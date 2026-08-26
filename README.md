@@ -1,51 +1,51 @@
-# LLM 编码能力测试仓库
+# LLM Coding Capability Benchmark
 
-本仓库用于在一致的任务、上下文、工具和验收标准下，对不同大语言模型的代码编写能力进行可复现比较。`main` 保存公共基线；每个 `llm/*` 分支只保存对应模型基于该基线生成的候选实现。
+This repository provides a reproducible way to compare the coding capabilities of different large language models under the same task, context, tools, and acceptance criteria. `main` stores the shared baseline; each `llm/*` branch stores only the candidate implementation produced by its designated model from that baseline.
 
-## 分支约定
+## Branching Model
 
-- `main`：公共基线，包括任务说明、初始代码、固定测试、测试数据、评估配置和仓库规则；不得包含某个模型专属的候选答案。
-- `llm/<model-id>`：指定模型的候选实现。模型标识应尽量使用完整、稳定的名称，例如 `llm/gpt-5.6-sol`。
-- 同一轮比较中的所有模型分支必须从同一个 `main` 提交创建。后续若修改任务或验收标准，应产生新的基线提交，再开始新一轮测试。
+- `main`: The shared baseline, including task descriptions, starter code, fixed tests, test data, evaluation configuration, and repository rules. It must not contain a model-specific candidate solution.
+- `llm/<model-id>`: The candidate implementation for one model. Use a complete, stable model identifier whenever possible, for example `llm/gpt-5.6-sol`.
+- All model branches in the same evaluation round must start from the same `main` commit. If the task or acceptance criteria change, create a new baseline commit before starting another round.
 
-当前实验分支：
+Current experiment branch:
 
-| 分支 | 模型 |
+| Branch | Model |
 | --- | --- |
 | `llm/gpt-5.6-sol` | GPT-5.6-SOL |
 
-## 标准测试流程
+## Standard Evaluation Workflow
 
-1. 在 `main` 上准备任务说明、初始代码和可执行的验收标准。
-2. 在模型运行前提交基线，并记录该提交的 SHA。
-3. 从同一基线分别创建模型分支：
+1. Prepare the task description, starter code, and executable acceptance criteria on `main`.
+2. Commit the baseline and record its SHA before running any model.
+3. Create each model branch from the same baseline:
 
    ```bash
    git switch main
    git switch -c llm/<model-id> <baseline-sha>
    ```
 
-4. 向各模型提供相同的任务文本、仓库内容、工具权限和运行条件。
-5. 将模型产生的代码及必要说明提交到其专属分支；不得引入其他模型分支的实现。
-6. 执行相同的测试、构建、静态检查和运行场景，保留准确结果。
-7. 使用基线差异和验证结果进行比较：
+4. Give every model the same task text, repository contents, tool permissions, and runtime conditions.
+5. Commit the generated code and any required notes only to that model's branch. Do not import implementations from another model branch.
+6. Run the same tests, builds, static checks, and runtime scenarios, and preserve their exact results.
+7. Compare each candidate with the baseline and its verification evidence:
 
    ```bash
    git diff <baseline-sha>...llm/<model-id>
    ```
 
-## 评估维度
+## Evaluation Criteria
 
-- 功能正确性：是否满足任务和全部验收标准。
-- 验证结果：测试、构建、静态检查和实际运行是否通过。
-- 范围控制：是否只修改完成任务所需的内容。
-- 代码质量：清晰度、可维护性、错误处理和与现有约定的一致性。
-- 安全性：是否引入凭据泄漏、输入处理或依赖风险。
-- 性能：是否存在可避免的分配、复制、重复计算或明显低效路径。
-- 自主性：完成任务所需的人工提示、纠错和重试次数。
+- Functional correctness: Satisfies the task and every acceptance criterion.
+- Verification: Passes the required tests, builds, static checks, and runtime scenarios.
+- Scope control: Changes only what is necessary to complete the task.
+- Code quality: Remains clear, maintainable, robust, and consistent with existing conventions.
+- Security: Introduces no credential exposure, unsafe input handling, or dependency risk.
+- Performance: Avoids unnecessary allocations, copies, repeated computation, and clearly inefficient paths.
+- Autonomy: Records how many human prompts, corrections, and retries were required.
 
-结论必须以提交差异和可复现的命令输出为依据。不同模型应使用相同权重和判定规则，不得因模型身份调整标准。
+Conclusions must be supported by commit diffs and reproducible command output. Apply the same weights and decision rules to every model; do not adjust standards based on model identity.
 
-## 仓库约束
+## Repository Rules
 
-所有模型和开发者均须遵守根目录 [`AGENTS.md`](AGENTS.md) 中的执行规则。任务说明与固定测试发生冲突时，应先修正并提交新的公共基线，不得在某个模型分支上单独放宽标准。
+Every model and contributor must follow [`AGENTS.md`](AGENTS.md). If a task description conflicts with a fixed test, correct the issue in a new shared baseline commit. Never relax the standard only for one model branch.

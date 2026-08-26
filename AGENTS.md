@@ -1,47 +1,47 @@
 # Repository Instructions
 
-本文件适用于仓库根目录及所有子目录。其目标是保证不同 LLM 的候选实现可隔离、可复现、可公平比较。
+This file applies to the repository root and every subdirectory. Its purpose is to keep candidate implementations from different LLMs isolated, reproducible, and comparable under fair conditions.
 
-## 分支不变量
+## Branch Invariants
 
-- `main` 是公共基线，只保存共享的任务、初始代码、文档、测试、测试数据和评估配置；不得保存模型专属答案。
-- 候选实现只能写入对应的 `llm/<model-id>` 分支。
-- 同一轮比较的模型分支必须基于同一个 `main` 提交。不得通过合并、变基、拣选或复制获取其他 `llm/*` 分支的候选实现。
-- 修改任务、固定测试或评估标准时，必须先在 `main` 形成新的基线提交；不得只为某个模型改变规则。
+- `main` is the shared baseline. It stores only shared tasks, starter code, documentation, tests, test data, and evaluation configuration; it must not contain model-specific solutions.
+- Candidate implementations may be written only to their corresponding `llm/<model-id>` branches.
+- Model branches in the same evaluation round must start from the same `main` commit. Do not merge, rebase, cherry-pick, or copy candidate implementations from another `llm/*` branch.
+- Changes to tasks, fixed tests, or evaluation standards must first become a new baseline commit on `main`. Never change the rules only for one model.
 
-## 实现约束
+## Implementation Constraints
 
-- 只实现当前任务明确要求的行为，不得擅自扩大功能范围。
-- 复用仓库已有结构和约定；不得为同一问题引入第二套模式或无必要的抽象、依赖和配置。
-- 除非任务明确要求，不得修改任务说明、固定测试、测试数据、评估脚本或本文件。
-- 不得通过删除、跳过、弱化测试，关闭 lint/类型检查，硬编码测试答案，吞掉异常，或模拟核心行为来制造通过结果。
-- 不得提交占位实现、空操作、伪造回退、未完成的 `TODO` 或无法工作的脚手架。
-- 不得读取、引用或移植其他模型分支中的实现。允许读取 `main` 及当前分支的历史和内容。
-- 不得提交密码、令牌、私钥、`.env` 内容或其他敏感信息。
-- 对输入、身份认证、持久化或外部服务的改动，必须遵守最小权限和安全失败原则。
-- 编译型或性能敏感代码不得进行可避免的分配、复制、重复 I/O 或重复计算。
+- Implement only the behavior explicitly required by the current task. Do not expand the feature scope without a request.
+- Reuse the repository's existing structure and conventions. Do not introduce a second pattern, unnecessary abstraction, dependency, or configuration for the same problem.
+- Unless the task explicitly requires it, do not modify task descriptions, fixed tests, test data, evaluation scripts, or this file.
+- Do not manufacture passing results by deleting, skipping, or weakening tests; disabling lint or type checks; hard-coding test answers; swallowing errors; or simulating core behavior.
+- Do not submit placeholder implementations, no-ops, fake fallbacks, unfinished `TODO` items, or nonfunctional scaffolding.
+- Do not read, reference, or port implementations from another model branch. Reading the history and contents of `main` and the current branch is allowed.
+- Do not commit passwords, tokens, private keys, `.env` contents, or other sensitive information.
+- Changes involving input, authentication, persistence, or external services must use least privilege and fail securely.
+- Compiled or performance-sensitive code must avoid unnecessary allocations, copies, repeated I/O, and repeated computation.
 
-## 验证约束
+## Verification Constraints
 
-- 交付前必须运行覆盖改动行为的最小充分验证；优先执行仓库已有的精确测试、构建、类型检查或实际运行场景。
-- Bug 修复必须先复现问题，再确认相同复现路径不再失败。
-- 不得声称未实际执行的命令或未观察到的结果。失败项必须原样报告，并区分代码失败与环境阻塞。
-- 测试或任务本身有缺陷时，停止针对该缺陷进行规避；记录证据，并在 `main` 修正基线后重新开始公平测试。
+- Before delivery, run the minimum sufficient verification that covers the changed behavior. Prefer the repository's existing focused tests, build, type checks, or actual runtime scenarios.
+- Bug fixes must reproduce the problem first, then confirm that the same reproduction path no longer fails.
+- Do not claim commands or results that were not actually executed and observed. Report failures exactly and distinguish code failures from environmental blockers.
+- If a test or task is defective, stop trying to work around the defect. Record the evidence, correct the baseline on `main`, and restart the fair evaluation.
 
-## 提交约束
+## Commit Constraints
 
-- 每个提交只包含一个可独立解释、验证和回退的逻辑变更。
-- 提交信息采用 `<type>: <description>`，常用类型为 `feat`、`fix`、`refactor`、`test`、`docs` 和 `chore`。
-- 模型生成的候选代码及其必要说明必须提交在该模型分支，不得提交到 `main`。
-- 提交前检查变更范围、验证结果和敏感信息；不得混入无关格式化或重构。
+- Each commit must contain one logical change that can be independently explained, verified, and reverted.
+- Commit messages use `<type>: <description>`. Common types are `feat`, `fix`, `refactor`, `test`, `docs`, and `chore`.
+- Model-generated candidate code and its required notes must be committed on that model's branch, never on `main`.
+- Before committing, review the change scope, verification results, and sensitive information. Do not mix unrelated formatting or refactoring into the commit.
 
-## 结果报告
+## Result Report
 
-每次候选实现至少应记录：
+Every candidate implementation must record at least:
 
-- 使用的完整模型标识。
-- 起始 `main` 提交 SHA。
-- 实际执行的验证命令及其结果。
-- 已知限制、失败项和所需人工干预。
+- The complete model identifier.
+- The starting `main` commit SHA.
+- The verification commands actually run and their results.
+- Known limitations, failures, and required human intervention.
 
-比较结论只能基于相同基线、相同任务、相同权限和相同评估标准下取得的证据。
+Comparison conclusions may be based only on evidence collected with the same baseline, task, permissions, and evaluation standards.
