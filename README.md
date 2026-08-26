@@ -22,7 +22,8 @@ This repository provides a reproducible way to compare the coding capabilities o
 llm-evals/                              # repository root; always main
 ├── tasks/
 │   └── <task-id>/
-│       ├── README.md                   # prompt, criteria, and round record
+│       ├── README.md                   # round record and reproducibility status
+│       ├── task.md                     # exact prompt and acceptance criteria
 │       ├── starter/                    # optional shared starter code
 │       └── tests/                      # optional fixed acceptance tests
 └── .worktrees/                         # ignored local linked worktrees
