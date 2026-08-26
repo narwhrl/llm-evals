@@ -5,57 +5,60 @@ This repository provides a reproducible way to compare the coding capabilities o
 ## Branching Model
 
 - `main`: The shared baseline, including task descriptions, starter code, fixed tests, test data, evaluation configuration, and repository rules. It must not contain a model-specific candidate solution.
-- `llm/<model-id>`: The candidate implementation for one model. Use a complete, stable model identifier whenever possible, for example `llm/gpt-5.6-sol`.
+- `llm/<task-id>/<model-id>`: The candidate implementation for one model on one task. Use complete, stable identifiers, for example `llm/voxel-waterfall/gpt-5.6-sol`.
 - All model branches in the same evaluation round must start from the same `main` commit. If the task or acceptance criteria change, create a new baseline commit before starting another round.
 
-Current experiment branches:
+## Tasks
 
-| Branch | Model |
-| --- | --- |
-| `llm/gpt-5.6-sol` | GPT-5.6-SOL |
-| `llm/grok-4.6` | Grok 4.6 |
+| Task | Round record | Candidate branches |
+| --- | --- | --- |
+| `voxel-waterfall` | [`tasks/voxel-waterfall/`](tasks/voxel-waterfall/) | GPT-5.6-SOL, Grok 4.6 |
 
-## Local Workspace Layout
+## Repository and Worktree Layout
 
-Keep each task in its own directory and each model in a linked worktree:
+`llm-evals/` is the Git repository and permanent `main` worktree. Task inputs are tracked under `tasks/`; linked model worktrees are local-only under the ignored `.worktrees/` directory:
 
 ```text
-llm-evals/
-└── <task-id>/
-    ├── baseline/                 # Git main worktree
-    └── worktrees/
-        ├── <model-id>/           # llm/<model-id>
-        └── <other-model-id>/     # llm/<other-model-id>
+llm-evals/                              # repository root; always main
+├── tasks/
+│   └── <task-id>/
+│       ├── README.md                   # prompt, criteria, and round record
+│       ├── starter/                    # optional shared starter code
+│       └── tests/                      # optional fixed acceptance tests
+└── .worktrees/                         # ignored local linked worktrees
+    └── <task-id>/
+        ├── <model-id>/                 # llm/<task-id>/<model-id>
+        └── <other-model-id>/
 ```
 
-Keep `baseline/` on `main`. Run candidate installation, generation, builds, and tests only inside the model's linked worktree so untracked files and build artifacts remain isolated.
+Every candidate branch uses the same tracked implementation path, `tasks/<task-id>/solution/`. Model identity belongs in the branch and local worktree path, not in a model-specific source directory; this keeps candidate diffs path-aligned.
 
 ## Standard Evaluation Workflow
 
-1. Prepare the task description, starter code, and executable acceptance criteria in `baseline/` on `main`.
-2. Commit the baseline and record its SHA before running any model.
-3. From `baseline/`, create every model branch and linked worktree from that exact SHA:
+1. On `main`, prepare `tasks/<task-id>/` with the prompt, starter code, executable acceptance criteria, fixed tests, and evaluation configuration.
+2. Commit that complete baseline and record its SHA before running any model.
+3. From the repository root, create every model branch and linked worktree from that exact SHA:
 
    ```bash
    git worktree add \
-     -b llm/<model-id> \
-     ../worktrees/<model-id> \
+     -b llm/<task-id>/<model-id> \
+     .worktrees/<task-id>/<model-id> \
      <baseline-sha>
    ```
 
 4. Give every model the same task text, repository contents, tool permissions, and runtime conditions.
-5. Run the model only in `worktrees/<model-id>/`. Commit its generated code and required notes only to `llm/<model-id>`; never import another model's implementation.
+5. Run the model only in `.worktrees/<task-id>/<model-id>/`. Commit its implementation at `tasks/<task-id>/solution/` only to `llm/<task-id>/<model-id>`; never import another model's implementation.
 6. Run the same tests, builds, static checks, and runtime scenarios in every model worktree, and preserve their exact results.
-7. Compare each candidate from `baseline/` with the baseline and its verification evidence:
+7. Compare each candidate from the repository root with the recorded baseline and its verification evidence:
 
    ```bash
-   git diff <baseline-sha>...llm/<model-id>
+   git diff <baseline-sha>...llm/<task-id>/<model-id>
    ```
 
 8. After preserving the candidate commit and evidence, remove only the linked worktree when it is no longer needed:
 
    ```bash
-   git worktree remove ../worktrees/<model-id>
+   git worktree remove .worktrees/<task-id>/<model-id>
    ```
 
 ## Evaluation Criteria

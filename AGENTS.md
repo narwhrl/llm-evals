@@ -5,16 +5,16 @@ This file applies to the repository root and every subdirectory. Its purpose is 
 ## Branch Invariants
 
 - `main` is the shared baseline. It stores only shared tasks, starter code, documentation, tests, test data, and evaluation configuration; it must not contain model-specific solutions.
-- Candidate implementations may be written only to their corresponding `llm/<model-id>` branches.
+- Candidate implementations may be written only to their corresponding `llm/<task-id>/<model-id>` branches.
 - Model branches in the same evaluation round must start from the same `main` commit. Do not merge, rebase, cherry-pick, or copy candidate implementations from another `llm/*` branch.
 - Changes to tasks, fixed tests, or evaluation standards must first become a new baseline commit on `main`. Never change the rules only for one model.
 
 ## Worktree Invariants
 
-- Each task uses its own task directory containing `baseline/` and `worktrees/`.
-- `baseline/` must remain checked out on `main`. Do not switch it to an `llm/*` branch or run candidate builds there.
-- Check out each `llm/<model-id>` branch only in `worktrees/<model-id>/`; run that model's installation, generation, build, and verification commands there.
-- Never reuse one physical worktree across models or tasks. Generated and ignored files remain in the worktree that created them.
+- `llm-evals/` is the repository root and permanent `main` worktree. Shared task inputs live under `tasks/<task-id>/`.
+- Check out each `llm/<task-id>/<model-id>` branch only in `.worktrees/<task-id>/<model-id>/`; run that model's installation, generation, build, and verification commands there.
+- Every candidate writes its implementation to the same tracked path, `tasks/<task-id>/solution/`. Do not create model-named source directories.
+- Never switch the repository root away from `main` or reuse one physical worktree across models or tasks. Generated and ignored files remain in the worktree that created them.
 
 ## Implementation Constraints
 
