@@ -18,8 +18,8 @@ function seededRandom(seed) {
   };
 }
 
-function worldCoordinate(index, size) {
-  return index - size / 2 + 0.5;
+function worldCoordinate(index, size, cellSize = 1) {
+  return (index - size / 2 + 0.5) * cellSize;
 }
 
 function exposedDepth(map, x, z, height) {
@@ -183,78 +183,113 @@ function createFoamMesh(positions) {
   return mesh;
 }
 
-export function createWaterfallMeshes(map, paths) {
+export function createWaterfallMeshes(map, paths, cellSize = 1) {
   const group = new THREE.Group();
-  const totalPoints = paths.reduce((sum, path) => sum + path.length, 0);
   const material = new THREE.MeshStandardMaterial({
-    color: 0x72c7c2,
-    emissive: 0x163e43,
-    emissiveIntensity: 0.5,
-    metalness: 0.05,
-    opacity: 0.86,
+    color: 0x49b9cb,
+    emissive: 0x174f68,
+    emissiveIntensity: 0.62,
+    metalness: 0.04,
+    opacity: 0.94,
     roughness: 0.18,
     transparent: true,
     depthWrite: false,
   });
-  const water = new THREE.InstancedMesh(UNIT_CUBE, material, totalPoints);
-  const dummy = new THREE.Object3D();
+  const waterVoxels = [];
+  const verticalVoxels = [];
   const foamPositions = [];
   const pathCells = new Set();
-  let index = 0;
+  const surfaceWidth = cellSize * 0.92;
+  const surfaceLength = cellSize * 1.08;
+  const faceWidth = cellSize * 0.84;
 
-  paths.forEach((path, pathIndex) => {
-    const outwardX = pathIndex === 1 ? 0.46 : 0;
-    const outwardZ = pathIndex === 0 ? 0.46 : 0;
+  paths.forEach((path) => {
     path.forEach((point, pointIndex) => {
-      const x = worldCoordinate(point.x, map.size) + outwardX;
-      const z = worldCoordinate(point.z, map.size) + outwardZ;
-      const vertical = Boolean(point.vertical);
-      dummy.position.set(x, vertical ? point.height + 0.05 : point.height + 0.12, z);
-      if (vertical) {
-        dummy.scale.set(pathIndex === 0 ? 0.76 : 0.2, 0.96, pathIndex === 0 ? 0.2 : 0.76);
-      } else {
-        dummy.scale.set(0.84, 0.18, 0.84);
-      }
-      dummy.updateMatrix();
-      water.setMatrixAt(index, dummy.matrix);
-      index += 1;
+      const x = worldCoordinate(point.x, map.size, cellSize);
+      const z = worldCoordinate(point.z, map.size, cellSize);
+      const previous = path[pointIndex - 1];
+      const next = path[pointIndex + 1];
+      const travelsX =
+        (previous && previous.x !== point.x) || (next && next.x !== point.x);
+      const travelsZ =
+        (previous && previous.z !== point.z) || (next && next.z !== point.z);
+      waterVoxels.push({
+        x,
+        y: point.height + 0.13,
+        z,
+        scaleX: travelsX ? surfaceLength : surfaceWidth,
+        scaleY: 0.2,
+        scaleZ: travelsZ ? surfaceLength : surfaceWidth,
+      });
       pathCells.add(point.z * map.size + point.x);
 
-      const next = path[pointIndex + 1];
-      if ((!next || (!vertical && next.vertical)) && pointIndex > 0) {
-        foamPositions.push({ x, y: point.height + 0.35, z, scale: next ? 0.68 : 1.25 });
+      if (!next || point.height <= next.height) return;
+
+      const stepX = next.x - point.x;
+      const stepZ = next.z - point.z;
+      const faceX = x + stepX * (cellSize * 0.5 + 0.06);
+      const faceZ = z + stepZ * (cellSize * 0.5 + 0.06);
+      for (let level = point.height - 1; level >= next.height; level -= 1) {
+        const voxel = {
+          x: faceX,
+          y: level + 0.5,
+          z: faceZ,
+          scaleX: stepX === 0 ? faceWidth : 0.16,
+          scaleY: 0.96,
+          scaleZ: stepZ === 0 ? faceWidth : 0.16,
+          stepX,
+          stepZ,
+        };
+        waterVoxels.push(voxel);
+        verticalVoxels.push(voxel);
+      }
+      if (point.height - next.height >= 2) {
+        foamPositions.push({
+          x: faceX,
+          y: point.height + 0.18,
+          z: faceZ,
+          scale: Math.min(0.9, cellSize * 0.32),
+        });
       }
     });
 
     const end = path.at(-1);
+    const endX = worldCoordinate(end.x, map.size, cellSize);
+    const endZ = worldCoordinate(end.z, map.size, cellSize);
     for (let foamIndex = 0; foamIndex < 9; foamIndex += 1) {
       const angle = (foamIndex / 9) * Math.PI * 2;
+      const radius = Math.min(2.4, cellSize * (0.42 + (foamIndex % 3) * 0.18));
       foamPositions.push({
-        x: worldCoordinate(end.x, map.size) + outwardX + Math.cos(angle) * (0.7 + (foamIndex % 3) * 0.3),
+        x: endX + Math.cos(angle) * radius,
         y: end.height + 0.2 + (foamIndex % 2) * 0.16,
-        z: worldCoordinate(end.z, map.size) + outwardZ + Math.sin(angle) * (0.7 + (foamIndex % 3) * 0.3),
-        scale: 0.42 + (foamIndex % 3) * 0.12,
+        z: endZ + Math.sin(angle) * radius,
+        scale: Math.min(0.78, cellSize * (0.3 + (foamIndex % 3) * 0.08)),
       });
     }
   });
 
+  const water = new THREE.InstancedMesh(UNIT_CUBE, material, waterVoxels.length);
+  const dummy = new THREE.Object3D();
+  waterVoxels.forEach((voxel, index) => {
+    dummy.position.set(voxel.x, voxel.y, voxel.z);
+    dummy.scale.set(voxel.scaleX, voxel.scaleY, voxel.scaleZ);
+    dummy.updateMatrix();
+    water.setMatrixAt(index, dummy.matrix);
+  });
   water.instanceMatrix.needsUpdate = true;
   water.computeBoundingSphere();
   water.renderOrder = 3;
-  water.name = 'voxel waterfalls';
+  water.name = 'terrain-attached voxel waterfalls';
   group.add(water, createFoamMesh(foamPositions));
 
-  const particles = createFlowParticles(map, paths);
+  const particles = createFlowParticles(verticalVoxels, cellSize);
   group.add(particles.mesh);
   return { group, material, particles, pathCells, water };
 }
 
-function createFlowParticles(map, paths) {
-  const random = seededRandom(0xa71f0);
-  const verticalPoints = paths.flatMap((path, pathIndex) =>
-    path.filter((point) => point.vertical).map((point) => ({ ...point, pathIndex })),
-  );
-  const count = Math.min(96, Math.max(48, verticalPoints.length * 2));
+function createFlowParticles(verticalVoxels, cellSize) {
+  const random = seededRandom(0xa71f0 + cellSize);
+  const count = verticalVoxels.length === 0 ? 0 : Math.min(96, Math.max(36, verticalVoxels.length));
   const material = new THREE.MeshBasicMaterial({
     color: 0xc7f2e7,
     transparent: true,
@@ -265,21 +300,23 @@ function createFlowParticles(map, paths) {
   const data = new Array(count);
 
   for (let index = 0; index < count; index += 1) {
-    const point = verticalPoints[index % verticalPoints.length];
+    const voxel = verticalVoxels[index % verticalVoxels.length];
+    const lateralJitter = (random() - 0.5) * cellSize * 0.56;
     data[index] = {
       phase: random(),
-      size: 0.1 + random() * 0.16,
-      x: worldCoordinate(point.x, map.size) + (point.pathIndex === 1 ? 0.55 : (random() - 0.5) * 0.42),
-      y: point.height + 0.8,
-      z: worldCoordinate(point.z, map.size) + (point.pathIndex === 0 ? 0.55 : (random() - 0.5) * 0.42),
+      size: Math.min(0.22, 0.1 + random() * 0.14),
+      x: voxel.x + (voxel.stepX === 0 ? lateralJitter : 0),
+      y: voxel.y + 0.38,
+      z: voxel.z + (voxel.stepZ === 0 ? lateralJitter : 0),
     };
   }
 
   mesh.frustumCulled = false;
   mesh.renderOrder = 5;
-  mesh.name = 'waterfall flow particles';
+  mesh.name = 'terrain-attached flow particles';
   return { data, mesh };
 }
+
 
 export function updateFlowParticles(particles, elapsed, speed, visible) {
   particles.mesh.visible = visible;
@@ -288,7 +325,7 @@ export function updateFlowParticles(particles, elapsed, speed, visible) {
   for (let index = 0; index < particles.data.length; index += 1) {
     const particle = particles.data[index];
     const progress = (particle.phase + elapsed * speed * 0.46) % 1;
-    dummy.position.set(particle.x, particle.y - progress * 2.8, particle.z);
+    dummy.position.set(particle.x, particle.y - progress * 0.82, particle.z);
     dummy.scale.set(particle.size, 0.18 + particle.size, particle.size);
     dummy.updateMatrix();
     particles.mesh.setMatrixAt(index, dummy.matrix);

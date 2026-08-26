@@ -124,19 +124,23 @@ export class VoxelWorld {
 
   buildScene() {
     this.heightMap = generateHeightMap();
+    this.terrainLodMap = createTerrainLodMap(this.heightMap);
     this.waterfallPaths = generateWaterfallPaths(this.heightMap);
+    this.waterfallPathsLod = generateWaterfallPaths(this.terrainLodMap);
 
     const sky = createSky();
     this.skyUniforms = sky.uniforms;
     this.scene.add(sky.sky, createLake());
 
     this.terrain = createTerrainMesh(this.heightMap);
-    this.terrainLod = createTerrainMesh(createTerrainLodMap(this.heightMap), 4);
+    this.terrainLod = createTerrainMesh(this.terrainLodMap, 4);
     this.terrainLod.mesh.visible = false;
     this.scene.add(this.terrain.mesh, this.terrainLod.mesh);
 
     this.waterfalls = createWaterfallMeshes(this.heightMap, this.waterfallPaths);
-    this.scene.add(this.waterfalls.group);
+    this.waterfallsLod = createWaterfallMeshes(this.terrainLodMap, this.waterfallPathsLod, 4);
+    this.waterfallsLod.group.visible = false;
+    this.scene.add(this.waterfalls.group, this.waterfallsLod.group);
 
     this.vegetation = createVegetationMeshes(this.heightMap, this.waterfalls.pathCells);
     this.scene.add(this.vegetation.group);
@@ -187,7 +191,8 @@ export class VoxelWorld {
     const treeCount = Math.round(this.vegetation.maxTrees * this.settings.vegetation * treeFactor);
     this.vegetation.trunks.count = treeCount;
     this.vegetation.leaves.count = treeCount;
-    this.waterfalls.group.visible = this.settings.waterfalls;
+    this.waterfalls.group.visible = this.settings.waterfalls && !this.usingTerrainLod;
+    this.waterfallsLod.group.visible = this.settings.waterfalls && this.usingTerrainLod;
     if (lightingChanged) this.applyPreset(this.settings.preset);
   }
 
@@ -224,12 +229,19 @@ export class VoxelWorld {
     this.elapsed += delta;
     this.cloudGroup.rotation.y += delta * 0.0065;
     this.cloudGroup.position.y = this.settings.cloudAltitude + Math.sin(this.elapsed * 0.18) * 0.42;
-    this.waterfalls.material.emissiveIntensity = 0.46 + Math.sin(this.elapsed * 2.2) * 0.08;
+    const activeWaterfalls = this.usingTerrainLod ? this.waterfallsLod : this.waterfalls;
+    activeWaterfalls.material.emissiveIntensity = 0.46 + Math.sin(this.elapsed * 2.2) * 0.08;
     updateFlowParticles(
       this.waterfalls.particles,
       this.elapsed,
       this.settings.waterfallSpeed,
-      this.settings.waterfalls,
+      this.settings.waterfalls && !this.usingTerrainLod,
+    );
+    updateFlowParticles(
+      this.waterfallsLod.particles,
+      this.elapsed,
+      this.settings.waterfallSpeed,
+      this.settings.waterfalls && this.usingTerrainLod,
     );
     this.controls.update(delta);
     this.renderer.render(this.scene, this.camera);
@@ -254,7 +266,7 @@ export class VoxelWorld {
       terrainVoxels: this.terrain.instanceCount,
       trees: this.vegetation.trunks.count,
       triangles: this.renderer.info.render.triangles,
-      waterfallVoxels: this.waterfalls.water.count,
+      waterfallVoxels: (this.usingTerrainLod ? this.waterfallsLod : this.waterfalls).water.count,
     };
     window.__VOXEL_WORLD_STATS__ = stats;
     this.onStats(stats);

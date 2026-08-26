@@ -7,6 +7,7 @@ import {
   createTerrainLodMap,
   generateHeightMap,
   generateWaterfallPaths,
+  getHeight,
 } from './terrain.js';
 
 test('generates a deterministic 128 by 128 mountain range', () => {
@@ -54,6 +55,18 @@ test('routes two waterfalls from high sources to the mountain foot', () => {
       path.every((point, index) => index === 0 || point.height <= path[index - 1].height),
       'water should never route uphill',
     );
+    assert.ok(
+      path.every((point) => point.height === getHeight(map, point.x, point.z)),
+      'every water surface voxel should rest on its terrain cell',
+    );
+    assert.ok(
+      path.every((point, index) => {
+        if (index === 0) return true;
+        const previous = path[index - 1];
+        return Math.abs(point.x - previous.x) + Math.abs(point.z - previous.z) === 1;
+      }),
+      'water should move through adjacent terrain cells without floating gaps',
+    );
   }
 });
 
@@ -66,4 +79,26 @@ test('preserves the mountain extent in the adaptive terrain level', () => {
   assert.equal(adaptiveMap.heights.length, 32 * 32);
   assert.ok(adaptiveMap.maxHeight >= map.maxHeight * 0.8, 'adaptive terrain should preserve peak height');
   assert.ok(adaptiveMap.maxHeight <= map.maxHeight, 'adaptive terrain should remain inside the source range');
+});
+
+test('routes adaptive waterfalls over the displayed terrain level', () => {
+  const map = createTerrainLodMap(generateHeightMap(), 4);
+  const paths = generateWaterfallPaths(map);
+
+  for (const path of paths) {
+    assert.ok(path.length >= 8, 'adaptive waterfall should cross multiple terrain cells');
+    assert.ok(path.at(-1).height <= 7, 'adaptive waterfall should reach the mountain foot');
+    assert.ok(
+      path.every((point) => point.height === getHeight(map, point.x, point.z)),
+      'adaptive water should use the same height map as the displayed terrain',
+    );
+    assert.ok(
+      path.every((point, index) => {
+        if (index === 0) return true;
+        const previous = path[index - 1];
+        return Math.abs(point.x - previous.x) + Math.abs(point.z - previous.z) === 1;
+      }),
+      'adaptive water should not bridge gaps between terrain cells',
+    );
+  }
 });

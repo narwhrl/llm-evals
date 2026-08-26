@@ -143,58 +143,57 @@ function highestPointInRegion(map, region) {
 }
 
 function traceDownhill(map, source, direction) {
-  const path = [source];
-  const visited = new Set([source.z * map.size + source.x]);
-  let current = source;
-  let preservedVisibleDrop = false;
+  const cellCount = map.size * map.size;
+  const parents = new Int32Array(cellCount);
+  parents.fill(-2);
+  const queue = new Int32Array(cellCount);
+  const sourceKey = source.z * map.size + source.x;
+  const directions = [
+    direction,
+    { x: direction.z, z: direction.x },
+    { x: -direction.z, z: -direction.x },
+  ];
+  let queueStart = 0;
+  let queueEnd = 1;
+  let destinationKey = -1;
 
-  function findCandidate(minForward, maxForward, maxLateral) {
-    let best = null;
-    for (let forward = minForward; forward <= maxForward; forward += 1) {
-      for (let lateral = -maxLateral; lateral <= maxLateral; lateral += 1) {
-        const x = current.x + direction.x * forward + direction.z * lateral;
-        const z = current.z + direction.z * forward + direction.x * lateral;
-        const height = getHeight(map, x, z);
-        const key = z * map.size + x;
-        if (
-          x < 1 ||
-          z < 1 ||
-          x >= map.size - 1 ||
-          z >= map.size - 1 ||
-          visited.has(key) ||
-          height > current.height
-        ) {
-          continue;
-        }
+  const minimumForwardProgress = Math.max(4, Math.floor(map.size * 0.12));
+  queue[0] = sourceKey;
+  parents[sourceKey] = -1;
 
-        const score = height * 0.42 + Math.abs(lateral) * 1.35 + (forward - 1) * 0.4;
-        if (!best || score < best.score) best = { x, z, height, key, score };
-      }
+  while (queueStart < queueEnd) {
+    const currentKey = queue[queueStart];
+    queueStart += 1;
+    const x = currentKey % map.size;
+    const z = Math.floor(currentKey / map.size);
+    const height = getHeight(map, x, z);
+    const forwardProgress = (x - source.x) * direction.x + (z - source.z) * direction.z;
+    if (height <= 7 && forwardProgress >= minimumForwardProgress) {
+      destinationKey = currentKey;
+      break;
     }
-    return best;
+
+    for (const step of directions) {
+      const nextX = x + step.x;
+      const nextZ = z + step.z;
+      if (nextX < 1 || nextZ < 1 || nextX >= map.size - 1 || nextZ >= map.size - 1) continue;
+      const nextKey = nextZ * map.size + nextX;
+      if (parents[nextKey] !== -2 || getHeight(map, nextX, nextZ) > height) continue;
+      parents[nextKey] = currentKey;
+      queue[queueEnd] = nextKey;
+      queueEnd += 1;
+    }
   }
 
-  for (let step = 0; step < map.size; step += 1) {
-    const best = findCandidate(1, 2, 2) ?? findCandidate(3, 9, 7);
-    if (!best) break;
+  if (destinationKey === -1) return [source];
 
-    const drop = current.height - best.height;
-    const preserveGap = !preservedVisibleDrop && drop >= 2;
-    for (
-      let height = current.height - 1;
-      height > best.height + (preserveGap ? 1 : 0);
-      height -= 1
-    ) {
-      path.push({ x: best.x, z: best.z, height, vertical: true });
-    }
-    preservedVisibleDrop ||= preserveGap;
-
-    current = { x: best.x, z: best.z, height: best.height };
-    visited.add(best.key);
-    path.push(current);
-    if (current.height <= 7) break;
+  const path = [];
+  for (let key = destinationKey; key !== -1; key = parents[key]) {
+    const x = key % map.size;
+    const z = Math.floor(key / map.size);
+    path.push({ x, z, height: getHeight(map, x, z) });
   }
-
+  path.reverse();
   return path;
 }
 
