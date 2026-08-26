@@ -5,7 +5,7 @@ React + Vite + Three.js 实现的 Minecraft 风格体素自然景观：主峰与
 ## 运行
 
 ```bash
-cd voxel-landscape
+cd tasks/voxel-waterfall/solution
 npm install
 npm run dev
 ```
