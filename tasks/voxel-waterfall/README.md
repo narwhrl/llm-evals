@@ -13,6 +13,6 @@
 
 ## Reproducibility Status
 
-The original baseline contained repository rules but did not contain the task prompt, starter code, fixed tests, or acceptance criteria. The candidate histories are preserved, but this evaluation round cannot be reproduced from Git alone.
+The task prompt and acceptance criteria are now preserved in [`task.md`](task.md). They were added after the original baseline, which also lacked starter code and fixed executable tests; the original execution therefore cannot be reproduced from the recorded baseline SHA alone.
 
-Before starting another round for this task, commit the complete shared prompt, inputs, starter code, fixed tests, and evaluation criteria in this directory, then record the resulting `main` SHA as the new baseline.
+Before starting another round for this task, commit all shared inputs, starter code, fixed tests, and evaluation configuration in this directory, then record the resulting `main` SHA as the new baseline.
