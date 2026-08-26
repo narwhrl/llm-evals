@@ -10,7 +10,7 @@ React、Vite 与 Three.js 实现的 3D 体素自然景观。场景包含 128×12
 ## 安装与启动
 
 ```bash
-cd voxel-waterfall
+cd tasks/voxel-waterfall/solution
 npm install
 npm run dev
 ```
