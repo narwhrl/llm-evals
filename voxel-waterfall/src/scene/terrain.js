@@ -198,6 +198,35 @@ function traceDownhill(map, source, direction) {
   return path;
 }
 
+export function createTerrainLodMap(source, cellSize = 4) {
+  const size = Math.ceil(source.size / cellSize);
+  const heights = new Uint8Array(size * size);
+  let minHeight = 255;
+  let maxHeight = 0;
+
+  for (let z = 0; z < size; z += 1) {
+    for (let x = 0; x < size; x += 1) {
+      let sum = 0;
+      let samples = 0;
+      let localMaximum = 0;
+      for (let offsetZ = 0; offsetZ < cellSize; offsetZ += 1) {
+        for (let offsetX = 0; offsetX < cellSize; offsetX += 1) {
+          const height = getHeight(source, x * cellSize + offsetX, z * cellSize + offsetZ);
+          sum += height;
+          samples += 1;
+          localMaximum = Math.max(localMaximum, height);
+        }
+      }
+      const height = Math.round((sum / samples) * 0.62 + localMaximum * 0.38);
+      heights[z * size + x] = height;
+      minHeight = Math.min(minHeight, height);
+      maxHeight = Math.max(maxHeight, height);
+    }
+  }
+
+  return { heights, maxHeight, minHeight, seed: source.seed, size };
+}
+
 export function generateWaterfallPaths(map) {
   const firstSource = highestPointInRegion(map, {
     minX: Math.floor(map.size * 0.5),

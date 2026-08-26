@@ -4,6 +4,7 @@ import test from 'node:test';
 import {
   GRID_SIZE,
   countProminentPeaks,
+  createTerrainLodMap,
   generateHeightMap,
   generateWaterfallPaths,
 } from './terrain.js';
@@ -54,4 +55,15 @@ test('routes two waterfalls from high sources to the mountain foot', () => {
       'water should never route uphill',
     );
   }
+});
+
+test('preserves the mountain extent in the adaptive terrain level', () => {
+  const map = generateHeightMap();
+  const adaptiveMap = createTerrainLodMap(map, 4);
+
+  assert.equal(adaptiveMap.size, 32);
+  assert.equal(adaptiveMap.size * 4, GRID_SIZE);
+  assert.equal(adaptiveMap.heights.length, 32 * 32);
+  assert.ok(adaptiveMap.maxHeight >= map.maxHeight * 0.8, 'adaptive terrain should preserve peak height');
+  assert.ok(adaptiveMap.maxHeight <= map.maxHeight, 'adaptive terrain should remain inside the source range');
 });
