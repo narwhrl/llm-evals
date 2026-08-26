@@ -8,30 +8,54 @@ This repository provides a reproducible way to compare the coding capabilities o
 - `llm/<model-id>`: The candidate implementation for one model. Use a complete, stable model identifier whenever possible, for example `llm/gpt-5.6-sol`.
 - All model branches in the same evaluation round must start from the same `main` commit. If the task or acceptance criteria change, create a new baseline commit before starting another round.
 
-Current experiment branch:
+Current experiment branches:
 
 | Branch | Model |
 | --- | --- |
 | `llm/gpt-5.6-sol` | GPT-5.6-SOL |
+| `llm/grok-4.6` | Grok 4.6 |
+
+## Local Workspace Layout
+
+Keep each task in its own directory and each model in a linked worktree:
+
+```text
+llm-evals/
+└── <task-id>/
+    ├── baseline/                 # Git main worktree
+    └── worktrees/
+        ├── <model-id>/           # llm/<model-id>
+        └── <other-model-id>/     # llm/<other-model-id>
+```
+
+Keep `baseline/` on `main`. Run candidate installation, generation, builds, and tests only inside the model's linked worktree so untracked files and build artifacts remain isolated.
 
 ## Standard Evaluation Workflow
 
-1. Prepare the task description, starter code, and executable acceptance criteria on `main`.
+1. Prepare the task description, starter code, and executable acceptance criteria in `baseline/` on `main`.
 2. Commit the baseline and record its SHA before running any model.
-3. Create each model branch from the same baseline:
+3. From `baseline/`, create every model branch and linked worktree from that exact SHA:
 
    ```bash
-   git switch main
-   git switch -c llm/<model-id> <baseline-sha>
+   git worktree add \
+     -b llm/<model-id> \
+     ../worktrees/<model-id> \
+     <baseline-sha>
    ```
 
 4. Give every model the same task text, repository contents, tool permissions, and runtime conditions.
-5. Commit the generated code and any required notes only to that model's branch. Do not import implementations from another model branch.
-6. Run the same tests, builds, static checks, and runtime scenarios, and preserve their exact results.
-7. Compare each candidate with the baseline and its verification evidence:
+5. Run the model only in `worktrees/<model-id>/`. Commit its generated code and required notes only to `llm/<model-id>`; never import another model's implementation.
+6. Run the same tests, builds, static checks, and runtime scenarios in every model worktree, and preserve their exact results.
+7. Compare each candidate from `baseline/` with the baseline and its verification evidence:
 
    ```bash
    git diff <baseline-sha>...llm/<model-id>
+   ```
+
+8. After preserving the candidate commit and evidence, remove only the linked worktree when it is no longer needed:
+
+   ```bash
+   git worktree remove ../worktrees/<model-id>
    ```
 
 ## Evaluation Criteria
