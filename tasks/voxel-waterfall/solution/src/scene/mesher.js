@@ -82,9 +82,9 @@ function emitSide(b, x, z, yy, dx, dz, r, g, bl) {
   } else if (dx === 1) { // east face, normal +x
     b.quad([fx1, y0, fz0], [fx1, y1, fz0], [fx1, y1, fz1], [fx1, y0, fz1], 1, 0, 0, r, g, bl);
   } else if (dz === -1) { // north face, normal -z
-    b.quad([fx1, y0, fz1], [fx1, y1, fz1], [fx0, y1, fz1], [fx0, y0, fz1], 0, 0, -1, r, g, bl);
+    b.quad([fx0, y0, fz1], [fx0, y1, fz1], [fx1, y1, fz1], [fx1, y0, fz1], 0, 0, -1, r, g, bl);
   } else { // south face, normal +z
-    b.quad([fx0, y0, fz0], [fx0, y1, fz0], [fx1, y1, fz0], [fx1, y0, fz0], 0, 0, 1, r, g, bl);
+    b.quad([fx1, y0, fz0], [fx1, y1, fz0], [fx0, y1, fz0], [fx0, y0, fz0], 0, 0, 1, r, g, bl);
   }
 }
 
@@ -130,9 +130,9 @@ export function buildWaterMesh(water, heights, material) {
         } else if (dx === 1) {
           b.quad([fx1, lo, fz0], [fx1, s, fz0], [fx1, s, fz1], [fx1, lo, fz1], 1, 0, 0, 1, 1, 1);
         } else if (dz === -1) {
-          b.quad([fx1, lo, fz1], [fx1, s, fz1], [fx0, s, fz1], [fx0, lo, fz1], 0, 0, -1, 1, 1, 1);
+          b.quad([fx0, lo, fz1], [fx0, s, fz1], [fx1, s, fz1], [fx1, lo, fz1], 0, 0, -1, 1, 1, 1);
         } else {
-          b.quad([fx0, lo, fz0], [fx0, s, fz0], [fx1, s, fz0], [fx1, lo, fz0], 0, 0, 1, 1, 1, 1);
+          b.quad([fx1, lo, fz0], [fx1, s, fz0], [fx0, s, fz0], [fx0, lo, fz0], 0, 0, 1, 1, 1, 1);
         }
       }
     }
