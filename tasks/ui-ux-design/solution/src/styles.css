@@ -1,0 +1,608 @@
+/* 《在读》设计系统：一纸一墨一印。
+   纸 = --paper（随章节推移暖化）；墨 = --ink；朱砂 = --cinnabar（仅印章/焦点/落笔）。 */
+
+:root {
+  --paper: rgb(247, 242, 232);
+  --ink: #1c1815;
+  --ink-soft: rgba(28, 24, 21, 0.66);
+  --ink-faint: rgba(28, 24, 21, 0.38);
+  --cinnabar: #b23a2a;
+  --cinnabar-deep: #97301f;
+  --serif: 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', serif;
+  --edge: clamp(20px, 7vw, 96px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--cinnabar);
+  color: #f6f1e7;
+}
+
+:focus-visible {
+  outline: 2px solid var(--cinnabar);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 60;
+  padding: 8px 14px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 14px;
+  text-decoration: none;
+  transform: translateY(-72px);
+  transition: transform 0.2s ease;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* ---- 核心装置画布 ---- */
+
+.ink-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ---- 页眉 ---- */
+
+.site-head {
+  position: fixed;
+  z-index: 20;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px var(--edge) 0;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.head-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+}
+
+.head-seal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  background: var(--cinnabar);
+  color: #f6f1e7;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  border-radius: 3px;
+  transform: rotate(-2deg);
+}
+
+.head-title {
+  font-size: 15px;
+  letter-spacing: 0.12em;
+}
+
+.head-title [lang='en'] {
+  color: var(--ink-soft);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+
+.head-chapter {
+  margin: 6px 0 0;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  color: var(--ink-soft);
+}
+
+/* 右侧阅读进度：一笔竖墨。 */
+.scroll-line {
+  position: fixed;
+  z-index: 20;
+  right: 14px;
+  top: 15vh;
+  bottom: 15vh;
+  width: 2px;
+  background: rgba(28, 24, 21, 0.12);
+}
+
+.scroll-line i {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--ink);
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+/* ---- 章节长卷 ---- */
+
+main {
+  position: relative;
+  z-index: 10;
+}
+
+.chapter {
+  position: relative;
+  min-height: 150vh;
+}
+
+.chapter-prologue {
+  min-height: 125vh;
+}
+
+.chapter-noon {
+  min-height: 170vh;
+}
+
+.chapter-night {
+  min-height: 175vh;
+}
+
+.chapter-pin {
+  position: sticky;
+  top: 0;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 12vh var(--edge) 13vh;
+}
+
+/* 竖排章节题： alternating 左右，让目光在纸面走 Z 形。 */
+.chapter-title {
+  position: absolute;
+  top: 11vh;
+  right: var(--edge);
+  margin: 0;
+  writing-mode: vertical-rl;
+  font-weight: 600;
+  font-size: clamp(26px, 3.4vw, 40px);
+  letter-spacing: 0.32em;
+  line-height: 1;
+}
+
+.chapter:nth-of-type(even) .chapter-title {
+  right: auto;
+  left: var(--edge);
+}
+
+.chapter-num {
+  display: block;
+  font-size: 0.44em;
+  font-weight: 400;
+  letter-spacing: 0.55em;
+  color: var(--cinnabar);
+  margin-bottom: 1.4em;
+}
+
+.chapter-prose {
+  max-width: 25em;
+  font-size: 15.5px;
+  line-height: 2.05;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+}
+
+.chapter:nth-of-type(even) .chapter-prose {
+  align-self: flex-end;
+  text-align: right;
+}
+
+.chapter-prose p {
+  margin: 0 0 0.9em;
+}
+
+.chapter-prose p:last-child {
+  margin-bottom: 0;
+}
+
+/* 序章副题与引导 */
+.prologue-sub {
+  margin: 3.5vh 0 0;
+  font-size: clamp(17px, 2vw, 21px);
+  letter-spacing: 0.3em;
+  color: var(--ink);
+}
+
+.prologue-hint {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 5vh 0 0;
+  font-size: 13px;
+  letter-spacing: 0.28em;
+  color: var(--ink-faint);
+}
+
+.hint-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--cinnabar);
+  animation: hint-breathe 2.6s ease-in-out infinite;
+}
+
+@keyframes hint-breathe {
+  0%,
+  100% {
+    transform: scale(0.72);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ---- 昼 · 续写装置 ---- */
+
+.continue-box {
+  margin-top: 4.5vh;
+  max-width: 30em;
+}
+
+.continue-label {
+  display: block;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  color: var(--cinnabar);
+  margin-bottom: 12px;
+}
+
+.continue-row {
+  display: flex;
+  gap: 14px;
+  align-items: stretch;
+}
+
+.continue-row input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  border-bottom: 1px solid rgba(28, 24, 21, 0.4);
+  background: transparent;
+  font-family: var(--serif);
+  font-size: 18px;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  padding: 8px 2px;
+  border-radius: 0;
+}
+
+.continue-row input::placeholder {
+  color: var(--ink-faint);
+}
+
+.continue-row input:focus-visible {
+  outline: none;
+  border-bottom-color: var(--cinnabar);
+  box-shadow: 0 2px 0 var(--cinnabar);
+}
+
+.continue-row button {
+  border: none;
+  background: var(--cinnabar);
+  color: #f6f1e7;
+  font-family: var(--serif);
+  font-size: 15px;
+  letter-spacing: 0.25em;
+  text-indent: 0.25em;
+  padding: 10px 18px;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.continue-row button:hover:not(:disabled) {
+  background: var(--cinnabar-deep);
+}
+
+.continue-row button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.continue-out {
+  margin-top: 20px;
+  min-height: 4.2em;
+  font-size: 17px;
+  line-height: 1.9;
+  letter-spacing: 0.05em;
+}
+
+.out-seed {
+  color: var(--ink-faint);
+}
+
+.out-committed {
+  color: var(--ink);
+}
+
+.out-hint {
+  color: var(--ink-faint);
+  font-size: 14px;
+  letter-spacing: 0.1em;
+}
+
+.out-ghosts i {
+  font-style: normal;
+  color: rgba(28, 24, 21, 0.4);
+  margin-left: 2px;
+  animation: ghost-flicker 0.21s ease-in-out infinite alternate;
+}
+
+@keyframes ghost-flicker {
+  from {
+    opacity: 0.15;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 0.6;
+    transform: translateY(-2px);
+  }
+}
+
+.continue-discarded {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: var(--ink-faint);
+  letter-spacing: 0.06em;
+}
+
+.continue-discarded em {
+  font-style: normal;
+  color: rgba(28, 24, 21, 0.5);
+  letter-spacing: 0.3em;
+}
+
+/* ---- 夜 · 钤印 ---- */
+
+.seal-wrap {
+  margin-top: 4vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.seal-stage {
+  width: 172px;
+  height: 172px;
+}
+
+.seal-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  transform: rotate(-2.5deg);
+  filter: drop-shadow(0 1px 0 rgba(28, 24, 21, 0.12));
+}
+
+.seal-press {
+  animation: seal-stamp 0.55s cubic-bezier(0.2, 1.35, 0.32, 1) both;
+}
+
+@keyframes seal-stamp {
+  0% {
+    transform: scale(1.75) rotate(-14deg);
+    opacity: 0;
+    filter: blur(7px);
+  }
+  62% {
+    transform: scale(0.96) rotate(-1.2deg);
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    transform: scale(1) rotate(-2.5deg);
+    opacity: 1;
+  }
+}
+
+.seal-placeholder {
+  width: 100%;
+  height: 100%;
+  border: 1px dashed rgba(28, 24, 21, 0.25);
+  border-radius: 8px;
+}
+
+.seal-caption {
+  margin: 0;
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  color: var(--ink-faint);
+}
+
+.seal-again {
+  border: none;
+  background: none;
+  padding: 4px 0;
+  font-family: var(--serif);
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  color: var(--cinnabar);
+  border-bottom: 1px solid rgba(178, 58, 42, 0.4);
+  cursor: pointer;
+}
+
+.seal-again:disabled {
+  color: var(--ink-faint);
+  border-bottom-color: transparent;
+  cursor: default;
+}
+
+.colophon {
+  margin-top: 7vh;
+  padding-top: 18px;
+  border-top: 1px solid rgba(28, 24, 21, 0.18);
+  font-size: 12.5px;
+  line-height: 2;
+  letter-spacing: 0.12em;
+  color: var(--ink-faint);
+  max-width: 30em;
+}
+
+.colophon p {
+  margin: 0;
+}
+
+.colophon a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(28, 24, 21, 0.35);
+}
+
+.colophon a:hover {
+  color: var(--cinnabar);
+  border-bottom-color: var(--cinnabar);
+}
+
+/* ---- 页边批注（静止奖励） ---- */
+
+.marginalia {
+  position: fixed;
+  z-index: 30;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl;
+  font-size: 13px;
+  letter-spacing: 0.34em;
+  line-height: 1;
+  color: var(--cinnabar);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.4s ease 0.2s;
+}
+
+.marginalia.show {
+  opacity: 0.92;
+}
+
+.marginalia.reduced {
+  transition: none;
+}
+
+/* ---- 移动端 ---- */
+
+@media (max-width: 700px) {
+  :root {
+    --edge: 22px;
+  }
+
+  .site-head {
+    padding-top: 14px;
+  }
+
+  .head-title [lang='en'] {
+    display: none;
+  }
+
+  .scroll-line {
+    right: 8px;
+  }
+
+  .chapter-pin {
+    padding: 11vh var(--edge) 12vh;
+  }
+
+  .chapter-title {
+    top: 9vh;
+    font-size: 25px;
+  }
+
+  .chapter-prose {
+    font-size: 15px;
+    line-height: 1.95;
+    max-width: 100%;
+  }
+
+  .chapter:nth-of-type(even) .chapter-prose {
+    text-align: left;
+    align-self: flex-start;
+  }
+
+  .continue-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .continue-row button {
+    align-self: flex-start;
+  }
+
+  .marginalia {
+    right: 14px;
+    font-size: 12px;
+  }
+
+  .seal-stage {
+    width: 148px;
+    height: 148px;
+  }
+}
+
+/* ---- 减动效：全部动势收束为静态构图 ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  .hint-dot {
+    animation: none;
+  }
+}
