@@ -1,4 +1,3 @@
-
 :root {
   --paper: oklch(0.95 0.018 88);
   --paper-deep: oklch(0.91 0.024 88);
@@ -9,6 +8,8 @@
   --water: oklch(0.71 0.12 185);
   --sun: oklch(0.86 0.14 94);
   --line: oklch(0.22 0.035 265 / 0.22);
+  --signal-ink: oklch(0.47 0.14 32);
+  --water-ink: oklch(0.47 0.08 185);
   --serif: 'Iowan Old Style', 'Baskerville', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
   --mono: 'SFMono-Regular', 'Cascadia Mono', Consolas, 'Liberation Mono', monospace;
   color: var(--ink);
@@ -142,7 +143,7 @@ button {
 
 .header-link:hover,
 .text-link:hover {
-  color: var(--signal);
+  color: var(--signal-ink);
   border-color: currentColor;
 }
 
@@ -433,6 +434,15 @@ h2 em {
   transition: background-color 160ms ease, transform 160ms ease;
 }
 
+.chapter-link.is-active {
+  color: var(--signal);
+}
+
+.chapter-link.is-active::after {
+  background: currentColor;
+  transform: translateX(0.05rem) scale(1.25);
+}
+
 .chapter-link:hover,
 .chapter-link:focus-visible {
   color: var(--signal);
@@ -506,7 +516,7 @@ h2 em {
 }
 
 .chamber-coordinate {
-  color: var(--signal);
+  color: var(--signal-ink);
   font-variant-numeric: tabular-nums;
 }
 
@@ -745,7 +755,7 @@ h2 em {
 .chamber-corner-bottom {
   bottom: 7rem;
   left: 2rem;
-  color: var(--signal);
+  color: var(--signal-ink);
   writing-mode: vertical-rl;
   transform: rotate(180deg);
 }
@@ -776,7 +786,7 @@ h2 em {
 }
 
 .state-name {
-  color: var(--signal);
+  color: var(--signal-ink);
 }
 
 .state-note {
@@ -785,6 +795,23 @@ h2 em {
   letter-spacing: 0.03em;
   text-transform: none;
 }
+.state-track {
+  position: absolute;
+  right: 0;
+  bottom: -0.4rem;
+  left: 0;
+  height: 1px;
+  overflow: hidden;
+  background: oklch(0.22 0.035 265 / 0.16);
+}
+
+.state-track i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--water), var(--signal));
+  transition: width 120ms linear;
+}
+
 
 .quiet-note {
   position: absolute;
@@ -800,7 +827,7 @@ h2 em {
 }
 
 .quiet-note-label {
-  color: var(--signal);
+  color: var(--signal-ink);
   font-size: 0.57rem;
   letter-spacing: 0.09em;
   text-transform: uppercase;
@@ -853,7 +880,7 @@ h2 em {
 }
 
 .readout-intensity b {
-  color: var(--signal);
+  color: var(--signal-ink);
   font-weight: 500;
   font-variant-numeric: tabular-nums;
 }
@@ -879,7 +906,7 @@ h2 em {
 }
 
 .control-value {
-  color: var(--signal);
+  color: var(--signal-ink);
   text-align: end;
   font-variant-numeric: tabular-nums;
 }
@@ -1623,7 +1650,7 @@ h2 em {
   position: absolute;
   right: 1.25rem;
   bottom: 1.25rem;
-  color: var(--signal);
+  color: var(--signal-ink);
   font-size: 0.58rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1668,7 +1695,7 @@ h2 em {
 
 .room-mode-button > span,
 .room-mode-button > i {
-  color: var(--water);
+  color: var(--water-ink);
   font-size: 0.62rem;
   font-style: normal;
   letter-spacing: 0.07em;
@@ -1688,7 +1715,7 @@ h2 em {
 .room-detail-kicker {
   display: block;
   margin-bottom: 1.2rem;
-  color: var(--water);
+  color: var(--water-ink);
   font-size: 0.59rem;
   letter-spacing: 0.09em;
   text-transform: uppercase;
@@ -1728,7 +1755,7 @@ h2 em {
 }
 
 .room-trust-line span:nth-child(2) {
-  color: var(--signal);
+  color: var(--signal-ink);
 }
 
 .room-trust-line span:last-child {

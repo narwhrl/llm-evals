@@ -248,6 +248,7 @@ function SignalChamber({
           <span className="state-led" aria-hidden="true" />
           <span className="state-name">{phase.label}</span>
           <span className="state-note">{phase.note}</span>
+          <span className="state-track" aria-hidden="true"><i style={{ width: `${progress * 100}%` }} /></span>
         </div>
         {quietNoteOpen && (
           <aside id="quiet-note" className="quiet-note" aria-label="A quiet note">
@@ -333,7 +334,7 @@ function MethodSection({ activePass, onPassChange, pageProgress }) {
           <p className="method-figure-caption">the line remembers every turn</p>
         </div>
         <div className="pass-column">
-          <div className="pass-list" role="list" aria-label="Method passes">
+          <div className="pass-list" role="group" aria-label="Method passes">
             {methodPasses.map((item, index) => (
               <button
                 className={`pass-item ${activePass === index ? 'is-active' : ''}`}
@@ -397,7 +398,7 @@ function SharedRoomSection() {
           <span className="room-diagram-label">{mode.cue}</span>
         </div>
         <div className="room-copy">
-          <div className="room-mode-list" role="list" aria-label="Ways I work with people">
+          <div className="room-mode-list" role="group" aria-label="Ways I work with people">
             {roomModes.map((item, index) => (
               <button
                 className={`room-mode-button ${roomMode === index ? 'is-active' : ''}`}
@@ -481,6 +482,7 @@ function App() {
   const [progress, setProgress] = useState(0);
   const [sequenceRun, setSequenceRun] = useState(0);
   const [pageProgress, setPageProgress] = useState(0);
+  const [activeChapter, setActiveChapter] = useState('signal');
   const [isPaused, setIsPaused] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [quietNoteOpen, setQuietNoteOpen] = useState(false);
@@ -520,6 +522,12 @@ function App() {
       frame = undefined;
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       setPageProgress(maxScroll > 0 ? clamp(window.scrollY / maxScroll, 0, 1) : 0);
+      const viewportAnchor = window.innerHeight * 0.38;
+      const currentChapter = chapterLinks.reduce((selected, chapter) => {
+        const section = document.querySelector(chapter.href);
+        return section && section.getBoundingClientRect().top <= viewportAnchor ? chapter.href.slice(1) : selected;
+      }, 'signal');
+      setActiveChapter(currentChapter);
     };
     const handleScroll = () => {
       if (!frame) frame = requestAnimationFrame(updateProgress);
@@ -579,7 +587,12 @@ function App() {
 
       <nav className="chapter-nav" aria-label="Chapters">
         {chapterLinks.map((chapter) => (
-          <a key={chapter.href} href={chapter.href} className="chapter-link">
+          <a
+            key={chapter.href}
+            href={chapter.href}
+            className={`chapter-link ${activeChapter === chapter.href.slice(1) ? 'is-active' : ''}`}
+            aria-current={activeChapter === chapter.href.slice(1) ? 'location' : undefined}
+          >
             <span>{chapter.number}</span>
             <span>{chapter.label}</span>
           </a>
