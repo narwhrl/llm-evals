@@ -10,7 +10,7 @@
 
 ## Shared Inputs
 
-This task intentionally provides no starter project or fixed executable tests. React and Vite are fixed requirements; visual technology, information architecture, and interaction model remain part of the evaluated design response. Every candidate must receive the same repository baseline, task prompt, tool permissions, runtime conditions, browser viewports, and review procedure.
+This task intentionally provides no starter project or fixed executable tests. Framework choice, visual technology, information architecture, and interaction model are part of the evaluated design response. Every candidate must receive the same repository baseline, task prompt, tool permissions, runtime conditions, browser viewports, and review procedure.
 
 ## Evaluation Procedure
 
