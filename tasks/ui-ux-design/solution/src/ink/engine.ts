@@ -575,7 +575,8 @@ export class InkEngine {
       ctx2d.fillText(g.ch, g.hx, g.hy);
     }
     const ax = this.w / 2;
-    const ay = Math.min(this.h / 2, this.h * (this.w < 700 ? 0.3 : 0.45));
+    const yHi = CHAPTERS[this.chapter].yHi * (this.w < 700 ? 0.55 : 1);
+    const ay = Math.min(this.h / 2, this.h * yHi);
     for (const s of this.slots) {
       ctx2d.font = this.fontFor(s.size);
       ctx2d.fillStyle = this.fillFor(s.red ? CINNABAR : inkC, 1);

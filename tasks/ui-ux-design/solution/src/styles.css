@@ -314,13 +314,10 @@ main {
   }
 }
 
-/* 夜章：内容居中，印章落在画布中央的印床上。 */
+/* 夜章：内容底部锚定、水平居中，印章落在画布中央的印床上。 */
 .chapter-night .chapter-pin {
-  justify-content: center;
   align-items: center;
   text-align: center;
-  padding-top: 16vh;
-  gap: 1.2vh;
 }
 
 .chapter-night .chapter-prose {
