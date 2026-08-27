@@ -33,6 +33,7 @@ export default function App() {
   reducedRef.current = reduced;
   const scrollRef = useRef<ChapterScroll>({ index: 0, progress: 0, global: 0 });
   const [scroll, setScroll] = useState<ChapterScroll>(scrollRef.current);
+  const [engineReady, setEngineReady] = useState(false);
   const markov = useMemo(() => new Markov(MARKOV_CORPUS), []);
 
   // 引擎生命周期：等正文字体就绪再启动，保证字宽测量正确。
@@ -58,6 +59,7 @@ export default function App() {
       engineRef.current = engine;
       engine.setChapter(scrollRef.current.index, scrollRef.current.progress);
       engine.start();
+      setEngineReady(true);
     };
     void boot();
     const onMove = (e: PointerEvent) => engineRef.current?.setPointer(e.clientX, e.clientY);
@@ -78,6 +80,11 @@ export default function App() {
   useEffect(() => {
     engineRef.current?.setReduced(reduced);
   }, [reduced]);
+
+  // 静止致意：批注浮现时，墨河同步慢下来。
+  useEffect(() => {
+    engineRef.current?.setCalm(idle && !reduced);
+  }, [idle, reduced]);
 
   const onScrollChange = useCallback((s: ChapterScroll) => {
     scrollRef.current = s;
@@ -116,9 +123,13 @@ export default function App() {
 
   return (
     <div className={`app${reduced ? ' reduced' : ''}`}>
-      <a className="skip-link" href="#ch-prologue">
+      <a className="skip-link" href="#ch-morning">
         跳到正文
       </a>
+      <div className={`boot-title${engineReady ? ' gone' : ''}`} aria-hidden="true">
+        <p className="boot-main">在读</p>
+        <p className="boot-sub">你在读我的时候，我才存在。</p>
+      </div>
       <canvas ref={canvasRef} className="ink-canvas" aria-hidden="true" />
       <header className="site-head">
         <p className="head-brand">

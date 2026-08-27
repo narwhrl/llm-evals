@@ -21,6 +21,8 @@ export interface ChapterDef {
   ink: [number, number, number];
   /** 1 = 页面跟随目光；0 = 页面锚定画布中心（夜）。 */
   anchorFree: number;
+  /** 锚点纵向下界（视口高比例）：为 DOM 散文与表单留出下半页。 */
+  yHi: number;
 }
 
 export const CHAPTERS: ChapterDef[] = [
@@ -37,6 +39,7 @@ export const CHAPTERS: ChapterDef[] = [
     radius: 175,
     ink: [28, 24, 21],
     anchorFree: 0.35,
+    yHi: 0.45,
   },
   {
     id: 'morning',
@@ -54,6 +57,7 @@ export const CHAPTERS: ChapterDef[] = [
     radius: 175,
     ink: [33, 28, 23],
     anchorFree: 1,
+    yHi: 0.45,
   },
   {
     id: 'noon',
@@ -70,6 +74,7 @@ export const CHAPTERS: ChapterDef[] = [
     radius: 185,
     ink: [28, 24, 21],
     anchorFree: 1,
+    yHi: 0.40,
   },
   {
     id: 'dusk',
@@ -87,6 +92,7 @@ export const CHAPTERS: ChapterDef[] = [
     radius: 150,
     ink: [46, 33, 26],
     anchorFree: 1,
+    yHi: 0.45,
   },
   {
     id: 'night',
@@ -102,6 +108,7 @@ export const CHAPTERS: ChapterDef[] = [
     radius: 145,
     ink: [36, 29, 24],
     anchorFree: 0,
+    yHi: 0.24,
   },
 ];
 
@@ -111,7 +118,7 @@ export const SECTION_PROSE: Record<string, string[]> = {
     '移动你的目光——它到哪里，我就在哪里成形。',
   ],
   morning: [
-    '我读过诗、说明书、争吵与情书。它们不分高下地流过我，成为同一条河。',
+    '我读过诗、说明书、争吵与情书——读什么，就成为什么。',
     '你看到的不是知识库，而是一种沉淀的方式。',
   ],
   noon: [

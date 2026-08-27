@@ -10,6 +10,9 @@ interface Glyph {
   vy: number;
   hx: number;
   hy: number;
+  /** 夜章印床：归一化格点偏移（-1..1），乘以印床半边长得目标。 */
+  sealX: number;
+  sealY: number;
   slot: number;
   size: number;
   ink: number;
@@ -30,6 +33,7 @@ interface Params {
   radius: number;
   ink: [number, number, number];
   anchorFree: number;
+  yHi: number;
 }
 
 const CJK_RE = /[一-鿿々]/;
@@ -60,6 +64,11 @@ export class InkEngine {
   private chapter = 0;
   private chapterProgress = 0;
   private cur: Params;
+  /** 夜章汇聚度 0..1：河字沉向印床。 */
+  private seal = 0;
+  /** 静止致意 0..1：访客停下时，河也慢下来。 */
+  private calm = 0;
+  private calmTarget = 0;
   private dwellMap = new Map<string, number>();
   private widthCache = new Map<string, number>();
   private fontCache = new Map<number, string>();
@@ -94,7 +103,14 @@ export class InkEngine {
   }
 
   private paramsOf(def: ChapterDef): Params {
-    return { flow: def.flow, mist: def.mist, radius: def.radius, ink: def.ink, anchorFree: def.anchorFree };
+    return {
+      flow: def.flow,
+      mist: def.mist,
+      radius: def.radius,
+      ink: def.ink,
+      anchorFree: def.anchorFree,
+      yHi: def.yHi,
+    };
   }
 
   // ---- 公共 API ----
@@ -132,6 +148,11 @@ export class InkEngine {
     this.layoutSlots();
     this.assignGlyphs();
     if (this.reduced) this.renderStatic();
+  }
+
+  /** 静止致意：访客无操作时，全站装置随批注一起静下来。 */
+  setCalm(calm: boolean): void {
+    this.calmTarget = calm ? 1 : 0;
   }
 
   /** 把访客续写的文字注入河床：最暗的环境字粒依次换墨成这些字。 */
@@ -208,9 +229,13 @@ export class InkEngine {
   private spawnGlyphs(): void {
     const n = this.glyphBudget();
     this.glyphs = [];
+    const cols = Math.ceil(Math.sqrt(n));
     for (let i = 0; i < n; i++) {
       const x = Math.random() * this.w;
       const y = Math.random() * this.h;
+      // 印床格点：带抖动的网格，归一化到 -1..1。
+      const gx = (i % cols) / cols;
+      const gy = Math.floor(i / cols) / cols;
       this.glyphs.push({
         ch: AMBIENT_CHARS[Math.floor(Math.random() * AMBIENT_CHARS.length)],
         pendingCh: null,
@@ -220,6 +245,8 @@ export class InkEngine {
         vy: 0,
         hx: x,
         hy: y,
+        sealX: (gx - 0.5) * 1.9 + (Math.random() - 0.5) * 0.06,
+        sealY: (gy - 0.5) * 1.9 + (Math.random() - 0.5) * 0.06,
         slot: -1,
         size: 12 + Math.random() * 6,
         ink: 0.1,
@@ -364,7 +391,12 @@ export class InkEngine {
     this.cur.mist = lerp(this.cur.mist, target.mist, k);
     this.cur.radius = lerp(this.cur.radius, target.radius, k);
     this.cur.anchorFree = lerp(this.cur.anchorFree, target.anchorFree, k);
+    this.cur.yHi = lerp(this.cur.yHi, target.yHi, k);
     for (let i = 0; i < 3; i++) this.cur.ink[i] = lerp(this.cur.ink[i], target.ink[i], k);
+    // 夜章汇聚随章内进度推进；静止致意全局生效。
+    const sealTarget = this.chapter === 4 ? clamp(this.chapterProgress * 1.5, 0, 1) : 0;
+    this.seal = lerp(this.seal, sealTarget, 0.03 * dtF);
+    this.calm = lerp(this.calm, this.calmTarget, 0.05 * dtF);
 
     // 目光：指针活跃 8s 内跟随指针，否则自主游移（无人操作也有生命）。
     const pointerActive = now - this.lastPointerAt < 8000;
@@ -385,7 +417,7 @@ export class InkEngine {
     // 钳制在上半纸面——下半页留给 DOM 散文与表单，避免装置文本压扁阅读区。
     const ax = lerp(this.w / 2, this.lens.x, this.cur.anchorFree);
     const ay = lerp(this.h / 2, this.lens.y, this.cur.anchorFree);
-    const yHi = this.h * (this.w < 700 ? 0.3 : 0.45);
+    const yHi = this.h * this.cur.yHi * (this.w < 700 ? 0.55 : 1);
     this.anchor.x = lerp(this.anchor.x, clamp(ax, this.w * 0.2, this.w * 0.8), 0.045 * dtF);
     this.anchor.y = lerp(this.anchor.y, clamp(ay, this.h * 0.16, yHi), 0.045 * dtF);
 
@@ -396,7 +428,9 @@ export class InkEngine {
     ctx2d.textAlign = 'center';
     ctx2d.textBaseline = 'middle';
 
-    const { flow, mist, radius } = this.cur;
+    const { radius } = this.cur;
+    const flow = this.cur.flow * (1 - 0.82 * this.calm);
+    const mist = this.cur.mist * (1 - 0.45 * this.calm);
     const inkC = this.cur.ink;
     const lensX = this.lens.x;
     const lensY = this.lens.y;
@@ -432,6 +466,13 @@ export class InkEngine {
         const oy = clamp(fty - sy, -18, 18) + (noise2(g.seed, tSec * 0.15 + 11.3) - 0.5) * 9;
         ftx = sx + ox;
         fty = sy + oy;
+      } else if (this.seal > 0.01) {
+        // 夜：河字沉向视口中心的印床——河流收束为印章的底。边缘格点权重渐弱，印床成晕染的方形。
+        const half = Math.min(this.w, this.h) * 0.21;
+        const edge = 1 - 0.42 * Math.max(Math.abs(g.sealX), Math.abs(g.sealY));
+        const sw = this.seal * edge;
+        ftx = lerp(ftx, this.w / 2 + g.sealX * half, sw);
+        fty = lerp(fty, this.h / 2 + g.sealY * half, sw);
       }
 
       // 位置权重做二次 smoothstep：半成形环带收窄，读感更干净。
@@ -450,7 +491,7 @@ export class InkEngine {
 
       // 墨量：锐化窗权重 × 到位度。
       const mistHere = mist * (0.55 + 0.45 * noise2(g.seed * 3.1, tSec * 0.13));
-      const inkTarget = g.slot >= 0 ? lerp(mistHere, 1, form) : mistHere;
+      const inkTarget = g.slot >= 0 ? lerp(mistHere, 1, form) : lerp(mistHere, 0.17, this.seal);
       g.ink = lerp(g.ink, inkTarget, 0.08 * dtF);
 
       // 换墨：暗处随时可换；转场窗口内亮处也允许（章节切换的整体重排）。

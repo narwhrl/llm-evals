@@ -72,6 +72,42 @@ body {
   transform: translateY(0);
 }
 
+/* ---- 引擎启动前的占位（也是 JS 降级链的一环） ---- */
+
+.boot-title {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  gap: 20px;
+  pointer-events: none;
+  transition:
+    opacity 0.9s ease,
+    visibility 0.9s;
+}
+
+.boot-title.gone {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.boot-main {
+  margin: 0;
+  font-size: clamp(64px, 11vw, 108px);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-indent: 0.14em;
+}
+
+.boot-sub {
+  margin: 0;
+  font-size: 15px;
+  letter-spacing: 0.22em;
+  color: var(--ink-soft);
+}
+
 /* ---- 核心装置画布 ---- */
 
 .ink-canvas {
@@ -278,10 +314,24 @@ main {
   }
 }
 
+/* 夜章：内容居中，印章落在画布中央的印床上。 */
+.chapter-night .chapter-pin {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding-top: 16vh;
+  gap: 1.2vh;
+}
+
+.chapter-night .chapter-prose {
+  align-self: center;
+  text-align: center;
+}
+
 /* ---- 昼 · 续写装置 ---- */
 
 .continue-box {
-  margin-top: 4.5vh;
+  margin-top: 2.5vh;
   max-width: 30em;
 }
 
@@ -347,8 +397,8 @@ main {
 }
 
 .continue-out {
-  margin-top: 20px;
-  min-height: 4.2em;
+  margin-top: 16px;
+  min-height: 3.4em;
   font-size: 17px;
   line-height: 1.9;
   letter-spacing: 0.05em;
@@ -405,7 +455,7 @@ main {
   margin-top: 4vh;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   gap: 10px;
 }
 
@@ -476,7 +526,7 @@ main {
 }
 
 .colophon {
-  margin-top: 7vh;
+  margin-top: 4vh;
   padding-top: 18px;
   border-top: 1px solid rgba(28, 24, 21, 0.18);
   font-size: 12.5px;
@@ -484,6 +534,7 @@ main {
   letter-spacing: 0.12em;
   color: var(--ink-faint);
   max-width: 30em;
+  text-align: left;
 }
 
 .colophon p {
