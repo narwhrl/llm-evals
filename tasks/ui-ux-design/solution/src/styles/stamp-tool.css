@@ -1,0 +1,256 @@
+/* ========================================================================
+   Stamp tool — the hidden layer. Invisible until 6s of attention, then
+   reveals as a small ink-cube in the bottom-right corner.
+   ======================================================================== */
+
+.stamp-tool {
+  position: fixed;
+  bottom: clamp(16px, 3vh, 32px);
+  right: clamp(16px, 3vw, 32px);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.6rem;
+}
+
+.stamp-tool__trigger {
+  width: 2.4rem;
+  height: 2.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ink-aku);
+  color: var(--paper-warm);
+  border-radius: 2px;
+  box-shadow:
+    inset 0 0 0 1.5px color-mix(in srgb, var(--paper-warm) 30%, transparent),
+    inset 0 0 6px color-mix(in srgb, var(--ink-sum) 35%, transparent);
+  opacity: 0;
+  transform: scale(0.85) rotate(-3deg);
+  pointer-events: none;
+  transition:
+    opacity 700ms var(--ease-stamp),
+    transform 700ms var(--ease-stamp),
+    background 200ms var(--ease-ink);
+  will-change: opacity, transform;
+}
+
+.stamp-tool__trigger.is-revealed {
+  opacity: 0.88;
+  transform: none;
+  pointer-events: auto;
+}
+
+.stamp-tool__trigger:hover,
+.stamp-tool__trigger:focus-visible {
+  opacity: 1;
+  transform: rotate(-3deg) scale(1.04);
+}
+
+.stamp-tool__glyph {
+  font-family: var(--font-stamp);
+  font-size: 1.45rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--paper-warm);
+}
+
+.stamp-tool__label {
+  font-family: var(--font-serif-en);
+  font-style: italic;
+  font-size: 0.62rem;
+  color: color-mix(in srgb, var(--ink-sum) 55%, transparent);
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  align-self: center;
+}
+
+.stamp-tool__tray {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  gap: 0.4rem;
+  align-items: center;
+  padding: 0.6rem;
+  background: color-mix(in srgb, var(--paper-deep) 90%, var(--paper-warm));
+  border: 1px solid color-mix(in srgb, var(--ink-sum) 20%, transparent);
+  border-radius: 3px;
+  box-shadow: 0 8px 22px -16px rgba(28, 23, 20, 0.35);
+  animation: trayOpen 320ms var(--ease-stamp);
+}
+
+@keyframes trayOpen {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.stamp-tool__pick {
+  width: 1.9rem;
+  height: 1.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper-warm);
+  border: 1px solid color-mix(in srgb, var(--ink-aku) 30%, transparent);
+  color: var(--ink-aku);
+  font-family: var(--font-stamp);
+  font-weight: 700;
+  font-size: 1.1rem;
+  border-radius: 2px;
+  transition:
+    background 200ms var(--ease-ink),
+    color 200ms var(--ease-ink),
+    transform 200ms var(--ease-ink);
+}
+
+.stamp-tool__pick:hover {
+  background: color-mix(in srgb, var(--ink-aku) 8%, var(--paper-warm));
+}
+
+.stamp-tool__pick.is-armed {
+  background: var(--ink-aku);
+  color: var(--paper-warm);
+  transform: scale(0.94);
+}
+
+.stamp-tool__clear {
+  grid-column: 1 / -1;
+  margin-top: 0.2rem;
+  padding: 0.4rem 0.6rem;
+  font-family: var(--font-serif-en);
+  font-style: italic;
+  font-size: 0.7rem;
+  color: color-mix(in srgb, var(--ink-sum) 55%, transparent);
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  border-top: 1px solid color-mix(in srgb, var(--ink-sum) 14%, transparent);
+}
+
+.stamp-tool__clear:hover {
+  color: var(--ink-aku);
+}
+
+.stamp-tool__hint {
+  grid-column: 1 / -1;
+  margin: 0.2rem 0 0 0;
+  font-family: var(--font-serif-cn);
+  font-size: 0.72rem;
+  color: color-mix(in srgb, var(--ink-sum) 60%, transparent);
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+/* Page-nav (top-right chapter index) */
+.page-nav {
+  position: fixed;
+  top: 2rem;
+  right: clamp(16px, 3vw, 32px);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.4rem;
+}
+
+.page-nav__trigger {
+  font-family: var(--font-serif-en);
+  font-style: italic;
+  font-size: 0.74rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ink-sum) 55%, transparent);
+  padding: 0.4rem 0.6rem;
+  border: 1px solid color-mix(in srgb, var(--ink-sum) 22%, transparent);
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--paper-warm) 70%, transparent);
+  transition: color 200ms var(--ease-ink), border-color 200ms var(--ease-ink);
+}
+
+.page-nav__trigger:hover,
+.page-nav__trigger:focus-visible {
+  color: var(--ink-aku);
+  border-color: var(--ink-aku);
+}
+
+.page-nav__list {
+  list-style: none;
+  margin: 0;
+  padding: 0.6rem 0.4rem;
+  background: color-mix(in srgb, var(--paper-deep) 90%, var(--paper-warm));
+  border: 1px solid color-mix(in srgb, var(--ink-sum) 20%, transparent);
+  border-radius: 3px;
+  box-shadow: 0 8px 22px -16px rgba(28, 23, 20, 0.35);
+  animation: trayOpen 280ms var(--ease-stamp);
+}
+
+.page-nav__item {
+  margin: 0;
+}
+
+.page-nav__link {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.2rem 0.8rem;
+  align-items: baseline;
+  padding: 0.4rem 0.6rem;
+  font-family: var(--font-serif-cn);
+  font-size: 0.92rem;
+  color: var(--ink-sum);
+  border-radius: 2px;
+}
+
+.page-nav__link:hover,
+.page-nav__link:focus-visible {
+  background: color-mix(in srgb, var(--ink-rin) 8%, transparent);
+}
+
+.page-nav__num {
+  font-family: var(--font-serif-en);
+  font-style: italic;
+  color: var(--ink-aku);
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+}
+
+.page-nav__title {
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.page-nav__sub {
+  grid-column: 2;
+  font-family: var(--font-serif-en);
+  font-style: italic;
+  font-size: 0.7rem;
+  color: color-mix(in srgb, var(--ink-sum) 55%, transparent);
+}
+
+/* Screen-reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 720px) {
+  .stamp-tool {
+    bottom: 14px;
+    right: 14px;
+  }
+  .page-nav {
+    top: 1rem;
+    right: 14px;
+  }
+}

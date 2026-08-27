@@ -1,0 +1,133 @@
+/* ========================================================================
+   墨河 · 手稿 — design tokens & base
+   A single page of paper. The ink is the content.
+   ======================================================================== */
+
+:root {
+  /* Paper materials. Not white. */
+  --paper-warm: #f3ecd9;     /* primary paper, slightly warm cream */
+  --paper-deep: #ebe2c8;     /* paper beneath ink wash */
+  --paper-edge: #d9cdb1;     /* paper edge / aged */
+  --paper-fold: #c9b78f;     /* paper fold shadow */
+
+  /* Inks. Four, only four. */
+  --ink-sum: #1c1714;        /* sumi: primary body ink */
+  --ink-rin: #2b3a55;        /* indigo wash: marginalia & accents */
+  --ink-aku: #6b1813;        /* vermilion: seals & stamps */
+  --ink-och: #b07a2a;        /* ochre: dates, secondary marks */
+
+  /* Type scale — tight, manuscript */
+  --type-display: clamp(2.6rem, 6.4vw, 5.6rem);
+  --type-h1: clamp(1.9rem, 3.6vw, 3rem);
+  --type-h2: clamp(1.35rem, 2.1vw, 1.75rem);
+  --type-body: 1.0625rem;
+  --type-small: 0.84rem;
+  --type-micro: 0.72rem;
+
+  /* Spacing — generous, like a printed page */
+  --gut: clamp(1.25rem, 3vw, 2.5rem);
+  --rule: 1px solid color-mix(in srgb, var(--ink-sum) 22%, transparent);
+
+  /* Motion — paper feels heavy, slow. */
+  --ease-ink: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-stamp: cubic-bezier(0.5, 0, 0.2, 1);
+  --ease-fold: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Type families */
+  --font-serif-cn:
+    'Songti SC', 'STSong', 'Noto Serif CJK SC', 'Source Han Serif SC', '宋体', serif;
+  --font-serif-en:
+    'EB Garamond', 'Garamond', 'Iowan Old Style', 'Apple Garamond', 'Times New Roman', serif;
+  --font-stamp:
+    'STKaiti', 'KaiTi', '楷体', var(--font-serif-cn);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper-warm);
+  color: var(--ink-sum);
+  font-family: var(--font-serif-cn);
+  font-size: var(--type-body);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'palt', 'kern';
+}
+
+body {
+  /* Paper texture: a very subtle fiber noise + vignette, layered. */
+  background-image:
+    radial-gradient(circle at 50% 0%, transparent 0%, transparent 60%, rgba(28, 23, 20, 0.045) 100%),
+    radial-gradient(circle at 0% 100%, transparent 0%, transparent 70%, rgba(28, 23, 20, 0.035) 100%),
+    repeating-linear-gradient(
+      97deg,
+      rgba(28, 23, 20, 0.012) 0px,
+      rgba(28, 23, 20, 0.012) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  background-attachment: fixed;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#root {
+  position: relative;
+  isolation: isolate;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+/* Reduced motion: kill all choreography but keep the artifact visible */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    transition-delay: 0 !important;
+    animation-delay: 0 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+::selection {
+  background: color-mix(in srgb, var(--ink-rin) 22%, transparent);
+  color: var(--ink-sum);
+}
+
+/* Focus state — paper-correct, no neon */
+:focus-visible {
+  outline: 2px solid var(--ink-aku);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Reduced motion: kill all choreography but keep the artifact visible */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Mobile — type and gutters shrink */
+@media (max-width: 720px) {
+  :root {
+    --type-body: 1rem;
+  }
+}
