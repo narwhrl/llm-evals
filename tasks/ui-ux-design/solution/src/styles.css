@@ -169,8 +169,7 @@ button {
 }
 
 .eyebrow,
-.section-index,
-.placeholder-label {
+.section-index {
   color: var(--ink-soft);
   font-size: 0.64rem;
   letter-spacing: 0.09em;
@@ -235,65 +234,6 @@ h2 em {
   text-transform: uppercase;
 }
 
-.hero-device-placeholder {
-  position: relative;
-  display: grid;
-  min-height: 32rem;
-  place-items: center;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  background: var(--paper-deep);
-}
-
-.hero-device-placeholder::before,
-.hero-device-placeholder::after {
-  position: absolute;
-  content: '';
-  pointer-events: none;
-}
-
-.hero-device-placeholder::before {
-  inset: 1.25rem;
-  border: 1px solid var(--line);
-}
-
-.hero-device-placeholder::after {
-  inset: 0;
-  opacity: 0.4;
-  background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
-  background-size: 4rem 4rem;
-}
-
-.placeholder-orbit {
-  position: absolute;
-  width: 13rem;
-  height: 13rem;
-  border: 1px solid var(--signal);
-  border-radius: 50%;
-  box-shadow: 0 0 0 3rem oklch(0.64 0.17 32 / 0.04), 0 0 0 7rem oklch(0.64 0.17 32 / 0.03);
-}
-
-.placeholder-core {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  width: 5rem;
-  height: 5rem;
-  place-items: center;
-  border: 1px solid var(--signal);
-  border-radius: 50%;
-  color: var(--signal);
-  font-size: 2.2rem;
-  background: var(--paper);
-}
-
-.placeholder-label {
-  position: absolute;
-  z-index: 2;
-  right: 2rem;
-  bottom: 2rem;
-  margin: 0;
-}
 
 .intro-band {
   display: grid;
@@ -331,25 +271,11 @@ h2 em {
   line-height: 1.7;
 }
 
-.placeholder-section {
-  width: min(100% - 3rem, 86rem);
-  min-height: 40rem;
-  margin: 0 auto;
-  padding: 7rem 0;
-  border-top: 1px solid var(--line);
-}
-
-.placeholder-section h2 {
-  max-width: 8ch;
-  margin: 5rem 0 0 24%;
-  font-size: clamp(3rem, 7vw, 7rem);
-}
 
 @media (max-width: 760px) {
   .site-header,
   .hero-section,
-  .intro-band,
-  .placeholder-section {
+  .intro-band {
     width: min(100% - 2rem, 40rem);
   }
 
@@ -367,10 +293,6 @@ h2 em {
     font-size: clamp(3.45rem, 16vw, 5.5rem);
   }
 
-  .hero-device-placeholder {
-    min-height: 25rem;
-    margin-top: 4rem;
-  }
 
   .intro-band {
     grid-template-columns: 1fr;
@@ -386,15 +308,6 @@ h2 em {
     max-width: 22rem;
   }
 
-  .placeholder-section {
-    min-height: 32rem;
-    padding: 5rem 0;
-  }
-
-  .placeholder-section h2 {
-    margin: 4rem 0 0;
-    font-size: clamp(3.2rem, 15vw, 5.5rem);
-  }
 }
 
 .chapter-nav {
@@ -2091,5 +2004,16 @@ h2 em {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+  }
+
+  .chamber-glow,
+  .orbit,
+  .signal-path,
+  .method-figure-orbit,
+  .method-thread,
+  .room-ring,
+  .room-pulse,
+  .echo-bars span {
+    animation: none !important;
   }
 }

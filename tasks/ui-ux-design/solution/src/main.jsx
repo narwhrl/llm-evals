@@ -1,4 +1,4 @@
-import { StrictMode, useCallback, useEffect, useMemo, useState } from 'react';
+import { StrictMode, memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
 
@@ -296,7 +296,7 @@ function SignalChamber({
   );
 }
 
-function MethodSection({ activePass, onPassChange, pageProgress }) {
+function MethodSection({ activePass, onPassChange }) {
   const pass = methodPasses[activePass];
   const threadPaths = [
     'M 42 330 C 90 278 112 284 147 310 S 203 365 242 303 S 310 220 365 256 S 386 330 378 388',
@@ -305,7 +305,7 @@ function MethodSection({ activePass, onPassChange, pageProgress }) {
   ];
 
   return (
-    <section className="method-section" id="method" aria-labelledby="method-title" style={{ '--page-drift': pageProgress }}>
+    <section className="method-section" id="method" aria-labelledby="method-title">
       <div className="method-heading">
         <p className="section-index">/ 01 — method</p>
         <p className="method-heading-note">three passes / no straight lines</p>
@@ -477,6 +477,10 @@ function EchoSection({ submittedWord, draftWord, onDraftChange, onSubmit }) {
   );
 }
 
+const StableMethodSection = memo(MethodSection);
+const StableSharedRoomSection = memo(SharedRoomSection);
+const StableEchoSection = memo(EchoSection);
+
 function App() {
   const [controls, setControls] = useState({ friction: 38, pace: 58, temperature: 62 });
   const [progress, setProgress] = useState(0);
@@ -628,9 +632,9 @@ function App() {
           <p className="intro-aside">Move through the page like you would move through a room: slowly enough for the details to answer back.</p>
         </section>
 
-        <MethodSection activePass={activePass} onPassChange={setActivePass} pageProgress={pageProgress} />
-        <SharedRoomSection />
-        <EchoSection
+        <StableMethodSection activePass={activePass} onPassChange={setActivePass} />
+        <StableSharedRoomSection />
+        <StableEchoSection
           submittedWord={submittedWord}
           draftWord={draftWord}
           onDraftChange={setDraftWord}
