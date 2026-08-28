@@ -27,7 +27,7 @@ export const DEFAULT_PARAMS: SceneParams = {
   terrainDetail: 0.6,
   snowline: 40,
   waterfallWidth: 2,
-  vegetation: 0.9,
+  vegetation: 1.05,
 
   waterfallSpeed: 1,
   waterOpacity: 0.72,

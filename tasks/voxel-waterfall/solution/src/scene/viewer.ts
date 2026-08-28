@@ -168,15 +168,15 @@ export class VoxelViewer {
 
   /** 初始相机位姿：东南方向仰望主峰与崖壁瀑布。 */
   resetView(): void {
-    const el = THREE.MathUtils.degToRad(42);
+    const el = THREE.MathUtils.degToRad(33);
     const az = THREE.MathUtils.degToRad(108); // 世界方位角（自 +X 起算），正对东南崖壁瀑布
-    const r = 330;
+    const r = 255;
     this.camera.position.set(
       r * Math.cos(el) * Math.cos(az),
-      r * Math.sin(el) + 16,
+      r * Math.sin(el) + 14,
       r * Math.cos(el) * Math.sin(az),
     );
-    this.controls.target.set(0, 16, 0);
+    this.controls.target.set(0, 14, 0);
     this.controls.update();
   }
 

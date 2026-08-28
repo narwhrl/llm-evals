@@ -47,16 +47,19 @@ export function generateVegetation(t: TerrainResult, params: SceneParams): Veget
   const treeLimit = Math.round(130 * params.vegetation);
   const wx = (x: number) => x - N / 2 + 0.5;
 
-  /** 单棵树：3-5 格树干 + 2-3 格半径椭球冠层（从远处可辨识的树形）。 */
+  /** 单棵树：4-6 格树干 + 3-4 格半径椭球冠层（默认相机距离下可辨识）。 */
   const plantTree = (x: number, z: number, col: number, big: boolean) => {
-    const trunkH = 3 + Math.floor(rand() * 3);
+    const trunkH = 4 + Math.floor(rand() * 3);
     const trunkColor = new THREE.Color(TRUNK_COLOR);
     for (let y = 0; y < trunkH; y++) {
-      trunks.push({ x: wx(x), y: col + y + 0.5, z: wx(z), c: trunkColor, s: 0.74 });
+      trunks.push({ x: wx(x), y: col + y + 0.5, z: wx(z), c: trunkColor, s: 0.76 });
     }
-    const leafColor = new THREE.Color(LEAF_COLORS[Math.floor(rand() * LEAF_COLORS.length)]);
+    const accent = rand() < 0.12;
+    const leafColor = accent
+      ? new THREE.Color(0xb0813c) // 少量秋色点缀，与草地拉开对比
+      : new THREE.Color(LEAF_COLORS[Math.floor(rand() * LEAF_COLORS.length)]);
     const cy = col + trunkH - 0.5;
-    const cr = big ? 3 : 2 + (rand() < 0.3 ? 1 : 0);
+    const cr = big ? 4 : 3 + (rand() < 0.3 ? 1 : 0);
     for (let dy = -1; dy <= 2; dy++) {
       const rr = dy <= 0 ? cr + 0.4 : dy === 1 ? cr - 0.5 : 0.7;
       for (let dz2 = -cr; dz2 <= cr; dz2++) {
@@ -79,25 +82,23 @@ export function generateVegetation(t: TerrainResult, params: SceneParams): Veget
       const forest = noise.fbm((x - N / 2) * 0.05, (z - N / 2) * 0.05, 3);
       const densityThresh = 0.28 - params.vegetation * 0.22;
       if (forest < densityThresh) continue;
-      if (rand() > 0.05 + params.vegetation * 0.22) continue;
-
       const col = t.h[z * N + x];
-      if (col < 4 || col > params.snowline - 14) continue;
+      // 云层(默认 y≈26)以上的山坡也种树：穿出云面、默认视角直接可见
+      if (col < 4 || col > params.snowline - 5) continue;
       let slope = 0;
       for (const [dx, dz] of [[1, 0], [-1, 0], [0, 1], [0, -1]] as const) {
         slope = Math.max(slope, Math.abs(t.h[(z + dz) * N + x + dx] - col));
       }
-      if (slope > 2) continue;
+      if (col > params.snowline - 14 ? slope > 3 : slope > 2) continue;
 
       plantTree(x, z, col, rand() < 0.18);
       treeCount++;
       if (treeCount >= treeLimit) break treeLoop;
     }
   }
-
-  // —— 河岸树：沿低地水系补植醒目树簇（近景可见）——
-  for (let z = 3; z < N - 3 && treeCount < treeLimit + 30; z += 1) {
-    for (let x = 3; x < N - 3 && treeCount < treeLimit + 30; x += 1) {
+  const ripCap = treeCount + Math.round(34 * Math.min(1, params.vegetation));
+  for (let z = 3; z < N - 3 && treeCount < ripCap; z += 1) {
+    for (let x = 3; x < N - 3 && treeCount < ripCap; x += 1) {
       if (!t.waterMask[z * N + x]) continue;
       if (t.h[z * N + x] > 22) continue; // 仅低地河段
       if (rand() > 0.05) continue;
