@@ -102,8 +102,23 @@ export function generateTerrain(params: SceneParams): TerrainResult {
       const ridge = nHeight.ridged(owx * 0.03, owz * 0.03, 4);
       const detail = nDetail.fbm(owx * 0.065, owz * 0.065, 3) * (0.6 + 2.4 * params.terrainDetail);
       const plain = nDetail.fbm(owx * 0.02 + 40, owz * 0.02 + 40, 2) * 1.4;
-      const hh = 3.2 + massif * (0.3 + 0.71 * Math.pow(ridge, 1.35)) + detail + plain;
+      const hh = 3.2 + massif * (0.3 + 0.71 * Math.pow(ridge, 1.05)) + detail + plain;
       h[idx(x, z)] = Math.max(1, Math.round(hh));
+    }
+  }
+
+  // —— 1.5 3×3 平滑：柔化单格尖峰与锯齿棱线（崖壁在下一节才刻，不受影响）——
+  for (let pass = 0; pass < 2; pass++) {
+    const src = Int16Array.from(h);
+    for (let z = 1; z < N - 1; z++) {
+      for (let x = 1; x < N - 1; x++) {
+        let sum = 0;
+        for (let dz = -1; dz <= 1; dz++) {
+          for (let dx = -1; dx <= 1; dx++) sum += src[(z + dz) * N + x + dx];
+        }
+        const i = idx(x, z);
+        h[i] = Math.round(h[i] * 0.25 + (sum / 9) * 0.75);
+      }
     }
   }
 
