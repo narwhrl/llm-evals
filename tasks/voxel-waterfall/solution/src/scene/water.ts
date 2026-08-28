@@ -38,8 +38,8 @@ float vnoise(vec2 p) {
 void main() {
   // 向下滚动的水流条纹
   float t = uTime * uSpeed;
-  float streak = vnoise(vec2(vUv.x * 12.0, vUv.y * 34.0 - t * 7.0));
-  float streak2 = vnoise(vec2(vUv.x * 26.0 + 7.3, vUv.y * 64.0 - t * 12.0));
+  float streak = vnoise(vec2(vUv.x * 12.0, vUv.y * 34.0 + t * 7.0));
+  float streak2 = vnoise(vec2(vUv.x * 26.0 + 7.3, vUv.y * 64.0 + t * 12.0));
   float white = smoothstep(0.42, 0.9, streak * 0.62 + streak2 * 0.48);
   vec3 col = mix(vec3(0.30, 0.52, 0.86), vec3(0.94, 0.98, 1.0), white);
   // 边缘与上下端淡出
