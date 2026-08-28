@@ -47,6 +47,29 @@ export function generateVegetation(t: TerrainResult, params: SceneParams): Veget
   const treeLimit = Math.round(130 * params.vegetation);
   const wx = (x: number) => x - N / 2 + 0.5;
 
+  /** 单棵树：3-5 格树干 + 2-3 格半径椭球冠层（从远处可辨识的树形）。 */
+  const plantTree = (x: number, z: number, col: number, big: boolean) => {
+    const trunkH = 3 + Math.floor(rand() * 3);
+    const trunkColor = new THREE.Color(TRUNK_COLOR);
+    for (let y = 0; y < trunkH; y++) {
+      trunks.push({ x: wx(x), y: col + y + 0.5, z: wx(z), c: trunkColor, s: 0.74 });
+    }
+    const leafColor = new THREE.Color(LEAF_COLORS[Math.floor(rand() * LEAF_COLORS.length)]);
+    const cy = col + trunkH - 0.5;
+    const cr = big ? 3 : 2 + (rand() < 0.3 ? 1 : 0);
+    for (let dy = -1; dy <= 2; dy++) {
+      const rr = dy <= 0 ? cr + 0.4 : dy === 1 ? cr - 0.5 : 0.7;
+      for (let dz2 = -cr; dz2 <= cr; dz2++) {
+        for (let dx2 = -cr; dx2 <= cr; dx2++) {
+          const dd = dx2 * dx2 + dz2 * dz2 + dy * dy * 1.5;
+          if (dd > rr * rr) continue;
+          if (rand() < 0.1) continue; // 破角更自然
+          leaves.push({ x: wx(x + dx2), y: cy + dy, z: wx(z + dz2), c: leafColor, s: 0.95 });
+        }
+      }
+    }
+  };
+
   // —— 树木：森林噪声掩膜 + 缓坡草地 ——
   let treeCount = 0;
   treeLoop:
@@ -66,28 +89,32 @@ export function generateVegetation(t: TerrainResult, params: SceneParams): Veget
       }
       if (slope > 2) continue;
 
-      // 树干 + 冠层
+      plantTree(x, z, col, rand() < 0.18);
       treeCount++;
-      const trunkH = 2 + Math.floor(rand() * 3);
-      const trunkColor = new THREE.Color(TRUNK_COLOR);
-      for (let y = 0; y < trunkH; y++) {
-        trunks.push({ x: wx(x), y: col + y + 0.5, z: wx(z), c: trunkColor, s: 0.82 });
-      }
-      const leafColor = new THREE.Color(LEAF_COLORS[Math.floor(rand() * LEAF_COLORS.length)]);
-      const cy = col + trunkH - 0.5;
-      const cr = 1 + Math.round(rand());
-      for (let dy = -1; dy <= 2; dy++) {
-        const rr = dy <= 0 ? cr + 0.5 : dy === 1 ? cr : 0.5;
-        for (let dz2 = -2; dz2 <= 2; dz2++) {
-          for (let dx2 = -2; dx2 <= 2; dx2++) {
-            const dd = dx2 * dx2 + dz2 * dz2 + dy * dy * 1.2;
-            if (dd > rr * rr) continue;
-            if (dd === Math.floor(dd) && rand() < 0.12) continue; // 破角更自然
-            leaves.push({ x: wx(x + dx2), y: cy + dy, z: wx(z + dz2), c: leafColor, s: 0.94 });
-          }
-        }
-      }
       if (treeCount >= treeLimit) break treeLoop;
+    }
+  }
+
+  // —— 河岸树：沿低地水系补植醒目树簇（近景可见）——
+  for (let z = 3; z < N - 3 && treeCount < treeLimit + 30; z += 1) {
+    for (let x = 3; x < N - 3 && treeCount < treeLimit + 30; x += 1) {
+      if (!t.waterMask[z * N + x]) continue;
+      if (t.h[z * N + x] > 22) continue; // 仅低地河段
+      if (rand() > 0.05) continue;
+      const ang = rand() * Math.PI * 2;
+      const ox = x + Math.round(Math.cos(ang) * (2 + rand() * 2));
+      const oz = z + Math.round(Math.sin(ang) * (2 + rand() * 2));
+      if (ox < 3 || oz < 3 || ox >= N - 3 || oz >= N - 3) continue;
+      if (t.waterMask[oz * N + ox]) continue;
+      const col = t.h[oz * N + ox];
+      if (col < 3 || col > params.snowline - 16) continue;
+      let slope = 0;
+      for (const [dx, dz] of [[1, 0], [-1, 0], [0, 1], [0, -1]] as const) {
+        slope = Math.max(slope, Math.abs(t.h[(oz + dz) * N + ox + dx] - col));
+      }
+      if (slope > 2) continue;
+      plantTree(ox, oz, col, rand() < 0.3);
+      treeCount++;
     }
   }
 
