@@ -13,6 +13,7 @@ This repository provides a reproducible way to compare the coding capabilities o
 | Task | Round record | Candidate branches |
 | --- | --- | --- |
 | `voxel-waterfall` | [`tasks/voxel-waterfall/`](tasks/voxel-waterfall/) | GPT-5.6-SOL, Grok 4.6 |
+| `ui-ux-design` | [`tasks/ui-ux-design/`](tasks/ui-ux-design/) | Prepared; no candidate branches yet |
 
 ## Repository and Worktree Layout
 
