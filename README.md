@@ -16,6 +16,7 @@ This repository provides a reproducible way to compare the coding capabilities o
 | `ui-ux-design` | [`tasks/ui-ux-design/`](tasks/ui-ux-design/) | Prepared; no candidate branches yet |
 | `cs-pvp-diorama` | [`tasks/cs-pvp-diorama/`](tasks/cs-pvp-diorama/) | Prepared; no candidate branches yet |
 | `voxel-chinese-architecture` | [`tasks/voxel-chinese-architecture/`](tasks/voxel-chinese-architecture/) | Prepared; no candidate branches yet |
+| `gargantua-schwarzschild-raytracer` | [`tasks/gargantua-schwarzschild-raytracer/`](tasks/gargantua-schwarzschild-raytracer/) | Prepared; no candidate branches yet |
 
 ## Repository and Worktree Layout
 
