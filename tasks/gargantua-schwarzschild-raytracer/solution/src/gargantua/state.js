@@ -70,6 +70,20 @@ export const CAMERA_PRESETS = [
   { name: '极区倾斜', distance: 19, azimuth: 268, elevation: 57, fov: 55 },
 ];
 
+/** Debug view metadata (keys 0–9); the shader muxes on the same integers. */
+export const DEBUG_VIEWS = [
+  { key: 0, name: '最终合成', desc: 'ACES + Bloom 后的成片画面' },
+  { key: 1, name: '步进/终止', desc: '测地线积分步数热图与终止类型（红=步数耗尽，暗红=落入视界，蓝=逃逸）' },
+  { key: 2, name: '事件视界掩码', desc: '被事件视界捕获的射线显示为白' },
+  { key: 3, name: '盘面交点阶次', desc: '橙=一次像，青=二次像，白=更高阶像' },
+  { key: 4, name: '红移/Doppler', desc: '首次盘面穿越的 g 因子：蓝=多普勒增亮，红=红移去增亮' },
+  { key: 5, name: '背景透镜坐标', desc: '逃逸方向的经纬网格，可见透镜扭曲' },
+  { key: 6, name: '星空/银河', desc: '透镜后程序化天空（无盘）' },
+  { key: 7, name: '后处理前 HDR', desc: '进入后处理前的 HDR 值（仅曝光）' },
+  { key: 8, name: '仅盘面发射', desc: '关闭天空，仅吸积盘的多次穿越发射' },
+  { key: 9, name: '捕获边界', desc: '冲击参数热图与临界带 b ≈ 2.598 rₛ' },
+];
+
 /**
  * Quality tiers really change the render budget: internal resolution scale,
  * geodesic step budget, turbulence octaves, bloom mips, and DPR cap.

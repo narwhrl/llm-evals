@@ -5,7 +5,7 @@ import {
   GEODESIC_FRAGMENT_SHADER,
 } from './geodesic.js';
 import { PostChain } from './post.js';
-import { DEFAULT_PARAMS, QUALITY_TIERS } from './state.js';
+import { CAMERA_PRESETS, DEFAULT_PARAMS, QUALITY_TIERS } from './state.js';
 
 // Full-screen triangle drawn directly in clip space: the three vertices cover
 // the viewport, so a single draw call rasterizes every pixel exactly once and
@@ -169,6 +169,27 @@ export class GargantuaRenderer {
 
   getDebugView() {
     return this.material.uniforms.uDebugView.value;
+  }
+
+  /** Move the camera to a named preset (distance/azimuth/elevation/fov). */
+  applyPreset(index) {
+    const preset = CAMERA_PRESETS[index];
+    if (!preset) return false;
+    this.setParams({
+      camDistance: preset.distance,
+      camAzimuth: preset.azimuth,
+      camElevation: preset.elevation,
+      fov: preset.fov,
+    });
+    return true;
+  }
+
+  toggleCinematic() {
+    return this.rig.toggleCinematic();
+  }
+
+  isCinematic() {
+    return this.rig.isCinematic();
   }
 
   handleUserInteract() {

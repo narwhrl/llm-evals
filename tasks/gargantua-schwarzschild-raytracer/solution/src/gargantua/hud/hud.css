@@ -1,0 +1,272 @@
+.hud-root {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  font-size: 12px;
+  user-select: none;
+}
+
+.hud-root button,
+.hud-root input {
+  pointer-events: auto;
+}
+
+/* ---- top bar ---------------------------------------------------------- */
+.hud-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 14px 16px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.hud-title {
+  pointer-events: none;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
+}
+
+.hud-title h1 {
+  margin: 0;
+  font-size: 20px;
+  letter-spacing: 0.35em;
+  font-weight: 600;
+  color: #ffd9a8;
+}
+
+.hud-title p {
+  margin: 3px 0 0;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: rgba(232, 230, 227, 0.78);
+}
+
+.hud-topbar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+}
+
+.hud-cluster {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.cluster-label {
+  color: rgba(232, 230, 227, 0.55);
+  margin-right: 2px;
+}
+
+.chip {
+  pointer-events: auto;
+  border: 1px solid rgba(255, 217, 168, 0.28);
+  background: rgba(10, 12, 18, 0.66);
+  color: #e8e6e3;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+
+.chip:hover {
+  border-color: rgba(255, 217, 168, 0.65);
+}
+
+.chip.active {
+  background: rgba(255, 154, 60, 0.24);
+  border-color: rgba(255, 154, 60, 0.85);
+  color: #ffd9a8;
+}
+
+.chip.small {
+  padding: 2px 8px;
+}
+
+/* ---- parameter drawer -------------------------------------------------- */
+.hud-panel {
+  pointer-events: auto;
+  position: absolute;
+  top: 108px;
+  right: 16px;
+  width: 264px;
+  max-height: calc(100vh - 170px);
+  overflow-y: auto;
+  background: rgba(8, 10, 15, 0.74);
+  border: 1px solid rgba(255, 217, 168, 0.16);
+  border-radius: 12px;
+  padding: 10px 12px 14px;
+  backdrop-filter: blur(10px);
+  scrollbar-width: thin;
+}
+
+.panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: #ffd9a8;
+  margin-bottom: 6px;
+}
+
+.panel-group h4 {
+  margin: 10px 0 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: rgba(255, 217, 168, 0.85);
+  border-bottom: 1px solid rgba(255, 217, 168, 0.14);
+  padding-bottom: 3px;
+}
+
+.ctl {
+  display: block;
+  margin: 6px 0 2px;
+}
+
+.ctl-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: rgba(232, 230, 227, 0.88);
+}
+
+.ctl-value {
+  color: rgba(255, 217, 168, 0.95);
+  font-variant-numeric: tabular-nums;
+}
+
+.ctl input[type='range'] {
+  width: 100%;
+  height: 14px;
+  margin: 2px 0 0;
+  accent-color: #ff9a3c;
+  background: transparent;
+}
+
+/* ---- debug indicator ---------------------------------------------------- */
+.hud-debug {
+  position: absolute;
+  left: 16px;
+  bottom: 52px;
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  max-width: min(520px, 70vw);
+  background: rgba(8, 10, 15, 0.66);
+  border: 1px solid rgba(255, 217, 168, 0.18);
+  border-radius: 8px;
+  padding: 6px 10px;
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+}
+
+.debug-key {
+  color: #ff9a3c;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.debug-name {
+  color: #ffd9a8;
+  white-space: nowrap;
+}
+
+.debug-desc {
+  color: rgba(232, 230, 227, 0.72);
+  font-size: 11px;
+}
+
+/* ---- shortcut legend ----------------------------------------------------- */
+.hud-legend {
+  position: absolute;
+  left: 16px;
+  bottom: 14px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  color: rgba(232, 230, 227, 0.6);
+  font-size: 11px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+}
+
+/* ---- collapsed state ------------------------------------------------------ */
+.hud-expand {
+  pointer-events: auto;
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  border: 1px solid rgba(255, 217, 168, 0.28);
+  background: rgba(10, 12, 18, 0.66);
+  color: #e8e6e3;
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+}
+
+.hud-collapsed .hud-topbar,
+.hud-collapsed .hud-panel {
+  display: none;
+}
+
+.hud-collapsed .hud-title h1 {
+  font-size: 16px;
+}
+
+/* ---- mobile: drawer becomes a bottom sheet -------------------------------- */
+@media (max-width: 640px) {
+  .hud-top {
+    padding: 10px;
+  }
+
+  .hud-title h1 {
+    font-size: 15px;
+  }
+
+  .hud-title p {
+    display: none;
+  }
+
+  .hud-topbar {
+    align-items: flex-end;
+    max-width: 60vw;
+  }
+
+  .hud-panel {
+    top: auto;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: auto;
+    max-height: 46vh;
+    border-radius: 14px 14px 0 0;
+  }
+
+  .hud-debug {
+    bottom: 44px;
+    max-width: calc(100vw - 32px);
+  }
+
+  .hud-legend {
+    gap: 8px;
+    font-size: 10px;
+  }
+
+  .hud-legend span:nth-child(n + 5) {
+    display: none;
+  }
+}
