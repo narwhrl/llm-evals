@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { GargantuaRenderer } from './gargantua/renderer.js';
 import { GargantuaStore } from './gargantua/store.js';
+import { exposeGargantuaApi } from './gargantua/expose.js';
+import { applyUrlState } from './gargantua/urlState.js';
 import { Hud } from './gargantua/hud/Hud.jsx';
 
 function isSnapshotEqual(a, b) {
@@ -21,6 +23,7 @@ export default function App() {
   const canvasRef = useRef(null);
   const [store, setStore] = useState(null);
   const [snapshot, setSnapshot] = useState(null);
+  const [contextLost, setContextLost] = useState(false);
 
   useEffect(() => {
     const renderer = new GargantuaRenderer(canvasRef.current);
@@ -30,6 +33,17 @@ export default function App() {
     if (window.innerWidth < 700 && !storeInstance.state.hudCollapsed) {
       storeInstance.state.hudCollapsed = true;
     }
+
+    renderer.onContextLost = () => setContextLost(true);
+    renderer.onContextRestored = () => setContextLost(false);
+
+    // URL contract applies before the first capture-ready frame; the ready
+    // flag and automation API go live right after that first frame.
+    const urlInfo = applyUrlState(storeInstance, renderer);
+    renderer.onFirstRender = () => {
+      document.documentElement.dataset.gargantuaReady = 'true';
+      exposeGargantuaApi(storeInstance, renderer, urlInfo);
+    };
 
     renderer.start();
     setStore(storeInstance);
@@ -112,6 +126,14 @@ export default function App() {
         aria-label="Gargantua 黑洞渲染画布"
       />
       {store && snapshot && <Hud store={store} snapshot={snapshot} />}
+      {contextLost && (
+        <div className="ctx-overlay" role="alert">
+          <div className="ctx-card">
+            <h2>渲染上下文已中断</h2>
+            <p>GPU 上下文丢失，正在等待恢复。画面已暂停，状态将自动恢复。</p>
+          </div>
+        </div>
+      )}
     </>
   );
 }

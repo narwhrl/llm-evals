@@ -104,10 +104,24 @@ export class GargantuaRenderer {
     this.lastFrameTime = 0;
     this.frameId = 0;
     this.running = false;
+    this.disposed = false;
+    this.firstFrameDone = false;
+    this.timeFrozen = false;
+    this.frozenTime = 0;
+
+    // Capture/automation hooks (set by the app layer).
+    this.onFirstRender = null;
+    this.onContextLost = null;
+    this.onContextRestored = null;
+
     this.render = this.render.bind(this);
     this.handleResize = this.handleResize.bind(this);
+    this.handleContextLost = this.handleContextLost.bind(this);
+    this.handleContextRestored = this.handleContextRestored.bind(this);
 
     window.addEventListener('resize', this.handleResize);
+    canvas.addEventListener('webglcontextlost', this.handleContextLost);
+    canvas.addEventListener('webglcontextrestored', this.handleContextRestored);
     this.setQuality(this.qualityKey);
     this.rig.applyState({
       distance: this.params.camDistance,
@@ -192,6 +206,47 @@ export class GargantuaRenderer {
     return this.rig.isCinematic();
   }
 
+  /**
+   * Freeze the simulation clock at `seconds` (?capture contract). While
+   * frozen, turbulence, orbital advection, grain, and the cinematic loop all
+   * hold still, so a captured frame is deterministic.
+   */
+  setTime(seconds) {
+    if (typeof seconds !== 'number' || !Number.isFinite(seconds) || seconds < 0) {
+      return false;
+    }
+    this.frozenTime = seconds;
+    this.simTime = seconds;
+    this.timeFrozen = true;
+    this.material.uniforms.uSimTime.value = seconds;
+    return true;
+  }
+
+  isTimeFrozen() {
+    return this.timeFrozen;
+  }
+
+  getSimTime() {
+    return this.timeFrozen ? this.frozenTime : this.simTime;
+  }
+
+  handleContextLost(event) {
+    // Preventing default lets the context be restored later.
+    event.preventDefault();
+    this.stop();
+    this.onContextLost?.();
+  }
+
+  handleContextRestored() {
+    if (this.disposed) return;
+    // GPU resources (render targets especially) must be rebuilt; material
+    // uniforms are plain JS state and survive the loss untouched.
+    this.post.disposeTargets();
+    this.handleResize();
+    this.onContextRestored?.();
+    this.start();
+  }
+
   handleUserInteract() {
     // Overridden by the interaction layer in a later commit; the rig already
     // stopped the cinematic loop before calling this.
@@ -254,24 +309,33 @@ export class GargantuaRenderer {
     const dt = Math.min((now - this.lastFrameTime) / 1000, 0.1);
     this.lastFrameTime = now;
     this.rig.update(dt);
-    this.simTime += dt * this.params.timeScale;
-    this.material.uniforms.uSimTime.value = this.simTime;
+    if (!this.timeFrozen) {
+      this.simTime += dt * this.params.timeScale;
+    }
+    this.material.uniforms.uSimTime.value = this.getSimTime();
     this.syncCameraUniforms();
     this.renderer.setRenderTarget(this.post.sceneRT);
     this.renderer.render(this.scene, this.clipCamera);
     this.renderer.getDrawingBufferSize(this.drawingSize);
     this.post.render({
       params: this.params,
-      simTime: this.simTime,
+      simTime: this.getSimTime(),
       debugView: this.getDebugView(),
       drawingSize: this.drawingSize,
     });
+    if (!this.firstFrameDone) {
+      this.firstFrameDone = true;
+      this.onFirstRender?.();
+    }
     this.frameId = requestAnimationFrame(this.render);
   }
 
   dispose() {
     this.stop();
+    this.disposed = true;
     window.removeEventListener('resize', this.handleResize);
+    this.canvas.removeEventListener('webglcontextlost', this.handleContextLost);
+    this.canvas.removeEventListener('webglcontextrestored', this.handleContextRestored);
     this.rig.dispose();
     this.post.dispose();
     this.mesh.geometry.dispose();
