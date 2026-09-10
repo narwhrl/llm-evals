@@ -1,44 +1,38 @@
 import * as THREE from 'three';
+import { CameraRig } from './cameraRig.js';
+import {
+  FULLSCREEN_VERTEX_SHADER,
+  GEODESIC_FRAGMENT_SHADER,
+} from './geodesic.js';
+import { DEFAULT_PARAMS, QUALITY_TIERS } from './state.js';
 
 // Full-screen triangle drawn directly in clip space: the three vertices cover
 // the viewport, so a single draw call rasterizes every pixel exactly once and
-// all visible imagery is produced per-pixel by the fragment shader.
-const FULLSCREEN_VERTEX_SHADER = /* glsl */ `
-varying vec2 vNdc;
+// all visible imagery is produced per-pixel by the geodesic fragment shader.
+const FULLSCREEN_GEOMETRY_POSITIONS = new Float32Array([
+  -1, -1, 0,
+   3, -1, 0,
+  -1,  3, 0,
+]);
 
-void main() {
-  vNdc = position.xy;
-  gl_Position = vec4(position.xy, 0.0, 1.0);
-}
-`;
-
-// Scaffolding preview: proves the vendored Three.js ESM build renders through
-// the full-screen path. Replaced by the geodesic fragment shader next.
-const PREVIEW_FRAGMENT_SHADER = /* glsl */ `
-precision highp float;
-
-varying vec2 vNdc;
-
-uniform float uTime;
-uniform vec2 uResolution;
-
-void main() {
-  vec2 uv = vNdc * 0.5 + 0.5;
-  uv.x *= uResolution.x / uResolution.y;
-  float glow = length(uv - vec2(0.5, 0.0));
-  vec3 color = vec3(1.0, 0.55, 0.18) * 0.12 / (glow * glow + 0.05);
-  color += vec3(0.02, 0.03, 0.06) * (1.0 - length(vNdc));
-  color *= 0.9 + 0.1 * sin(uTime * 0.5);
-  gl_FragColor = vec4(color, 1.0);
-}
-`;
-
-const MAX_DEVICE_PIXEL_RATIO = 2;
+/** Parameter key → shader uniform sink (camera params are routed separately). */
+const PARAM_UNIFORMS = {
+  diskInner: 'uDiskInner',
+  diskOuter: 'uDiskOuter',
+  diskHalfThickness: 'uDiskHalfThickness',
+  diskTemperature: 'uDiskTemperature',
+  diskBrightness: 'uDiskBrightness',
+  orbitalSpeed: 'uOrbitalSpeedScale',
+  turbulenceAmplitude: 'uTurbAmplitude',
+  turbulenceSpeed: 'uTurbSpeed',
+  starDensity: 'uStarDensity',
+  galaxyBrightness: 'uGalaxyBrightness',
+};
 
 /**
- * Owns the WebGL context, the full-screen shader surface, and the frame loop.
- * Commit 1 wires context lifecycle and resize; the geodesic shader, camera
- * rig, post chain, and debug views attach in later commits.
+ * Owns the WebGL context, the geodesic shader surface, the camera rig, and
+ * the frame loop. Post-processing (HDR bloom + ACES), the HUD, the URL
+ * capture contract, and context-loss recovery attach in later commits.
  */
 export class GargantuaRenderer {
   constructor(canvas) {
@@ -48,47 +42,173 @@ export class GargantuaRenderer {
       antialias: false,
       powerPreference: 'high-performance',
     });
+    this.renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
     this.scene = new THREE.Scene();
     // Identity camera: the full-screen triangle carries its own clip-space
-    // positions, so no projection is applied.
-    this.camera = new THREE.Camera();
+    // positions. The *view* camera below only feeds shader uniforms.
+    this.clipCamera = new THREE.Camera();
+    this.viewCamera = new THREE.PerspectiveCamera(58, 1, 0.1, 300);
+
+    this.params = { ...DEFAULT_PARAMS };
+    this.qualityKey = 'high';
+    this.simTime = 0;
 
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute(
       'position',
-      new THREE.BufferAttribute(
-        new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]),
-        3,
-      ),
+      new THREE.BufferAttribute(new Float32Array(FULLSCREEN_GEOMETRY_POSITIONS), 3),
     );
     this.material = new THREE.ShaderMaterial({
       vertexShader: FULLSCREEN_VERTEX_SHADER,
-      fragmentShader: PREVIEW_FRAGMENT_SHADER,
+      fragmentShader: GEODESIC_FRAGMENT_SHADER,
       depthTest: false,
       depthWrite: false,
       uniforms: {
-        uTime: { value: 0 },
         uResolution: { value: new THREE.Vector2(1, 1) },
+        uSimTime: { value: 0 },
+        uCamPos: { value: new THREE.Vector3() },
+        uCamRight: { value: new THREE.Vector3(1, 0, 0) },
+        uCamUp: { value: new THREE.Vector3(0, 1, 0) },
+        uCamForward: { value: new THREE.Vector3(0, 0, -1) },
+        uTanHalfFov: { value: Math.tan((58 / 2) * (Math.PI / 180)) },
+        uDiskInner: { value: this.params.diskInner },
+        uDiskOuter: { value: this.params.diskOuter },
+        uDiskHalfThickness: { value: this.params.diskHalfThickness },
+        uDiskTemperature: { value: this.params.diskTemperature },
+        uDiskBrightness: { value: this.params.diskBrightness },
+        uOrbitalSpeedScale: { value: this.params.orbitalSpeed },
+        uTurbAmplitude: { value: this.params.turbulenceAmplitude },
+        uTurbSpeed: { value: this.params.turbulenceSpeed },
+        uTurbOctaves: { value: QUALITY_TIERS.high.turbOctaves },
+        uStarDensity: { value: this.params.starDensity },
+        uGalaxyBrightness: { value: this.params.galaxyBrightness },
+        uMaxSteps: { value: QUALITY_TIERS.high.maxSteps },
+        uDebugView: { value: 0 },
+        uDiskOnly: { value: 0 },
       },
     });
     this.mesh = new THREE.Mesh(geometry, this.material);
     this.mesh.frustumCulled = false;
     this.scene.add(this.mesh);
 
-    this.clock = new THREE.Clock();
+    this.rig = new CameraRig(this.viewCamera, canvas, {
+      onUserInteract: () => this.handleUserInteract?.(),
+      onChange: () => this.readBackCameraParams(),
+    });
+
+    this.lastFrameTime = 0;
     this.frameId = 0;
     this.running = false;
     this.render = this.render.bind(this);
     this.handleResize = this.handleResize.bind(this);
 
     window.addEventListener('resize', this.handleResize);
+    this.setQuality(this.qualityKey);
+    this.rig.applyState({
+      distance: this.params.camDistance,
+      azimuth: this.params.camAzimuth,
+      elevation: this.params.camElevation,
+      fov: this.params.fov,
+    });
+  }
+
+  /** Apply one or more live parameters from the HUD/URL/persistence layers. */
+  setParams(partial) {
+    for (const [key, value] of Object.entries(partial)) {
+      if (!(key in this.params)) continue;
+      this.params[key] = value;
+      const uniform = PARAM_UNIFORMS[key];
+      if (uniform) this.material.uniforms[uniform].value = value;
+    }
+    if ('fov' in partial) {
+      this.viewCamera.fov = this.params.fov;
+      this.viewCamera.updateProjectionMatrix();
+    }
+    if (
+      'camDistance' in partial || 'camAzimuth' in partial || 'camElevation' in partial
+    ) {
+      this.rig.applyState({
+        distance: this.params.camDistance,
+        azimuth: this.params.camAzimuth,
+        elevation: this.params.camElevation,
+        fov: this.params.fov,
+      });
+    }
+  }
+
+  getParams() {
+    return { ...this.params };
+  }
+
+  /** Quality tier really changes budget: step count, octaves, resolution. */
+  setQuality(key) {
+    const tier = QUALITY_TIERS[key];
+    if (!tier) return false;
+    this.qualityKey = key;
+    this.material.uniforms.uMaxSteps.value = tier.maxSteps;
+    this.material.uniforms.uTurbOctaves.value = tier.turbOctaves;
     this.handleResize();
+    return true;
+  }
+
+  getQuality() {
+    return this.qualityKey;
+  }
+
+  setDebugView(index) {
+    const value = Math.max(0, Math.min(9, index | 0));
+    this.material.uniforms.uDebugView.value = value;
+    this.material.uniforms.uDiskOnly.value = value === 8 ? 1 : 0;
+    return value;
+  }
+
+  getDebugView() {
+    return this.material.uniforms.uDebugView.value;
+  }
+
+  handleUserInteract() {
+    // Overridden by the interaction layer in a later commit; the rig already
+    // stopped the cinematic loop before calling this.
+  }
+
+  /** OrbitControls is authoritative while damping; mirror it into params. */
+  readBackCameraParams() {
+    // The rig fires 'change' from its own constructor before we can assign
+    // this.rig; nothing to read back yet.
+    if (!this.rig) return;
+    const state = this.rig.getState();
+    this.params.camDistance = state.distance;
+    this.params.camAzimuth = state.azimuth;
+    this.params.camElevation = state.elevation;
+    this.params.fov = state.fov;
+  }
+
+  handleResize() {
+    const width = this.canvas.clientWidth || window.innerWidth;
+    const height = this.canvas.clientHeight || window.innerHeight;
+    const tier = QUALITY_TIERS[this.qualityKey];
+    const dpr = Math.min(window.devicePixelRatio || 1, tier.maxDpr);
+    this.renderer.setPixelRatio(dpr * tier.renderScale);
+    this.renderer.setSize(width, height, false);
+    this.material.uniforms.uResolution.value.set(width * dpr, height * dpr);
+  }
+
+  syncCameraUniforms() {
+    this.viewCamera.updateMatrixWorld();
+    const e = this.viewCamera.matrixWorld.elements;
+    this.material.uniforms.uCamPos.value.copy(this.viewCamera.position);
+    this.material.uniforms.uCamRight.value.set(e[0], e[1], e[2]);
+    this.material.uniforms.uCamUp.value.set(e[4], e[5], e[6]);
+    // The view camera looks down its local −Z; forward is the negated basis.
+    this.material.uniforms.uCamForward.value.set(-e[8], -e[9], -e[10]);
+    this.material.uniforms.uTanHalfFov.value =
+      Math.tan((this.viewCamera.fov / 2) * (Math.PI / 180));
   }
 
   start() {
     if (this.running) return;
     this.running = true;
-    this.clock.start();
+    this.lastFrameTime = performance.now();
     this.frameId = requestAnimationFrame(this.render);
   }
 
@@ -97,25 +217,23 @@ export class GargantuaRenderer {
     cancelAnimationFrame(this.frameId);
   }
 
-  handleResize() {
-    const width = this.canvas.clientWidth || window.innerWidth;
-    const height = this.canvas.clientHeight || window.innerHeight;
-    const dpr = Math.min(window.devicePixelRatio || 1, MAX_DEVICE_PIXEL_RATIO);
-    this.renderer.setPixelRatio(dpr);
-    this.renderer.setSize(width, height, false);
-    this.material.uniforms.uResolution.value.set(width * dpr, height * dpr);
-  }
-
   render() {
     if (!this.running) return;
-    this.material.uniforms.uTime.value = this.clock.getElapsedTime();
-    this.renderer.render(this.scene, this.camera);
+    const now = performance.now();
+    const dt = Math.min((now - this.lastFrameTime) / 1000, 0.1);
+    this.lastFrameTime = now;
+    this.rig.update(dt);
+    this.simTime += dt * this.params.timeScale;
+    this.material.uniforms.uSimTime.value = this.simTime;
+    this.syncCameraUniforms();
+    this.renderer.render(this.scene, this.clipCamera);
     this.frameId = requestAnimationFrame(this.render);
   }
 
   dispose() {
     this.stop();
     window.removeEventListener('resize', this.handleResize);
+    this.rig.dispose();
     this.mesh.geometry.dispose();
     this.material.dispose();
     this.renderer.dispose();
