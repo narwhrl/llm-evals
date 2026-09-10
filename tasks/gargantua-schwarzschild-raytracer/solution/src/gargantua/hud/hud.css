@@ -261,6 +261,12 @@
     max-width: calc(100vw - 32px);
   }
 
+  /* 面板展开为底部抽屉时，隐藏与之重叠的悬浮条。 */
+  .hud-root:not(.hud-collapsed) .hud-debug,
+  .hud-root:not(.hud-collapsed) .hud-legend {
+    display: none;
+  }
+
   .hud-legend {
     gap: 8px;
     font-size: 10px;
