@@ -4,6 +4,7 @@ import {
   FULLSCREEN_VERTEX_SHADER,
   GEODESIC_FRAGMENT_SHADER,
 } from './geodesic.js';
+import { PostChain } from './post.js';
 import { DEFAULT_PARAMS, QUALITY_TIERS } from './state.js';
 
 // Full-screen triangle drawn directly in clip space: the three vertices cover
@@ -95,6 +96,10 @@ export class GargantuaRenderer {
       onUserInteract: () => this.handleUserInteract?.(),
       onChange: () => this.readBackCameraParams(),
     });
+
+    // HDR post chain: geodesic HDR target → bloom → ACES composite.
+    this.post = new PostChain(this.renderer);
+    this.drawingSize = new THREE.Vector2();
 
     this.lastFrameTime = 0;
     this.frameId = 0;
@@ -188,9 +193,14 @@ export class GargantuaRenderer {
     const height = this.canvas.clientHeight || window.innerHeight;
     const tier = QUALITY_TIERS[this.qualityKey];
     const dpr = Math.min(window.devicePixelRatio || 1, tier.maxDpr);
-    this.renderer.setPixelRatio(dpr * tier.renderScale);
+    // The canvas stays at device resolution for crisp post effects; the
+    // geodesic + bloom targets scale with the quality tier's renderScale.
+    this.renderer.setPixelRatio(dpr);
     this.renderer.setSize(width, height, false);
-    this.material.uniforms.uResolution.value.set(width * dpr, height * dpr);
+    const sceneW = Math.max(2, Math.round(width * dpr * tier.renderScale));
+    const sceneH = Math.max(2, Math.round(height * dpr * tier.renderScale));
+    this.post.setSize(sceneW, sceneH, tier.bloomMips);
+    this.material.uniforms.uResolution.value.set(sceneW, sceneH);
   }
 
   syncCameraUniforms() {
@@ -226,7 +236,15 @@ export class GargantuaRenderer {
     this.simTime += dt * this.params.timeScale;
     this.material.uniforms.uSimTime.value = this.simTime;
     this.syncCameraUniforms();
+    this.renderer.setRenderTarget(this.post.sceneRT);
     this.renderer.render(this.scene, this.clipCamera);
+    this.renderer.getDrawingBufferSize(this.drawingSize);
+    this.post.render({
+      params: this.params,
+      simTime: this.simTime,
+      debugView: this.getDebugView(),
+      drawingSize: this.drawingSize,
+    });
     this.frameId = requestAnimationFrame(this.render);
   }
 
@@ -234,6 +252,7 @@ export class GargantuaRenderer {
     this.stop();
     window.removeEventListener('resize', this.handleResize);
     this.rig.dispose();
+    this.post.dispose();
     this.mesh.geometry.dispose();
     this.material.dispose();
     this.renderer.dispose();
