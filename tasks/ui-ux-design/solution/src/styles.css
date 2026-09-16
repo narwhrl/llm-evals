@@ -1,0 +1,47 @@
+/* 《织》设计基调 — 亚麻本色底，四色纬线：靛蓝 / 茜红 / 墨黑 / 一缕金 */
+
+:root {
+  --linen: #ece7dd;
+  --linen-deep: #e2dccd;
+  --ink: #2b2723;
+  --ink-soft: #57503f;
+  --indigo: #2f4858;
+  --madder: #a4432f;
+  --gold: #b98a2f;
+  --thread: #8d8471;
+  --panel: rgba(236, 231, 221, 0.92);
+  --serif: "Songti SC", "STSong", "SimSun", "Noto Serif CJK SC", "Noto Serif SC", serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--linen);
+  color: var(--ink);
+  font-family: var(--serif);
+  line-height: 1.9;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--indigo);
+  color: var(--linen);
+}
+
+:focus-visible {
+  outline: 2px solid var(--madder);
+  outline-offset: 3px;
+}
