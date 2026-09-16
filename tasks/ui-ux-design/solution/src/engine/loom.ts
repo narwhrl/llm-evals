@@ -104,6 +104,8 @@ export class LoomEngine {
   private lastTangleEmitted = 0
 
   private finaleEnabled = false
+  private finaleColor: WeftColor = 'indigo'
+  private lastFling = -9
   private userRows = 0
   private pendingSettle = false
   private settleTimer = -1
@@ -295,6 +297,10 @@ export class LoomEngine {
     this.finaleEnabled = v
   }
 
+  setFinaleColor(c: WeftColor) {
+    this.finaleColor = c
+  }
+
   /** 终章：用户投梭。返回是否成功织入 */
   throwShuttle(color: WeftColor): boolean {
     if (!this.finaleEnabled || this.userRows >= 3 || this.phase === 'settled') return false
@@ -372,6 +378,19 @@ export class LoomEngine {
 
     if (this.pointer.onCloth) {
       this.swing.vel += vx * 0.00004
+      return
+    }
+    // 终章：在织口附近用力横甩 = 投出当前选中的纬线
+    if (
+      this.finaleEnabled &&
+      this.phase !== 'settled' &&
+      Math.abs(y - this.fellY()) < 46 &&
+      Math.abs(vx) > 55
+    ) {
+      if (this.time - this.lastFling > 0.9) {
+        this.lastFling = this.time
+        this.throwShuttle(this.finaleColor)
+      }
       return
     }
     if (y < this.fellY() || this.phase === 'settled') return
@@ -629,7 +648,7 @@ export class LoomEngine {
     ctx.translate(cx, this.beamY)
     ctx.rotate(this.swing.ang)
     ctx.translate(-cx, -this.beamY)
-    const drew = this.cloth.drawTo(ctx, this.loomLeft, this.clothTop)
+    const drew = this.cloth.drawTo(ctx, this.loomLeft, this.clothTop, this.wovenRows * this.rowH)
     if (drew && this.wovenRows > 0) {
       // 织口线：最新一行被压紧的地方
       ctx.fillStyle = `rgba(43, 39, 35, ${0.22 + this.beatPulse * 0.4})`

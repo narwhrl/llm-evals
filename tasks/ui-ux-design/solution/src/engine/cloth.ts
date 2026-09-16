@@ -131,9 +131,21 @@ export class ClothRenderer {
     return row * this.rowH
   }
 
-  drawTo(ctx: CanvasRenderingContext2D, x: number, y: number): boolean {
+  drawTo(ctx: CanvasRenderingContext2D, x: number, y: number, visibleHeight: number): boolean {
     if (!this.canvas) return false
-    ctx.drawImage(this.canvas, x, y, this.width, this.canvas.height / this.dpr)
+    const h = Math.min(visibleHeight, this.canvas.height / this.dpr)
+    if (h <= 0) return true
+    ctx.drawImage(
+      this.canvas,
+      0,
+      0,
+      this.canvas.width,
+      h * this.dpr,
+      x,
+      y,
+      this.width,
+      h,
+    )
     return true
   }
 }

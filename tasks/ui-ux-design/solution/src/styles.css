@@ -206,6 +206,208 @@ main {
   color: var(--ink-soft);
 }
 
+/* ---------- 终章 · 成 ---------- */
+
+.chapter-finale .panel { border-left-color: var(--gold); }
+
+.weft-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8em;
+  margin: 1.6em 0 0;
+}
+
+.weft-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  letter-spacing: 0.15em;
+  padding: 0.55em 1.2em;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--ink-soft);
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.weft-button:hover:not(:disabled) {
+  background: rgba(43, 39, 35, 0.06);
+}
+
+.weft-button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.swatch {
+  display: inline-block;
+  width: 0.95em;
+  height: 0.95em;
+  border-radius: 1px;
+  box-shadow: inset 0 0 0 1px rgba(43, 39, 35, 0.2);
+}
+
+.finale-status {
+  margin: 1.1em 0 0;
+  font-size: 0.82rem;
+  letter-spacing: 0.15em;
+  color: var(--ink-soft);
+}
+
+.gift-list {
+  list-style: none;
+  margin: 1.4em 0 0;
+  padding: 0;
+}
+
+.gift-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7em;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  margin-top: 0.5em;
+}
+
+.finale-done {
+  margin: 0.6em 0 0;
+  font-size: 1.15rem;
+  letter-spacing: 0.06em;
+}
+
+.finale-done strong {
+  display: block;
+  margin-top: 0.4em;
+  font-size: 1.3rem;
+  letter-spacing: 0.08em;
+}
+
+/* ---------- 落款 ---------- */
+
+.hem {
+  padding: 26vh 7vw 12vh;
+}
+
+.hem-inner {
+  max-width: 34em;
+  margin: 0 auto;
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  line-height: 2.1;
+}
+
+.hem-mark {
+  margin: 0 0 0.6em;
+  font-size: 1.7rem;
+  letter-spacing: 0.35em;
+  color: var(--ink);
+}
+
+.hem-note {
+  margin-top: 1.6em;
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+}
+
+/* ---------- 拨线浮层与隐藏自白 ---------- */
+
+.chips {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.chip {
+  position: absolute;
+  transform: translate(-50%, -110%);
+  padding: 0.15em 0.7em;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  color: var(--ink-soft);
+  background: var(--panel);
+  border: 1px solid rgba(87, 80, 63, 0.35);
+  border-radius: 2px;
+  animation: chip-float 1.8s ease-out forwards;
+  white-space: nowrap;
+}
+
+.chip-broken {
+  color: var(--gold);
+  border-color: var(--gold);
+}
+
+@keyframes chip-float {
+  0% { opacity: 0; transform: translate(-50%, -90%); }
+  12% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -260%); }
+}
+
+.confession {
+  position: fixed;
+  top: 50%;
+  right: 5vw;
+  transform: translateY(-50%);
+  z-index: 4;
+  max-height: 82vh;
+  padding: 2em 1.6em;
+  background: var(--panel);
+  border: 1px solid var(--gold);
+  box-shadow: 0 2px 18px rgba(43, 39, 35, 0.12);
+}
+
+.confession-lines {
+  writing-mode: vertical-rl;
+  font-size: 1rem;
+  letter-spacing: 0.22em;
+  line-height: 2.4;
+  color: var(--ink);
+}
+
+.confession-lines p {
+  margin: 0 0 0 0.8em;
+}
+
+.confession-close {
+  position: absolute;
+  top: 0.7em;
+  left: 0.9em;
+  font-family: var(--serif);
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  color: var(--ink-soft);
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--ink-soft);
+  padding: 0 0 0.1em;
+  cursor: pointer;
+}
+
+.pluck-fab {
+  position: fixed;
+  left: 4vw;
+  bottom: 4.5vh;
+  z-index: 3;
+  font-family: var(--serif);
+  font-size: 0.8rem;
+  letter-spacing: 0.22em;
+  padding: 0.6em 1.3em;
+  color: var(--ink-soft);
+  background: var(--panel);
+  border: 1px solid rgba(87, 80, 63, 0.4);
+  border-radius: 2px;
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.pluck-fab:hover,
+.pluck-fab:focus-visible {
+  opacity: 1;
+  color: var(--ink);
+}
+
 .kicker {
   margin: 0 0 1em;
   font-size: 0.78rem;
