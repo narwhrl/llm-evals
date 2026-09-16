@@ -78,11 +78,11 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 0 7vw 6vh;
+  padding: 0 7vw 10vh;
 }
 
 .hero-label {
-  margin-top: 19vh;
+  margin-top: 48vh;
   display: inline-flex;
   align-items: stretch;
   gap: 1.2em;
@@ -293,9 +293,12 @@ main {
 .hem-inner {
   max-width: 34em;
   margin: 0 auto;
+  padding: 2em 2.4em;
   font-size: 0.92rem;
   color: var(--ink-soft);
   line-height: 2.1;
+  background: var(--panel);
+  border-top: 1px solid rgba(87, 80, 63, 0.35);
 }
 
 .hem-mark {
@@ -387,7 +390,7 @@ main {
 
 .pluck-fab {
   position: fixed;
-  left: 4vw;
+  right: 4vw;
   bottom: 4.5vh;
   z-index: 3;
   font-family: var(--serif);
@@ -444,11 +447,11 @@ main {
 
 @media (max-width: 700px) {
   .hero {
-    padding: 0 6vw 5vh;
+    padding: 0 6vw 12vh;
   }
 
   .hero-label {
-    margin-top: 16vh;
+    margin-top: 54vh;
     gap: 0.9em;
     padding: 0.8em 1.1em 0.8em 0.8em;
   }
