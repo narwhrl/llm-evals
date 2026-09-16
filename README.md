@@ -30,6 +30,10 @@ llm-evals/                              # repository root; always main
 │       ├── task.md                     # exact prompt and acceptance criteria
 │       ├── starter/                    # optional shared starter code
 │       └── tests/                      # optional fixed acceptance tests
+├── deploy/                             # candidate gallery build and deployment
+│   ├── build.mjs                       # builds every llm/* branch into public/
+│   ├── wrangler.jsonc                  # Worker, static assets, custom domain
+│   └── public/                         # generated gallery output (ignored)
 └── .worktrees/                         # ignored local linked worktrees
     └── <task-id>/
         ├── <model-id>/                 # llm/<task-id>/<model-id>
@@ -65,6 +69,46 @@ Every candidate branch uses the same tracked implementation path, `tasks/<task-i
    ```bash
    git worktree remove .worktrees/<task-id>/<model-id>
    ```
+
+## Candidate Gallery
+
+Every pushed candidate branch is built and published to one Cloudflare Worker, so all implementations can be viewed side by side at predictable paths.
+
+- Live site: <https://llm-evals-result.narwh.dev/>
+- URL layout: `https://llm-evals-result.narwh.dev/<task-id>/<model-id>/`
+- `/` serves a generated index page that links every published candidate.
+
+### Publish or Update
+
+Prerequisites: Node.js with npm, and an authenticated Wrangler session (`npx wrangler login`) on an account that owns the `narwh.dev` zone. Run both commands from the repository root:
+
+```bash
+node deploy/build.mjs              # build every candidate branch into deploy/public/
+cd deploy && npx wrangler deploy   # upload and publish
+```
+
+Rebuild a subset while iterating; `BUILD_CONCURRENCY` (default `4`) controls how many candidates build at once:
+
+```bash
+node deploy/build.mjs ui-ux-design/kimi-k3 voxel-waterfall/grok-4.6
+```
+
+To publish a new candidate, push its `llm/<task-id>/<model-id>` branch and run both commands again. Branches are discovered from `origin`, so no configuration change is needed; any branch without `tasks/<task-id>/solution/package.json` is skipped and listed in the summary.
+
+### How the Build Works
+
+`deploy/build.mjs`:
+
+1. Fetches `origin` and selects every `llm/<task-id>/<model-id>` branch that has a `tasks/<task-id>/solution/package.json`.
+2. Creates a temporary detached worktree under `.worktrees/.deploy-tmp/`, runs `npm ci` (or `npm install` when the branch has no `package-lock.json`), then `npm run build -- --base=/<task-id>/<model-id>/ --outDir=<repository>/deploy/public/<task-id>/<model-id> --emptyOutDir`, and removes the temporary worktree again.
+3. Regenerates `deploy/public/index.html` from every candidate directory present in `deploy/public/`, so a partial rebuild still lists everything that would be deployed.
+4. Prints a per-candidate summary and exits non-zero if any candidate failed to build.
+
+The `--base` flag is a hosting adaptation applied at build time only: it rewrites asset URLs so an app works under its path prefix, and it never modifies a candidate's tracked files. Evaluation conclusions must still be based on each candidate's own build; this step only decides where the built files are served from.
+
+`deploy/public/` and `deploy/.wrangler/` are ignored, so build output is never committed. Deployment settings live in `deploy/wrangler.jsonc`: static assets from `./public`, `html_handling: auto-trailing-slash` (so `/<task-id>/<model-id>` redirects to the trailing-slash form), and the `llm-evals-result.narwh.dev` custom domain route.
+
+The gallery is public, with no authentication gate. Unknown paths return 404 — there is no single-page-application fallback, because candidates are single-page apps without client-side routing.
 
 ## Evaluation Criteria
 
