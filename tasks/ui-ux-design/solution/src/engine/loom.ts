@@ -39,6 +39,7 @@ interface WarpThread {
   points: ThreadPoint[]
   tensionAt: number
   tensioned: boolean
+  waved: boolean
   slackSeed: number
   word: string
   isBroken: boolean
@@ -91,6 +92,7 @@ export class LoomEngine {
   private time = 0
   private warpT = -0.4
   private warpingDone = false
+  private waveT = -1
 
   private shuttle = { active: false, dir: 1, t: 0, dur: 0.36, fromX: 0, toX: 0, y: 0, color: PALETTE.indigo as string }
   private beatPulse = 0
@@ -202,6 +204,7 @@ export class LoomEngine {
         points: [],
         tensionAt: tensionAt[i],
         tensioned: false,
+        waved: false,
         slackSeed: rng() * Math.PI * 2,
         word: THREAD_WORDS[Math.floor(rng() * THREAD_WORDS.length)],
         isBroken: i === this.brokenIndex,
@@ -234,6 +237,12 @@ export class LoomEngine {
 
   private fellY(): number {
     return this.clothTop + this.wovenRows * this.rowH
+  }
+
+  /** 乱线蔓延前沿：0=该质点未被卷入，1=完全卷入 */
+  private tangleFront(j: number): number {
+    const depth01 = j / (POINTS - 1)
+    return clamp((depth01 - (1 - this.tangleAmount)) / 0.18, 0, 1)
   }
 
   // ---------- 外部驱动 ----------
@@ -505,8 +514,24 @@ export class LoomEngine {
       if (all) {
         this.warpingDone = true
         if (this.phase === 'warping') this.phase = 'loom'
+        this.waveT = 0 // 上经句号：一道缓波掠过全部经线
         this.events.onWarpDone?.()
       }
+    }
+
+    // 一线波：像织工上经后最后一次通查
+    if (this.waveT >= 0) {
+      this.waveT += dt
+      const frontier = this.loomLeft + this.waveT * 850
+      for (const t of this.threads) {
+        if (t.waved || t.restX > frontier) continue
+        t.waved = true
+        for (let j = 1; j < POINTS; j++) {
+          t.points[j].px -= 5 * Math.sin((Math.PI * j) / (POINTS - 1))
+        }
+        t.glow = Math.max(t.glow, 0.4)
+      }
+      if (frontier > this.loomLeft + this.loomW + 140) this.waveT = -1
     }
 
     // 缠结程度趋近目标
@@ -533,7 +558,7 @@ export class LoomEngine {
           if (rec) this.commitRow(rec)
           this.beatCool = this.rowQueue.length > 5 ? 0.1 : 0.22
         }
-      } else if (this.rowQueue.length > 0 && this.beatCool <= 0) {
+      } else if (this.rowQueue.length > 0 && this.beatCool <= 0 && this.tangleAmount < 0.9) {
         const rec = this.rowQueue[0]
         this.shuttle.active = true
         this.shuttle.dir *= -1
@@ -615,8 +640,10 @@ export class LoomEngine {
           p.y += vy * 0.985 + 900 * dt * dt
           continue
         }
-        const restY = fell + seg * j + Math.sin((Math.PI * j) / (POINTS - 1)) * this.tangleAmount * 14
-        const tOff = t.tangleOffsets[j] * this.tangleAmount
+        const bell = Math.sin((Math.PI * j) / (POINTS - 1))
+        const restY = fell + seg * j + bell * this.tangleFront(j) * 14
+        // 缠结从线尾向上蔓延：越靠近织口，越晚被卷进去
+        const tOff = t.tangleOffsets[j] * this.tangleFront(j)
         let ax = (t.restX + tOff - p.x) * kX
         const ay = (restY - p.y) * kY
         if (!this.reducedMotion) {
@@ -626,11 +653,16 @@ export class LoomEngine {
         p.x += vx + ax * dt * dt
         p.y += vy + ay * dt * dt
       }
-      // 线内波动传递
+      // 线内波动传递：只平滑“偏离目标的动态部分”，
+      // 静态缠结形状由弹簧目标承担，不被熨平
       for (let pass = 0; pass < 2; pass++) {
         for (let j = 1; j < POINTS - 1; j++) {
           const p = pts[j]
-          p.x += (pts[j - 1].x + pts[j + 1].x - 2 * p.x) * 0.16
+          const dev = (jj: number) => {
+            const q = pts[jj]
+            return q.x - (t.restX + (t.cut ? 0 : t.tangleOffsets[jj] * this.tangleFront(jj)))
+          }
+          p.x += (dev(j - 1) + dev(j + 1) - 2 * dev(j)) * 0.16
         }
       }
     }
@@ -650,9 +682,9 @@ export class LoomEngine {
     ctx.translate(-cx, -this.beamY)
     const drew = this.cloth.drawTo(ctx, this.loomLeft, this.clothTop, this.wovenRows * this.rowH)
     if (drew && this.wovenRows > 0) {
-      // 织口线：最新一行被压紧的地方
+      // 织口线：打纬第三拍 —— 下沉回弹 + 亮线脉冲
       ctx.fillStyle = `rgba(43, 39, 35, ${0.22 + this.beatPulse * 0.4})`
-      ctx.fillRect(this.loomLeft, this.fellY() - 1, this.loomW, 1.2 + this.beatPulse * 1.4)
+      ctx.fillRect(this.loomLeft, this.fellY() - 1 + this.beatPulse * 1.5, this.loomW, 1.2 + this.beatPulse * 1.4)
     }
     if (this.phase === 'settled') this.drawFringe(ctx)
     ctx.restore()

@@ -7,6 +7,7 @@ interface Props {
   userRows: number
   giftsThrown: WeftColor[]
   settledAnnounced: boolean
+  shuttleBlocked: boolean
   onThrow: (color: WeftColor) => void
 }
 
@@ -21,7 +22,7 @@ const WEFTS: { id: WeftColor; name: string }[] = [
  * 赠言不写在标签上——织进去，才读得到。
  */
 export const Finale = forwardRef<HTMLElement, Props>(function Finale(
-  { finaleOn, userRows, giftsThrown, settledAnnounced, onThrow },
+  { finaleOn, userRows, giftsThrown, settledAnnounced, shuttleBlocked, onThrow },
   ref,
 ) {
   const done = userRows >= 3
@@ -53,6 +54,13 @@ export const Finale = forwardRef<HTMLElement, Props>(function Finale(
             <p className="finale-status" role="status">
               {done ? '梭子停了。等布落下来。' : `已织入 ${userRows} / 3 行。`}
             </p>
+            {shuttleBlocked && (
+              <p className="finale-blocked" role="alert">
+                {done
+                  ? '梭子在线结前停下了——回到第四章把线理顺，它会替你织完。'
+                  : '线还乱着，梭子过不去。可以回到第四章，先帮它理顺。'}
+              </p>
+            )}
           </>
         )}
         {giftsThrown.length > 0 && (

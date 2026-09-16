@@ -150,6 +150,7 @@ export default function App() {
           userRows={userRows}
           giftsThrown={giftsThrown}
           settledAnnounced={settledAnnounced}
+          shuttleBlocked={tangleAmount > 0.9}
           onThrow={throwWeft}
         />
         <Hem settledAnnounced={settledAnnounced} />

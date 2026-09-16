@@ -256,6 +256,15 @@ main {
   color: var(--ink-soft);
 }
 
+.finale-blocked {
+  margin: 0.9em 0 0;
+  padding: 0.7em 1em;
+  font-size: 0.85rem;
+  color: var(--madder);
+  border-left: 2px solid var(--madder);
+  background: rgba(164, 67, 47, 0.06);
+}
+
 .gift-list {
   list-style: none;
   margin: 1.4em 0 0;
