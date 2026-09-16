@@ -1,0 +1,15 @@
+{
+  "name": "llm-evals-gallery",
+  "compatibility_date": "2026-09-16",
+  "assets": {
+    "directory": "./public",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "none"
+  },
+  "routes": [
+    {
+      "pattern": "llm-evals-result.narwh.dev",
+      "custom_domain": true
+    }
+  ]
+}
