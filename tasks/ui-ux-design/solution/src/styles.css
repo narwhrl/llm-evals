@@ -175,6 +175,36 @@ main {
 .chapter-think .panel { border-left-color: var(--indigo); }
 .chapter-create .panel { border-left-color: var(--madder); }
 .chapter-collab .panel { border-left-color: var(--ink); }
+.chapter-tangle .panel { border-left-color: var(--thread); }
+
+.tangle-row {
+  display: flex;
+  align-items: baseline;
+  gap: 1.2em;
+  margin: 1.4em 0 0;
+}
+
+.comb-button {
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  letter-spacing: 0.2em;
+  padding: 0.55em 1.4em;
+  color: var(--linen);
+  background: var(--ink);
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.comb-button:hover {
+  background: var(--ink-soft);
+}
+
+.tangle-state {
+  font-size: 0.82rem;
+  letter-spacing: 0.15em;
+  color: var(--ink-soft);
+}
 
 .kicker {
   margin: 0 0 1em;

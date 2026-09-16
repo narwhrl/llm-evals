@@ -158,15 +158,43 @@ export class LoomEngine {
     })
     this.brokenIndex = Math.floor(n * (0.58 + rng() * 0.2))
 
+    // 缠结形状：成对交叉 + 二阶摆动 + 抖动 —— 要乱得像真的打了结
+    const allOffsets: Float32Array[] = new Array(n)
+    const done = new Array<boolean>(n).fill(false)
+    const bellAt = (j: number) => Math.sin((Math.PI * j) / (POINTS - 1))
+    const wigAt = (j: number, phase: number) => Math.sin((2 * Math.PI * j) / (POINTS - 1) + phase)
+    for (let i = 0; i < n; i++) {
+      if (done[i]) continue
+      if (i + 1 < n && rng() < 0.55) {
+        const amp = this.spacing * (3 + rng() * 4.5)
+        const sign = rng() < 0.5 ? 1 : -1
+        const phase = rng() * Math.PI * 2
+        for (const [idx, s] of [[i, sign], [i + 1, -sign]] as const) {
+          const arr = new Float32Array(POINTS)
+          for (let j = 0; j < POINTS; j++) {
+            arr[j] =
+              bellAt(j) * amp * s +
+              wigAt(j, phase + idx) * amp * 0.35 +
+              (rng() - 0.5) * this.spacing * 0.8 * bellAt(j)
+          }
+          allOffsets[idx] = arr
+          done[idx] = true
+        }
+      } else {
+        const amp = this.spacing * (0.9 + rng() * 2)
+        const sign = rng() < 0.5 ? 1 : -1
+        const phase = rng() * Math.PI * 2
+        const arr = new Float32Array(POINTS)
+        for (let j = 0; j < POINTS; j++) {
+          arr[j] = bellAt(j) * amp * sign + wigAt(j, phase) * amp * 0.5 + (rng() - 0.5) * this.spacing * 0.5 * bellAt(j)
+        }
+        allOffsets[i] = arr
+        done[i] = true
+      }
+    }
+
     this.threads = order.map((i) => i).map((i) => {
       const restX = this.loomLeft + i * this.spacing
-      const offsets = new Float32Array(POINTS)
-      const swap = i % 2 === 0 && i + 1 < n && rng() < 0.5
-      const amp = this.spacing * (1.6 + rng() * 2.6) * (i % 4 < 2 ? 1 : -1)
-      for (let j = 0; j < POINTS; j++) {
-        const bell = Math.sin((Math.PI * j) / (POINTS - 1))
-        offsets[j] = (swap ? bell * amp : 0) + (rng() - 0.5) * this.spacing * 1.1 * bell
-      }
       const thread: WarpThread = {
         restX,
         points: [],
@@ -177,7 +205,7 @@ export class LoomEngine {
         isBroken: i === this.brokenIndex,
         glow: 0,
         lastPluck: -9,
-        tangleOffsets: offsets,
+        tangleOffsets: allOffsets[i],
         cut: false,
         cutAt: 0,
         fade: 1,
@@ -469,7 +497,7 @@ export class LoomEngine {
       this.lastTangleEmitted = this.tangleAmount
       this.events.onTangleChange?.(this.tangleAmount)
     }
-    if (!this.combed && this.tangleActive && this.tangleAmount < 0.12 && this.combProgress > 0.2) {
+    if (!this.combed && this.tangleAmount < 0.12 && this.combProgress > 0.2) {
       this.combed = true
       this.events.onCombed?.()
     }
@@ -568,7 +596,7 @@ export class LoomEngine {
           p.y += vy * 0.985 + 900 * dt * dt
           continue
         }
-        const restY = fell + seg * j
+        const restY = fell + seg * j + Math.sin((Math.PI * j) / (POINTS - 1)) * this.tangleAmount * 14
         const tOff = t.tangleOffsets[j] * this.tangleAmount
         let ax = (t.restX + tOff - p.x) * kX
         const ay = (restY - p.y) * kY
