@@ -45,3 +45,204 @@ body {
   outline: 2px solid var(--madder);
   outline-offset: 3px;
 }
+
+/* ---------- 织机画布 ---------- */
+
+.stage {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  touch-action: pan-y; /* 纵向滚动照常，横向拂过即是拨线 */
+}
+
+.stage-fallback {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    repeating-linear-gradient(90deg, rgba(124, 115, 97, 0.25) 0 2px, transparent 2px 12px),
+    repeating-linear-gradient(0deg, rgba(47, 72, 88, 0.14) 0 4px, transparent 4px 8px),
+    var(--linen);
+}
+
+main {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- 首屏：上经 ---------- */
+
+.hero {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0 7vw 6vh;
+}
+
+.hero-label {
+  margin-top: 19vh;
+  display: inline-flex;
+  align-items: stretch;
+  gap: 1.2em;
+  align-self: flex-start;
+  background: var(--panel);
+  border: 1px solid rgba(87, 80, 63, 0.45);
+  padding: 1em 1.6em 1em 1em;
+  box-shadow: 0 1px 0 rgba(43, 39, 35, 0.08);
+}
+
+.hero-mark {
+  display: grid;
+  place-items: center;
+  width: 1.7em;
+  min-height: 100%;
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  line-height: 1;
+  color: var(--linen);
+  background: var(--madder);
+  border-radius: 2px;
+}
+
+.hero-title h1 {
+  margin: 0;
+  font-size: clamp(1.5rem, 3.6vw, 2.6rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.7;
+}
+
+.hero-title p {
+  margin: 0.6em 0 0;
+  color: var(--ink-soft);
+  font-size: clamp(0.85rem, 1.6vw, 1rem);
+  letter-spacing: 0.1em;
+}
+
+.hero-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.9em;
+  margin: 0;
+  font-size: 0.82rem;
+  letter-spacing: 0.18em;
+  color: var(--ink-soft);
+  opacity: 0;
+  transition: opacity 1.2s ease 0.3s;
+}
+
+.hero-hint.is-on {
+  opacity: 1;
+}
+
+.hero-hint-line {
+  display: inline-block;
+  width: 1px;
+  height: 2.4em;
+  background: var(--ink-soft);
+  transform-origin: top;
+  animation: hint-drop 2.1s ease-in-out infinite;
+}
+
+@keyframes hint-drop {
+  0% { transform: scaleY(0); }
+  45% { transform: scaleY(1); }
+  100% { transform: scaleY(1); opacity: 0.25; }
+}
+
+/* ---------- 织章 ---------- */
+
+.chapter {
+  min-height: 135vh;
+  display: flex;
+  align-items: center;
+  padding: 12vh 7vw;
+}
+
+.chapter.align-left { justify-content: flex-start; }
+.chapter.align-right { justify-content: flex-end; }
+
+.panel {
+  position: relative;
+  max-width: 33em;
+  background: var(--panel);
+  padding: 2.2em 2.6em 2em;
+  border-left: 3px solid var(--ink);
+  box-shadow: 0 1px 0 rgba(43, 39, 35, 0.07);
+}
+
+.chapter-think .panel { border-left-color: var(--indigo); }
+.chapter-create .panel { border-left-color: var(--madder); }
+.chapter-collab .panel { border-left-color: var(--ink); }
+
+.kicker {
+  margin: 0 0 1em;
+  font-size: 0.78rem;
+  letter-spacing: 0.35em;
+  color: var(--ink-soft);
+}
+
+.panel h2 {
+  margin: 0 0 0.8em;
+  font-size: clamp(1.45rem, 3vw, 2.1rem);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  line-height: 1.5;
+}
+
+.body-text {
+  margin: 0;
+  font-size: 1.02rem;
+}
+
+.weave-note {
+  margin: 0;
+  position: absolute;
+  top: 2.2em;
+  right: 1em;
+  writing-mode: vertical-rl;
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+  color: var(--ink-soft);
+  opacity: 0.75;
+}
+
+/* ---------- 移动端 ---------- */
+
+@media (max-width: 700px) {
+  .hero {
+    padding: 0 6vw 5vh;
+  }
+
+  .hero-label {
+    margin-top: 16vh;
+    gap: 0.9em;
+    padding: 0.8em 1.1em 0.8em 0.8em;
+  }
+
+  .chapter {
+    min-height: 120vh;
+    padding: 10vh 6vw;
+  }
+
+  .panel {
+    padding: 1.6em 1.5em 1.4em;
+  }
+
+  .weave-note {
+    position: static;
+    writing-mode: horizontal-tb;
+    margin-top: 1.2em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-hint {
+    transition: none;
+  }
+  .hero-hint-line {
+    animation: none;
+    transform: scaleY(1);
+  }
+}
