@@ -54,10 +54,6 @@ export default function App() {
   const engine = engineRef.current
 
   useEffect(() => {
-    ;(window as unknown as { __loom?: LoomEngine }).__loom = engine
-  }, [engine])
-
-  useEffect(() => {
     engine.setReducedMotion(reducedMotion)
   }, [engine, reducedMotion])
 
