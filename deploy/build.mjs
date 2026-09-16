@@ -106,6 +106,21 @@ function buildOne({ ref, task, model }) {
   }
 }
 
+function collectPublished() {
+  const published = [];
+  for (const task of readdirSync(PUBLIC_DIR, { withFileTypes: true })) {
+    if (!task.isDirectory()) continue;
+    for (const model of readdirSync(join(PUBLIC_DIR, task.name), { withFileTypes: true })) {
+      if (!model.isDirectory()) continue;
+      const dir = join(PUBLIC_DIR, task.name, model.name);
+      if (!existsSync(join(dir, "index.html"))) continue;
+      const { bytes, files } = dirSize(dir);
+      published.push({ task: task.name, model: model.name, ok: true, bytes, files });
+    }
+  }
+  return published;
+}
+
 function renderGallery(results, skipped) {
   const byTask = new Map();
   for (const result of results) {
@@ -120,7 +135,7 @@ function renderGallery(results, skipped) {
       const items = [
         ...ok.map(
           (e) =>
-            `<li><a href="${e.base}"><span class="model">${e.model}</span><span class="meta">${e.files} 个文件 · ${(e.bytes / 1024 / 1024).toFixed(1)} MB</span></a></li>`,
+            `<li><a href="/${e.task}/${e.model}/"><span class="model">${e.model}</span><span class="meta">${e.files} 个文件 · ${(e.bytes / 1024 / 1024).toFixed(1)} MB</span></a></li>`,
         ),
         ...failed.map(
           (e) =>
@@ -203,8 +218,13 @@ async function main() {
   await Promise.all(workers);
 
   results.sort((a, b) => (a.task + a.model).localeCompare(b.task + b.model));
+  // 画廊页始终按 public/ 里实际存在的产物生成，部分重建不会漏掉其他候选。
+  const published = collectPublished();
+  const listed = new Set(published.map((e) => `${e.task}/${e.model}`));
+  const entries = [...published, ...results.filter((r) => !r.ok && !listed.has(`${r.task}/${r.model}`))];
+  entries.sort((a, b) => (a.task + a.model).localeCompare(b.task + b.model));
   rmSync(join(PUBLIC_DIR, "index.html"), { force: true });
-  writeFileSync(join(PUBLIC_DIR, "index.html"), renderGallery(results, skipped), "utf8");
+  writeFileSync(join(PUBLIC_DIR, "index.html"), renderGallery(entries, skipped), "utf8");
 
   const failed = results.filter((r) => !r.ok);
   console.log("\n================ 构建汇总 ================");
