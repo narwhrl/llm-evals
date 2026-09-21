@@ -1,0 +1,104 @@
+:root {
+  color: #f4efe6;
+  background: #1b1714;
+  font: 15px/1.45 "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root, .app, .viewport {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.viewport canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hud, .panel {
+  position: absolute;
+  z-index: 2;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(22, 18, 15, 0.72);
+  backdrop-filter: blur(10px);
+}
+
+.hud {
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 760px;
+  padding: 14px 16px;
+}
+
+.kicker, h1, .summary { margin: 0; }
+
+.kicker {
+  color: #e0b07a;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 560;
+  letter-spacing: -0.04em;
+}
+
+.summary { color: #d9d0c4; font-size: 13px; }
+
+.panel {
+  top: 118px;
+  left: 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 14px;
+  width: min(460px, calc(100% - 32px));
+  max-height: min(430px, calc(100% - 140px));
+  padding: 14px;
+  overflow: auto;
+}
+
+.field, .check {
+  display: grid;
+  gap: 4px;
+  color: #efe7dc;
+  font-size: 13px;
+}
+
+.panel .check, .panel button { grid-column: 1 / -1; }
+
+.field input, .field select, button {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: inherit;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.field select, button {
+  min-height: 34px;
+  padding: 0 8px;
+}
+
+.check {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+}
+
+button { cursor: pointer; }
+
+.hud button { width: auto; padding: 0 12px; }
+
+@media (max-width: 720px) {
+  .hud { align-items: start; }
+  h1 { font-size: 22px; }
+  .panel { top: 132px; }
+}
