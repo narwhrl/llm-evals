@@ -60,6 +60,11 @@
   display: none;
 }
 
+/* 减少动效时不翻面，背面须正对镜头，否则被 backface-visibility 藏掉 */
+.plate.no-flip .plate-back {
+  transform: none;
+}
+
 .marks-layer {
   position: absolute;
   inset: 0;
