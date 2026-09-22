@@ -1,0 +1,24 @@
+:root {
+  /* 纸与墨：整个作品只允许出现这些材质色 */
+  --paper: #f2ede3;
+  --paper-shade: #e7e0d1;
+  --ink: #1b2a3a;
+  --ink-soft: #46586b;
+  --ghost: #8a8578;
+  --vermilion: #c2492b;
+  --rule: rgba(27, 42, 58, 0.16);
+  --rule-strong: rgba(27, 42, 58, 0.34);
+
+  /* 排版：拉丁身份用 Instrument Serif，中文随设备栈（如实记录为已知限制） */
+  --serif-latin: "Instrument Serif", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --cjk: "PingFang SC", "HarmonyOS Sans SC", "Noto Sans SC", "Source Han Sans SC", "Microsoft YaHei", sans-serif;
+  --serif-cjk: "Songti SC", "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+  --mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", "Segoe UI Mono", Consolas, monospace;
+
+  --measure: 34ch;
+  --gutter: clamp(20px, 5vw, 72px);
+  --shadow-ink: 0 1px 0 rgba(27, 42, 58, 0.06);
+
+  font-synthesis-weight: none;
+  text-underline-offset: 0.16em;
+}

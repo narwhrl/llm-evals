@@ -1,0 +1,17 @@
+/* Instrument Serif · OFL-1.1 · 见 @fontsource/instrument-serif/LICENSE
+   只取 latin 子集与 woff2：不打包 latin-ext 与 woff 回退，减少一半字体体积。 */
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Instrument Serif";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2") format("woff2");
+}
