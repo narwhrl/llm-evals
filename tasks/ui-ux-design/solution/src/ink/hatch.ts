@@ -58,7 +58,8 @@ export function wordTargets(text: string, options: HatchOptions): HatchTarget[] 
 
   // 让记号数接近目标：记号覆盖面积 ≈ spacing²
   const spacing = Math.max(2.6, Math.sqrt(inkPixels / Math.max(60, options.desiredCount)));
-  const markSize = Math.min(size * 0.34, spacing * 2.35);
+  // 记号要略小于间距：留出纸的底色，字才是"拓"出来的，不是糊上去的
+  const markSize = Math.min(size * 0.3, spacing * 1.5);
   const targets: HatchTarget[] = [];
   const jitter = spacing * 0.24;
 

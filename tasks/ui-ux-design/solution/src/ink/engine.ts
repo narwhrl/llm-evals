@@ -116,6 +116,11 @@ export class InkEngine {
     if (!this.running) this.renderOnce();
   }
 
+  /** 当前质量档位的笔迹上限：离线烘焙版画时也要守同一个预算 */
+  get profileMaxStrokes(): number {
+    return this.profile.maxStrokes;
+  }
+
   /**
    * 离线烘焙：按固定步长把一段时间一次跑完，中途分批把墨写进纸里
    * （印章缓冲区是有上限的队列，攒太久会丢墨）。静置呈现与调试样张都走这条路。
@@ -130,8 +135,7 @@ export class InkEngine {
     this.renderer.drawLive(this.field.live);
   }
 
-  snapshot(): EngineSnapshot {
-    return {
+  snapshot(): EngineSnapshot {    return {
       temperature: this.params.temperature,
       live: this.field.liveCount,
       abandoned: this.field.abandoned,

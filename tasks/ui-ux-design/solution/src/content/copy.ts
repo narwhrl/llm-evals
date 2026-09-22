@@ -5,6 +5,8 @@ export interface DeviceCue {
   /** 这一章里墨迹源在视口里的位置（0..1） */
   originX: number;
   originY: number;
+  /** 静置呈现时这一章定格成哪一张版画（同一套模拟离线跑完） */
+  plate: { seconds: number; strokes: number; cut?: boolean };
 }
 
 export interface ChapterCopy {
@@ -40,7 +42,7 @@ export const CHAPTERS: ChapterCopy[] = [
     ],
     aside: ["把光标放到纸上，墨会被你拉过去。", "这一笔没有温度：温度从第二章开始。"],
     align: "left",
-    device: { temperature: 0.02, ambient: 0.55, attract: 9, originX: 0.62, originY: 0.3 },
+    device: { temperature: 0.02, ambient: 0.55, attract: 9, originX: 0.62, originY: 0.3, plate: { seconds: 26, strokes: 10 } },
   },
   {
     id: "fork",
@@ -53,7 +55,7 @@ export const CHAPTERS: ChapterCopy[] = [
     ],
     aside: ["温度是一个杠杆，不是一个滤镜。", "同时进行得越多，被放弃得也越多。"],
     align: "left",
-    device: { temperature: 0.42, ambient: 1, attract: 5, originX: 0.34, originY: 0.42 },
+    device: { temperature: 0.42, ambient: 1, attract: 5, originX: 0.34, originY: 0.42, plate: { seconds: 30, strokes: 90 } },
   },
   {
     id: "cut",
@@ -66,7 +68,7 @@ export const CHAPTERS: ChapterCopy[] = [
     ],
     aside: ["这一刀之后，纸只会越来越脏。", "右边的计数停不下来：它不是错误数，是代价。"],
     align: "right",
-    device: { temperature: 0.55, ambient: 1, attract: 4, originX: 0.68, originY: 0.34 },
+    device: { temperature: 0.55, ambient: 1, attract: 4, originX: 0.68, originY: 0.34, plate: { seconds: 34, strokes: 110, cut: true } },
   },
   {
     id: "you-write",
@@ -79,7 +81,7 @@ export const CHAPTERS: ChapterCopy[] = [
     ],
     aside: ["直接打字；也可以点下面的输入框。", "你写下的字，是最后一章的材料。"],
     align: "left",
-    device: { temperature: 0.28, ambient: 0.55, attract: 6, originX: 0.3, originY: 0.55 },
+    device: { temperature: 0.28, ambient: 0.55, attract: 6, originX: 0.3, originY: 0.55, plate: { seconds: 22, strokes: 60 } },
   },
   {
     id: "impression",
@@ -92,7 +94,7 @@ export const CHAPTERS: ChapterCopy[] = [
     ],
     aside: ["最终画像：由你写下的字决定。", "拓完这一页，墨就停了。"],
     align: "wide",
-    device: { temperature: 0.12, ambient: 0, attract: 0, originX: 0.5, originY: 0.5 },
+    device: { temperature: 0.12, ambient: 0, attract: 0, originX: 0.5, originY: 0.5, plate: { seconds: 40, strokes: 130 } },
   },
 ];
 

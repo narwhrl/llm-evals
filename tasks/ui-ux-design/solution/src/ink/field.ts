@@ -189,7 +189,7 @@ export class Field {
     this.hatchElapsed = 0;
 
     const wanted = Math.min(MIGRANT_CAPACITY, targets.length * marksPerTarget);
-    const count = Math.min(wanted, Math.max(targets.length, this.markCount * marksPerTarget));
+    const count = wanted;
     this.migrantCount = 0;
     if (count === 0 || targets.length === 0) {
       this.hatchTotal = 0;

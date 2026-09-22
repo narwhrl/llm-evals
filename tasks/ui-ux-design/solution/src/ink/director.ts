@@ -1,7 +1,9 @@
 import type { DeviceCue } from "../content/copy";
 import { clamp01, easeInOutCubic, lerp, Spring } from "../engine/spring";
+import { InkAudio } from "./audio";
 import type { EngineMode, InkEngine } from "./engine";
 import type { HatchTarget } from "./field";
+import { bakePlate } from "./plates";
 
 export interface DirectorHandles {
   /** 朱红刀线（章节二与「读」共用） */
@@ -33,7 +35,14 @@ const ORIGIN_DAMPING = 13;
  * 逐帧的活都在这里，React 只负责挂载与低频状态。
  */
 export class Director {
-  private cue: DeviceCue = { temperature: 0.25, ambient: 0.7, attract: 6, originX: 0.5, originY: 0.34 };
+  private cue: DeviceCue = {
+    temperature: 0.25,
+    ambient: 0.7,
+    attract: 6,
+    originX: 0.5,
+    originY: 0.34,
+    plate: { seconds: 24, strokes: 60 },
+  };
   private temperature = 0.25;
   private ambient = 0.7;
   private attract = 6;
@@ -47,6 +56,7 @@ export class Director {
   private handles: DirectorHandles = { line: null, sheet: null };
   private cutSevered = 0;
   private hatchRequested = false;
+  private readonly audio = new InkAudio();
 
   constructor(
     private readonly engine: InkEngine,
@@ -61,10 +71,21 @@ export class Director {
     this.handles = { ...this.handles, ...handles };
   }
 
+  /** 音效必须在用户手势里开启；关掉时立刻安静。 */
+  setAudio(enabled: boolean): void {
+    if (enabled) this.audio.enable();
+    else this.audio.disable();
+  }
+
+  get audioEnabled(): boolean {
+    return this.audio.enabled;
+  }
+
   setCue(cue: DeviceCue): void {
     this.cue = cue;
     this.originX.target = cue.originX;
     this.originY.target = cue.originY;
+    if (this.mode === "still") this.bakeStillPlate();
   }
 
   /** 访客的调温是"在章节的建议上叠加偏移"，所以章节仍然主导节奏。 */
@@ -75,10 +96,34 @@ export class Director {
   setMode(mode: EngineMode): void {
     this.mode = mode;
     if (mode === "still") {
-      this.engine.field.clear();
-      this.engine.renderer.clearAll();
-      this.engine.invalidate();
+      this.bakeStillPlate();
+      return;
     }
+    this.engine.invalidate();
+  }
+
+  /**
+   * 静置呈现：同一套模拟离线跑完这一章的版画，一次性写进纸里。
+   * 与完整动效是同一套引擎画出来的，只是不为时间花时间。
+   */
+  private bakeStillPlate(): void {
+    const cue = this.cue;
+    this.engine.renderer.clearAll();
+    bakePlate(
+      this.engine.field,
+      {
+        temperature: cue.temperature,
+        ambient: cue.ambient,
+        originX: cue.originX,
+        originY: cue.originY,
+        seconds: cue.plate.seconds,
+        strokes: cue.plate.strokes,
+        cut: cue.plate.cut,
+      },
+      () => this.engine.renderer.drawPaint(this.engine.field.paint),
+      this.engine.profileMaxStrokes,
+    );
+    this.engine.invalidate();
   }
 
   get temperatureValue(): number {
@@ -93,6 +138,8 @@ export class Director {
     this.cutSevered = 0;
     this.shake.velocity -= 240;
     this.handles.line?.setAttribute("data-active", "true");
+    this.audio.cut();
+    InkAudio.buzz([0, 26, 40, 18]);
   }
 
   /** 访客按下「读」：在他读的位置切一刀，和章节二用的是同一把刀。 */
@@ -101,7 +148,11 @@ export class Director {
     this.cut = { active: true, t: 0, duration: 0.36, fromY: normalized, toY: normalized, sweeps: false };
     this.handles.line?.setAttribute("data-active", "true");
     this.shake.velocity -= 150;
-    this.events.onRead?.(this.engine.field.cutSweep(y, true));
+    const severed = this.engine.field.cutSweep(y, true);
+    this.audio.cut();
+    this.audio.drop(1.4);
+    InkAudio.buzz(18);
+    this.events.onRead?.(severed);
   }
 
   /** 终章：把纸上的墨交给拓印目标。 */
