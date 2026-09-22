@@ -1,0 +1,68 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Gargantua acceptance harness</title>
+<style>body{background:#111820;color:#dce6ec;font:14px system-ui;margin:24px}button{padding:12px;margin:0 10px 14px 0}iframe{position:fixed;right:10px;top:180px;width:960px;height:600px;border:1px solid #465565;max-width:68vw}pre{white-space:pre-wrap;max-width:26vw;height:70vh;overflow:auto;font-size:10px}h1{font-size:22px}.pass{color:#86d8a8}.fail{color:#ff9d87}</style>
+<h1>Gargantua · production acceptance harness</h1><p>This separate same-origin harness exercises the real app, renderer, controls and WebGL context. No replacement rendering.</p><button id="run">Run acceptance checks</button><button id="download">Download report</button><pre id="results">Ready to run.</pre><iframe id="app" title="Actual Gargantua application"></iframe>
+<script type="module">
+const frame=document.querySelector('#app'),out=document.querySelector('#results');
+const records=[],errors=[];let w,api;
+function record(name,passed,detail){records.push({name,passed,detail});out.textContent=JSON.stringify({records,errors},null,2);out.className=records.every(r=>r.passed)?'pass':'fail';}
+const delay=ms=>new Promise(r=>setTimeout(r,ms));
+async function until(fn,timeout=20000){const start=performance.now();while(!fn()){if(performance.now()-start>timeout)throw Error('Timed out');await delay(30);}}
+async function settle(){await until(()=>api.ready);await new Promise(r=>w.requestAnimationFrame(()=>w.requestAnimationFrame(r)));}
+async function load(search='?capture=1&quality=standard&time=12.5&hud=1'){
+ frame.src=new URL('./'+search,location.href).href;await new Promise(r=>frame.onload=r);w=frame.contentWindow;
+ w.addEventListener('error',e=>errors.push(String(e.message)));w.addEventListener('unhandledrejection',e=>errors.push(String(e.reason)));
+ await until(()=>w.__GARGANTUA__?.ready);api=w.__GARGANTUA__;
+}
+function snapshot(){return api.getState();}
+async function input(id,value){const el=w.document.getElementById(id);const proto=el.tagName==='INPUT'?w.HTMLInputElement.prototype:w.HTMLSelectElement.prototype;Object.getOwnPropertyDescriptor(proto,'value').set.call(el,String(value));el.dispatchEvent(new w.Event('input',{bubbles:true}));el.dispatchEvent(new w.Event('change',{bubbles:true}));await settle();}
+function key(code,shiftKey=false){w.dispatchEvent(new w.KeyboardEvent('keydown',{code,shiftKey,bubbles:true}));}
+function clickText(text){const button=[...w.document.querySelectorAll('button')].find(b=>b.textContent.includes(text));if(!button)throw Error('Missing button '+text);button.click();}
+async function pixels(){api.setTime(snapshot().time);return await new Promise(resolve=>w.requestAnimationFrame(()=>{const canvas=w.document.querySelector('canvas'),probe=document.createElement('canvas');probe.width=96;probe.height=60;const ctx=probe.getContext('2d');ctx.drawImage(canvas,0,0,96,60);const data=ctx.getImageData(0,0,96,60).data;let sum=0,hash=2166136261;for(let i=0;i<data.length;i+=4){sum+=data[i]+data[i+1]+data[i+2];hash=Math.imul(hash^data[i],16777619);hash=Math.imul(hash^data[i+1],16777619);hash=Math.imul(hash^data[i+2],16777619);}resolve({hash:hash>>>0,sum});}));}
+document.querySelector('#run').onclick=async()=>{
+ records.length=0;errors.length=0;document.querySelector('#run').disabled=true;
+ try{
+  await load();record('Ready after production shader compilation and first frame',snapshot().ready&&w.document.documentElement.dataset.gargantuaReady==='true',snapshot());
+  const first=await pixels();await delay(100);const second=await pixels();record('Frozen capture frame is stable and nonblack',first.hash===second.hash&&first.sum>0,{first,second});
+  const before=JSON.stringify(snapshot());const invalid=[api.setQuality('invalid'),api.setPreset(4),api.setPreset('1'),api.setDebug(10),api.setTime(-1),api.setTime(Infinity)];record('Invalid API inputs reject without state mutation',invalid.every(v=>v===null)&&before===JSON.stringify(snapshot()));
+  const samples=[];for(let i=0;i<10;i++){api.setDebug(i);await settle();samples.push({debug:i,state:snapshot().debug,pixels:await pixels()});}record('All ten diagnostic modes change actual pixels',samples.every(s=>s.debug===s.state)&&new Set(samples.map(s=>s.pixels.hash)).size===10,samples);
+  api.setDebug(0);const presets=[];for(let i=0;i<4;i++){api.setPreset(i);await settle();presets.push({preset:i,params:snapshot().params,pixels:await pixels()});}record('Four distinct preset images',new Set(presets.map(s=>s.pixels.hash)).size===4,presets);
+  const budgets=[];for(const q of ['standard','high','cinematic']){api.setQuality(q);await settle();budgets.push(snapshot().render);}record('Quality changes true pixel and integration budgets',budgets[0].width<budgets[1].width&&budgets[1].width<budgets[2].width&&budgets[0].budget.steps<budgets[2].budget.steps,budgets);
+  api.setQuality('standard');api.setPreset(0);await settle();clickText('Parameters');await delay(60);
+  const params=[...w.document.querySelectorAll('input[type=range]')].map(e=>({id:e.id,min:Number(e.min),max:Number(e.max),step:Number(e.step)}));
+  const effects=[];for(const p of params){const original=snapshot().params[p.id];const value=Math.min(p.max,Math.max(p.min,original+(p.max-p.min)*.17));const imageBefore=await pixels();await input(p.id,value);const actual=snapshot().params[p.id],after=await pixels();effects.push({id:p.id,value:actual,stateChanged:Math.abs(actual-original)>0,pixelsChanged:imageBefore.hash!==after.hash});await input(p.id,original);}
+  record('All 21 UI sliders update real state',effects.length===21&&effects.every(e=>e.stateChanged),effects);
+  record('Nineteen instantaneous visual controls change pixels',effects.filter(e=>!['timeScale','turbulenceSpeed'].includes(e.id)).every(e=>e.pixelsChanged),effects.filter(e=>!e.pixelsChanged));
+  w.document.querySelector('[aria-label="Close parameters"]')?.click();
+ }catch(error){
+  record('Acceptance exception',false,String(error.stack||error));
+ }
+ try{
+  w.document.querySelector('[aria-label="Close parameters"]')?.click();
+  for(let i=0;i<10;i++){key('Digit'+i);await settle();record('Keyboard debug '+i,snapshot().debug===i);}
+  for(let i=1;i<=4;i++){key('Digit'+i,true);await settle();record('Keyboard preset '+i,snapshot().preset===i-1);}
+  key('KeyH');await settle();record('HUD hides',!snapshot().hud);key('KeyH');await settle();record('HUD restores',snapshot().hud);
+  key('KeyQ');await settle();record('Q cycles quality',snapshot().quality==='high');key('KeyR');await settle();record('R restores defaults',snapshot().preset===0&&snapshot().debug===0&&snapshot().params.emission===1.85);
+  const canvas=w.document.querySelector('canvas');
+  record('Trusted touch / pinch requires external device input',null,'Synthetic PointerEvents cannot acquire native pointer capture. Use a touch-enabled browser or physical device; do not credit this harness with a touch pass.');
+  const dist=snapshot().params.distance;canvas.dispatchEvent(new w.WheelEvent('wheel',{deltaY:120,bubbles:true,cancelable:true}));await settle();record('Wheel zoom changes distance',snapshot().params.distance!==dist);
+  // Real context loss/restoration on the existing canvas; the extension is specified by WebGL.
+  const gl=canvas.getContext('webgl2'),extension=gl.getExtension('WEBGL_lose_context');
+  if(extension){const saved=snapshot();extension.loseContext();await until(()=>!api.ready);await delay(150);record('Context loss pauses and signals recovery',w.document.body.textContent.includes('Signal interrupted'));extension.restoreContext();await until(()=>api.ready,30000);const image=await pixels();record('Context restoration rebuilds and preserves state',JSON.stringify(saved.params)===JSON.stringify(snapshot().params)&&image.sum>0,{pixels:image,state:snapshot()});}
+  else record('Context loss extension unavailable',false,'Environment limitation');
+  await load('?capture=1&quality=broken&preset=99&debug=1.5&time=-2&hud=broken');record('Malformed URL recovers',snapshot().quality==='high'&&snapshot().preset===0&&snapshot().debug===0&&snapshot().time===0&&snapshot().hud===true);
+  // Normal mode verifies persistence, animation and user ownership after manual input.
+  await load('?hud=1');key('KeyR');await settle();clickText('Parameters');await delay(50);
+  for(const [id,val]of [['fov',51],['emission',1.4],['galaxy',1.1],['exposure',1.35]])await input(id,val);
+  api.setQuality('standard');api.setDebug(7);await settle();key('KeyH');await settle();const saved=snapshot();
+  await load('');record('Versioned persistence across reload',snapshot().params.fov===51&&snapshot().params.emission===1.4&&snapshot().params.galaxy===1.1&&snapshot().params.exposure===1.35&&snapshot().quality==='standard'&&snapshot().debug===7&&snapshot().hud===false,{saved,loaded:snapshot()});
+  key('KeyH');key('KeyR');await settle();const t0=snapshot().time;await until(()=>snapshot().time>t0);record('Normal simulation time advances',snapshot().time>t0);key('Space');await delay(200);record('Space starts camera orbit',snapshot().playing);key('Space');await settle();record('Space pauses camera orbit',!snapshot().playing);
+  clickText('Parameters');await delay(50);await input('timeScale',0);const frozen=snapshot().time;await delay(200);record('Time rate zero freezes turbulence',snapshot().time===frozen);
+  key('KeyR');await settle();key('Space');await delay(100);w.document.querySelector('canvas').dispatchEvent(new w.WheelEvent('wheel',{deltaY:50,bubbles:true,cancelable:true}));await settle();record('Manual input takes ownership from cinematic loop',!snapshot().playing);
+  key('KeyR');await settle();record('Reset removes persisted customization',snapshot().params.fov===42&&snapshot().params.emission===1.85&&snapshot().quality==='high'&&snapshot().debug===0&&snapshot().hud);
+  const resources=w.performance.getEntriesByType('resource').map(r=>r.name);record('Runtime resources are same-origin',resources.every(u=>u.startsWith(location.origin)||u.startsWith('data:')),resources);
+  record('No unhandled runtime errors',errors.length===0,errors);
+ }catch(error){record('Acceptance exception',false,String(error.stack||error));}
+ document.querySelector('#run').disabled=false;document.documentElement.dataset.qaComplete='true';
+};
+document.querySelector('#download').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({userAgent:navigator.userAgent,records,errors},null,2)],{type:'application/json'}));a.download='browser-acceptance.json';a.click();URL.revokeObjectURL(a.href);};
+</script></html>

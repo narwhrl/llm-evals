@@ -1,0 +1,30 @@
+[
+  {
+    "Preset": 0,
+    "ExpectedRadiusPixels": 124.93568257495782,
+    "ObservedRadiusX": 124,
+    "ObservedRadiusY": 124,
+    "Pass": true
+  },
+  {
+    "Preset": 1,
+    "ExpectedRadiusPixels": 103.4522654969019,
+    "ObservedRadiusX": 103,
+    "ObservedRadiusY": 103,
+    "Pass": true
+  },
+  {
+    "Preset": 2,
+    "ExpectedRadiusPixels": 94.69295417021326,
+    "ObservedRadiusX": 94,
+    "ObservedRadiusY": 94,
+    "Pass": true
+  },
+  {
+    "Preset": 3,
+    "ExpectedRadiusPixels": 131.9473980553903,
+    "ObservedRadiusX": 132,
+    "ObservedRadiusY": 132,
+    "Pass": true
+  }
+]

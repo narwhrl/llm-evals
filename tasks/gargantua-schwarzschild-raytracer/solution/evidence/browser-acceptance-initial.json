@@ -1,0 +1,783 @@
+{
+  "records": [
+    {
+      "name": "Ready after production shader compilation and first frame",
+      "passed": true,
+      "detail": {
+        "version": 1,
+        "params": {
+          "fov": 42,
+          "distance": 24,
+          "azimuth": 0,
+          "elevation": 8,
+          "timeScale": 1,
+          "innerRadius": 3,
+          "outerRadius": 10,
+          "thickness": 0.085,
+          "temperature": 6800,
+          "emission": 1.85,
+          "orbitalSpeed": 1,
+          "turbulence": 0.65,
+          "turbulenceSpeed": 0.6,
+          "starDensity": 0.8,
+          "galaxy": 0.55,
+          "bloom": 0.4,
+          "bloomThreshold": 1,
+          "exposure": 1,
+          "vignette": 0.25,
+          "grain": 0.012,
+          "dispersion": 0.0005
+        },
+        "quality": "standard",
+        "preset": 0,
+        "debug": 0,
+        "hud": true,
+        "panel": false,
+        "playing": false,
+        "capture": true,
+        "time": 12.5,
+        "ready": true,
+        "render": {
+          "width": 840,
+          "height": 525,
+          "devicePixelRatio": 2,
+          "fps": 0,
+          "budget": {
+            "scale": 0.7,
+            "dpr": 1.25,
+            "steps": 200,
+            "step": 0.055,
+            "crossings": 3,
+            "bloomLevels": 3
+          },
+          "contextLost": false
+        }
+      }
+    },
+    {
+      "name": "Frozen capture frame is stable and nonblack",
+      "passed": true,
+      "detail": {
+        "first": {
+          "hash": 1974261008,
+          "sum": 408591
+        },
+        "second": {
+          "hash": 1974261008,
+          "sum": 408591
+        }
+      }
+    },
+    {
+      "name": "Invalid API inputs reject without state mutation",
+      "passed": true
+    },
+    {
+      "name": "All ten diagnostic modes change actual pixels",
+      "passed": true,
+      "detail": [
+        {
+          "debug": 0,
+          "state": 0,
+          "pixels": {
+            "hash": 1974261008,
+            "sum": 408591
+          }
+        },
+        {
+          "debug": 1,
+          "state": 1,
+          "pixels": {
+            "hash": 2044382753,
+            "sum": 1469772
+          }
+        },
+        {
+          "debug": 2,
+          "state": 2,
+          "pixels": {
+            "hash": 1851035389,
+            "sum": 1372920
+          }
+        },
+        {
+          "debug": 3,
+          "state": 3,
+          "pixels": {
+            "hash": 4040030957,
+            "sum": 164616
+          }
+        },
+        {
+          "debug": 4,
+          "state": 4,
+          "pixels": {
+            "hash": 2899190423,
+            "sum": 353384
+          }
+        },
+        {
+          "debug": 5,
+          "state": 5,
+          "pixels": {
+            "hash": 478462655,
+            "sum": 366058
+          }
+        },
+        {
+          "debug": 6,
+          "state": 6,
+          "pixels": {
+            "hash": 2334983358,
+            "sum": 344095
+          }
+        },
+        {
+          "debug": 7,
+          "state": 7,
+          "pixels": {
+            "hash": 3314841847,
+            "sum": 1432330
+          }
+        },
+        {
+          "debug": 8,
+          "state": 8,
+          "pixels": {
+            "hash": 3824674340,
+            "sum": 17845
+          }
+        },
+        {
+          "debug": 9,
+          "state": 9,
+          "pixels": {
+            "hash": 515382872,
+            "sum": 125511
+          }
+        }
+      ]
+    },
+    {
+      "name": "Four distinct preset images",
+      "passed": true,
+      "detail": [
+        {
+          "preset": 0,
+          "params": {
+            "fov": 42,
+            "distance": 24,
+            "azimuth": 0,
+            "elevation": 8,
+            "timeScale": 1,
+            "innerRadius": 3,
+            "outerRadius": 10,
+            "thickness": 0.085,
+            "temperature": 6800,
+            "emission": 1.85,
+            "orbitalSpeed": 1,
+            "turbulence": 0.65,
+            "turbulenceSpeed": 0.6,
+            "starDensity": 0.8,
+            "galaxy": 0.55,
+            "bloom": 0.4,
+            "bloomThreshold": 1,
+            "exposure": 1,
+            "vignette": 0.25,
+            "grain": 0.012,
+            "dispersion": 0.0005
+          },
+          "pixels": {
+            "hash": 1974261008,
+            "sum": 408591
+          }
+        },
+        {
+          "preset": 1,
+          "params": {
+            "fov": 48,
+            "distance": 25,
+            "azimuth": 65,
+            "elevation": 36,
+            "timeScale": 1,
+            "innerRadius": 3,
+            "outerRadius": 10,
+            "thickness": 0.085,
+            "temperature": 6800,
+            "emission": 1.85,
+            "orbitalSpeed": 1,
+            "turbulence": 0.65,
+            "turbulenceSpeed": 0.6,
+            "starDensity": 0.8,
+            "galaxy": 0.55,
+            "bloom": 0.4,
+            "bloomThreshold": 1,
+            "exposure": 1,
+            "vignette": 0.25,
+            "grain": 0.012,
+            "dispersion": 0.0005
+          },
+          "pixels": {
+            "hash": 3481588047,
+            "sum": 626830
+          }
+        },
+        {
+          "preset": 2,
+          "params": {
+            "fov": 47,
+            "distance": 28,
+            "azimuth": 135,
+            "elevation": 83,
+            "timeScale": 1,
+            "innerRadius": 3,
+            "outerRadius": 10,
+            "thickness": 0.085,
+            "temperature": 6800,
+            "emission": 1.85,
+            "orbitalSpeed": 1,
+            "turbulence": 0.65,
+            "turbulenceSpeed": 0.6,
+            "starDensity": 0.8,
+            "galaxy": 0.55,
+            "bloom": 0.4,
+            "bloomThreshold": 1,
+            "exposure": 1,
+            "vignette": 0.25,
+            "grain": 0.012,
+            "dispersion": 0.0005
+          },
+          "pixels": {
+            "hash": 3917097748,
+            "sum": 633969
+          }
+        },
+        {
+          "preset": 3,
+          "params": {
+            "fov": 57,
+            "distance": 16,
+            "azimuth": 210,
+            "elevation": -12,
+            "timeScale": 1,
+            "innerRadius": 3,
+            "outerRadius": 10,
+            "thickness": 0.085,
+            "temperature": 6800,
+            "emission": 1.85,
+            "orbitalSpeed": 1,
+            "turbulence": 0.65,
+            "turbulenceSpeed": 0.6,
+            "starDensity": 0.8,
+            "galaxy": 0.55,
+            "bloom": 0.4,
+            "bloomThreshold": 1,
+            "exposure": 1,
+            "vignette": 0.25,
+            "grain": 0.012,
+            "dispersion": 0.0005
+          },
+          "pixels": {
+            "hash": 4213755804,
+            "sum": 716257
+          }
+        }
+      ]
+    },
+    {
+      "name": "Quality changes true pixel and integration budgets",
+      "passed": true,
+      "detail": [
+        {
+          "width": 840,
+          "height": 525,
+          "devicePixelRatio": 2,
+          "fps": 0,
+          "budget": {
+            "scale": 0.7,
+            "dpr": 1.25,
+            "steps": 200,
+            "step": 0.055,
+            "crossings": 3,
+            "bloomLevels": 3
+          },
+          "contextLost": false
+        },
+        {
+          "width": 1296,
+          "height": 810,
+          "devicePixelRatio": 2,
+          "fps": 0,
+          "budget": {
+            "scale": 0.9,
+            "dpr": 1.5,
+            "steps": 360,
+            "step": 0.035,
+            "crossings": 5,
+            "bloomLevels": 4
+          },
+          "contextLost": false
+        },
+        {
+          "width": 1920,
+          "height": 1200,
+          "devicePixelRatio": 2,
+          "fps": 0,
+          "budget": {
+            "scale": 1,
+            "dpr": 2,
+            "steps": 640,
+            "step": 0.022,
+            "crossings": 7,
+            "bloomLevels": 5
+          },
+          "contextLost": false
+        }
+      ]
+    },
+    {
+      "name": "All 21 UI sliders update real state",
+      "passed": true,
+      "detail": [
+        {
+          "id": "fov",
+          "value": 53,
+          "stateChanged": true,
+          "pixelsChanged": true
+        },
+        {
+          "id": "distance",
+          "value": 32.2,
+          "stateChanged": true,
+          "pixelsChanged": true
+        },
+        {
+          "id": "azimuth",
+          "value": 61,
+          "stateChanged": true,
+          "pixelsChanged": true
+        },
+        {
+          "id": "elevation",
+          "value": 37,
+          "stateChanged": true,
+          "pixelsChanged": true
+        },
+        {
+          "id": "timeScale",
+          "value": 1.5,
+          "stateChanged": true,
+          "pixelsChanged": false
+        },
+        {
+          "id": "innerRadius",
+          "value": 3.7,
+          "stateChanged": true,
+          "pixelsChanged": true
+        },
+        {
+          "id": "outerRadius",
+          "value": 11.5,
+          "stateChanged": true,
+          "pixelsChanged": true
+        },
+        {
+          "id": "thickness",
+          "value": 0.165,
+          "stateChanged": true,
+          "pixelsChanged": true
+        },
+        {
+          "id": "temperature",
+          "value": 9400,
+          "stateChanged": true,
+          "pixelsChanged": true
+        },
+        {
+          "id": "emission",
+          "value": 2.85,
+          "stateChanged": true,
+          "pixelsChanged": true
+        },
+        {
+          "id": "orbitalSpeed",
+          "value": 1.25,
+          "stateChanged": true,
+          "pixelsChanged": true
+        },
+        {
+          "id": "turbulence",
+          "value": 0.82,
+          "stateChanged": true,
+          "pixelsChanged": true
+        },
+        {
+          "id": "turbulenceSpeed",
+          "value": 0.95,
+          "stateChanged": true,
+          "pixelsChanged": true
+        },
+        {
+          "id": "starDensity",
+          "value": 1.15,
+          "stateChanged": true,
+          "pixelsChanged": true
+        },
+        {
+          "id": "galaxy",
+          "value": 0.9,
+          "stateChanged": true,
+          "pixelsChanged": true
+        },
+        {
+          "id": "bloom",
+          "value": 0.66,
+          "stateChanged": true,
+          "pixelsChanged": true
+        },
+        {
+          "id": "bloomThreshold",
+          "value": 1.65,
+          "stateChanged": true,
+          "pixelsChanged": true
+        },
+        {
+          "id": "exposure",
+          "value": 1.5,
+          "stateChanged": true,
+          "pixelsChanged": true
+        },
+        {
+          "id": "vignette",
+          "value": 0.39,
+          "stateChanged": true,
+          "pixelsChanged": true
+        },
+        {
+          "id": "grain",
+          "value": 0.026,
+          "stateChanged": true,
+          "pixelsChanged": true
+        },
+        {
+          "id": "dispersion",
+          "value": 0.0012,
+          "stateChanged": true,
+          "pixelsChanged": true
+        }
+      ]
+    },
+    {
+      "name": "Nineteen instantaneous visual controls change pixels",
+      "passed": true,
+      "detail": [
+        {
+          "id": "timeScale",
+          "value": 1.5,
+          "stateChanged": true,
+          "pixelsChanged": false
+        }
+      ]
+    },
+    {
+      "name": "Keyboard debug 0",
+      "passed": true
+    },
+    {
+      "name": "Keyboard debug 1",
+      "passed": true
+    },
+    {
+      "name": "Keyboard debug 2",
+      "passed": true
+    },
+    {
+      "name": "Keyboard debug 3",
+      "passed": true
+    },
+    {
+      "name": "Keyboard debug 4",
+      "passed": true
+    },
+    {
+      "name": "Keyboard debug 5",
+      "passed": true
+    },
+    {
+      "name": "Keyboard debug 6",
+      "passed": true
+    },
+    {
+      "name": "Keyboard debug 7",
+      "passed": true
+    },
+    {
+      "name": "Keyboard debug 8",
+      "passed": true
+    },
+    {
+      "name": "Keyboard debug 9",
+      "passed": true
+    },
+    {
+      "name": "Keyboard preset 1",
+      "passed": true
+    },
+    {
+      "name": "Keyboard preset 2",
+      "passed": true
+    },
+    {
+      "name": "Keyboard preset 3",
+      "passed": true
+    },
+    {
+      "name": "Keyboard preset 4",
+      "passed": true
+    },
+    {
+      "name": "HUD hides",
+      "passed": true
+    },
+    {
+      "name": "HUD restores",
+      "passed": true
+    },
+    {
+      "name": "Q cycles quality",
+      "passed": true
+    },
+    {
+      "name": "R restores defaults",
+      "passed": true
+    },
+    {
+      "name": "Touch-equivalent OrbitControls rotates camera",
+      "passed": false,
+      "detail": {
+        "before": 0,
+        "after": 0
+      }
+    },
+    {
+      "name": "Wheel zoom changes distance",
+      "passed": true
+    },
+    {
+      "name": "Context loss pauses and signals recovery",
+      "passed": true
+    },
+    {
+      "name": "Context restoration rebuilds and preserves state",
+      "passed": true,
+      "detail": {
+        "pixels": {
+          "hash": 1390441247,
+          "sum": 352822
+        },
+        "state": {
+          "version": 1,
+          "params": {
+            "fov": 42,
+            "distance": 25.523657919611022,
+            "azimuth": 0,
+            "elevation": 8.000000000000002,
+            "timeScale": 1,
+            "innerRadius": 3,
+            "outerRadius": 10,
+            "thickness": 0.085,
+            "temperature": 6800,
+            "emission": 1.85,
+            "orbitalSpeed": 1,
+            "turbulence": 0.65,
+            "turbulenceSpeed": 0.6,
+            "starDensity": 0.8,
+            "galaxy": 0.55,
+            "bloom": 0.4,
+            "bloomThreshold": 1,
+            "exposure": 1,
+            "vignette": 0.25,
+            "grain": 0.012,
+            "dispersion": 0.0005
+          },
+          "quality": "high",
+          "preset": 0,
+          "debug": 0,
+          "hud": true,
+          "panel": false,
+          "playing": false,
+          "capture": true,
+          "time": 0,
+          "ready": true,
+          "render": {
+            "width": 864,
+            "height": 540,
+            "devicePixelRatio": 1,
+            "fps": 0,
+            "budget": {
+              "scale": 0.9,
+              "dpr": 1.5,
+              "steps": 360,
+              "step": 0.035,
+              "crossings": 5,
+              "bloomLevels": 4
+            },
+            "contextLost": false
+          }
+        }
+      }
+    },
+    {
+      "name": "Malformed URL recovers",
+      "passed": true
+    },
+    {
+      "name": "Versioned persistence across reload",
+      "passed": true,
+      "detail": {
+        "saved": {
+          "version": 1,
+          "params": {
+            "fov": 51,
+            "distance": 24,
+            "azimuth": 0,
+            "elevation": 8,
+            "timeScale": 1,
+            "innerRadius": 3,
+            "outerRadius": 10,
+            "thickness": 0.085,
+            "temperature": 6800,
+            "emission": 1.4,
+            "orbitalSpeed": 1,
+            "turbulence": 0.65,
+            "turbulenceSpeed": 0.6,
+            "starDensity": 0.8,
+            "galaxy": 1.1,
+            "bloom": 0.4,
+            "bloomThreshold": 1,
+            "exposure": 1.35,
+            "vignette": 0.25,
+            "grain": 0.012,
+            "dispersion": 0.0005
+          },
+          "quality": "standard",
+          "preset": 0,
+          "debug": 7,
+          "hud": false,
+          "panel": true,
+          "playing": false,
+          "capture": false,
+          "time": 1.1625999999999994,
+          "ready": true,
+          "render": {
+            "width": 672,
+            "height": 420,
+            "devicePixelRatio": 1,
+            "fps": 22,
+            "budget": {
+              "scale": 0.7,
+              "dpr": 1.25,
+              "steps": 200,
+              "step": 0.055,
+              "crossings": 3,
+              "bloomLevels": 3
+            },
+            "contextLost": false
+          }
+        },
+        "loaded": {
+          "version": 1,
+          "params": {
+            "fov": 51,
+            "distance": 24,
+            "azimuth": 0,
+            "elevation": 8,
+            "timeScale": 1,
+            "innerRadius": 3,
+            "outerRadius": 10,
+            "thickness": 0.085,
+            "temperature": 6800,
+            "emission": 1.4,
+            "orbitalSpeed": 1,
+            "turbulence": 0.65,
+            "turbulenceSpeed": 0.6,
+            "starDensity": 0.8,
+            "galaxy": 1.1,
+            "bloom": 0.4,
+            "bloomThreshold": 1,
+            "exposure": 1.35,
+            "vignette": 0.25,
+            "grain": 0.012,
+            "dispersion": 0.0005
+          },
+          "quality": "standard",
+          "preset": 0,
+          "debug": 7,
+          "hud": false,
+          "panel": true,
+          "playing": false,
+          "capture": false,
+          "time": 1.0653999999999997,
+          "ready": true,
+          "render": {
+            "width": 672,
+            "height": 420,
+            "devicePixelRatio": 1,
+            "fps": 0,
+            "budget": {
+              "scale": 0.7,
+              "dpr": 1.25,
+              "steps": 200,
+              "step": 0.055,
+              "crossings": 3,
+              "bloomLevels": 3
+            },
+            "contextLost": false
+          }
+        }
+      }
+    },
+    {
+      "name": "Normal simulation time advances",
+      "passed": true
+    },
+    {
+      "name": "Space starts camera orbit",
+      "passed": true
+    },
+    {
+      "name": "Space pauses camera orbit",
+      "passed": true
+    },
+    {
+      "name": "Time rate zero freezes turbulence",
+      "passed": true
+    },
+    {
+      "name": "Manual input takes ownership from cinematic loop",
+      "passed": true
+    },
+    {
+      "name": "Reset removes persisted customization",
+      "passed": true
+    },
+    {
+      "name": "Runtime resources are same-origin",
+      "passed": true,
+      "detail": [
+        "http://127.0.0.1:4186/assets/index-Dffduts-.js",
+        "http://127.0.0.1:4186/assets/index-DJvWf--h.css"
+      ]
+    },
+    {
+      "name": "No unhandled runtime errors",
+      "passed": false,
+      "detail": [
+        "Uncaught NotFoundError: Failed to execute 'setPointerCapture' on 'Element': No active pointer with the given id is found."
+      ]
+    }
+  ],
+  "errors": [
+    "Uncaught NotFoundError: Failed to execute 'setPointerCapture' on 'Element': No active pointer with the given id is found."
+  ]
+}
