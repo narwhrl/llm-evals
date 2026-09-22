@@ -56,6 +56,8 @@ export class Director {
   private handles: DirectorHandles = { line: null, sheet: null };
   private cutSevered = 0;
   private hatchRequested = false;
+  /** 已经烘焙成版画的那一章（同一个 cue 对象不重复烘焙） */
+  private bakedPlate: DeviceCue | null = null;
   private readonly audio = new InkAudio();
 
   constructor(
@@ -95,8 +97,11 @@ export class Director {
 
   setMode(mode: EngineMode): void {
     this.mode = mode;
+    this.bakedPlate = null;
     if (mode === "still") {
-      this.bakeStillPlate();
+      // 换一张纸，然后等这一章的 cue 来烘版画（Experience 会在模式变化后重发 cue）
+      this.engine.field.clear();
+      this.engine.renderer.clearAll();
       return;
     }
     this.engine.invalidate();
@@ -104,11 +109,14 @@ export class Director {
 
   /**
    * 静置呈现：同一套模拟离线跑完这一章的版画，一次性写进纸里。
-   * 与完整动效是同一套引擎画出来的，只是不为时间花时间。
+   * 与完整动效是同一个引擎画出来的，只是不为时间花时间；
+   * 版画累积在同一张纸上，所以静置版也一样"越读越脏"，
+   * 终章的拓印才有足够的灰可用。
    */
   private bakeStillPlate(): void {
+    if (this.bakedPlate === this.cue) return;
+    this.bakedPlate = this.cue;
     const cue = this.cue;
-    this.engine.renderer.clearAll();
     bakePlate(
       this.engine.field,
       {

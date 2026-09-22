@@ -97,7 +97,8 @@ export default function Experience() {
     director.startHatch(targets, config.marks);
   }, [displayWord, engine]);
 
-  // 章节 → 装置参数；第三、四章触发各自的装置动作
+  // 章节 → 装置参数；第三、四章触发各自的装置动作。
+  // 模式也在依赖里：切到静置呈现时要用当前这一章的 cue 重新烘一张版画。
   useEffect(() => {
     const chapter = CHAPTERS[active];
     const director = directorRef.current;
@@ -112,7 +113,7 @@ export default function Experience() {
       return () => window.clearTimeout(timer);
     }
     return undefined;
-  }, [active, startFinale, engine]);
+  }, [active, startFinale, engine, mode]);
 
   useEffect(() => {
     directorRef.current?.setAudio(audio);
@@ -182,7 +183,12 @@ export default function Experience() {
 
   return (
     <>
-      <div ref={stageRef} className="stage">
+      <div
+        ref={stageRef}
+        className="stage"
+        role="img"
+        aria-label="墨迹场：一张正在被写的纸。墨迹随你的阅读分叉、被一刀截断、最后把你写下的字拓出来。"
+      >
         <div className="knife" ref={knifeRef} data-active="false" aria-hidden="true">
           <span />
         </div>

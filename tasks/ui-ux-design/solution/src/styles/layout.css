@@ -302,11 +302,12 @@
   letter-spacing: 0.08em;
 }
 
-/* 印章式按钮：唯一允许的"控件"形态 */
+/* 印章式按钮：唯一允许的"控件"形态。方角、朱红、按下即反白，
+   是一枚盖在纸上的记号，不是一枚胶囊。 */
 .press {
   padding: 9px 18px;
   border: 1px solid var(--vermilion);
-  border-radius: 999px;
+  border-radius: 1px;
   color: var(--vermilion);
   background: color-mix(in srgb, var(--paper) 80%, transparent);
   font-family: var(--mono);
@@ -315,6 +316,8 @@
   text-transform: uppercase;
   cursor: pointer;
   transition: background-color 0.18s ease, color 0.18s ease;
+  /* 印泥压下去的那一点重影 */
+  box-shadow: 1px 1px 0 color-mix(in srgb, var(--vermilion) 22%, transparent);
 }
 
 .press:hover,

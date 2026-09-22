@@ -27,6 +27,8 @@ export function Deck({ engine, temperature, onTemperature, onRead, showControls,
 
   const abandoned = snapshot?.abandoned ?? 0;
   const live = snapshot?.live ?? 0;
+  // 读数每 220ms 变一次，所以它不是 aria-live 区域：
+  // 状态播报只走 Experience 里那条只说事件的 role="status"。
 
   return (
     <div className="deck">
@@ -51,7 +53,7 @@ export function Deck({ engine, temperature, onTemperature, onRead, showControls,
         </div>
       ) : null}
 
-      <p className="deck__readout" aria-live="polite">
+      <p className="deck__readout">
         <span>
           温度 <b>{temperature.toFixed(2)}</b>
         </span>

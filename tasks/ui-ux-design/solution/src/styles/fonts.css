@@ -1,5 +1,13 @@
 /* Instrument Serif · OFL-1.1 · 见 @fontsource/instrument-serif/LICENSE
    只取 latin 子集与 woff2：不打包 latin-ext 与 woff 回退，减少一半字体体积。 */
+
+/* 拉丁文本的字体身份（正体=写下的，斜体=被放弃的）。
+   这一条必须存在：没有它，@font-face 永远不会被任何元素用上。 */
+.latin {
+  font-family: var(--serif-latin);
+  font-style: normal;
+}
+
 @font-face {
   font-family: "Instrument Serif";
   font-style: normal;

@@ -4,8 +4,8 @@ export const PALETTE = {
   paperShade: "#e7e0d1",
   ink: "#1b2a3a",
   inkSoft: "#46586b",
-  ghost: "#8a8578",
-  vermilion: "#c2492b",
+  ghost: "#6f6a5e",
+  vermilion: "#b03f22",
 } as const;
 
 export type InkColor = (typeof PALETTE)["ink"] | (typeof PALETTE)["ghost"] | (typeof PALETTE)["vermilion"];
