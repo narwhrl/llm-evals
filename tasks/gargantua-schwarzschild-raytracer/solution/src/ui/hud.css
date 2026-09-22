@@ -1,0 +1,342 @@
+.hud-root {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  font-family: 'Segoe UI', ui-sans-serif, system-ui, sans-serif;
+  font-size: 12px;
+  color: #cfd8e3;
+  user-select: none;
+  z-index: 10;
+}
+
+.hud-panel {
+  pointer-events: auto;
+  background: rgba(8, 10, 14, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 8px 10px;
+}
+
+.top-bar {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  max-width: 320px;
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  color: #ffb454;
+}
+
+.subtitle {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: #8fa0b3;
+  margin-bottom: 6px;
+}
+
+.status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  font-size: 11px;
+  color: #a7b4c4;
+}
+
+.status b {
+  color: #e8eef5;
+  font-weight: 600;
+}
+
+.presets-bar {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  max-width: 340px;
+}
+
+.debug-bar {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: min(92vw, 560px);
+  text-align: center;
+}
+
+.bar-caption {
+  font-size: 11px;
+  color: #8fa0b3;
+  margin-bottom: 6px;
+}
+
+.bar-caption small {
+  color: #67788c;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+button {
+  pointer-events: auto;
+  font: inherit;
+  font-size: 11px;
+  color: #cfd8e3;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 4px 9px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+button:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+button.active {
+  background: rgba(255, 180, 84, 0.22);
+  border-color: rgba(255, 180, 84, 0.65);
+  color: #ffd9a3;
+}
+
+button.danger:hover {
+  background: rgba(255, 90, 90, 0.2);
+  border-color: rgba(255, 90, 90, 0.55);
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.params-panel {
+  position: absolute;
+  top: 128px;
+  right: 12px;
+  width: 262px;
+  max-height: calc(100vh - 220px);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.params-panel.collapsed {
+  width: auto;
+  max-height: none;
+}
+
+.panel-toggle {
+  align-self: flex-end;
+}
+
+.params-panel.collapsed .panel-toggle {
+  align-self: stretch;
+}
+
+.params-scroll {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;
+}
+
+.params-scroll details {
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  padding-top: 4px;
+}
+
+.params-scroll summary {
+  cursor: pointer;
+  font-size: 11px;
+  color: #ffb454;
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+
+.slider-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 8px;
+  padding: 3px 0;
+  cursor: default;
+}
+
+.slider-label {
+  font-size: 11px;
+  color: #b9c4d2;
+}
+
+.slider-value {
+  font-size: 11px;
+  font-family: ui-monospace, Consolas, monospace;
+  color: #e8eef5;
+}
+
+.slider-row input[type='range'] {
+  grid-column: 1 / -1;
+  width: 100%;
+  height: 18px;
+  margin: 0;
+  accent-color: #ffb454;
+  cursor: pointer;
+}
+
+.help-bar {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  max-width: 300px;
+}
+
+.help-bar ul {
+  margin: 6px 0 0;
+  padding-left: 16px;
+  font-size: 11px;
+  color: #a7b4c4;
+  line-height: 1.7;
+}
+
+.help-bar b {
+  color: #ffd9a3;
+  font-family: ui-monospace, Consolas, monospace;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 20;
+  pointer-events: auto;
+}
+
+.overlay-card {
+  max-width: 380px;
+  text-align: center;
+  line-height: 1.6;
+  color: #cfd8e3;
+}
+
+.overlay-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffb454;
+  margin-bottom: 6px;
+  letter-spacing: 0.12em;
+}
+
+.mono {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 11px;
+  color: #8fa0b3;
+  word-break: break-all;
+}
+
+/* mobile: compact status/presets on top, horizontally scrollable debug strip
+   at the bottom edge, params as a bottom drawer (collapsed by default) */
+@media (max-width: 760px) {
+  .top-bar {
+    top: 8px;
+    left: 8px;
+    max-width: 52vw;
+    padding: 6px 8px;
+  }
+
+  .title {
+    font-size: 13px;
+  }
+
+  .subtitle {
+    font-size: 9px;
+    letter-spacing: 0.03em;
+  }
+
+  .status {
+    font-size: 10px;
+    gap: 2px 8px;
+  }
+
+  .presets-bar {
+    top: 8px;
+    right: 8px;
+    max-width: 44vw;
+    padding: 6px 8px;
+  }
+
+  .row {
+    justify-content: flex-start;
+  }
+
+  .row button {
+    padding: 4px 6px;
+    font-size: 10px;
+  }
+
+  .debug-bar {
+    bottom: 8px;
+    top: auto;
+    left: 8px;
+    right: 8px;
+    transform: none;
+    max-width: none;
+    text-align: left;
+    padding: 5px 8px;
+  }
+
+  .debug-bar .row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    gap: 4px;
+    scrollbar-width: none;
+  }
+
+  .debug-bar .row button {
+    min-width: 30px;
+    padding: 4px 6px;
+    flex: 0 0 auto;
+  }
+
+  .debug-bar .bar-caption {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 4px;
+  }
+
+  .params-panel {
+    top: auto;
+    bottom: 52px;
+    left: 8px;
+    right: 8px;
+    width: auto;
+    max-height: 46vh;
+    z-index: 12;
+  }
+
+  .params-panel .panel-toggle {
+    align-self: stretch;
+  }
+
+  .help-bar {
+    bottom: 96px;
+    top: auto;
+    left: 8px;
+    max-width: 70vw;
+    z-index: 11;
+  }
+}
