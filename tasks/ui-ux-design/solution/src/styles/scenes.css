@@ -8,6 +8,13 @@
   padding: 0 var(--gutter);
 }
 
+.hero__text {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  gap: 22px;
+}
+
 .hero__title {
   display: flex;
   flex-wrap: wrap;
@@ -235,13 +242,14 @@
   line-height: 1.9;
 }
 
-/* 版本说明 */
+/* 版本说明：这一带是印上去的，纸到这里变干净 */
 .colophon {
   display: grid;
   gap: 22px;
   margin-top: 8svh;
   padding: 44px var(--gutter) 64px;
   border-top: 1px solid var(--rule-strong);
+  background: var(--paper);
 }
 
 .colophon__title {

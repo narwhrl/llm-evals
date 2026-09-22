@@ -41,14 +41,21 @@
   transform: translate(-50%, 0);
 }
 
-/* 报头：极小、贴边、像印在纸角的登记信息 */
+/* 报头：极小、贴边、像印在纸角的登记信息；
+   文字与墨争同一张纸，所以贴边的报头跟着视线走，并且自带一层纸，读得清。 */
 .masthead {
+  position: sticky;
+  z-index: 4;
+  top: 0;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: 16px;
-  padding: 22px var(--gutter) 0;
+  padding: 22px var(--gutter) 18px;
   color: var(--ink-soft);
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 44%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 44%, transparent 100%);
   font-family: var(--mono);
   font-size: 11px;
   letter-spacing: 0.16em;
@@ -118,7 +125,22 @@
 }
 
 .chapter__body {
+  position: relative;
+  isolation: isolate;
   max-width: var(--measure);
+}
+
+/* 文字底下是"还没被写脏的一块纸"：墨可以在别处落下，但不能吃掉可读性。 */
+.chapter__body::before,
+.hero__text::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -30px -34px;
+  background: var(--paper);
+  opacity: 0.9;
+  -webkit-mask-image: radial-gradient(122% 108% at 50% 50%, #000 56%, transparent 100%);
+  mask-image: radial-gradient(122% 108% at 50% 50%, #000 56%, transparent 100%);
 }
 
 .chapter--right .chapter__body {
@@ -309,6 +331,32 @@
 }
 
 @media (max-width: 720px) {
+  .masthead {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 14px var(--gutter) 14px;
+    letter-spacing: 0.08em;
+  }
+
+  .masthead nav {
+    flex-wrap: wrap;
+    gap: 6px 16px;
+  }
+
+  .masthead__title {
+    font-size: 11px;
+  }
+
+  .masthead__cn {
+    font-size: 13px;
+    letter-spacing: 0.2em;
+  }
+
+  .masthead__action {
+    white-space: nowrap;
+  }
+
   .chapter {
     min-height: 84svh;
     padding: 10svh var(--gutter);
