@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="体素风格中式古典建筑群 · Three.js 实时场景" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f0e9dd'/%3E%3Cpath d='M3 15 16 7l13 8z' fill='%23c8913f'/%3E%3Cpath d='M2 17h28v2H2z' fill='%238f2f24'/%3E%3Crect x='10' y='19' width='12' height='9' fill='%23b8402f'/%3E%3Crect x='14' y='21' width='4' height='7' fill='%232f2119'/%3E%3C/svg%3E"
+    />
+    <title>体素中式古建群 · Voxel Chinese Architecture</title>
+  </head>
+  <body>
+    <canvas id="scene"></canvas>
+
+    <div class="hud">
+      <header class="hud-title">
+        <h1>体素 · 中式古建群</h1>
+        <p>山门 · 钟鼓楼 · 配殿 · 主殿 &nbsp;|&nbsp; 中轴对称院落</p>
+      </header>
+
+      <div class="hud-stats" id="stats" aria-live="polite"></div>
+
+      <footer class="hud-hint">
+        <span>拖拽旋转</span><i></i><span>滚轮缩放</span><i></i><span>右键平移</span><i></i><span>可选 ?view=top 切换机位</span>
+      </footer>
+
+      <nav class="hud-views" id="views" aria-label="机位切换"></nav>
+      <nav class="hud-tod" id="tod" aria-label="时间档"></nav>
+    </div>
+
+    <div class="overlay" id="overlay">
+      <div class="overlay-inner">
+        <div class="overlay-title">正在营造场景</div>
+        <div class="overlay-step" id="overlay-step">初始化</div>
+        <div class="overlay-bar"><span id="overlay-bar-fill"></span></div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
