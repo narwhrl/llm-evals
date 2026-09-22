@@ -47,7 +47,6 @@ export const SLOT_ORDER: SlotId[] = ['s1', 's2', 's3', 's4', 's5'];
 export const BODY: Part[] = [
   { kind: 'text', value: '我是一个' },
   { kind: 'slot', id: 's1' },
-  { kind: 'text', value: '的' },
   { kind: 'slot', id: 's2' },
   { kind: 'text', value: '，' },
   { kind: 'slot', id: 's3' },

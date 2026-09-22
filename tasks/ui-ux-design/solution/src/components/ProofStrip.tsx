@@ -31,7 +31,10 @@ export interface ProofStripProps {
   faceRef: RefObject<HTMLDivElement>;
   basketRef: RefObject<HTMLUListElement>;
   states: States;
+  /** 只记「删改」次数；取回不计 */
   setState: (id: SlotId, v: number) => void;
+  /** 只记「删改」次数；取回不计 */
+  bumpEdit: () => void;
   scraps: Scrap[];
   setScraps: React.Dispatch<React.SetStateAction<Scrap[]>>;
   counts: Record<SlotId, number>;
@@ -62,6 +65,7 @@ export function ProofStrip(props: ProofStripProps) {
     basketRef,
     states,
     setState,
+    bumpEdit,
     scraps,
     setScraps,
     counts,
@@ -83,12 +87,14 @@ export function ProofStrip(props: ProofStripProps) {
     s4: null,
     s5: null,
   });
+  const bodyRef = useRef<HTMLParagraphElement | null>(null);
   const scrapId = useRef(1);
 
   const flip = flipProgress(progress);
   const dele = deleProgress(progress);
   const interactive = progress >= 0.34 && flip < 0.03;
 
+  // 封面的标题是「未干」的：随滚动定影，而不是从透明里淡入
   const titleT = reduced ? 1 : easeOutCubic(seg(progress, 0, 0.065));
   const pressAt = useCallback(
     (i: number) => (reduced ? 1 : seg(progress, 0.1 + i * 0.026, 0.152 + i * 0.026)),
@@ -97,6 +103,7 @@ export function ProofStrip(props: ProofStripProps) {
 
   const spawnTear = useCallback(
     (text: string, from: DOMRect, base: HTMLElement) => {
+      if (reduced) return;
       const b = base.getBoundingClientRect();
       const basket = basketRef.current;
       const t = basket
@@ -105,7 +112,12 @@ export function ProofStrip(props: ProofStripProps) {
             return { x: r.left - b.left + r.width / 2, y: r.top - b.top + 18 };
           })()
         : { x: base.clientWidth - 60, y: base.clientHeight - 60 };
-      const local = { left: from.left - b.left, top: from.top - b.top, width: from.width, height: from.height };
+      const local = {
+        left: from.left - b.left,
+        top: from.top - b.top,
+        width: from.width,
+        height: from.height,
+      };
 
       const ghost = document.createElement('div');
       ghost.className = 'tear-ghost';
@@ -114,22 +126,42 @@ export function ProofStrip(props: ProofStripProps) {
       const start = performance.now();
       const step = (now: number) => {
         const t01 = Math.min(1, (now - start) / TEAR_MS);
-        const pose = tearPose(reduced ? 1 : t01, local, t);
+        const pose = tearPose(t01, local, t);
         ghost.style.transform = `translate(${pose.x}px, ${pose.y}px) rotate(${pose.rot}deg) scale(${pose.scaleX}, ${pose.scaleY})`;
         ghost.style.opacity = String(pose.opacity);
-        if (t01 < 1) {
-          requestAnimationFrame(step);
-        } else {
-          ghost.remove();
-        }
+        if (t01 < 1) requestAnimationFrame(step);
+        else ghost.remove();
       };
-      if (reduced) {
-        ghost.remove();
-        return;
-      }
       requestAnimationFrame(step);
     },
     [basketRef, reduced],
+  );
+
+  const restore = useCallback(
+    (scrapDbId: number) => {
+      const scrap = scraps.find((s) => s.id === scrapDbId);
+      if (!scrap) return;
+      const cur = states[scrap.slotId];
+      if (cur === scrap.variant) return;
+      setScraps((s) => {
+        const rest = s.filter((x) => x.id !== scrapDbId);
+        return cur < 0
+          ? rest
+          : [
+              ...rest,
+              {
+                id: scrapId.current++,
+                slotId: scrap.slotId,
+                variant: cur,
+                text: SLOTS[scrap.slotId].cycle[cur],
+              },
+            ];
+      });
+      setState(scrap.slotId, scrap.variant);
+      bumpDrop(scrap.slotId);
+      announce(`已把「${scrap.text}」放回${slotLabel(scrap.slotId)}`);
+    },
+    [announce, bumpDrop, scraps, setScraps, setState, states],
   );
 
   const strike = useCallback(
@@ -138,21 +170,32 @@ export function ProofStrip(props: ProofStripProps) {
       const face = faceRef.current;
       if (!el || !face || !interactive) return;
       const cur = states[id];
-      if (cur < 0) return;
+
+      // 删空的词位：点按＝从废稿篓取回最近一稿
+      if (cur < 0) {
+        const mine = [...scraps].reverse().find((s) => s.slotId === id);
+        if (mine) restore(mine.id);
+        else announce(`${slotLabel(id)}的废稿篓是空的`);
+        return;
+      }
 
       const wordEl = el.querySelector<HTMLElement>('.slot-word') ?? el;
       const rect = wordEl.getBoundingClientRect();
       const box = boxIn(wordEl, face);
-      box.y += counts[id] * 2.4;
-      marksRef.current?.addStrike(`${id}-${counts[id]}`, box, true);
+      marksRef.current?.addStrike(`${id}-${counts[id]}-s`, box, true);
       spawnTear(SLOTS[id].cycle[cur], rect, face);
 
       const next = cur === 2 ? -1 : cur + 1;
       const n = counts[id] + 1;
       setState(id, next);
+      bumpEdit();
       setCounts((c) => ({ ...c, [id]: n }));
-      setScraps((s) => [...s, { id: scrapId.current++, slotId: id, variant: cur, text: SLOTS[id].cycle[cur] }]);
+      setScraps((s) => [
+        ...s,
+        { id: scrapId.current++, slotId: id, variant: cur, text: SLOTS[id].cycle[cur] },
+      ]);
       bumpDrop(id);
+      if (next >= 0) marksRef.current?.addInsert(`${id}-${n}-i`, boxIn(el, face));
       if (n >= 3 && !ghostUnlocked) setGhostUnlocked(true);
       navigator.vibrate?.(12);
       announce(
@@ -164,11 +207,14 @@ export function ProofStrip(props: ProofStripProps) {
     [
       announce,
       bumpDrop,
+      bumpEdit,
       counts,
       faceRef,
       ghostUnlocked,
       interactive,
       marksRef,
+      restore,
+      scraps,
       setCounts,
       setGhostUnlocked,
       setScraps,
@@ -178,25 +224,9 @@ export function ProofStrip(props: ProofStripProps) {
     ],
   );
 
-  const restore = useCallback(
-    (scrapDbId: number) => {
-      const scrap = scraps.find((s) => s.id === scrapDbId);
-      if (!scrap) return;
-      const cur = states[scrap.slotId];
-      if (cur === scrap.variant) return;
-      setScraps((s) => {
-        const rest = s.filter((x) => x.id !== scrapDbId);
-        return cur < 0 ? rest : [...rest, { id: scrapId.current++, slotId: scrap.slotId, variant: cur, text: SLOTS[scrap.slotId].cycle[cur] }];
-      });
-      setState(scrap.slotId, scrap.variant);
-      bumpDrop(scrap.slotId);
-      announce(`已把「${scrap.text}」放回${slotLabel(scrap.slotId)}`);
-    },
-    [announce, bumpDrop, scraps, setScraps, setState, states],
-  );
-
   const onStripKeyDown = (e: React.KeyboardEvent) => {
-    const id = (e.target as HTMLElement).closest<HTMLElement>('[data-slot]')?.dataset.slot as SlotId | undefined;
+    const id = (e.target as HTMLElement).closest<HTMLElement>('[data-slot]')?.dataset
+      .slot as SlotId | undefined;
     if (!id) return;
     if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
       e.preventDefault();
@@ -222,13 +252,12 @@ export function ProofStrip(props: ProofStripProps) {
   }, [interactive]);
 
   let tokenIndex = 0;
-  const prompt =
-    editCount > 0 ? COPY.promptAfterEdit : COPY.promptInitial;
+  const prompt = editCount > 0 ? COPY.promptAfterEdit : COPY.promptInitial;
 
   return (
     <>
       <div className="plate-face plate-front" ref={faceRef} data-front>
-        <MarksLayer ref={marksRef} dele={dele} reduced={reduced} sink={flip} />
+        <MarksLayer ref={marksRef} dele={dele} reduced={reduced} sink={flip} targetRef={bodyRef} />
         <div className="rail mono" aria-hidden="true">
           <span className="rail-label">{COPY.feedLabel}</span>
           <span className="rail-track">
@@ -239,7 +268,9 @@ export function ProofStrip(props: ProofStripProps) {
 
         <div className="measure">
           <header className="sheet-head mono">
-            <span>{COPY.titleCn} / {COPY.titleEn}</span>
+            <span>
+              {COPY.titleCn} / {COPY.titleEn}
+            </span>
             <span data-header-state>{progress < 0.8 ? COPY.headerDraft : COPY.headerClean}</span>
           </header>
 
@@ -249,8 +280,9 @@ export function ProofStrip(props: ProofStripProps) {
           <div
             className="title-block"
             style={{
-              transform: `translateY(${(1 - titleT) * 12}vh) rotate(${(1 - titleT) * -2.5}deg) scale(${1.25 - titleT * 0.25})`,
-              opacity: titleT,
+              transform: `rotate(${(1 - titleT) * -1.6}deg) scale(${1.04 - titleT * 0.04})`,
+              filter: `blur(${(1 - titleT) * 2.2}px)`,
+              opacity: 0.55 + titleT * 0.45,
             }}
           >
             <h1 className="title-cn">
@@ -260,7 +292,7 @@ export function ProofStrip(props: ProofStripProps) {
             <p className="title-sub">{COPY.subtitle}</p>
           </div>
 
-          <p className="body-line" onKeyDown={onStripKeyDown} data-strip>
+          <p className="body-line" ref={bodyRef} onKeyDown={onStripKeyDown} data-strip>
             {BODY.map((part) => {
               const i = tokenIndex++;
               const t = pressAt(i);
@@ -271,14 +303,13 @@ export function ProofStrip(props: ProofStripProps) {
               };
               if (part.kind === 'text') {
                 return (
-                  <span key={`t${i}`} className="tok tok-text" style={press} aria-hidden="false">
+                  <span key={`t${i}`} className="tok tok-text" style={press}>
                     {part.value}
                   </span>
                 );
               }
               const def = SLOTS[part.id];
               const cur = states[part.id];
-              const disabled = !interactive || cur < 0;
               return (
                 <span key={part.id} className="tok tok-slot" style={press}>
                   <button
@@ -288,11 +319,11 @@ export function ProofStrip(props: ProofStripProps) {
                     }}
                     className={`slot${cur < 0 ? ' is-empty' : ''}`}
                     data-slot={part.id}
-                    disabled={disabled}
+                    disabled={!interactive}
                     onClick={() => strike(part.id)}
                     aria-label={
                       cur < 0
-                        ? `${slotLabel(part.id)}，已删空，按 Backspace 从废稿篓取回`
+                        ? `${slotLabel(part.id)}，已删空，按 Enter 或 Backspace 从废稿篓取回`
                         : `${slotLabel(part.id)}，当前「${def.cycle[cur]}」，按 Enter 删改`
                     }
                   >
@@ -313,6 +344,13 @@ export function ProofStrip(props: ProofStripProps) {
               );
             })}
           </p>
+
+          {openNote && SLOTS[openNote].note && (
+            <div className="note-float" role="note" data-note-body={openNote}>
+              <span className="mono note-float-tag">后注 / {openNote.toUpperCase()}</span>
+              {SLOTS[openNote].note}
+            </div>
+          )}
 
           <p className="prompt" data-prompt>
             {prompt}
@@ -340,14 +378,6 @@ export function ProofStrip(props: ProofStripProps) {
             listRef={basketRef}
           />
         </div>
-
-        {/* 有后注打开时，浮到版心下方 */}
-        {openNote && SLOTS[openNote].note && (
-          <div className="note-float" role="note" data-note-body={openNote}>
-            <span className="mono note-float-tag">后注 / {openNote.toUpperCase()}</span>
-            {SLOTS[openNote].note}
-          </div>
-        )}
 
         <div className="cover-hint mono" style={{ opacity: progress < 0.06 ? 1 : 0 }}>
           向下滚动 = 走纸

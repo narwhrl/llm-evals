@@ -267,6 +267,11 @@
   border-bottom-style: solid;
   opacity: 0.55;
   vertical-align: 0.15em;
+  cursor: pointer;
+}
+
+.slot.is-empty:disabled {
+  cursor: default;
 }
 
 .slot-word {
@@ -339,10 +344,7 @@
 }
 
 .note-float {
-  position: absolute;
-  left: 0.6rem;
-  bottom: 1rem;
-  max-width: min(30rem, 46vw);
+  margin: 0.2rem 0 0;
   padding: 0.7rem 0.95rem;
   background: var(--paper-deep);
   border-left: 2px solid var(--pencil-blue);
@@ -505,6 +507,9 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-decoration: line-through;
+  text-decoration-color: rgba(194, 46, 40, 0.55);
+  text-decoration-thickness: 1.5px;
 }
 
 /* 幽灵句：铅笔涂改痕 */
@@ -812,10 +817,7 @@
   }
 
   .note-float {
-    max-width: none;
-    left: 0.9rem;
-    right: 0.9rem;
-    bottom: 0.6rem;
+    margin-top: 0.4rem;
   }
 
   .condemned-tag {

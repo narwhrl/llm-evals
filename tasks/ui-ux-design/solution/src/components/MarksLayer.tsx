@@ -4,11 +4,13 @@ import {
   useEffect,
   useImperativeHandle,
   useRef,
+  type RefObject,
 } from 'react';
-import { delePoints, ribbon, strikePoints, INK_VERMILION, type Box } from '../engine/marks';
+import { delePoints, ribbon, strikePoints, INK_VERMILION, type Box, type Pt } from '../engine/marks';
 
 export interface MarksHandle {
   addStrike: (key: string, rect: Box, animate: boolean) => void;
+  addInsert: (key: string, rect: Box) => void;
   clearStrikes: () => void;
 }
 
@@ -18,28 +20,52 @@ interface Props {
   reduced: boolean;
   /** 翻面后笔迹随校样沉入纸背 */
   sink: number;
+  /** 判死笔迹的靶区（校样正文），为空则退到整面 */
+  targetRef?: RefObject<HTMLElement>;
 }
 
-interface StrikeMark {
+interface TransientMark {
   key: string;
   box: Box;
   seed: number;
   grow: number;
+  fade: number;
+  /** strike 与撕词一起走；insert 是替代词落位的插入号，留得久一点 */
+  mode: 'strike' | 'insert';
 }
 
-const GROW_MS = 340;
+const GROW_MS: Record<TransientMark['mode'], number> = { strike: 190, insert: 140 };
+const FADE_MS: Record<TransientMark['mode'], number> = { strike: 340, insert: 720 };
+
+/** 插入号 ⌃：替代词砸落补位的校对符号 */
+function insertPoints(box: Box): Pt[] {
+  const x0 = box.x + box.w * 0.08;
+  const x1 = box.x + box.w * 0.92;
+  const xm = box.x + box.w * 0.5;
+  const yb = box.y + box.h + 5;
+  const yt = box.y + box.h + 1;
+  return [
+    { x: x0, y: yb },
+    { x: (x0 + xm) / 2, y: (yb + yt) / 2 },
+    { x: xm, y: yt },
+    { x: (xm + x1) / 2, y: (yt + yb) / 2 },
+    { x: x1, y: yb },
+  ];
+}
 
 /**
- * 笔迹层：删除线与删除号都以带笔压的色带写出。
+ * 笔迹层：删除线、插入号与删除号都以带笔压的色带写出。
+ * 划除/插入随动作生灭（笔迹属于被删的那个词），删除号随滚动可回溯。
  * 空闲时不跑动画循环，只被事件唤醒。
  */
 export const MarksLayer = forwardRef<MarksHandle, Props>(function MarksLayer(
-  { dele, reduced, sink },
+  { dele, reduced, sink, targetRef },
   ref,
 ) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const marksRef = useRef<StrikeMark[]>([]);
+  const marksRef = useRef<TransientMark[]>([]);
   const rafRef = useRef(0);
+  const wakeRef = useRef<() => void>(() => {});
   const deleRef = useRef(dele);
   deleRef.current = dele;
 
@@ -59,21 +85,35 @@ export const MarksLayer = forwardRef<MarksHandle, Props>(function MarksLayer(
     ctx.clearRect(0, 0, w, h);
     if (sink >= 0.99) return;
 
-    ctx.globalAlpha = 1 - sink * 0.8;
+    const sinkA = 1 - sink * 0.8;
 
     for (const m of marksRef.current) {
-      ribbon(ctx, strikePoints(m.box, m.seed), m.grow, 2.6, INK_VERMILION);
+      ctx.globalAlpha = sinkA * (1 - m.fade);
+      const pts = m.mode === 'insert' ? insertPoints(m.box) : strikePoints(m.box, m.seed);
+      ribbon(ctx, pts, m.grow, m.mode === 'insert' ? 1.9 : 2.6, INK_VERMILION);
     }
 
+    ctx.globalAlpha = sinkA;
     const d = deleRef.current;
     if (d > 0) {
-      const box: Box = { x: 10, y: h * 0.16, w: w - 20, h: h * 0.68 };
+      let box: Box;
+      const target = targetRef?.current;
+      if (target) {
+        const t = target.getBoundingClientRect();
+        const b = canvas.getBoundingClientRect();
+        box = {
+          x: t.left - b.left - 14,
+          y: t.top - b.top - t.height * 0.34,
+          w: t.width + 28,
+          h: t.height * 1.68,
+        };
+      } else {
+        box = { x: 10, y: h * 0.16, w: w - 20, h: h * 0.68 };
+      }
       ribbon(ctx, delePoints(box, 91), d, 13, INK_VERMILION);
     }
     ctx.globalAlpha = 1;
-  }, [sink]);
-
-  const tickRef = useRef<(now: number) => void>(() => {});
+  }, [sink, targetRef]);
 
   useEffect(() => {
     let running = false;
@@ -83,21 +123,26 @@ export const MarksLayer = forwardRef<MarksHandle, Props>(function MarksLayer(
       const dt = Math.min(64, now - last);
       last = now;
       let busy = false;
-      if (!reduced) {
-        for (const m of marksRef.current) {
-          if (m.grow < 1) {
-            m.grow = Math.min(1, m.grow + dt / GROW_MS);
-            busy = true;
-          }
+      for (const m of marksRef.current) {
+        if (m.grow < 1) {
+          m.grow = reduced ? 1 : Math.min(1, m.grow + dt / GROW_MS[m.mode]);
+          busy = true;
+        } else if (m.fade < 1) {
+          m.fade = reduced ? 1 : Math.min(1, m.fade + dt / FADE_MS[m.mode]);
+          busy = true;
         }
-      } else {
-        for (const m of marksRef.current) m.grow = 1;
+      }
+      if (marksRef.current.some((m) => m.fade >= 1)) {
+        marksRef.current = marksRef.current.filter((m) => m.fade < 1);
       }
       draw();
-      rafRef.current = busy ? requestAnimationFrame(tick) : 0;
-      running = busy;
+      if (busy) {
+        rafRef.current = requestAnimationFrame(tick);
+      } else {
+        running = false;
+        rafRef.current = 0;
+      }
     };
-    tickRef.current = tick;
 
     const wake = () => {
       if (reduced) {
@@ -109,11 +154,12 @@ export const MarksLayer = forwardRef<MarksHandle, Props>(function MarksLayer(
       last = performance.now();
       rafRef.current = requestAnimationFrame(tick);
     };
-    (draw as unknown as { wake?: () => void }).wake = wake;
+    wakeRef.current = wake;
 
     draw();
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = 0;
       running = false;
     };
   }, [draw, reduced]);
@@ -125,46 +171,40 @@ export const MarksLayer = forwardRef<MarksHandle, Props>(function MarksLayer(
 
   useImperativeHandle(
     ref,
-    () => ({
-      addStrike(key, rect, animate) {
-        const existing = marksRef.current.find((m) => m.key === key);
-        if (existing) {
-          existing.box = rect;
-          draw();
-          return;
-        }
+    () => {
+      const push = (key: string, rect: Box, mode: TransientMark['mode'], animate: boolean) => {
         marksRef.current.push({
           key,
           box: rect,
           seed: (key.charCodeAt(0) * 131 + marksRef.current.length * 17) >>> 0,
           grow: animate && !reduced ? 0 : 1,
+          fade: 0,
+          mode,
         });
         if (reduced) {
+          // 直接定格在完成态一帧后消失，保持内容与反馈不减
           draw();
+          window.setTimeout(() => {
+            marksRef.current = marksRef.current.filter((m) => m.key !== key);
+            draw();
+          }, 240);
           return;
         }
-        if (rafRef.current) cancelAnimationFrame(rafRef.current);
-        let last = performance.now();
-        const localTick = (now: number) => {
-          const dt = Math.min(64, now - last);
-          last = now;
-          let busy = false;
-          for (const m of marksRef.current) {
-            if (m.grow < 1) {
-              m.grow = Math.min(1, m.grow + dt / GROW_MS);
-              busy = true;
-            }
-          }
+        wakeRef.current();
+      };
+      return {
+        addStrike(key, rect, animate) {
+          push(key, rect, 'strike', animate);
+        },
+        addInsert(key, rect) {
+          push(key, rect, 'insert', true);
+        },
+        clearStrikes() {
+          marksRef.current = [];
           draw();
-          rafRef.current = busy ? requestAnimationFrame(localTick) : 0;
-        };
-        rafRef.current = requestAnimationFrame(localTick);
-      },
-      clearStrikes() {
-        marksRef.current = [];
-        draw();
-      },
-    }),
+        },
+      };
+    },
     [draw, reduced],
   );
 

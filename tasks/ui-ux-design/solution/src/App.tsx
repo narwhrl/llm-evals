@@ -41,6 +41,9 @@ export default function App() {
 
   const setState = useCallback((id: SlotId, v: number) => {
     setStates((s) => ({ ...s, [id]: v }));
+  }, []);
+
+  const bumpEdit = useCallback(() => {
     setEditCount((n) => n + 1);
   }, []);
 
@@ -87,6 +90,7 @@ export default function App() {
               basketRef={basketRef}
               states={states}
               setState={setState}
+              bumpEdit={bumpEdit}
               scraps={scraps}
               setScraps={setScraps}
               counts={counts}
