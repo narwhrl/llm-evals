@@ -99,6 +99,7 @@ function Panel({ controller }) {
       <Slider id="camDistance" label="Camera distance" value={state.params.camDistance} onChange={setParam('camDistance')} min={6} max={60} step={0.1} />
       <Slider id="camAzimuth" label="Camera azimuth (°)" value={state.params.camAzimuth} onChange={setParam('camAzimuth')} min={-180} max={180} step={1} />
       <Slider id="camPitch" label="Camera pitch (°)" value={state.params.camPitch} onChange={setParam('camPitch')} min={-80} max={80} step={1} />
+      <Slider id="timeScale" label="Time multiplier" value={state.params.timeScale} onChange={setParam('timeScale')} min={0} max={5} step={0.05} />
 
       <h2>Disk</h2>
       <Slider id="diskInner" label="Disk inner radius" value={state.params.diskInner} onChange={setParam('diskInner')} min={4} max={12} step={0.1} />

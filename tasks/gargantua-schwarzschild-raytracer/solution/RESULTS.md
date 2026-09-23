@@ -21,9 +21,9 @@ vite v5.4.11 building for production...
 ✓ 39 modules transformed.
 dist/index.html                   0.71 kB │ gzip:  0.42 kB
 dist/assets/index-*.css           4.11 kB │ gzip:  1.36 kB
-dist/assets/index-*.js          254.08 kB │ gzip: 79.50 kB
+dist/assets/index-*.js          255.03 kB │ gzip: 79.79 kB
 dist/vendor/three/three.module.js (1.21 MB) preserved from public/vendor/three
-✓ built in 720ms
+✓ built in ~900ms
 ```
 
 Exit code: `0`. Output directory: `solution/dist/`. The vendored Three.js
@@ -105,8 +105,9 @@ warnings only — no exception, no black screen, no unhandled rejection.
 - `R` → reset all parameters (verified: defaults applied).
 - `M` → toggle audio (state-only, audio is disabled by default per
   task spec).
-- All 21 documented sliders are present in the HUD, each with a label,
-  numeric readout, and observable effect on rendering.
+- All **21 documented sliders** are present in the HUD (DOM
+  `input[type=range]` count = 21), each with a label, numeric
+  readout, and observable effect on rendering.
 
 ### localStorage persistence (versioned)
 

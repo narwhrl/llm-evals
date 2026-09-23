@@ -17,15 +17,15 @@ export const PARAM_DEFS = [
   ['diskOuter', 'Disk outer radius', 10, 36, 0.1, 16],
   ['diskThickness', 'Disk half-thickness', 0.05, 1.2, 0.01, 0.35],
   ['diskTemperature', 'Disk temperature', 0.2, 3.0, 0.05, 1.0],
-  ['diskIntensity', 'Disk emission intensity', 0.0, 4.0, 0.05, 0.85],
+  ['diskIntensity', 'Disk emission intensity', 0.0, 4.0, 0.05, 1.6],
   ['orbitSpeed', 'Orbital velocity multiplier', 0.4, 1.8, 0.02, 1.0],
   ['turbulence', 'Turbulence amplitude', 0.0, 1.0, 0.02, 0.35],
   ['turbulenceSpeed', 'Turbulence speed', 0.0, 4.0, 0.05, 1.0],
   ['starDensity', 'Star density', 0.1, 3.0, 0.05, 1.2],
   ['galaxyBrightness', 'Galaxy brightness', 0.0, 2.0, 0.05, 0.7],
-  ['bloomStrength', 'Bloom strength', 0.0, 2.5, 0.02, 0.6],
-  ['bloomThreshold', 'Bloom threshold', 0.0, 4.0, 0.02, 1.4],
-  ['exposure', 'Exposure', 0.2, 3.0, 0.02, 1.1],
+  ['bloomStrength', 'Bloom strength', 0.0, 2.5, 0.02, 0.85],
+  ['bloomThreshold', 'Bloom threshold', 0.0, 4.0, 0.02, 0.9],
+  ['exposure', 'Exposure', 0.2, 3.0, 0.02, 2.2],
   ['vignette', 'Vignette strength', 0.0, 1.5, 0.02, 0.45],
   ['grain', 'Film grain strength', 0.0, 0.3, 0.005, 0.04],
   ['chromaticAberration', 'Chromatic aberration strength', 0.0, 0.02, 0.0005, 0.002]
@@ -43,9 +43,9 @@ export const CAMERA_PRESETS = [
   { id: 1, name: 'High Inclination',
     distance: 22, azimuth: 30,  pitch: 55, fov: 60 },
   { id: 2, name: 'Photon Toll',
-    distance: 16, azimuth: -45, pitch: 26, fov: 70 },
+    distance: 19, azimuth: -90, pitch: 8, fov: 65 },
   { id: 3, name: 'Low Orbit',
-    distance: 14, azimuth: 120, pitch: 32, fov: 80 }
+    distance: 14, azimuth: 60,  pitch: 28, fov: 75 }
 ];
 
 export const DEBUG_MODES = [

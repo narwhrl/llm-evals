@@ -143,11 +143,17 @@ bool sampleDisk(
   vec3 pos, vec3 prevPos, vec3 vel, float pathLen,
   inout int count, inout RaySample samples[MAX_DISK_CROSSINGS]
 ) {
-  // Detect a disk-plane crossing between prevPos and pos: z must change sign
-  // and the in-plane radius must lie inside [rIn, rOut] at the crossing.
-  if (sign(prevPos.z) == sign(pos.z)) return false;
-  float tCross = -prevPos.z / (pos.z - prevPos.z);
-  if (tCross < 0.0 || tCross > 1.0) return false;
+  // A disk crossing happens whenever the ray crosses z=0 between prevPos
+  // and pos AND the in-plane radius at that point lies within [rIn, rOut].
+  // We accept either a true sign change in z, OR a step that started
+  // exactly on z=0 (numerical edge case).
+  float z0 = prevPos.z, z1 = pos.z;
+  bool crossed = (z0 * z1 <= 0.0) && (z0 != z1);
+  if (!crossed) return false;
+
+  // Linear interpolation parameter for z=0 crossing
+  float tCross = -z0 / (z1 - z0);
+  tCross = clamp(tCross, 0.0, 1.0);
   vec3 xPos = mix(prevPos, pos, tCross);
   float r = length(xPos.xy);
   if (r < uDiskInner || r > uDiskOuter) return false;
@@ -166,6 +172,8 @@ bool sampleDisk(
   vec3 velPlane = dir - nHat * dot(dir, nHat);
   vec3 velPlaneN = normalize(velPlane + vec3(1e-4));
   float vDotDir = dot(velLocal, velPlaneN);
+  // Relativistic Doppler factor g = 1 / (1 - v·n̂); clamped to avoid
+  // the singularity for rays travelling opposite to the disk rotation.
   float g = 1.0 / max(0.05, 1.0 - vDotDir);
   g = clamp(g, 0.15, 6.0);
 
