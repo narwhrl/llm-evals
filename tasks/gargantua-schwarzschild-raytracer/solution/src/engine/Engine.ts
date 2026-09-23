@@ -53,6 +53,10 @@ export class Engine {
   private paused = false;
   private firstFrameDone = false;
   private disposed = false;
+  // Set while recovering from a WebGL context loss: the old targets' GL
+  // objects died with the lost context, so disposing them would only emit
+  // "object does not belong to this context" warnings.
+  private restoring = false;
 
   // Simulation clock (seconds). Frozen under capture=1.
   simTime = 0;
@@ -166,7 +170,10 @@ export class Engine {
       },
     });
 
-    const bloomArray = Array.from({ length: MAX_BLOOM_LEVELS }, () => this.blackTex);
+    const bloomUniforms: Record<string, { value: THREE.Texture }> = {};
+    for (let i = 0; i < MAX_BLOOM_LEVELS; i++) {
+      bloomUniforms[`tBloom${i}`] = { value: this.blackTex };
+    }
     this.compMat = new THREE.ShaderMaterial({
       vertexShader: POST_VERT,
       fragmentShader: COMPOSITE_FRAG,
@@ -175,7 +182,7 @@ export class Engine {
       blending: THREE.NoBlending,
       uniforms: {
         tScene: { value: null },
-        tBloom: { value: bloomArray },
+        ...bloomUniforms,
         uBloomLevels: { value: 4 },
         uBloomIntensity: { value: 0.8 },
         uExposure: { value: 1.15 },
@@ -216,8 +223,20 @@ export class Engine {
 
   private onContextRestored = (): void => {
     // three re-initialises its own GL state; rebuild every render target and
+    // the fallback texture (their GL objects died with the old context) and
     // force program recompilation, then resume exactly where we were.
+    this.restoring = true;
     this.rebuildTargets();
+    this.restoring = false;
+    // The old 1x1 fallback texture died with the lost context; replace the
+    // reference without touching the dead GL object.
+    this.blackTex = new THREE.DataTexture(new Uint8Array([0, 0, 0, 255]), 1, 1);
+    this.blackTex.needsUpdate = true;
+    for (let i = 0; i < MAX_BLOOM_LEVELS; i++) {
+      if (i >= this.bloomRTs.length) {
+        this.compMat.uniforms[`tBloom${i}`].value = this.blackTex;
+      }
+    }
     this.rayMat.needsUpdate = true;
     this.brightMat.needsUpdate = true;
     this.blurMat.needsUpdate = true;
@@ -251,11 +270,13 @@ export class Engine {
       depthBuffer: false,
       stencilBuffer: false,
     };
-    this.sceneRT?.dispose();
+    if (!this.restoring) this.sceneRT?.dispose();
     this.sceneRT = new THREE.WebGLRenderTarget(iw, ih, rtOpts);
 
-    for (const rt of this.bloomRTs) rt.dispose();
-    for (const rt of this.tmpRTs) rt.dispose();
+    if (!this.restoring) {
+      for (const rt of this.bloomRTs) rt.dispose();
+      for (const rt of this.tmpRTs) rt.dispose();
+    }
     this.bloomRTs = [];
     this.tmpRTs = [];
     for (let i = 0; i < budget.bloomLevels; i++) {
@@ -264,9 +285,9 @@ export class Engine {
       this.bloomRTs.push(new THREE.WebGLRenderTarget(lw, lh, rtOpts));
       this.tmpRTs.push(new THREE.WebGLRenderTarget(lw, lh, rtOpts));
     }
-    const bloomTextures = this.compMat.uniforms.tBloom.value as THREE.Texture[];
     for (let i = 0; i < MAX_BLOOM_LEVELS; i++) {
-      bloomTextures[i] = i < this.bloomRTs.length ? this.bloomRTs[i].texture : this.blackTex;
+      this.compMat.uniforms[`tBloom${i}`].value =
+        i < this.bloomRTs.length ? this.bloomRTs[i].texture : this.blackTex;
     }
     this.compMat.uniforms.uBloomLevels.value = this.bloomRTs.length;
     this.rayMat.uniforms.uResolution.value.set(iw, ih);

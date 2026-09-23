@@ -58,7 +58,15 @@ export const MAX_BLOOM_LEVELS = 6;
 
 export const COMPOSITE_FRAG = /* glsl */ `
 uniform sampler2D tScene;
-uniform sampler2D tBloom[${MAX_BLOOM_LEVELS}];
+// GLSL ES 1.00 forbids non-constant sampler array indexing, so the bloom
+// pyramid is bound as named samplers with constant indices (uBloomLevels
+// gates how many actually contribute).
+uniform sampler2D tBloom0;
+uniform sampler2D tBloom1;
+uniform sampler2D tBloom2;
+uniform sampler2D tBloom3;
+uniform sampler2D tBloom4;
+uniform sampler2D tBloom5;
 uniform float uBloomLevels;
 uniform float uBloomIntensity;
 uniform float uExposure;
@@ -106,12 +114,12 @@ vec3 srgbEncode(vec3 c) {
 
 // Bloom pyramid sum with optional per-channel radial offset (dispersion).
 vec3 bloomSum(vec2 uv) {
-  vec3 sum = vec3(0.0);
-  for (int i = 0; i < ${MAX_BLOOM_LEVELS}; i++) {
-    if (float(i) >= uBloomLevels) break;
-    float w = 1.0 / (1.0 + float(i) * 0.85);
-    sum += texture2D(tBloom[i], uv).rgb * w;
-  }
+  vec3 sum = texture2D(tBloom0, uv).rgb * (1.0 / 1.00);
+  if (uBloomLevels > 1.0) sum += texture2D(tBloom1, uv).rgb * (1.0 / 1.85);
+  if (uBloomLevels > 2.0) sum += texture2D(tBloom2, uv).rgb * (1.0 / 2.70);
+  if (uBloomLevels > 3.0) sum += texture2D(tBloom3, uv).rgb * (1.0 / 3.55);
+  if (uBloomLevels > 4.0) sum += texture2D(tBloom4, uv).rgb * (1.0 / 4.40);
+  if (uBloomLevels > 5.0) sum += texture2D(tBloom5, uv).rgb * (1.0 / 5.25);
   return sum * uBloomIntensity;
 }
 
