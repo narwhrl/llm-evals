@@ -1,0 +1,745 @@
+:root {
+  color-scheme: dark;
+  --fg: #e7e7e7;
+  --fg-dim: #8a8a8a;
+  --bg: #000;
+  --accent: #ffb468;
+  --accent-dim: #b07a3a;
+  --panel: rgba(8, 8, 10, 0.86);
+  --panel-strong: rgba(14, 14, 18, 0.95);
+  --panel-border: rgba(255, 255, 255, 0.09);
+  --row-border: rgba(255, 255, 255, 0.06);
+  --button-bg: rgba(255, 255, 255, 0.06);
+  --button-bg-hover: rgba(255, 255, 255, 0.12);
+  --button-bg-active: rgba(255, 180, 104, 0.25);
+  --danger: #ff5c5c;
+  font-family: system-ui, -apple-system, "Segoe UI", "Roboto", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  background: #000;
+  color: var(--fg);
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
+}
+
+.app canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  touch-action: none;
+  cursor: grab;
+}
+
+.app canvas:active {
+  cursor: grabbing;
+}
+
+/* ---- status overlay --------------------------------------------------- */
+
+.app .status-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+  color: var(--fg);
+  font-family: monospace;
+  text-align: center;
+  padding: 24px;
+  z-index: 50;
+  pointer-events: none;
+  transition: opacity 280ms ease;
+}
+
+/* Capture-mode screenshot determinism: when the URL pins the canvas
+   state, the overlay must vanish synchronously so the "ready" pixel
+   buffer is exactly what the screenshot captures.  We disable the
+   fade-out transition only here; normal sessions keep the smooth
+   animation. */
+.app.capture-mode .status-overlay,
+.app.capture-mode .status-overlay.hidden {
+  transition: none;
+}
+.app.capture-mode .status-overlay.hidden {
+  opacity: 0;
+  display: none;
+}
+
+.app .status-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.app .status-overlay .status-inner {
+  max-width: 480px;
+}
+
+.app .status-overlay.error {
+  background: rgba(40, 0, 0, 0.85);
+  color: #ffb3b3;
+}
+
+.app .status-overlay.lost {
+  background: rgba(40, 24, 0, 0.85);
+  color: #ffd28a;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(255, 180, 104, 0.2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  margin: 0 auto 16px;
+  animation: gargantua-spin 1s linear infinite;
+}
+
+@keyframes gargantua-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---- HUD -------------------------------------------------------------- */
+
+.app .hud {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-family: monospace;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  width: min(420px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+  z-index: 20;
+  color: var(--fg);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.6);
+}
+
+.app .hud.collapsed {
+  width: auto;
+  max-height: 56px;
+}
+
+.app .hud-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--row-border);
+  flex: 0 0 auto;
+}
+
+.app .hud.collapsed .hud-header {
+  border-bottom: none;
+}
+
+.app .hud-toggle {
+  background: var(--button-bg);
+  color: var(--fg);
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  width: 28px;
+  height: 28px;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+
+.app .hud-toggle:hover {
+  background: var(--button-bg-hover);
+}
+
+.app .hud-title {
+  margin: 0;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  flex: 0 0 auto;
+}
+
+.app .hud-status {
+  margin-left: auto;
+  color: var(--fg-dim);
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.app .hud-status-line {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.app .status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  background: var(--fg-dim);
+}
+
+.app .status-dot.ready { background: #6ee787; }
+.app .status-dot.booting { background: var(--accent); animation: gargantua-blink 1.2s ease-in-out infinite; }
+.app .status-dot.lost { background: #ffae5a; }
+.app .status-dot.error { background: var(--danger); }
+
+@keyframes gargantua-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.app .hud-body {
+  padding: 8px 12px 12px;
+  overflow-y: auto;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.app .hud-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.app .hud-body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.app .hud-section h2 {
+  margin: 0 0 6px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--fg-dim);
+  font-weight: 600;
+}
+
+/* ---- presets ---------------------------------------------------------- */
+
+.app .preset-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+
+.app .preset-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--button-bg);
+  color: var(--fg);
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  font-size: 12px;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+
+.app .preset-btn:hover {
+  background: var(--button-bg-hover);
+}
+
+.app .preset-btn.active {
+  background: var(--button-bg-active);
+  border-color: var(--accent-dim);
+  color: var(--accent);
+}
+
+.app .preset-num {
+  background: rgba(255, 180, 104, 0.18);
+  color: var(--accent);
+  border-radius: 4px;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  flex: 0 0 auto;
+}
+
+.app .preset-name {
+  flex: 1 1 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- quality ---------------------------------------------------------- */
+
+.app .quality-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+}
+
+.app .quality-btn {
+  padding: 6px 8px;
+  background: var(--button-bg);
+  color: var(--fg);
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.app .quality-btn:hover {
+  background: var(--button-bg-hover);
+}
+
+.app .quality-btn.active {
+  background: var(--button-bg-active);
+  border-color: var(--accent-dim);
+  color: var(--accent);
+}
+
+.app .quality-budget {
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--fg-dim);
+  letter-spacing: 0.02em;
+}
+
+/* ---- playback --------------------------------------------------------- */
+
+.app .playback-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.app .play-btn,
+.app .reset-btn {
+  padding: 8px 10px;
+  background: var(--button-bg);
+  color: var(--fg);
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.app .play-btn:hover,
+.app .reset-btn:hover {
+  background: var(--button-bg-hover);
+}
+
+.app .play-btn.playing {
+  background: var(--button-bg-active);
+  border-color: var(--accent-dim);
+  color: var(--accent);
+}
+
+.app .play-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---- debug grid ------------------------------------------------------- */
+
+.app .debug-grid {
+  display: grid;
+  /* minmax(0, 1fr) lets each column shrink below the long debug
+     label's min-content width — without it, grid `1fr` resolves to
+     max(min-content, 1fr) on overflowing content and pushes the
+     right column past the HUD's right edge on narrow phones,
+     clipping the label entirely instead of ellipsising. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.app .debug-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  background: var(--button-bg);
+  color: var(--fg);
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11px;
+  text-align: left;
+  /* Allow the flex item to shrink below its intrinsic content width
+     so the label inside ellipsises instead of forcing the column
+     track wider than its share of the grid. */
+  min-width: 0;
+}
+
+.app .debug-btn:hover {
+  background: var(--button-bg-hover);
+}
+
+.app .debug-btn.active {
+  background: var(--button-bg-active);
+  border-color: var(--accent-dim);
+  color: var(--accent);
+}
+
+.app .debug-key {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 3px;
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--fg-dim);
+  flex: 0 0 auto;
+}
+
+.app .debug-btn.active .debug-key {
+  background: rgba(255, 180, 104, 0.18);
+  color: var(--accent);
+}
+
+.app .debug-name {
+  flex: 1 1 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.app .debug-current {
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--fg-dim);
+}
+
+/* ---- parameters ------------------------------------------------------- */
+
+.app .param-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.app .param-row {
+  display: grid;
+  grid-template-columns: 1fr 110px 56px 28px;
+  gap: 6px;
+  align-items: center;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--row-border);
+}
+
+.app .param-row:last-child {
+  border-bottom: none;
+}
+
+.app .param-label {
+  color: var(--fg);
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.app .param-range {
+  width: 100%;
+  height: 14px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+}
+
+.app .param-range::-webkit-slider-runnable-track {
+  background: rgba(255, 255, 255, 0.08);
+  height: 4px;
+  border-radius: 2px;
+}
+
+.app .param-range::-moz-range-track {
+  background: rgba(255, 255, 255, 0.08);
+  height: 4px;
+  border-radius: 2px;
+}
+
+.app .param-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: -4px;
+  border: none;
+  cursor: pointer;
+}
+
+.app .param-range::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: none;
+  cursor: pointer;
+}
+
+.app .param-number {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--fg);
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  padding: 4px 6px;
+  font-family: inherit;
+  font-size: 11px;
+  width: 100%;
+  text-align: right;
+  min-width: 0;
+  -moz-appearance: textfield;
+}
+
+.app .param-number::-webkit-outer-spin-button,
+.app .param-number::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.app .param-reset {
+  background: var(--button-bg);
+  border: 1px solid var(--panel-border);
+  color: var(--fg);
+  border-radius: 4px;
+  width: 28px;
+  height: 24px;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app .param-reset:hover {
+  background: var(--button-bg-hover);
+}
+
+/* ---- keys ------------------------------------------------------------- */
+
+.app .keys-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px 12px;
+  font-size: 11px;
+  color: var(--fg-dim);
+}
+
+.app .keys-list kbd {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--fg);
+  border: 1px solid var(--panel-border);
+  border-radius: 3px;
+  padding: 1px 5px;
+  margin-right: 4px;
+  font-family: inherit;
+  font-size: 10px;
+}
+
+/* ---- footer ----------------------------------------------------------- */
+
+.app .hud-footer {
+  padding-top: 8px;
+  border-top: 1px solid var(--row-border);
+}
+
+.app .hud-credit {
+  color: var(--fg-dim);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+
+/* ---- floating HUD recovery button ------------------------------------ */
+
+/* Always-on small button to bring the HUD back when it has been
+   toggled off — critical on devices without an H key (mobile). */
+.app .hud-fab {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 25;
+  background: var(--panel-strong);
+  color: var(--accent);
+  border: 1px solid var(--accent-dim);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-family: monospace;
+  font-size: 12px;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  pointer-events: auto;
+}
+
+.app .hud-fab:hover {
+  background: var(--button-bg-active);
+}
+
+.app .hud-fab.hidden {
+  display: none;
+}
+
+/* ---- mobile tweaks ---------------------------------------------------- */
+
+/* Prevent the document itself from scrolling on mobile — the canvas
+   owns all gesture input via OrbitControls (touch-action:none), so
+   any html/body overflow would only produce useless page-level
+   scroll bars on short content. */
+html, body { overscroll-behavior: none; }
+
+/* Narrow portrait phones: HUD goes full-width with margins, the
+   collapsed HUD keeps a slim header so a single tap reveals the
+   controls, and every interactive element gets a comfortable touch
+   target.  We deliberately do not change the parameter slider / number
+   layout further than the existing two-row grid because the values
+   already truncate with ellipsis and the slider stays operable. */
+@media (max-width: 720px) {
+  .app {
+    /* Strict viewport lock — prevents accidental pinch-zoom and
+       horizontal scroll triggered by HUD overflow. */
+    overflow: hidden;
+  }
+  .app .hud {
+    top: 8px;
+    right: 8px;
+    left: 8px;
+    width: auto;
+    max-height: 78vh;
+    font-size: 13px;
+  }
+  .app .hud.collapsed {
+    left: auto;
+    width: auto;
+    max-height: 44px;
+  }
+  .app .hud-header {
+    padding: 6px 10px;
+    gap: 8px;
+  }
+  .app .hud-title { font-size: 12px; }
+  .app .hud-status { font-size: 10px; }
+  /* Bigger touch targets for HUD chrome on phones. */
+  .app .hud-toggle {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+  .app .hud-fab {
+    top: 12px;
+    right: 12px;
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+  .app .param-row {
+    grid-template-columns: 1fr 64px 36px;
+    grid-template-areas:
+      "label label label"
+      "range number reset";
+    row-gap: 4px;
+  }
+  .app .param-label { grid-area: label; }
+  .app .param-range { grid-area: range; }
+  .app .param-number { grid-area: number; min-width: 0; }
+  .app .param-reset { grid-area: reset; width: 36px; height: 32px; }
+  .app .preset-btn,
+  .app .quality-btn,
+  .app .debug-btn,
+  .app .play-btn,
+  .app .reset-btn {
+    padding: 10px 12px;
+    font-size: 13px;
+    min-height: 40px;
+  }
+  .app .debug-btn { padding: 8px 10px; }
+  .app .debug-key { width: 22px; height: 22px; font-size: 11px; }
+  .app .keys-list {
+    grid-template-columns: 1fr;
+  }
+  .app .preset-row {
+    grid-template-columns: 1fr;
+  }
+  .app .hud-body { padding: 10px 12px 14px; gap: 16px; }
+  /* The debug-name span can get truncated by an aggressive font; on
+     narrow phones we still let it ellipsise but add a slightly
+     larger minimum so the label text reads cleanly. */
+  .app .debug-name { min-width: 0; }
+  .app .preset-name { min-width: 0; }
+}
+
+/* Even narrower viewports — very small phones — get the slider/number
+   stacked vertically so the number input never falls off the right
+   edge of a sub-360 CSS px layout. */
+@media (max-width: 380px) {
+  .app .param-row {
+    grid-template-columns: 1fr 32px;
+    grid-template-areas:
+      "label reset"
+      "range range"
+      "number number";
+  }
+  .app .param-number { text-align: left; }
+}
+
+/* When typing inside the HUD, dim the rest of the page slightly so the
+   focused control is obvious without losing context. */
+.app.hud-focused .hud {
+  box-shadow: 0 6px 32px rgba(255, 180, 104, 0.18);
+}
