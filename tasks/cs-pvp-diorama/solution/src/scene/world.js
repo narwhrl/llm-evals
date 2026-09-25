@@ -27,6 +27,7 @@ import {
   addShelf,
   addSphere,
   addTireStack,
+  addTorus,
   addTrafficBarrier,
   addTruck,
   addWindow,
@@ -280,7 +281,7 @@ function buildBase(scene, materials) {
     }
   }
 
-  addDecal(world, 4.3, 4.3, [-8.4, 0.36, -7.1], materials.siteA);
+  addDecal(world, 4.3, 4.3, [-8.4, 0.455, -7.1], materials.siteA);
   addDecal(world, 4.1, 4.1, [8.7, 0.36, -4.75], materials.siteB);
 
   const puddles = [
@@ -373,7 +374,27 @@ function buildWarehouse(world, materials) {
   const front = centerZ + depth * 0.5;
 
   addBox(group, [width, 0.2, depth], [centerX, 0.34, centerZ], materials.concreteDark);
-  addBox(group, [width, height, 0.34], [centerX, height * 0.5 + 0.36, back], materials.wall);
+
+  const rearDoorX = centerX + 3.2;
+  const rearDoorWidth = 1.7;
+  const rearDoorHeight = 2.65;
+  const rearOpeningLeft = rearDoorX - rearDoorWidth * 0.5;
+  const leftRearWidth = rearOpeningLeft - left;
+  const rightRearWidth = right - (rearDoorX + rearDoorWidth * 0.5);
+  addBox(group, [leftRearWidth, height, 0.34], [(left + rearOpeningLeft) * 0.5, height * 0.5 + 0.36, back], materials.wall);
+  addBox(group, [rightRearWidth, height, 0.34], [rearDoorX + rearDoorWidth * 0.5 + rightRearWidth * 0.5, height * 0.5 + 0.36, back], materials.wall);
+  addBox(group, [rearDoorWidth + 0.16, height - rearDoorHeight, 0.34], [rearDoorX, rearDoorHeight + (height - rearDoorHeight) * 0.5 + 0.36, back], materials.wall);
+  addBox(group, [rearDoorWidth, rearDoorHeight, 0.08], [rearDoorX, rearDoorHeight * 0.5 + 0.42, back + 0.19], materials.dark, { castShadow: false });
+
+  const rearDoorLeaf = new THREE.Group();
+  rearDoorLeaf.position.set(rearDoorX - 0.43, 0.44, back + 0.25);
+  rearDoorLeaf.rotation.y = -0.48;
+  group.add(rearDoorLeaf);
+  addBox(rearDoorLeaf, [0.84, rearDoorHeight - 0.08, 0.12], [0, rearDoorHeight * 0.5, 0], materials.rust);
+  addBox(rearDoorLeaf, [0.12, 0.32, 0.16], [0.25, 1.28, 0.08], materials.steelWet);
+  addBox(group, [0.84, rearDoorHeight - 0.08, 0.12], [rearDoorX + 0.43, (rearDoorHeight - 0.08) * 0.5 + 0.44, back + 0.25], materials.metalDark);
+  addBox(group, [0.12, 0.32, 0.16], [rearDoorX + 0.66, 1.72, back + 0.34], materials.steelWet);
+
   addBox(group, [0.34, height, depth], [left, height * 0.5 + 0.36, centerZ], materials.wallDark);
   addBox(group, [0.34, height, depth], [right, height * 0.5 + 0.36, centerZ], materials.wall);
   addBox(group, [width, 0.72, 0.38], [centerX, height + 0.25, front], materials.wallDark);
@@ -414,6 +435,21 @@ function buildWarehouse(world, materials) {
   addCrate(group, [centerX + 3.2, 1.38, centerZ + 2.55], 0.8, materials.wood, materials.woodDark, { rotationY: 0.12 });
   addDumpster(group, [centerX + 3.4, 0.44, back + 1.4], materials.green, materials.metalDark, { rotationY: Math.PI / 2 });
 
+  const sortingX = centerX + 1.85;
+  const sortingZ = back + 0.82;
+  addBox(group, [2.25, 0.16, 0.92], [sortingX, 1.32, sortingZ], materials.metal, { rotation: [0.03, 0, -0.025] });
+  for (const x of [sortingX - 0.82, sortingX + 0.82]) {
+    addBox(group, [0.1, 0.86, 0.1], [x, 0.86, sortingZ], materials.steelWet);
+  }
+  addBox(group, [0.72, 0.42, 0.58], [sortingX - 0.5, 1.58, sortingZ], materials.cardboard, { rotation: [0, 0.12, 0] });
+  addBox(group, [0.56, 0.3, 0.5], [sortingX + 0.5, 1.53, sortingZ - 0.08], materials.cardboard, { rotation: [0, -0.18, 0.04] });
+  for (let strap = 0; strap < 3; strap += 1) {
+    addBox(group, [0.055, 0.022, 2.2], [centerX - 0.1 + strap * 0.22, 0.465, centerZ + 2.4], materials.yellow, { rotation: [0, 0.1 + strap * 0.06, 0], castShadow: false });
+  }
+  for (let paper = 0; paper < 5; paper += 1) {
+    addBox(group, [0.5, 0.018, 0.34], [centerX - 2.4 + paper * 0.24, 0.47 + paper * 0.002, centerZ + 2.5 + (paper % 2) * 0.18], materials.ivory, { rotation: [0, 0.35 * paper, 0], castShadow: false });
+  }
+
   addWindow(group, [right + 0.19, 2.7, centerZ - 2.0], 1.15, 1.05, materials, { rotationY: Math.PI / 2, boards: 2 });
   addWindow(group, [right + 0.19, 2.7, centerZ + 0.15], 1.1, 1.05, materials, { rotationY: Math.PI / 2 });
   addBox(group, [0.12, 2.5, 1.5], [right + 0.2, 1.65, centerZ + 2.45], materials.metalDark);
@@ -427,11 +463,23 @@ function buildWarehouse(world, materials) {
   coldFixture.rotation.x = Math.PI / 2;
   const coldFixture2 = addCagedLight(group, [centerX - 2.7, 3.8, centerZ - 2.3], materials, { cold: true });
   coldFixture2.rotation.x = Math.PI / 2;
+  const coldFixtures = [coldFixture, coldFixture2];
 
-  addBox(group, [0.24, 1.7, 0.2], [centerX + 4.3, 1.25, back + 0.2], materials.rust);
-  addBox(group, [0.14, 0.48, 0.14], [centerX + 4.3, 2.18, back + 0.27], materials.redLight, { castShadow: false });
+  addBox(group, [0.24, 1.7, 0.2], [rearDoorX + 0.55, 1.28, back + 0.25], materials.rust);
+  addBox(group, [0.14, 0.48, 0.14], [rearDoorX - 0.42, 1.58, back + 0.34], materials.redLight, { castShadow: false });
 
-  return { group, shutter, coldFixtures: [coldFixture, coldFixture2], steamOrigin: new THREE.Vector3(centerX + 4.3, 2.3, back + 0.3) };
+  function update(time) {
+    shutter.position.x = shutter.userData.baseX + Math.sin(time * 17.3) * Math.sin(time * 0.71) * 0.012;
+    coldFixtures.forEach((fixture, index) => {
+      fixture.rotation.z = Math.sin(time * (index + 2) * 0.7) * 0.012;
+    });
+  }
+
+  return {
+    group,
+    steamOrigin: new THREE.Vector3(rearDoorX - 0.42, 1.9, back + 0.36),
+    update,
+  };
 }
 
 function buildGuardhouse(world, materials) {
@@ -443,7 +491,22 @@ function buildGuardhouse(world, materials) {
   const z = -9.3;
   addBox(group, [6.2, 0.22, 5.2], [x, 0.36, z], materials.concreteDark);
 
-  addBox(group, [6.2, 3.15, 0.3], [x, 1.95, z - 2.45], materials.wallDark);
+  const rearDoorWidth = 2.05;
+  const rearSideWidth = (6.2 - rearDoorWidth) * 0.5;
+  addBox(group, [rearSideWidth, 3.15, 0.3], [x - rearDoorWidth * 0.5 - rearSideWidth * 0.5, 1.95, z - 2.45], materials.wallDark);
+  addBox(group, [rearSideWidth, 3.15, 0.3], [x + rearDoorWidth * 0.5 + rearSideWidth * 0.5, 1.95, z - 2.45], materials.wallDark);
+  addBox(group, [rearDoorWidth + 0.18, 0.78, 0.3], [x, 2.76, z - 2.45], materials.wallDark);
+  addBox(group, [rearDoorWidth, 2.27, 0.08], [x, 1.58, z - 2.29], materials.dark, { castShadow: false });
+
+  const rearDoorLeaf = new THREE.Group();
+  rearDoorLeaf.position.set(x - 0.51, 0.46, z - 2.22);
+  rearDoorLeaf.rotation.y = 0.42;
+  group.add(rearDoorLeaf);
+  addBox(rearDoorLeaf, [0.98, 2.2, 0.11], [0, 1.1, 0], materials.metalDark);
+  addBox(rearDoorLeaf, [0.08, 0.25, 0.15], [0.31, 1.05, 0.08], materials.steelWet);
+  addBox(group, [0.98, 2.2, 0.11], [x + 0.51, 1.56, z - 2.22], materials.metalDark);
+  addBox(group, [0.08, 0.25, 0.15], [x + 0.18, 1.51, z - 2.14], materials.steelWet);
+
   addBox(group, [0.3, 3.15, 5.2], [x - 3.0, 1.95, z], materials.wall);
   addBox(group, [0.3, 3.15, 5.2], [x + 3.0, 1.95, z], materials.wallDark);
   addBox(group, [0.42, 3.2, 0.42], [x - 2.8, 1.95, z + 2.4], materials.metalDark);
@@ -466,10 +529,30 @@ function buildGuardhouse(world, materials) {
   addBox(group, [0.18, 1.4, 2.2], [x + 2.72, 4.48, z - 0.3], materials.metalDark);
   addWindow(group, [x + 2.76, 4.48, z - 0.3], 1.75, 1.2, materials, { rotationY: Math.PI / 2 });
 
-  addStairs(group, [12.65, 0.28, z + 0.2], 1.18, 4.8, 3.2, 7, materials.concreteDark, { rails: true, railMaterial: materials.steelWet });
-  addBox(group, [1.35, 0.18, 1.25], [13.05, 3.62, z - 2.15], materials.metalDark);
-  addStairs(group, [13.05, 3.62, z - 1.8], 1.15, 4.6, 2.85, 6, materials.concreteDark, { rotationY: Math.PI, rails: true, railMaterial: materials.steelWet });
-  addGuardRail(group, [12.35, 3.6, z - 2.65], [13.8, 3.6, z - 2.65], 0.7, materials);
+  addLadder(group, [x + 3.17, 0.46, z], 6.05, 0.82, materials, { rotationY: Math.PI / 2 });
+  addBox(group, [1.15, 0.14, 1.18], [x + 3.6, 3.42, z], materials.metalDark);
+  for (let hoop = 0; hoop < 4; hoop += 1) {
+    const y = 2.25 + hoop * 1.05;
+    addTorus(group, 0.58, 0.026, [x + 3.43, y, z], materials.steelWet, {
+      rotation: [Math.PI / 2, 0, 0],
+      radialSegments: 5,
+      tubularSegments: 18,
+    });
+  }
+  for (let bar = 0; bar < 5; bar += 1) {
+    const angle = bar / 5 * Math.PI * 2;
+    addPipe(
+      group,
+      [x + 3.43 + Math.cos(angle) * 0.58, 2.25, z + Math.sin(angle) * 0.58],
+      [x + 3.43 + Math.cos(angle) * 0.58, 5.4, z + Math.sin(angle) * 0.58],
+      0.022,
+      materials.steelWet,
+      { segments: 6 },
+    );
+  }
+  addGuardRail(group, [x + 3.0, 3.48, z - 0.6], [x + 4.12, 3.48, z - 0.6], 0.66, materials);
+  addGuardRail(group, [x + 4.12, 3.48, z - 0.6], [x + 4.12, 3.48, z + 0.6], 0.66, materials);
+  addDecal(group, 0.82, 0.56, [x - 2.83, 2.05, z - 0.4], materials.dutyRoster, [0, Math.PI / 2, 0]);
 
   addDesk(group, [x - 1.3, 0.5, z - 1.0], materials, { rotationY: 0.18 });
   addChair(group, [x - 1.25, 0.47, z - 0.05], materials, { rotationY: 0.18, rotationZ: 0.04 });
@@ -494,10 +577,14 @@ function buildGuardhouse(world, materials) {
   addDecal(group, 1.1, 0.55, [x + 3.17, 1.15, z + 0.3], materials.signBlue, [0, Math.PI / 2, 0]);
   addBulletMarks(group, [x - 1.65, 1.35, z + 2.67], 18, 1.6, 1.2, materials);
 
+  function update(time) {
+    fixture.rotation.z = Math.sin(time * 2.4) * 0.018;
+  }
+
   return {
     group,
-    warmFixture: fixture,
     steamOrigin: new THREE.Vector3(x - 2.3, 1.6, z - 2.63),
+    update,
   };
 }
 
@@ -512,8 +599,28 @@ function buildMidLane(world, materials) {
     addBox(group, [2.1, 1.2, 4.3], [side * 5.55, 0.92, 0], materials.concrete);
     addStairs(group, [side * 5.55, 0.35, -3.35], 1.4, 2.0, 0.86, 4, materials.concreteDark, { rotationY: side < 0 ? 0 : Math.PI, rails: true, railMaterial: materials.steelWet });
     addBox(group, [0.12, 0.7, 1.05], [side * 4.05, 2.88, -0.8], materials.dark, { castShadow: false });
-    addBox(group, [0.12, 0.7, 1.05], [side * 4.05, 2.88, 0.8], materials.dark, { castShadow: false });
     addGuardRail(group, [side * 4.5, 1.55, -2.05], [side * 6.5, 1.55, -2.05], 0.72, materials);
+  }
+
+  for (const side of [-1, 1]) {
+    const boothX = side * 5.55;
+    const boothZ = 1.25;
+    addBox(group, [1.72, 0.14, 2.05], [boothX, 1.58, boothZ], materials.concreteDark);
+    addBox(group, [1.72, 1.72, 0.14], [boothX, 2.48, boothZ + 0.96], materials.wallDark);
+    addBox(group, [0.14, 1.72, 2.05], [boothX + side * 0.79, 2.48, boothZ], materials.wall);
+    addBox(group, [1.9, 0.16, 2.25], [boothX, 3.4, boothZ], materials.rust, { rotation: [0, 0, side * 0.018] });
+    addWindow(
+      group,
+      [boothX - side * 0.8, 2.52, boothZ + 0.05],
+      1.48,
+      1.08,
+      materials,
+      { rotationY: side < 0 ? Math.PI / 2 : -Math.PI / 2 },
+    );
+    addDesk(group, [boothX, 1.66, boothZ + 0.18], materials, { rotationY: side * 0.06 });
+    addChair(group, [boothX + side * 0.16, 1.64, boothZ - 0.55], materials, { rotationY: side * 0.1, rotationZ: 0.03 });
+    const boothFixture = addCagedLight(group, [boothX, 3.2, boothZ + 0.15], materials, { cold: side < 0 });
+    boothFixture.rotation.x = Math.PI / 2;
   }
 
   addBox(group, [0.62, 4.35, 0.72], [-2.25, 2.45, 0], materials.metalDark);
@@ -544,18 +651,31 @@ function buildMidLane(world, materials) {
   addBox(group, [0.1, 1.4, 1.5], [2.4, 1.1, 6.2], materials.metalDark, { rotation: [0, 0, -0.04] });
   addDecal(group, 1.15, 0.72, [2.34, 1.4, 6.2], materials.signYellow, [0, -Math.PI / 2, 0.05]);
 
-  addBox(group, [1.25, 0.08, 14.8], [2.85, 0.345, 2.1], materials.dark, { castShadow: false });
-  for (const x of [2.22, 3.48]) {
-    addBox(group, [0.18, 0.34, 14.8], [x, 0.48, 2.1], materials.concreteDark);
+  addBox(group, [1.32, 0.1, 14.2], [2.85, 0.36, 2.15], materials.dark, { castShadow: false });
+  for (const x of [2.15, 3.55]) {
+    addBox(group, [0.3, 1.12, 14.2], [x, 0.93, 2.15], materials.concreteDark);
+    addBox(group, [0.38, 0.16, 14.35], [x, 1.54, 2.15], materials.rust);
   }
-  for (const z of [-5.2, 9.2]) {
-    addBox(group, [1.52, 1.65, 0.32], [2.85, 1.05, z], materials.dark, { castShadow: false });
-    addBox(group, [1.8, 0.22, 0.42], [2.85, 1.92, z], materials.rust);
+  for (let z = -3.85; z < 8.3; z += 2.25) {
+    addBox(group, [1.7, 0.18, 0.22], [2.85, 1.46, z], materials.metalDark);
+    addBox(group, [0.16, 0.9, 0.16], [2.24, 0.96, z], materials.steelWet, { castShadow: false });
+    addBox(group, [0.16, 0.9, 0.16], [3.46, 0.96, z], materials.steelWet, { castShadow: false });
+    if ((z + 3.85) % 4.5 < 0.1) {
+      addBox(group, [0.62, 0.05, 0.24], [2.85, 1.34, z], materials.coldLight, { castShadow: false });
+    }
   }
-  addDrainGrate(group, [2.85, 0.53, 9.55], [1.28, 1.2], materials);
-  addDrainGrate(group, [2.85, 0.53, -5.55], [1.28, 1.2], materials);
-  for (let z = -3.5; z < 7; z += 2.3) {
-    addBox(group, [1.15, 0.05, 0.42], [2.85, 0.405, z], materials.metalDark, { castShadow: false });
+  for (const slabZ of [-1.25, 3.25, 7.25]) {
+    addBox(group, [1.78, 0.2, 1.9], [2.85, 1.5, slabZ], materials.concreteDark);
+  }
+  for (const z of [-4.72, 9.18]) {
+    addBox(group, [0.34, 1.15, 0.38], [2.15, 0.93, z], materials.rust);
+    addBox(group, [0.34, 1.15, 0.38], [3.55, 0.93, z], materials.rust);
+    addBox(group, [1.76, 0.28, 0.42], [2.85, 1.42, z], materials.rust);
+  }
+  addDrainGrate(group, [2.85, 0.43, 9.52], [1.3, 1.1], materials);
+  addDrainGrate(group, [2.85, 0.43, -5.02], [1.3, 1.1], materials);
+  for (let z = -3.2; z < 8; z += 2.25) {
+    addBox(group, [1.2, 0.045, 0.38], [2.85, 0.43, z], materials.metalDark, { castShadow: false });
   }
 
   addDecal(group, 2.3, 0.8, [-4.03, 1.2, 0], materials.graffitiA, [0, Math.PI / 2, 0.02]);
@@ -677,11 +797,7 @@ function buildUtilityDetails(world, materials) {
   return group;
 }
 
-function buildLighting(scene, world, materials, warehouse, guardhouse) {
-  const group = new THREE.Group();
-  group.name = 'tactical-lighting';
-  world.add(group);
-
+function buildLighting(scene, world, warehouse) {
   const hemisphere = new THREE.HemisphereLight(0x8bb7d1, 0x18242a, 2.15);
   scene.add(hemisphere);
 
@@ -722,6 +838,12 @@ function buildLighting(scene, world, materials, warehouse, guardhouse) {
   coldStreetLight.position.set(-12.0, 3.55, 10.0);
   scene.add(coldStreetLight);
 
+  const underpassLightA = new THREE.PointLight(0x86c9d7, 28, 5.5, 2);
+  const underpassLightB = new THREE.PointLight(0x86c9d7, 24, 5.5, 2);
+  underpassLightA.position.set(2.85, 1.08, -1.4);
+  underpassLightB.position.set(2.85, 1.08, 5.4);
+  scene.add(underpassLightA, underpassLightB);
+
   const searchTarget = new THREE.Object3D();
   searchTarget.position.set(0.5, 0.4, 2.0);
   world.add(searchTarget);
@@ -740,20 +862,33 @@ function buildLighting(scene, world, materials, warehouse, guardhouse) {
   redVent.position.copy(warehouse.steamOrigin).add(new THREE.Vector3(0, 0.15, 0));
   scene.add(redVent);
 
+  let emergencyMeshes = [];
+  function setEmergencyMeshes(meshes) {
+    emergencyMeshes = meshes;
+  }
+
+  function update(time) {
+    const slowPulse = 0.5 + Math.sin(time * 2.1) * 0.5;
+    streetLight.intensity = 170 + Math.sin(time * 8.2) * 7 + Math.sin(time * 19.7) * 3.2;
+    coldStreetLight.intensity = 88 + slowPulse * 7;
+    searchlight.intensity = 240 + Math.sin(time * 5.4) * 14;
+    searchlight.target.position.x = 0.5 + Math.sin(time * 0.38) * 1.6;
+    guardLight.intensity = 130 + Math.sin(time * 11.6) * 6;
+
+    const policeCycle = (Math.sin(time * 5.6) + 1) * 0.5;
+    policeRed.intensity = 6 + policeCycle * 32;
+    policeBlue.intensity = 6 + (1 - policeCycle) * 32;
+    if (emergencyMeshes[0]) emergencyMeshes[0].visible = policeCycle > 0.18;
+    if (emergencyMeshes[1]) emergencyMeshes[1].visible = policeCycle < 0.82;
+  }
+
   return {
-    group,
     hemisphere,
     ambient,
     moon,
-    warehouseLight,
-    warehouseBackLight,
-    guardLight,
-    streetLight,
-    coldStreetLight,
     searchlight,
-    policeRed,
-    policeBlue,
-    redVent,
+    setEmergencyMeshes,
+    update,
   };
 }
 
@@ -766,7 +901,7 @@ export function buildWorld(scene, materials) {
   const ctSpawn = buildCTSpawn(world, materials);
   const flanks = buildFlanks(world, materials);
   const utilities = buildUtilityDetails(world, materials);
-  const lights = buildLighting(scene, world, materials, warehouse, guardhouse);
+  const lights = buildLighting(scene, world, warehouse);
 
   const emergencyMeshes = [];
   ctSpawn.traverse((object) => {
@@ -775,25 +910,12 @@ export function buildWorld(scene, materials) {
     }
   });
 
-  function update(time, delta) {
-    const slowPulse = 0.5 + Math.sin(time * 2.1) * 0.5;
-    warehouse.shutter.position.x = warehouse.shutter.userData.baseX + Math.sin(time * 17.3) * Math.sin(time * 0.71) * 0.012;
-    lights.streetLight.intensity = 170 + Math.sin(time * 8.2) * 7 + Math.sin(time * 19.7) * 3.2;
-    lights.coldStreetLight.intensity = 88 + slowPulse * 7;
-    lights.searchlight.intensity = 240 + Math.sin(time * 5.4) * 14;
-    lights.searchlight.target.position.x = 0.5 + Math.sin(time * 0.38) * 1.6;
-    lights.guardLight.intensity = 130 + Math.sin(time * 11.6) * 6;
+  lights.setEmergencyMeshes(emergencyMeshes);
 
-    const policeCycle = (Math.sin(time * 5.6) + 1) * 0.5;
-    lights.policeRed.intensity = 6 + policeCycle * 32;
-    lights.policeBlue.intensity = 6 + (1 - policeCycle) * 32;
-    if (emergencyMeshes[0]) emergencyMeshes[0].visible = policeCycle > 0.18;
-    if (emergencyMeshes[1]) emergencyMeshes[1].visible = policeCycle < 0.82;
-
-    warehouse.coldFixtures.forEach((fixture, index) => {
-      fixture.rotation.z = Math.sin(time * (index + 2) * 0.7) * 0.012;
-    });
-    guardhouse.warmFixture.rotation.z = Math.sin(time * 2.4) * 0.018;
+  function update(time) {
+    warehouse.update(time);
+    guardhouse.update(time);
+    lights.update(time);
   }
 
   return {

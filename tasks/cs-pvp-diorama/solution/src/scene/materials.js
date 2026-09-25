@@ -483,6 +483,9 @@ export function createMaterials() {
   materials.signPolice = noOutline(
     new THREE.MeshBasicMaterial({ map: makeTextTexture({ text: 'CT UNIT', background: '#17232a', foreground: '#d5e2e1', subtext: 'RESTRICTED SECTOR' }), toneMapped: false }),
   );
+  materials.dutyRoster = noOutline(
+    new THREE.MeshBasicMaterial({ map: makeTextTexture({ text: 'DUTY', background: '#b7b09a', foreground: '#252a28', subtext: '23:00  /  07:00' }), toneMapped: false }),
+  );
   materials.siteA = noOutline(
     new THREE.MeshBasicMaterial({ map: makeSiteTexture('A'), transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -3 }),
   );

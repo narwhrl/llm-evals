@@ -67,16 +67,11 @@ export function addTorus(parent, radius, tube, position, material, options = {})
   return mesh;
 }
 
-export function addLine(parent, points, material, options = {}) {
+export function addLine(parent, points, material) {
   const geometry = new THREE.BufferGeometry().setFromPoints(
     points.map((point) => new THREE.Vector3(point[0], point[1], point[2])),
   );
   const line = new THREE.Line(geometry, material);
-  if (options.loop) line.geometry.setFromPoints([
-    ...points.map((point) => new THREE.Vector3(point[0], point[1], point[2])),
-    new THREE.Vector3(points[0][0], points[0][1], points[0][2]),
-  ]);
-  line.computeLineDistances();
   parent.add(line);
   return line;
 }

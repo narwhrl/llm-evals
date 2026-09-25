@@ -129,6 +129,13 @@ export function createWeather(scene, world, materials, lights, regions) {
     [-3.7, 5.05, -13.2, 0.18],
     [-12.7, 5.05, -4.9, 0.18],
     [-3.7, 5.05, -4.9, 0.18],
+    [-11.2, 3.15, -4.42, 0.14],
+    [-5.0, 3.15, -4.42, 0.14],
+    [4.95, 2.58, -10.0, 0.08],
+    [8.2, 2.58, -10.0, 0.08],
+    [5.0, 4.83, -10.0, 0.08],
+    [8.15, 4.83, -10.0, 0.08],
+    [10.25, 2.43, -11.2, 0.07],
     [5.1, 4.8, -10.0, 0.08],
     [8.1, 4.8, -10.0, 0.08],
     [5.7, 6.85, -9.0, 0.05],
@@ -141,8 +148,10 @@ export function createWeather(scene, world, materials, lights, regions) {
   const dripPositions = new Float32Array(dripCount * 6);
   const drips = Array.from({ length: dripCount }, (_, index) => {
     const origin = dripOrigins[index % dripOrigins.length];
+    const originX = origin[0] + (random() - 0.5) * origin[3] * 2;
     return {
-      x: origin[0] + (random() - 0.5) * origin[3] * 2,
+      x: originX,
+      originX,
       y: 0.5 + random() * (origin[1] - 0.5),
       z: origin[2] + (random() - 0.5) * origin[3] * 2,
       top: origin[1],
@@ -260,7 +269,7 @@ export function createWeather(scene, world, materials, lights, regions) {
       drip.y -= drip.speed * delta;
       if (drip.y < 0.42) {
         drip.y = drip.top;
-        drip.x = drip.originX ?? drip.x;
+        drip.x = drip.originX;
       }
       const offset = index * 6;
       dripPositions[offset] = drip.x;
