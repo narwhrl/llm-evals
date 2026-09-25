@@ -109,7 +109,7 @@ export function addPipe(parent, start, end, radius, material, options = {}) {
   const direction = new THREE.Vector3().subVectors(to, from);
   const length = direction.length();
   const pipe = new THREE.Mesh(
-    new THREE.CylinderGeometry(radius, radius, length, options.segments ?? 8, 1, false),
+    getCylinderGeometry(radius, length, { segments: options.segments ?? 8 }),
     material,
   );
   pipe.position.copy(from).add(to).multiplyScalar(0.5);
@@ -322,13 +322,14 @@ export function addLadder(parent, position, height, width, materials, options = 
   if (options.rotationY) group.rotation.y = options.rotationY;
   if (options.rotationX) group.rotation.x = options.rotationX;
   parent.add(group);
+  const railMaterial = options.railMaterial ?? materials.steelWet;
   for (const x of [-width * 0.5, width * 0.5]) {
-    addPipe(group, [x, 0, 0], [x, height, 0], 0.045, materials.steelWet, { segments: 7 });
+    addPipe(group, [x, 0, 0], [x, height, 0], 0.045, railMaterial, { segments: 7 });
   }
   const rungCount = Math.max(2, Math.floor(height / 0.36));
   for (let index = 0; index <= rungCount; index += 1) {
     const y = 0.18 + index * ((height - 0.3) / rungCount);
-    addPipe(group, [-width * 0.5, y, 0], [width * 0.5, y, 0], 0.032, materials.steelWet, { segments: 6 });
+    addPipe(group, [-width * 0.5, y, 0], [width * 0.5, y, 0], 0.032, railMaterial, { segments: 6 });
   }
   return group;
 }

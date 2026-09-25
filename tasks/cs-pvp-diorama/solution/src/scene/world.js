@@ -34,6 +34,7 @@ import {
 } from './props.js';
 
 const FLOOR_Y = 0.18;
+const bulletMarkGeometry = new THREE.CircleGeometry(1, 8);
 
 function addRamp(parent, width, length, height, position, material) {
   const halfWidth = width * 0.5;
@@ -161,7 +162,8 @@ function addBulletMarks(parent, position, count, width, height, materials, rotat
   parent.add(group);
   for (let index = 0; index < count; index += 1) {
     const radius = 0.025 + random() * 0.035;
-    const mark = new THREE.Mesh(new THREE.CircleGeometry(radius, 8), materials.dark);
+    const mark = new THREE.Mesh(bulletMarkGeometry, materials.dark);
+    mark.scale.setScalar(radius);
     mark.position.set((random() - 0.5) * width, (random() - 0.5) * height, 0.012);
     mark.rotation.z = random() * Math.PI;
     group.add(mark);
@@ -333,7 +335,7 @@ function buildTSpawn(world, materials) {
   addFence(group, [-14.6, FLOOR_Y, -15.15], [-14.6, FLOOR_Y, -10.2], materials, { height: 2.05, spacing: 2.3 });
 
   addTruck(group, [-7.3, FLOOR_Y, -12.6], materials, { rotationY: 0.02 });
-  addLadder(group, [-3.85, FLOOR_Y, -12.0], 3.2, 0.75, materials, { rotationY: 0.18, rotationX: -0.12 });
+  addLadder(group, [-3.85, FLOOR_Y, -12.0], 3.2, 0.75, materials, { rotationY: 0.18, rotationX: -0.12, railMaterial: materials.wood });
 
   addContainer(group, [6.6, FLOOR_Y, -12.2], [3.5, 2.4, 5.5], materials.blueDark, materials.metal, { sign: materials.signBlue });
   addContainer(group, [6.6, FLOOR_Y + 2.42, -12.3], [3.25, 2.25, 5.0], materials.rust, materials.metalDark, { sign: materials.graffitiB });
@@ -385,6 +387,9 @@ function buildWarehouse(world, materials) {
   const rearDoorX = centerX + 3.2;
   const rearDoorWidth = 1.7;
   const rearDoorHeight = 2.65;
+  const sideDoorZ = centerZ + 2.45;
+  const sideDoorWidth = 1.55;
+  const sideDoorHeight = 2.55;
   const rearOpeningLeft = rearDoorX - rearDoorWidth * 0.5;
   const leftRearWidth = rearOpeningLeft - left;
   const rightRearWidth = right - (rearDoorX + rearDoorWidth * 0.5);
@@ -403,7 +408,13 @@ function buildWarehouse(world, materials) {
   addBox(group, [0.12, 0.32, 0.16], [rearDoorX + 0.66, 1.72, back + 0.34], materials.steelWet);
 
   addBox(group, [0.34, height, depth], [left, height * 0.5 + 0.36, centerZ], materials.wallDark);
-  addBox(group, [0.34, height, depth], [right, height * 0.5 + 0.36, centerZ], materials.wall);
+  const sideRearLength = sideDoorZ - sideDoorWidth * 0.5 - back;
+  const sideFrontStart = sideDoorZ + sideDoorWidth * 0.5;
+  const sideFrontLength = front - sideFrontStart;
+  addBox(group, [0.34, height, sideRearLength], [right, height * 0.5 + 0.36, back + sideRearLength * 0.5], materials.wall);
+  addBox(group, [0.34, height, sideFrontLength], [right, height * 0.5 + 0.36, sideFrontStart + sideFrontLength * 0.5], materials.wall);
+  addBox(group, [0.34, height - sideDoorHeight, sideDoorWidth], [right, sideDoorHeight + (height - sideDoorHeight) * 0.5 + 0.36, sideDoorZ], materials.wall);
+  addBox(group, [0.08, sideDoorHeight, sideDoorWidth], [right - 0.19, sideDoorHeight * 0.5 + 0.42, sideDoorZ], materials.dark, { castShadow: false });
   addBox(group, [width, 0.72, 0.38], [centerX, height + 0.25, front], materials.wallDark);
   addBox(group, [0.48, height, 0.48], [left + 0.2, height * 0.5 + 0.35, front], materials.metalDark);
   addBox(group, [0.48, height, 0.48], [right - 0.2, height * 0.5 + 0.35, front], materials.metalDark);
@@ -459,8 +470,14 @@ function buildWarehouse(world, materials) {
 
   addWindow(group, [right + 0.19, 2.7, centerZ - 2.0], 1.15, 1.05, materials, { rotationY: Math.PI / 2, boards: 2 });
   addWindow(group, [right + 0.19, 2.7, centerZ + 0.15], 1.1, 1.05, materials, { rotationY: Math.PI / 2 });
-  addBox(group, [0.12, 2.5, 1.5], [right + 0.2, 1.65, centerZ + 2.45], materials.metalDark);
-  addWindow(group, [right + 0.28, 2.05, centerZ + 2.45], 1.18, 1.55, materials, { rotationY: Math.PI / 2 });
+
+  const sideDoor = new THREE.Group();
+  sideDoor.position.set(right - 0.17, 0.44, sideDoorZ + sideDoorWidth * 0.5 - 0.05);
+  sideDoor.rotation.y = 1.05;
+  group.add(sideDoor);
+  addBox(sideDoor, [0.12, sideDoorHeight - 0.08, sideDoorWidth - 0.08], [0, sideDoorHeight * 0.5, -sideDoorWidth * 0.5], materials.rust);
+  addWindow(sideDoor, [0.08, 1.55, -sideDoorWidth * 0.5], 0.9, 0.9, materials, { rotationY: Math.PI / 2, boards: 1 });
+  addBox(sideDoor, [0.16, 0.1, 0.24], [0.09, 1.08, -sideDoorWidth + 0.2], materials.steelWet);
   addAirConditioner(group, [right + 0.68, 3.7, centerZ - 1.5], materials, { rotationY: Math.PI / 2 });
   addDecal(group, 2.6, 1.15, [centerX - 2.5, 4.05, front + 0.205], materials.graffitiA, [0, 0, -0.03]);
   addDecal(group, 1.5, 0.65, [right + 0.205, 1.05, centerZ + 0.15], materials.signBlue, [0, Math.PI / 2, 0]);
@@ -477,9 +494,9 @@ function buildWarehouse(world, materials) {
 
   function update(time) {
     shutter.position.x = shutter.userData.baseX + Math.sin(time * 17.3) * Math.sin(time * 0.71) * 0.012;
-    coldFixtures.forEach((fixture, index) => {
-      fixture.rotation.z = Math.sin(time * (index + 2) * 0.7) * 0.012;
-    });
+    for (let index = 0; index < coldFixtures.length; index += 1) {
+      coldFixtures[index].rotation.z = Math.sin(time * (index + 2) * 0.7) * 0.012;
+    }
   }
 
   return {
