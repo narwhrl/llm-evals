@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>运输船</title>
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <canvas id="view"></canvas>
+    <div id="hud" hidden>
+      <div id="scorebar">
+        <span class="side gr"><b id="score-gr">0</b> 保卫者</span>
+        <span id="clock">6:00</span>
+        <span class="side bl">潜伏者 <b id="score-bl">0</b></span>
+      </div>
+      <div id="heading">船尾</div>
+      <div id="minimap-wrap">
+        <canvas id="minimap" width="440" height="720"></canvas>
+        <div class="map-caption">甲板</div>
+      </div>
+      <ol id="feed"></ol>
+      <div id="crosshair" class="gap-2"><i></i><i></i><i></i><i></i><b id="hitmark"></b></div>
+      <div id="scope" hidden></div>
+      <div id="hit-dirs"></div>
+      <div id="vignette"></div>
+      <div id="status">
+        <div class="bars">
+          <div class="bar hp"><span id="hp-fill"></span><em id="hp-num">100</em></div>
+          <div class="bar armor"><span id="armor-fill"></span><em id="armor-num">25</em></div>
+        </div>
+        <div id="protect" hidden>出生保护</div>
+      </div>
+      <div id="weapon-panel">
+        <div id="weapon-name">卡宾枪</div>
+        <div id="ammo">30 <small>/ 90</small></div>
+        <div id="cook" hidden><span></span></div>
+        <div id="gear"><span id="gear-frag">手雷 1</span><span id="gear-smoke">烟雾 1</span></div>
+      </div>
+      <div id="hint" hidden>点击画面继续</div>
+      <div id="death" hidden>
+        <strong>已阵亡</strong>
+        <p id="death-detail"></p>
+      </div>
+      <table id="board" hidden></table>
+    </div>
+    <section id="menu">
+      <div class="panel">
+        <p class="kicker">北湾七号 · 团队竞技</p>
+        <h1>运输船</h1>
+        <p class="lead">货轮船面。保卫者从船头舱出发，潜伏者从船尾舱出发。先到 30 击杀，或六分钟后击杀更多的一方获胜。</p>
+        <div class="choice" id="team-choice">
+          <button type="button" data-team="gr" class="on">保卫者 · 船头</button>
+          <button type="button" data-team="bl">潜伏者 · 船尾</button>
+        </div>
+        <div class="choice guns" id="gun-choice">
+          <button type="button" data-gun="rifle">47式步枪</button>
+          <button type="button" data-gun="carbine" class="on">卡宾枪</button>
+          <button type="button" data-gun="smg">冲锋枪</button>
+          <button type="button" data-gun="bolt">栓动狙击</button>
+        </div>
+        <label class="sens">灵敏度 <input id="sens" type="range" min="0.0008" max="0.006" step="0.0001" /></label>
+        <button id="start" type="button" class="go">登上甲板</button>
+        <ul class="keys">
+          <li>WASD 移动，Shift 静步，Ctrl / C 蹲下，Space 跳跃</li>
+          <li>鼠标瞄准，左键射击，右键瞄准，R 换弹，滚轮切枪</li>
+          <li>1 匕首，2 手枪，3 主武器，G 手雷，X 烟雾</li>
+          <li>B 更换主武器，Tab 或点击顶部比分打开计分板，Esc 暂停</li>
+        </ul>
+      </div>
+    </section>
+    <section id="pause" hidden>
+      <div class="panel">
+        <h2>暂停</h2>
+        <label class="sens">灵敏度 <input id="sens-pause" type="range" min="0.0008" max="0.006" step="0.0001" /></label>
+        <div class="choice guns" id="gun-pause"></div>
+        <button id="resume" type="button" class="go">继续</button>
+        <button id="restart" type="button">重新开始</button>
+      </div>
+    </section>
+    <section id="finish" hidden>
+      <div class="panel">
+        <p class="kicker">本局结束</p>
+        <h2 id="finish-title">平局</h2>
+        <p id="finish-score"></p>
+        <button id="again" type="button" class="go">再来一局</button>
+      </div>
+    </section>
+    <p id="gl-error" hidden>这个环境没有可用的 WebGL，船开不起来。</p>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
