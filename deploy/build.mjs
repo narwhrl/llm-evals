@@ -112,6 +112,7 @@ const TASK_LABELS = {
   "ui-ux-design": "UI/UX Design",
   "voxel-chinese-architecture": "Voxel Chinese Architecture",
   "voxel-waterfall": "Voxel Waterfall",
+  "cf-transport-ship": "运输船",
 };
 
 function escapeHtml(value) {

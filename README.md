@@ -17,6 +17,7 @@ This repository provides a reproducible way to compare the coding capabilities o
 | `cs-pvp-diorama` | [`tasks/cs-pvp-diorama/`](tasks/cs-pvp-diorama/) | Prepared; no candidate branches yet |
 | `voxel-chinese-architecture` | [`tasks/voxel-chinese-architecture/`](tasks/voxel-chinese-architecture/) | Prepared; no candidate branches yet |
 | `gargantua-schwarzschild-raytracer` | [`tasks/gargantua-schwarzschild-raytracer/`](tasks/gargantua-schwarzschild-raytracer/) | Prepared; no candidate branches yet |
+| `cf-transport-ship` | [`tasks/cf-transport-ship/`](tasks/cf-transport-ship/) | Prepared; no candidate branches yet |
 
 ## Repository and Worktree Layout
 
