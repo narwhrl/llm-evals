@@ -23,11 +23,11 @@ All commands were run from `tasks/cs-pvp-diorama/solution/` unless noted otherwi
 | Command | Result |
 | --- | --- |
 | `npm install --save-dev vite@7.3.6` | Installed the locked runtime/build dependencies; npm reported 0 vulnerabilities after the update. |
-| `npm run build` | Passed with Vite 7.3.6; 14 modules transformed and production assets emitted in 1.08 s. Vite emitted a non-failing warning that the minified Three.js bundle is 613.45 kB (159.83 kB gzip). |
+| `npm run build` | Passed with Vite 7.3.6; 14 modules transformed and production assets emitted in 3.93 s. Vite emitted a non-failing warning that the minified Three.js bundle is 614.72 kB (160.22 kB gzip). |
 | `npm audit --audit-level=high` | Passed: `found 0 vulnerabilities`. |
 | `Get-ChildItem -Path src -Filter *.js -Recurse \| ForEach-Object { node --check $_.FullName; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE } }` | Passed for every JavaScript source file. |
 | `npm run preview -- --port 4173` | Production preview started successfully at `http://127.0.0.1:4173/`. |
-| Clean-profile headless Chrome/CDP verification at `1440 × 900` | One responsive WebGL canvas at 1440 × 900; empty visible page text; WebGL available; no runtime or console errors; pointer drag changed orbit angle; wheel input changed zoom; a second orbit exposed the rear facilities; sampled animation rate was 48.24 fps. |
+| Clean-profile headless Chrome/CDP verification at `1440 × 900` | One responsive WebGL canvas at 1440 × 900; empty visible page text; WebGL available; no runtime or console errors; pointer drag changed orbit angle; wheel input changed zoom; a second orbit exposed the rear facilities; sampled animation rate was 33.09 fps. |
 | `git diff --check main...HEAD` | Passed with no whitespace errors. |
 
 Browser observations at the required viewport:
@@ -40,9 +40,9 @@ Browser observations at the required viewport:
 
 ## Known Limitations and Warnings
 
-- Vite reports a non-failing chunk-size warning because Three.js and the rendering effects are delivered in one 613.45 kB minified bundle. The production build and runtime are successful; this is not a functional failure.
+- Vite reports a non-failing chunk-size warning because Three.js and the rendering effects are delivered in one 614.72 kB minified bundle. The production build and runtime are successful; this is not a functional failure.
 - The scene is a stylized procedural interpretation rather than a scan or photoreal asset conversion. Fine surface details become less apparent at maximum zoom.
-- The 48.24 fps figure is a clean headless-browser sample on this machine, not a guarantee for all GPU hardware.
+- The 33.09 fps figure is a clean headless-browser sample on this machine, not a guarantee for all GPU hardware.
 
 ## Human Intervention
 
