@@ -79,7 +79,7 @@ export function createWeather(scene, world, materials, lights, regions) {
   weather.name = 'rain-night-atmosphere';
   world.add(weather);
 
-  const rainCount = 720;
+  const rainCount = 620;
   const rainPositions = new Float32Array(rainCount * 6);
   const rainDrops = Array.from({ length: rainCount }, () => ({
     x: (random() - 0.5) * 31.5,
@@ -94,28 +94,19 @@ export function createWeather(scene, world, materials, lights, regions) {
   rain.frustumCulled = false;
   weather.add(rain);
 
-  const rippleCenters = [
-    [-6.6, -1.6],
-    [-0.8, 4.7],
-    [2.7, 1.7],
-    [8.9, 3.4],
-    [-11.3, 5.4],
-    [7.3, -4.4],
-    [-4.4, -12.2],
-    [13.2, 8.0],
-    [-1.9, 10.5],
-  ];
+  const rippleCenters = regions.puddles;
   const ripples = [];
-  for (let index = 0; index < 34; index += 1) {
+  const rippleGeometry = new THREE.RingGeometry(0.12, 0.145, 24);
+  for (let index = 0; index < 20; index += 1) {
     const center = rippleCenters[index % rippleCenters.length];
     const material = materials.ripple.clone();
     material.userData.outlineParameters = { visible: false };
-    const ring = new THREE.Mesh(new THREE.RingGeometry(0.12, 0.145, 24), material);
+    const ring = new THREE.Mesh(rippleGeometry, material);
     ring.rotation.x = -Math.PI / 2;
     ring.position.set(
-      center[0] + (random() - 0.5) * 1.45,
+      center.x + (random() - 0.5) * 1.45,
       0.39 + (index % 3) * 0.001,
-      center[1] + (random() - 0.5) * 0.65,
+      center.z + (random() - 0.5) * 0.65,
     );
     ring.userData.phase = random();
     ring.userData.speed = 0.42 + random() * 0.32;
@@ -133,8 +124,8 @@ export function createWeather(scene, world, materials, lights, regions) {
     [-5.0, 3.15, -4.42, 0.14],
     [4.95, 2.58, -10.0, 0.08],
     [8.2, 2.58, -10.0, 0.08],
-    [5.0, 4.83, -10.0, 0.08],
-    [8.15, 4.83, -10.0, 0.08],
+    [5.0, 6.92, -10.0, 0.08],
+    [8.15, 6.92, -10.0, 0.08],
     [10.25, 2.43, -11.2, 0.07],
     [5.1, 4.8, -10.0, 0.08],
     [8.1, 4.8, -10.0, 0.08],
@@ -302,9 +293,7 @@ export function createWeather(scene, world, materials, lights, regions) {
     }
     lightning.strength = Math.max(0, lightning.strength - delta * 3.6);
     const flicker = lightning.strength * (0.72 + Math.sin(time * 42) * 0.28);
-    lights.hemisphere.intensity = 2.15 + flicker * 2.4;
-    lights.ambient.intensity = 0.92 + flicker * 0.9;
-    lights.moon.intensity = 3.1 + flicker * 3.0;
+    lights.applyLightning(flicker);
     scene.background.copy(lightning.baseBackground).lerp(lightning.flashBackground, flicker * 0.28);
     warmCone.material.opacity = 0.027 + Math.sin(time * 7.2) * 0.004;
   }

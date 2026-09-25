@@ -298,11 +298,17 @@ function buildBase(scene, materials) {
   const puddleGeometry = createPuddleGeometry(puddles);
   const reflector = new Reflector(puddleGeometry, {
     clipBias: 0.003,
-    textureWidth: 768,
-    textureHeight: 768,
+    textureWidth: 512,
+    textureHeight: 512,
     color: 0x587382,
     multisample: 2,
   });
+  const renderReflection = reflector.onBeforeRender;
+  let reflectionFrame = 0;
+  reflector.onBeforeRender = function throttleReflection(...args) {
+    reflectionFrame = (reflectionFrame + 1) % 4;
+    if (reflectionFrame === 0) renderReflection.apply(this, args);
+  };
   reflector.rotation.x = -Math.PI / 2;
   reflector.position.y = 0.365;
   reflector.material.userData.outlineParameters = { visible: false };
@@ -314,7 +320,7 @@ function buildBase(scene, materials) {
   waterSkin.renderOrder = 2;
   world.add(waterSkin);
 
-  return world;
+  return { world, puddles };
 }
 
 function buildTSpawn(world, materials) {
@@ -331,7 +337,8 @@ function buildTSpawn(world, materials) {
 
   addContainer(group, [6.6, FLOOR_Y, -12.2], [3.5, 2.4, 5.5], materials.blueDark, materials.metal, { sign: materials.signBlue });
   addContainer(group, [6.6, FLOOR_Y + 2.42, -12.3], [3.25, 2.25, 5.0], materials.rust, materials.metalDark, { sign: materials.graffitiB });
-  addContainer(group, [11.65, FLOOR_Y, -13.25], [3.2, 2.25, 4.1], materials.blue, materials.metal, { rotationY: 0.02, sign: materials.graffitiA });
+  addContainer(group, [6.55, FLOOR_Y + 4.69, -12.35], [3.08, 2.05, 4.55], materials.blue, materials.metal, { sign: materials.signYellow });
+  addContainer(group, [11.65, FLOOR_Y, -13.25], [3.2, 2.25, 4.1], materials.blueDark, materials.metal, { rotationY: 0.02, sign: materials.graffitiA });
 
   addRamp(group, 7.4, 5.2, 1.15, [0, FLOOR_Y, -7.15], materials.concreteDark);
   addBox(group, [0.42, 1.18, 5.4], [-3.8, 0.77, -7.15], materials.concrete);
@@ -515,8 +522,22 @@ function buildGuardhouse(world, materials) {
 
   addWindow(group, [x - 1.65, 2.05, z + 2.58], 1.65, 1.45, materials, { boards: 1 });
   addWindow(group, [x + 1.45, 2.05, z + 2.58], 1.55, 1.45, materials);
-  addBox(group, [1.05, 2.3, 0.12], [x + 0.15, 1.55, z + 2.58], materials.metalDark);
-  addWindow(group, [x + 0.15, 1.95, z + 2.66], 0.82, 1.25, materials, { rotationY: 0, boards: 1 });
+
+  const frontLeftDoor = new THREE.Group();
+  frontLeftDoor.position.set(x - 0.52, 0.46, z + 2.58);
+  frontLeftDoor.rotation.y = -0.24;
+  group.add(frontLeftDoor);
+  addBox(frontLeftDoor, [1.0, 2.34, 0.12], [0, 1.17, 0], materials.metalDark);
+  addWindow(frontLeftDoor, [0, 1.58, 0.08], 0.7, 1.08, materials, { boards: 1 });
+  addBox(frontLeftDoor, [0.08, 0.24, 0.15], [0.33, 1.05, 0.1], materials.steelWet);
+
+  const frontRightDoor = new THREE.Group();
+  frontRightDoor.position.set(x + 0.52, 0.46, z + 2.58);
+  frontRightDoor.rotation.y = 0.04;
+  group.add(frontRightDoor);
+  addBox(frontRightDoor, [1.0, 2.34, 0.12], [0, 1.17, 0], materials.metalDark);
+  addWindow(frontRightDoor, [0, 1.58, 0.08], 0.7, 1.08, materials);
+  addBox(frontRightDoor, [0.08, 0.24, 0.15], [-0.33, 1.05, 0.1], materials.steelWet);
 
   addBox(group, [6.2, 0.28, 5.2], [x, 3.47, z], materials.metalDark);
   addBox(group, [5.4, 0.24, 4.6], [x, 6.55, z - 0.15], materials.rust, { rotation: [0.025, 0, -0.01] });
@@ -555,7 +576,15 @@ function buildGuardhouse(world, materials) {
   addDecal(group, 0.82, 0.56, [x - 2.83, 2.05, z - 0.4], materials.dutyRoster, [0, Math.PI / 2, 0]);
 
   addDesk(group, [x - 1.3, 0.5, z - 1.0], materials, { rotationY: 0.18 });
-  addChair(group, [x - 1.25, 0.47, z - 0.05], materials, { rotationY: 0.18, rotationZ: 0.04 });
+  addChair(group, [x - 1.3, 0.82, z - 0.12], materials, { rotationY: 0.48, rotationZ: 1.42 });
+  addBox(group, [0.44, 0.28, 0.24], [x - 1.75, 1.6, z - 1.17], materials.metalDark, { rotation: [0, -0.12, 0] });
+  for (let grille = 0; grille < 4; grille += 1) {
+    addBox(group, [0.03, 0.15, 0.26], [x - 1.9 + grille * 0.09, 1.6, z - 1.16], materials.steelWet, { castShadow: false });
+  }
+  addPipe(group, [x - 1.58, 1.74, z - 1.18], [x - 1.48, 2.12, z - 1.2], 0.018, materials.steelWet, { segments: 5 });
+  addCylinder(group, 0.09, 0.17, [x - 0.88, 1.53, z - 0.92], materials.metal, { segments: 10 });
+  addCylinder(group, 0.075, 0.012, [x - 0.88, 1.62, z - 0.92], materials.dark, { segments: 10, castShadow: false });
+  addBox(group, [0.58, 0.025, 0.38], [x - 1.16, 1.47, z - 1.12], materials.ivory, { rotation: [0, 0.28, 0], castShadow: false });
   addBox(group, [0.8, 1.8, 0.52], [x + 2.3, 1.35, z - 1.55], materials.metalDark);
   for (let drawer = 0; drawer < 4; drawer += 1) {
     addBox(group, [0.65, 0.05, 0.06], [x + 2.22, 0.82 + drawer * 0.36, z - 1.27], materials.steel, { castShadow: false });
@@ -632,7 +661,6 @@ function buildMidLane(world, materials) {
   leftGate.position.set(-2.0, 0.36, 0.22);
   leftGate.rotation.y = -0.58;
   group.add(leftGate);
-  addBox(leftGate, [2.0, 3.3, 0.18], [-0.95, 1.7, 0], materials.metalDark);
   for (let index = 0; index < 5; index += 1) {
     addBox(leftGate, [0.08, 3.05, 0.23], [-1.72 + index * 0.39, 1.7, 0], materials.steelWet, { castShadow: false });
   }
@@ -838,12 +866,6 @@ function buildLighting(scene, world, warehouse) {
   coldStreetLight.position.set(-12.0, 3.55, 10.0);
   scene.add(coldStreetLight);
 
-  const underpassLightA = new THREE.PointLight(0x86c9d7, 28, 5.5, 2);
-  const underpassLightB = new THREE.PointLight(0x86c9d7, 24, 5.5, 2);
-  underpassLightA.position.set(2.85, 1.08, -1.4);
-  underpassLightB.position.set(2.85, 1.08, 5.4);
-  scene.add(underpassLightA, underpassLightB);
-
   const searchTarget = new THREE.Object3D();
   searchTarget.position.set(0.5, 0.4, 2.0);
   world.add(searchTarget);
@@ -867,6 +889,12 @@ function buildLighting(scene, world, warehouse) {
     emergencyMeshes = meshes;
   }
 
+  function applyLightning(strength) {
+    hemisphere.intensity = 2.15 + strength * 2.4;
+    ambient.intensity = 0.92 + strength * 0.9;
+    moon.intensity = 3.1 + strength * 3.0;
+  }
+
   function update(time) {
     const slowPulse = 0.5 + Math.sin(time * 2.1) * 0.5;
     streetLight.intensity = 170 + Math.sin(time * 8.2) * 7 + Math.sin(time * 19.7) * 3.2;
@@ -883,17 +911,15 @@ function buildLighting(scene, world, warehouse) {
   }
 
   return {
-    hemisphere,
-    ambient,
-    moon,
-    searchlight,
+    applyLightning,
     setEmergencyMeshes,
     update,
   };
 }
 
 export function buildWorld(scene, materials) {
-  const world = buildBase(scene, materials);
+  const base = buildBase(scene, materials);
+  const world = base.world;
   const tSpawn = buildTSpawn(world, materials);
   const warehouse = buildWarehouse(world, materials);
   const guardhouse = buildGuardhouse(world, materials);
@@ -920,7 +946,7 @@ export function buildWorld(scene, materials) {
 
   return {
     world,
-    regions: { tSpawn, warehouse, guardhouse, mid, ctSpawn, flanks, utilities },
+    regions: { tSpawn, warehouse, guardhouse, mid, ctSpawn, flanks, utilities, puddles: base.puddles },
     lights,
     update,
   };

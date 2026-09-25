@@ -493,6 +493,18 @@ export function createMaterials() {
     new THREE.MeshBasicMaterial({ map: makeSiteTexture('B', '#e4c985'), transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -3 }),
   );
 
+  for (const material of [
+    materials.steelWet,
+    materials.metalDark,
+    materials.cardboard,
+    materials.sandbag,
+    materials.rubber,
+    materials.black,
+    materials.ivory,
+  ]) {
+    material.userData.outlineParameters = { visible: false };
+  }
+
   materials.gradientMap = gradientMap;
   return materials;
 }

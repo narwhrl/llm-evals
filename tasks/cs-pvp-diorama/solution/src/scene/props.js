@@ -2,12 +2,56 @@ import * as THREE from 'three';
 
 const Y_AXIS = new THREE.Vector3(0, 1, 0);
 const Z_AXIS = new THREE.Vector3(0, 0, 1);
+const boxGeometryCache = new Map();
+const cylinderGeometryCache = new Map();
+const sphereGeometryCache = new Map();
+const torusGeometryCache = new Map();
+
+function getBoxGeometry(size) {
+  const key = size.join(',');
+  if (!boxGeometryCache.has(key)) {
+    boxGeometryCache.set(key, new THREE.BoxGeometry(size[0], size[1], size[2]));
+  }
+  return boxGeometryCache.get(key);
+}
+
+function getCylinderGeometry(radius, height, options) {
+  const radiusTop = options.radiusTop ?? radius;
+  const radiusBottom = options.radiusBottom ?? radius;
+  const segments = options.segments ?? 12;
+  const openEnded = options.openEnded ?? false;
+  const key = [radiusTop, radiusBottom, height, segments, openEnded].join(',');
+  if (!cylinderGeometryCache.has(key)) {
+    cylinderGeometryCache.set(
+      key,
+      new THREE.CylinderGeometry(radiusTop, radiusBottom, height, segments, 1, openEnded),
+    );
+  }
+  return cylinderGeometryCache.get(key);
+}
+
+function getSphereGeometry(radius, options) {
+  const widthSegments = options.widthSegments ?? 12;
+  const heightSegments = options.heightSegments ?? 8;
+  const key = [radius, widthSegments, heightSegments].join(',');
+  if (!sphereGeometryCache.has(key)) {
+    sphereGeometryCache.set(key, new THREE.SphereGeometry(radius, widthSegments, heightSegments));
+  }
+  return sphereGeometryCache.get(key);
+}
+
+function getTorusGeometry(radius, tube, options) {
+  const radialSegments = options.radialSegments ?? 6;
+  const tubularSegments = options.tubularSegments ?? 16;
+  const key = [radius, tube, radialSegments, tubularSegments].join(',');
+  if (!torusGeometryCache.has(key)) {
+    torusGeometryCache.set(key, new THREE.TorusGeometry(radius, tube, radialSegments, tubularSegments));
+  }
+  return torusGeometryCache.get(key);
+}
 
 export function addBox(parent, size, position, material, options = {}) {
-  const mesh = new THREE.Mesh(
-    new THREE.BoxGeometry(size[0], size[1], size[2]),
-    material,
-  );
+  const mesh = new THREE.Mesh(getBoxGeometry(size), material);
   mesh.position.set(position[0], position[1], position[2]);
   if (options.rotation) {
     mesh.rotation.set(options.rotation[0], options.rotation[1], options.rotation[2]);
@@ -19,18 +63,7 @@ export function addBox(parent, size, position, material, options = {}) {
 }
 
 export function addCylinder(parent, radius, height, position, material, options = {}) {
-  const segments = options.segments ?? 12;
-  const mesh = new THREE.Mesh(
-    new THREE.CylinderGeometry(
-      options.radiusTop ?? radius,
-      options.radiusBottom ?? radius,
-      height,
-      segments,
-      1,
-      options.openEnded ?? false,
-    ),
-    material,
-  );
+  const mesh = new THREE.Mesh(getCylinderGeometry(radius, height, options), material);
   mesh.position.set(position[0], position[1], position[2]);
   if (options.rotation) {
     mesh.rotation.set(options.rotation[0], options.rotation[1], options.rotation[2]);
@@ -42,10 +75,7 @@ export function addCylinder(parent, radius, height, position, material, options 
 }
 
 export function addSphere(parent, radius, position, material, options = {}) {
-  const mesh = new THREE.Mesh(
-    new THREE.SphereGeometry(radius, options.widthSegments ?? 12, options.heightSegments ?? 8),
-    material,
-  );
+  const mesh = new THREE.Mesh(getSphereGeometry(radius, options), material);
   mesh.position.set(position[0], position[1], position[2]);
   if (options.scale) mesh.scale.set(...options.scale);
   mesh.castShadow = options.castShadow ?? true;
@@ -55,10 +85,7 @@ export function addSphere(parent, radius, position, material, options = {}) {
 }
 
 export function addTorus(parent, radius, tube, position, material, options = {}) {
-  const mesh = new THREE.Mesh(
-    new THREE.TorusGeometry(radius, tube, options.radialSegments ?? 6, options.tubularSegments ?? 16),
-    material,
-  );
+  const mesh = new THREE.Mesh(getTorusGeometry(radius, tube, options), material);
   mesh.position.set(position[0], position[1], position[2]);
   if (options.rotation) mesh.rotation.set(...options.rotation);
   if (options.scale) mesh.scale.set(...options.scale);
