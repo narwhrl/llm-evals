@@ -14,7 +14,7 @@ This task intentionally provides no starter project or fixed executable tests. M
 
 The deliverable must run locally in a browser and support a production build without services that require credentials. Runtime must not depend on remote art or audio. Each model writes its code and result report under the canonical candidate path in its isolated clone; the curator archives the completed tree under that model's candidate ID.
 
-The map is a playable reconstruction of the publicly documented CrossFire team-deathmatch layout 「运输船」. Official game assets, trademarks, logos, character models, textures, audio, and extracted data are not allowed. Similarity is judged from spatial routes, sightlines, cover types, and the gunfight, not from copied art.
+The map is a playable reconstruction of the classic PC CrossFire team-deathmatch layout 「运输船」. Candidates select one consistent reference version, document the evidence for routes and sightlines, and mark unsupported details as approximations. Official game assets, trademarks, logos, character models, textures, audio, and extracted data are not allowed. Similarity is judged from spatial routes, sightlines, cover types, and the gunfight, not from copied art.
 
 ## Evaluation Procedure
 
@@ -23,11 +23,10 @@ Before starting a round:
 1. Designate the current `main` commit as the shared baseline and record its full SHA in every candidate result report.
 2. Create each isolated model clone from that exact SHA according to the repository workflow.
 3. Evaluate every candidate in the same browser at a `1440 × 900` desktop viewport.
-4. Install, run the documented dev command, and play from a clean session. Confirm pointer lock, movement, crouch, jump, and collision against cabins, containers, crates, railings, stairs, and the under-deck passage.
-5. Stand in the defender doorway and confirm a clear eye-level sightline to the attacker doorway. Walk both side lanes and confirm a wooden crate blocks view while a rifle round still damages a target behind it. Enter the right-hand flank passage from spawn, reach the raised end, and confirm the overlook does not expose the enemy spawn interior.
-6. Check the asymmetric landmarks: extra cabin volume, diagonal cover, splayed green containers, triple-crate jump, high boxes, and the under-deck route.
-7. Fight the bots until a kill, a death, and a respawn have all happened. Confirm reload, ammunition limits, headshots, sniper aim, grenades, smoke, the scoreboard, and the minimap. Confirm bots move, shoot back, and use more than one route.
-8. Run the documented production build and confirm `index.html` is emitted. Record the exact commands, results, browser observations, console failures, and asset failures. Recycle any development server afterward.
+4. Inspect the candidate's `docs/MAP_REFERENCE.md` and reference evidence before judging routes, sightlines, or uncertain map details. Check that the selected reference version is consistent and that estimated dimensions are identified as such.
+5. Install, run the documented dev command, and play from a clean session. Follow A01–A32 in `task.md`, recording each item as passed, failed, or unverified with its actual steps and evidence. Confirm the documented main and flank routes, collision, jump access, key sightlines, and wood-versus-metal bullet behavior. Require an under-deck connection only if supported by the selected version's evidence.
+6. Fight the bots until a kill, a death, a respawn, and a completed match have occurred. Confirm real combat, reload and ammunition limits, weapon differences, grenades, smoke visibility, scoring, and multiple bot routes.
+7. Run the documented production build, including a non-root `--base` and `--outDir` build. Serve and play the production output, checking that all runtime assets load locally. Record the exact commands, results, browser observations, console failures, and asset failures. Recycle any development server afterward.
 
 Each candidate result report must also include the complete model identifier, known limitations or failures, and any required human intervention, as required by the repository rules.
 
@@ -35,8 +34,8 @@ Each candidate result report must also include the complete model identifier, kn
 
 Apply the prompt consistently and record observable evidence for:
 
-- **Ship and routes:** a readable cargo ship with inaccessible bow and stern tips, bow and stern spawn cabins, a clear mid sightline, two side lanes joined to mid, and two spawn-side flank passages ending in an overlook.
-- **Tactical landmarks:** penetrable wood, impenetrable metal, diagonal cover, splayed green containers, triple-crate and high-box positions, an under-deck passage, and a visible asymmetry between the camps.
+- **Ship and routes:** a readable cargo ship with two end spawn areas, a documented main firefight lane, confirmed flank routes, and consistent elevations, openings, and cover placement against the selected reference version.
+- **Tactical landmarks:** penetrable wood, impenetrable metal, diagonal central cargo, jumpable crate groups, high positions, and documented asymmetry between the camps. Assess any under-deck route against the reference evidence rather than presuming one.
 - **Gunfight:** first-person shooting with distinct weapons, recoil and spread, headshots, reload and ammo limits, grenades, smoke that blocks vision, hit feedback, death, and respawn.
 - **Opposition:** bots path along the documented routes, acquire visible targets, fire, reload, and create a match that can end on kills or time.
 - **Presentation:** deck, hull, sea, and sky read as a ship; characters and viewmodels are recognizable; HUD, minimap, score, and audio make the fight legible at 1440×900.
