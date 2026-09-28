@@ -6,7 +6,7 @@
 - Canonical candidate path: `tasks/ui-ux-design/solution/`
 - Candidate result report: `tasks/ui-ux-design/solution/RESULTS.md`
 - Prompt: [`task.md`](task.md)
-- Status: Prepared on `main`; no evaluation round or candidate branch has started.
+- Status: Fourteen candidates archived on `llm/ui-ux-design` at `tasks/ui-ux-design/solutions/<candidate-id>/`. Original commits and source trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json).
 
 ## Shared Inputs
 
@@ -17,7 +17,7 @@ This task intentionally provides no starter project or fixed executable tests. F
 Before starting a round:
 
 1. Designate the current `main` commit as the shared baseline and record its full SHA in every candidate result report.
-2. Create each candidate branch and linked worktree from that exact SHA according to the repository workflow.
+2. Create each isolated model clone from that exact SHA according to the repository workflow.
 3. Require the candidate to preserve its pre-implementation concept, visitor journey, visual and interaction principles, and three explicit non-goals in `tasks/ui-ux-design/solution/RESULTS.md`.
 4. Require the same report to preserve the seven-axis creative-director critique and identify the substantive implementation changes made afterward.
 5. Evaluate every candidate in the same browser/runtime at `1440 × 900` desktop and `390 × 844` mobile viewports, with both normal and reduced-motion preferences.

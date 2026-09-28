@@ -6,20 +6,20 @@
 - Canonical candidate path: `tasks/voxel-chinese-architecture/solution/`
 - Candidate result report: `tasks/voxel-chinese-architecture/solution/RESULTS.md`
 - Prompt: [`task.md`](task.md)
-- Status: Prepared on `main`; no evaluation round or candidate branch has started.
+- Status: Eight candidates archived on `llm/voxel-chinese-architecture` at `tasks/voxel-chinese-architecture/solutions/<candidate-id>/`. Original commits and source trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json).
 
 ## Shared Inputs
 
 This task intentionally provides no starter project or fixed executable tests. Scene architecture, voxel construction method, framework choice (React or vanilla), camera presentation, and asset strategy are part of the evaluated response. Every candidate must receive the same repository baseline, task prompt, tool permissions, runtime conditions, browser viewport, and review procedure.
 
-The deliverable must run locally in a browser and support a production build without services that require credentials. Candidate code and its result report belong under the canonical candidate path; model identity belongs only in the candidate branch and worktree path.
+The deliverable must run locally in a browser and support a production build without services that require credentials. Each model writes its code and result report under the canonical candidate path in its isolated clone; the curator archives the completed tree under that model's candidate ID.
 
 ## Evaluation Procedure
 
 Before starting a round:
 
 1. Designate the current `main` commit as the shared baseline and record its full SHA in every candidate result report.
-2. Create each candidate branch and linked worktree from that exact SHA according to the repository workflow.
+2. Create each isolated model clone from that exact SHA according to the repository workflow.
 3. Evaluate every candidate in the same browser/runtime at a `1440 × 900` desktop viewport.
 4. Load the scene from a clean browser session and wait for its documented initialization path. Confirm that the first view already shows the full architectural ensemble without requiring user input.
 5. Inspect the scene from the default framing and, if orbit/zoom controls exist, from multiple angles and elevations. Confirm axial courtyard composition, circulation, building hierarchy, roof forms, structural members, color system, ground treatment, and lighting.
