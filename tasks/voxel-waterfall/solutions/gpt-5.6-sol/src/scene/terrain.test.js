@@ -1,0 +1,104 @@
+import assert from 'node:assert/strict';
+import test from 'node:test';
+
+import {
+  GRID_SIZE,
+  countProminentPeaks,
+  createTerrainLodMap,
+  generateHeightMap,
+  generateWaterfallPaths,
+  getHeight,
+} from './terrain.js';
+
+test('generates a deterministic 128 by 128 mountain range', () => {
+  const first = generateHeightMap();
+  const second = generateHeightMap();
+
+  assert.equal(GRID_SIZE, 128);
+  assert.equal(first.heights.length, 128 * 128);
+  assert.deepEqual(first.heights, second.heights);
+  assert.ok(first.maxHeight >= 44, `expected a tall main peak, got ${first.maxHeight}`);
+  assert.ok(first.maxHeight <= 58, `expected a bounded mountain, got ${first.maxHeight}`);
+  assert.ok(countProminentPeaks(first, 25, 7) >= 4, 'expected a main peak and several subpeaks');
+});
+
+test('tapers the mountain into low foothills along every map edge', () => {
+  const map = generateHeightMap();
+  const edgeHeights = [];
+
+  for (let i = 0; i < GRID_SIZE; i += 1) {
+    edgeHeights.push(
+      map.heights[i],
+      map.heights[(GRID_SIZE - 1) * GRID_SIZE + i],
+      map.heights[i * GRID_SIZE],
+      map.heights[i * GRID_SIZE + GRID_SIZE - 1],
+    );
+  }
+
+  assert.ok(Math.max(...edgeHeights) <= 5, 'edge voxels should remain foothills');
+});
+
+test('routes two waterfalls from high sources to the mountain foot', () => {
+  const map = generateHeightMap();
+  const paths = generateWaterfallPaths(map);
+
+  assert.equal(paths.length, 2);
+  for (const path of paths) {
+    assert.ok(path.length >= 28, `waterfall path is too short: ${path.length}`);
+    assert.ok(path[0].height >= 32, `waterfall starts too low: ${path[0].height}`);
+    assert.ok(path.at(-1).height <= 10, `waterfall does not reach the foot: ${path.at(-1).height}`);
+    assert.ok(
+      path.some((point, index) => index > 0 && path[index - 1].height - point.height >= 2),
+      'waterfall needs at least one visible drop',
+    );
+    assert.ok(
+      path.every((point, index) => index === 0 || point.height <= path[index - 1].height),
+      'water should never route uphill',
+    );
+    assert.ok(
+      path.every((point) => point.height === getHeight(map, point.x, point.z)),
+      'every water surface voxel should rest on its terrain cell',
+    );
+    assert.ok(
+      path.every((point, index) => {
+        if (index === 0) return true;
+        const previous = path[index - 1];
+        return Math.abs(point.x - previous.x) + Math.abs(point.z - previous.z) === 1;
+      }),
+      'water should move through adjacent terrain cells without floating gaps',
+    );
+  }
+});
+
+test('preserves the mountain extent in the adaptive terrain level', () => {
+  const map = generateHeightMap();
+  const adaptiveMap = createTerrainLodMap(map, 4);
+
+  assert.equal(adaptiveMap.size, 32);
+  assert.equal(adaptiveMap.size * 4, GRID_SIZE);
+  assert.equal(adaptiveMap.heights.length, 32 * 32);
+  assert.ok(adaptiveMap.maxHeight >= map.maxHeight * 0.8, 'adaptive terrain should preserve peak height');
+  assert.ok(adaptiveMap.maxHeight <= map.maxHeight, 'adaptive terrain should remain inside the source range');
+});
+
+test('routes adaptive waterfalls over the displayed terrain level', () => {
+  const map = createTerrainLodMap(generateHeightMap(), 4);
+  const paths = generateWaterfallPaths(map);
+
+  for (const path of paths) {
+    assert.ok(path.length >= 8, 'adaptive waterfall should cross multiple terrain cells');
+    assert.ok(path.at(-1).height <= 7, 'adaptive waterfall should reach the mountain foot');
+    assert.ok(
+      path.every((point) => point.height === getHeight(map, point.x, point.z)),
+      'adaptive water should use the same height map as the displayed terrain',
+    );
+    assert.ok(
+      path.every((point, index) => {
+        if (index === 0) return true;
+        const previous = path[index - 1];
+        return Math.abs(point.x - previous.x) + Math.abs(point.z - previous.z) === 1;
+      }),
+      'adaptive water should not bridge gaps between terrain cells',
+    );
+  }
+});
