@@ -18,7 +18,7 @@ This repository compares coding models under the same task, context, tools, and 
 | `cs-pvp-diorama` | [`tasks/cs-pvp-diorama/`](tasks/cs-pvp-diorama/) | `llm/cs-pvp-diorama` |
 | `voxel-chinese-architecture` | [`tasks/voxel-chinese-architecture/`](tasks/voxel-chinese-architecture/) | `llm/voxel-chinese-architecture` |
 | `gargantua-schwarzschild-raytracer` | [`tasks/gargantua-schwarzschild-raytracer/`](tasks/gargantua-schwarzschild-raytracer/) | `llm/gargantua-schwarzschild-raytracer` |
-| `cf-transport-ship` | [`tasks/cf-transport-ship/`](tasks/cf-transport-ship/) | `llm/cf-transport-ship` |
+| `cf-transport-ship` | [`tasks/cf-transport-ship/`](tasks/cf-transport-ship/) | No archived candidates |
 
 ## Repository and Worktree Layout
 

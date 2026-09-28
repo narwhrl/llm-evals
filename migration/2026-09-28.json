@@ -4,17 +4,6 @@
   "note": "Refs captured before the task-branch migration. cursor-c343 is a source identifier; its model is unknown.",
   "candidates": [
     {
-      "task": "cf-transport-ship",
-      "id": "grok-4.7",
-      "modelIdKnown": true,
-      "sourceRef": "origin/llm/cf-transport-ship/grok-4.7",
-      "sourceCommit": "9de133540068aabbcf771f1cbcca2fca0f47cf7e",
-      "sourceTree": "02874800753dbf94ca2e80fdfc349152ae354797",
-      "archiveTag": "candidate/cf-transport-ship/grok-4.7",
-      "destination": "tasks/cf-transport-ship/solutions/grok-4.7",
-      "hasResults": true
-    },
-    {
       "task": "cs-pvp-diorama",
       "id": "deepseek-v4.1-flash",
       "modelIdKnown": true,

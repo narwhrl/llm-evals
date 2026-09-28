@@ -6,7 +6,7 @@
 - Canonical candidate path: `tasks/cf-transport-ship/solution/`
 - Candidate result report: `tasks/cf-transport-ship/solution/RESULTS.md`
 - Prompt: [`task.md`](task.md)
-- Status: One candidate archived on `llm/cf-transport-ship` at `tasks/cf-transport-ship/solutions/<candidate-id>/`. Original commit and source tree are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json).
+- Status: No archived candidates. The task is ready for a new evaluation round from a pinned `main` baseline.
 
 ## Shared Inputs
 
