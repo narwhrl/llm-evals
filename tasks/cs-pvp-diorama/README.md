@@ -6,7 +6,7 @@
 - Canonical candidate path: `tasks/cs-pvp-diorama/solution/`
 - Candidate result report: `tasks/cs-pvp-diorama/solution/RESULTS.md`
 - Prompt: [`task.md`](task.md)
-- Status: Thirteen candidates archived on `llm/cs-pvp-diorama` at `tasks/cs-pvp-diorama/solutions/<candidate-id>/`. Historical source commits and trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json); later imports are recorded in [`imports.json`](imports.json).
+- Status: Fourteen candidates archived on `llm/cs-pvp-diorama` at `tasks/cs-pvp-diorama/solutions/<candidate-id>/`. Historical source commits and trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json); later imports are recorded in [`imports.json`](imports.json).
 
 ## Shared Inputs
 

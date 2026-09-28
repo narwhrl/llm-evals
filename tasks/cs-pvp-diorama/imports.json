@@ -12,6 +12,17 @@
       "archiveTag": "candidate/cs-pvp-diorama/claude-opus-5.5",
       "destination": "tasks/cs-pvp-diorama/solutions/claude-opus-5.5",
       "resultReport": "tasks/cs-pvp-diorama/solutions/claude-opus-5.5/RESULTS.md"
+    },
+    {
+      "candidateId": "minimax-m3.1-flash-preview",
+      "model": "minimax/MiniMax-M3.1-Flash-Preview",
+      "baselineMain": "a294b85b790330294719e0b6b0cd5c022dd72073",
+      "sourceRef": "local-clone:.runs/cs-pvp-diorama/minimax-m3.1-flash-preview (detached, remote removed)",
+      "sourceCommit": "5a00ef885d61d506cf6e5ee10a914fda6f940043",
+      "sourceTree": "9ba5b30c24162267363e1695b26292d6c3fe0a5a",
+      "archiveTag": "candidate/cs-pvp-diorama/minimax-m3.1-flash-preview",
+      "destination": "tasks/cs-pvp-diorama/solutions/minimax-m3.1-flash-preview",
+      "resultReport": "tasks/cs-pvp-diorama/solutions/minimax-m3.1-flash-preview/RESULTS.md"
     }
   ]
 }
