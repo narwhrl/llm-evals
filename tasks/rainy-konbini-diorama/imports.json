@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "taskId": "rainy-konbini-diorama",
+  "candidates": [
+    {
+      "candidateId": "gpt-6-sol",
+      "model": "gpt-6-sol",
+      "baselineMain": "eac83c1f847779d4ebcd8ac81865d9d7d5b9659d",
+      "sourceRef": "local-clone:.runs/rainy-konbini-diorama/gpt-6-sol (detached, remote removed)",
+      "sourceCommit": "c455d21fe8b51bd0fb6e001468f3d29e2c0fe069",
+      "sourceTree": "9e4f6264df5030103027802615b7d47c758e4845",
+      "archiveTag": "candidate/rainy-konbini-diorama/gpt-6-sol",
+      "destination": "tasks/rainy-konbini-diorama/solutions/gpt-6-sol",
+      "resultReport": "tasks/rainy-konbini-diorama/solutions/gpt-6-sol/RESULTS.md"
+    }
+  ]
+}
