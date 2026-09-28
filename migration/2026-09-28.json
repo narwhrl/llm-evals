@@ -1,0 +1,735 @@
+{
+  "schema": 1,
+  "sourceMain": "cc2d832da3eda3aabf0385aee755d23d9ea1d7d4",
+  "note": "Refs captured before the task-branch migration. cursor-c343 is a source identifier; its model is unknown.",
+  "candidates": [
+    {
+      "task": "cf-transport-ship",
+      "id": "grok-4.7",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/cf-transport-ship/grok-4.7",
+      "sourceCommit": "9de133540068aabbcf771f1cbcca2fca0f47cf7e",
+      "sourceTree": "02874800753dbf94ca2e80fdfc349152ae354797",
+      "archiveTag": "candidate/cf-transport-ship/grok-4.7",
+      "destination": "tasks/cf-transport-ship/solutions/grok-4.7",
+      "hasResults": true
+    },
+    {
+      "task": "cs-pvp-diorama",
+      "id": "deepseek-v4.1-flash",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/cs-pvp-diorama/deepseek-v4.1-flash",
+      "sourceCommit": "75a9da348066fc8024f6f58ff02b88a0d2a8fce9",
+      "sourceTree": "dff42f3714a8f84851cb92d12ac6c70474c0c900",
+      "archiveTag": "candidate/cs-pvp-diorama/deepseek-v4.1-flash",
+      "destination": "tasks/cs-pvp-diorama/solutions/deepseek-v4.1-flash",
+      "hasResults": true
+    },
+    {
+      "task": "cs-pvp-diorama",
+      "id": "gemini-3.7-flash",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/cs-pvp-diorama/gemini-3.7-flash",
+      "sourceCommit": "ad9270fdba6085718dde4608665f7d8a90a64dd9",
+      "sourceTree": "927ca11e630a01dd6706c1e1df2a696cbb769e97",
+      "archiveTag": "candidate/cs-pvp-diorama/gemini-3.7-flash",
+      "destination": "tasks/cs-pvp-diorama/solutions/gemini-3.7-flash",
+      "hasResults": true
+    },
+    {
+      "task": "cs-pvp-diorama",
+      "id": "glm-5.3",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/cs-pvp-diorama/glm-5.3",
+      "sourceCommit": "aff07e2950ff948a459b4a100a408761806e79fe",
+      "sourceTree": "18d94046a9641191f73d24f2565c77c0c7bda2fe",
+      "archiveTag": "candidate/cs-pvp-diorama/glm-5.3",
+      "destination": "tasks/cs-pvp-diorama/solutions/glm-5.3",
+      "hasResults": true
+    },
+    {
+      "task": "cs-pvp-diorama",
+      "id": "gpt-5.6-sol",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/cs-pvp-diorama/gpt-5.6-sol",
+      "sourceCommit": "5ec8c7b0f3d0329d6aeab33989088f1ac8a48b98",
+      "sourceTree": "da3451c120a4e92fcdf4233f37b0e511321a15d2",
+      "archiveTag": "candidate/cs-pvp-diorama/gpt-5.6-sol",
+      "destination": "tasks/cs-pvp-diorama/solutions/gpt-5.6-sol",
+      "hasResults": true
+    },
+    {
+      "task": "cs-pvp-diorama",
+      "id": "gpt-6-sol",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/cs-pvp-diorama/gpt-6-sol",
+      "sourceCommit": "14e68a01eb913c3bf1b7d0283f9c5c57c0696daa",
+      "sourceTree": "4f1ce82e9283c7e43bf70210f108489fb2edeab4",
+      "archiveTag": "candidate/cs-pvp-diorama/gpt-6-sol",
+      "destination": "tasks/cs-pvp-diorama/solutions/gpt-6-sol",
+      "hasResults": true
+    },
+    {
+      "task": "cs-pvp-diorama",
+      "id": "grok-4.6",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/cs-pvp-diorama/grok-4.6",
+      "sourceCommit": "fa5405cfa9583690ba10a093cd02689c5dbfaa2f",
+      "sourceTree": "99585665dc15a00f394874aefc8f07339756dd42",
+      "archiveTag": "candidate/cs-pvp-diorama/grok-4.6",
+      "destination": "tasks/cs-pvp-diorama/solutions/grok-4.6",
+      "hasResults": true
+    },
+    {
+      "task": "cs-pvp-diorama",
+      "id": "grok-bot",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/cs-pvp-diorama/grok-bot",
+      "sourceCommit": "6fe7d4743632e6cfe9517b2739dc622701022ed6",
+      "sourceTree": "2ff11dd27f4b75ddd9669981aedb33caffd2db5c",
+      "archiveTag": "candidate/cs-pvp-diorama/grok-bot",
+      "destination": "tasks/cs-pvp-diorama/solutions/grok-bot",
+      "hasResults": true
+    },
+    {
+      "task": "cs-pvp-diorama",
+      "id": "kimi-k3",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/cs-pvp-diorama/kimi-k3",
+      "sourceCommit": "e88a90d9a64bd0c5e4a14f14c9d5ca07b23f77ac",
+      "sourceTree": "1e54bca0b73c1f7d61e8a32c2a6377d353ab87b1",
+      "archiveTag": "candidate/cs-pvp-diorama/kimi-k3",
+      "destination": "tasks/cs-pvp-diorama/solutions/kimi-k3",
+      "hasResults": true
+    },
+    {
+      "task": "cs-pvp-diorama",
+      "id": "mimo-v2.6-flash",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/cs-pvp-diorama/mimo-v2.6-flash",
+      "sourceCommit": "4096c62b27b5fdeda3b436b386836e22fc7de70c",
+      "sourceTree": "a670988b8776c969704c298ad01a848759655c9f",
+      "archiveTag": "candidate/cs-pvp-diorama/mimo-v2.6-flash",
+      "destination": "tasks/cs-pvp-diorama/solutions/mimo-v2.6-flash",
+      "hasResults": true
+    },
+    {
+      "task": "cs-pvp-diorama",
+      "id": "minimax-m3",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/cs-pvp-diorama/minimax-m3",
+      "sourceCommit": "500e19f655e946627ba902e74ab1869825ed15fd",
+      "sourceTree": "9b907e6743fb9e57ac239bcdcacefbeb7cfca43d",
+      "archiveTag": "candidate/cs-pvp-diorama/minimax-m3",
+      "destination": "tasks/cs-pvp-diorama/solutions/minimax-m3",
+      "hasResults": true
+    },
+    {
+      "task": "cs-pvp-diorama",
+      "id": "space-bunny-free",
+      "modelIdKnown": true,
+      "sourceRef": "llm/cs-pvp-diorama/space-bunny-free",
+      "sourceCommit": "ff8d0066955fe4e90bfc242edf56ad8e9957abff",
+      "sourceTree": "475954324faf474954d0d7300288c6007671317e",
+      "archiveTag": "candidate/cs-pvp-diorama/space-bunny-free",
+      "destination": "tasks/cs-pvp-diorama/solutions/space-bunny-free",
+      "hasResults": true
+    },
+    {
+      "task": "gargantua-schwarzschild-raytracer",
+      "id": "cursor-c343",
+      "modelIdKnown": false,
+      "sourceRef": "origin/cursor/gargantua-raytracer-c343",
+      "sourceCommit": "700d3fa3df70c62e71100079248c72170b182308",
+      "sourceTree": "0d74720fee3d7b1a692e69f4f1f1a6a700271629",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/cursor-c343",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/cursor-c343",
+      "hasResults": false
+    },
+    {
+      "task": "gargantua-schwarzschild-raytracer",
+      "id": "deepseek-v4.1-flash",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/gargantua-schwarzschild-raytracer/deepseek-v4.1-flash",
+      "sourceCommit": "703a8da77a7e2c42912ac6c438605f36ef184ba8",
+      "sourceTree": "b739129757368139fa353ed11b963464c839855c",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/deepseek-v4.1-flash",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/deepseek-v4.1-flash",
+      "hasResults": true
+    },
+    {
+      "task": "gargantua-schwarzschild-raytracer",
+      "id": "gemini-3.8-flash",
+      "modelIdKnown": true,
+      "sourceRef": "llm/gargantua-schwarzschild-raytracer/gemini-3.8-flash",
+      "sourceCommit": "058d763a69fb47b20da1c44d5863e75a9c99fc58",
+      "sourceTree": "f1a0097b3877c9059fdcb80279d56cd94d66f648",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/gemini-3.8-flash",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/gemini-3.8-flash",
+      "hasResults": true
+    },
+    {
+      "task": "gargantua-schwarzschild-raytracer",
+      "id": "glm-5.3",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/gargantua-schwarzschild-raytracer/glm-5.3",
+      "sourceCommit": "e799c126dddee1355b1a71653d18cc6d773561e8",
+      "sourceTree": "16cad15b5faa95d7cf2e6fe03a71fd78b9341e21",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/glm-5.3",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/glm-5.3",
+      "hasResults": true
+    },
+    {
+      "task": "gargantua-schwarzschild-raytracer",
+      "id": "gpt-6-astra",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/gargantua-schwarzschild-raytracer/gpt-6-astra",
+      "sourceCommit": "438e713c55c500462f22c0482074f6567bda3e86",
+      "sourceTree": "2152eaebe36779a909a7a1039548dcdb0456cd73",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/gpt-6-astra",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/gpt-6-astra",
+      "hasResults": true
+    },
+    {
+      "task": "gargantua-schwarzschild-raytracer",
+      "id": "gpt-6-sol",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/gargantua-schwarzschild-raytracer/gpt-6-sol",
+      "sourceCommit": "8a7c2b71e47a169f61517b603fe59d2f54f85ea8",
+      "sourceTree": "d73c716f096fcb6d8835c0eb5bffd3a4575747c1",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/gpt-6-sol",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/gpt-6-sol",
+      "hasResults": true
+    },
+    {
+      "task": "gargantua-schwarzschild-raytracer",
+      "id": "grok-4.7",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/gargantua-schwarzschild-raytracer/grok-4.7",
+      "sourceCommit": "a3a6e930b3a652d3b894ed1a41bba599c76c2f5b",
+      "sourceTree": "358e00f225c880d580fb469025b0abc55292c189",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/grok-4.7",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/grok-4.7",
+      "hasResults": true
+    },
+    {
+      "task": "gargantua-schwarzschild-raytracer",
+      "id": "grok-bot",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/gargantua-schwarzschild-raytracer/grok-bot",
+      "sourceCommit": "a7da551e92335e7b907b3578e4ba95724b410130",
+      "sourceTree": "08fc683823f90a773c8de2d8c96d5cd34e94b42d",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/grok-bot",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/grok-bot",
+      "hasResults": true
+    },
+    {
+      "task": "gargantua-schwarzschild-raytracer",
+      "id": "mimo-v2.6-flash",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/gargantua-schwarzschild-raytracer/mimo-v2.6-flash",
+      "sourceCommit": "e77accc5677e748195fb89e9822ea733bd550afa",
+      "sourceTree": "8cee48e02cfa353d3c30754964ba9f0cb0a9a14e",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/mimo-v2.6-flash",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/mimo-v2.6-flash",
+      "hasResults": true
+    },
+    {
+      "task": "gargantua-schwarzschild-raytracer",
+      "id": "mimo-v2.6-pro",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/gargantua-schwarzschild-raytracer/mimo-v2.6-pro",
+      "sourceCommit": "66bd8ddffe5217200128c869e3e0c29359fceca9",
+      "sourceTree": "b40a8534d661d89ec4572f26c622632ae15ba494",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/mimo-v2.6-pro",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/mimo-v2.6-pro",
+      "hasResults": true
+    },
+    {
+      "task": "gargantua-schwarzschild-raytracer",
+      "id": "minimax-m3",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/gargantua-schwarzschild-raytracer/minimax-m3",
+      "sourceCommit": "63dab5a859054429365e18c5b2fd6024a8aa40a2",
+      "sourceTree": "a85a49e665edf2a3e70b6bf71853fa5101b50fc8",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/minimax-m3",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/minimax-m3",
+      "hasResults": true
+    },
+    {
+      "task": "gargantua-schwarzschild-raytracer",
+      "id": "omp-gpt-6-sol-minimax-m3",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/gargantua-schwarzschild-raytracer/omp-gpt-6-sol-minimax-m3",
+      "sourceCommit": "bd48d778221d053c17f8beec86f70a5fb0388ded",
+      "sourceTree": "71a8a691be29cbfd7b842307ed526eecc21a6fec",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/omp-gpt-6-sol-minimax-m3",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/omp-gpt-6-sol-minimax-m3",
+      "hasResults": true
+    },
+    {
+      "task": "ui-ux-design",
+      "id": "deepseek-v4.1-flash",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/ui-ux-design/deepseek-v4.1-flash",
+      "sourceCommit": "afd197efa0dc0e4ef8a068255ce7fc65ca4ff8d6",
+      "sourceTree": "c740d29918fc9338178c3d4ca2f507ee0183d78d",
+      "archiveTag": "candidate/ui-ux-design/deepseek-v4.1-flash",
+      "destination": "tasks/ui-ux-design/solutions/deepseek-v4.1-flash",
+      "hasResults": true
+    },
+    {
+      "task": "ui-ux-design",
+      "id": "gemini-3.7-flash",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/ui-ux-design/gemini-3.7-flash",
+      "sourceCommit": "99f3f710fef3f55d535a9376703de0f43a00bdc1",
+      "sourceTree": "ba5f060a447d05c7e76d5d7c1a7e552f29706994",
+      "archiveTag": "candidate/ui-ux-design/gemini-3.7-flash",
+      "destination": "tasks/ui-ux-design/solutions/gemini-3.7-flash",
+      "hasResults": true
+    },
+    {
+      "task": "ui-ux-design",
+      "id": "gemini-3.8-flash",
+      "modelIdKnown": true,
+      "sourceRef": "llm/ui-ux-design/gemini-3.8-flash",
+      "sourceCommit": "485f247db895fb8c499f365ad479378a9f54e864",
+      "sourceTree": "4414b7ac9e51cea1583e3dd68cdd2ddea67d4eb4",
+      "archiveTag": "candidate/ui-ux-design/gemini-3.8-flash",
+      "destination": "tasks/ui-ux-design/solutions/gemini-3.8-flash",
+      "hasResults": true
+    },
+    {
+      "task": "ui-ux-design",
+      "id": "glm-5.3",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/ui-ux-design/glm-5.3",
+      "sourceCommit": "9ce633e317b6c6e792146f905360e800f6107555",
+      "sourceTree": "dab9ad938c0e40e071b77a2a036273dbfe9cc6a4",
+      "archiveTag": "candidate/ui-ux-design/glm-5.3",
+      "destination": "tasks/ui-ux-design/solutions/glm-5.3",
+      "hasResults": true
+    },
+    {
+      "task": "ui-ux-design",
+      "id": "gpt-5.6-luna",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/ui-ux-design/gpt-5.6-luna",
+      "sourceCommit": "1429f4a13c164a769564aea479fbd3d59594cddb",
+      "sourceTree": "440dee639f0b03ca7352414d34dcbb1edba4110e",
+      "archiveTag": "candidate/ui-ux-design/gpt-5.6-luna",
+      "destination": "tasks/ui-ux-design/solutions/gpt-5.6-luna",
+      "hasResults": true
+    },
+    {
+      "task": "ui-ux-design",
+      "id": "gpt-5.6-sol",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/ui-ux-design/gpt-5.6-sol",
+      "sourceCommit": "7316a914b840d02a3ec0e75e01ac77922d5a8810",
+      "sourceTree": "ee552ac2bb90c9650f84bb240f78123a1d42f5a2",
+      "archiveTag": "candidate/ui-ux-design/gpt-5.6-sol",
+      "destination": "tasks/ui-ux-design/solutions/gpt-5.6-sol",
+      "hasResults": true
+    },
+    {
+      "task": "ui-ux-design",
+      "id": "gpt-5.6-terra",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/ui-ux-design/gpt-5.6-terra",
+      "sourceCommit": "ac525f7110eded67821f55f8dad33b005b80c56e",
+      "sourceTree": "8f182c049de04c8987a5504d5b39d9fbe6250187",
+      "archiveTag": "candidate/ui-ux-design/gpt-5.6-terra",
+      "destination": "tasks/ui-ux-design/solutions/gpt-5.6-terra",
+      "hasResults": true
+    },
+    {
+      "task": "ui-ux-design",
+      "id": "gpt-6-astra",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/ui-ux-design/gpt-6-astra",
+      "sourceCommit": "f3000382abbe22c2bb4bfa08a96752d7fa506090",
+      "sourceTree": "7909c680ec9afe40c9153529b4e775e0e69dd4e0",
+      "archiveTag": "candidate/ui-ux-design/gpt-6-astra",
+      "destination": "tasks/ui-ux-design/solutions/gpt-6-astra",
+      "hasResults": true
+    },
+    {
+      "task": "ui-ux-design",
+      "id": "grok-4.6",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/ui-ux-design/grok-4.6",
+      "sourceCommit": "c872969d0d1572026040dd7a1f3b63af28158930",
+      "sourceTree": "ce50107599968bedfb468cfabbd7d21a7c4ed808",
+      "archiveTag": "candidate/ui-ux-design/grok-4.6",
+      "destination": "tasks/ui-ux-design/solutions/grok-4.6",
+      "hasResults": true
+    },
+    {
+      "task": "ui-ux-design",
+      "id": "grok-bot",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/ui-ux-design/grok-bot",
+      "sourceCommit": "bae2f9827cac321f66e34f1c43f43827c2510bdd",
+      "sourceTree": "62282e5f5d9061177f57a151e52de16b2b57a036",
+      "archiveTag": "candidate/ui-ux-design/grok-bot",
+      "destination": "tasks/ui-ux-design/solutions/grok-bot",
+      "hasResults": true
+    },
+    {
+      "task": "ui-ux-design",
+      "id": "kimi-k3",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/ui-ux-design/kimi-k3",
+      "sourceCommit": "1c1543428aa78484e72ccbc482ccb1cc6a74de0d",
+      "sourceTree": "a1708c2ee924c1428d8e12954255c3841da5e170",
+      "archiveTag": "candidate/ui-ux-design/kimi-k3",
+      "destination": "tasks/ui-ux-design/solutions/kimi-k3",
+      "hasResults": true
+    },
+    {
+      "task": "ui-ux-design",
+      "id": "mimo-v2.6-flash",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/ui-ux-design/mimo-v2.6-flash",
+      "sourceCommit": "2f7c97d0c4e010be72ab395f8cb3a248d25e1a78",
+      "sourceTree": "a8e04eb342793154bbc945670603ae2d32a1cbc4",
+      "archiveTag": "candidate/ui-ux-design/mimo-v2.6-flash",
+      "destination": "tasks/ui-ux-design/solutions/mimo-v2.6-flash",
+      "hasResults": true
+    },
+    {
+      "task": "ui-ux-design",
+      "id": "mimo-v2.6-pro",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/ui-ux-design/mimo-v2.6-pro",
+      "sourceCommit": "0beea99ed0fa7e122d2f95877335e8807143ad9d",
+      "sourceTree": "451f9b1c9cdea90d66040784b955149a9746a5c4",
+      "archiveTag": "candidate/ui-ux-design/mimo-v2.6-pro",
+      "destination": "tasks/ui-ux-design/solutions/mimo-v2.6-pro",
+      "hasResults": true
+    },
+    {
+      "task": "ui-ux-design",
+      "id": "minimax-m3",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/ui-ux-design/minimax-m3",
+      "sourceCommit": "d94abc4b412b9f9e4b438f7229cd836349a6e1b0",
+      "sourceTree": "1818efe2a6340f116d1000f8793189f90727724b",
+      "archiveTag": "candidate/ui-ux-design/minimax-m3",
+      "destination": "tasks/ui-ux-design/solutions/minimax-m3",
+      "hasResults": true
+    },
+    {
+      "task": "voxel-chinese-architecture",
+      "id": "deepseek-v4.1-flash",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/voxel-chinese-architecture/deepseek-v4.1-flash",
+      "sourceCommit": "b4f785e21aefc773e38a975c52ca469eed503e37",
+      "sourceTree": "932d94b0364a97d3db4caa633037d1a76860d843",
+      "archiveTag": "candidate/voxel-chinese-architecture/deepseek-v4.1-flash",
+      "destination": "tasks/voxel-chinese-architecture/solutions/deepseek-v4.1-flash",
+      "hasResults": true
+    },
+    {
+      "task": "voxel-chinese-architecture",
+      "id": "gemini-3.8-flash",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/voxel-chinese-architecture/gemini-3.8-flash",
+      "sourceCommit": "b010d50b5bb3cb84b74773c2652d4980046c5af3",
+      "sourceTree": "600884a4b31bf3fcf4cc38a643dec060da9d1faa",
+      "archiveTag": "candidate/voxel-chinese-architecture/gemini-3.8-flash",
+      "destination": "tasks/voxel-chinese-architecture/solutions/gemini-3.8-flash",
+      "hasResults": true
+    },
+    {
+      "task": "voxel-chinese-architecture",
+      "id": "gpt-6-astra",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/voxel-chinese-architecture/gpt-6-astra",
+      "sourceCommit": "208ffc590145f1fcbcb4a01dc89490348bf9448a",
+      "sourceTree": "fee92895de4ad99798596f9978c584e2652c62fb",
+      "archiveTag": "candidate/voxel-chinese-architecture/gpt-6-astra",
+      "destination": "tasks/voxel-chinese-architecture/solutions/gpt-6-astra",
+      "hasResults": true
+    },
+    {
+      "task": "voxel-chinese-architecture",
+      "id": "gpt-6-sol",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/voxel-chinese-architecture/gpt-6-sol",
+      "sourceCommit": "93534b7edb2ae47832259948abe8a5a3ecbee6e1",
+      "sourceTree": "d10c7e43ec7791b673fcce69390c8b631c6e17cb",
+      "archiveTag": "candidate/voxel-chinese-architecture/gpt-6-sol",
+      "destination": "tasks/voxel-chinese-architecture/solutions/gpt-6-sol",
+      "hasResults": true
+    },
+    {
+      "task": "voxel-chinese-architecture",
+      "id": "grok-4.7",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/voxel-chinese-architecture/grok-4.7",
+      "sourceCommit": "2b4c47a144fa53126139fa7abdf71d709b841baf",
+      "sourceTree": "153426d2610abba2d00ddd694ef1e646f2a62191",
+      "archiveTag": "candidate/voxel-chinese-architecture/grok-4.7",
+      "destination": "tasks/voxel-chinese-architecture/solutions/grok-4.7",
+      "hasResults": true
+    },
+    {
+      "task": "voxel-chinese-architecture",
+      "id": "grok-bot",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/voxel-chinese-architecture/grok-bot",
+      "sourceCommit": "c8b00cd5fff1079beb54df945b8d91fbdd1117ce",
+      "sourceTree": "0b2bdfc1b08ae84c54f3aa5670b101e8d30f010a",
+      "archiveTag": "candidate/voxel-chinese-architecture/grok-bot",
+      "destination": "tasks/voxel-chinese-architecture/solutions/grok-bot",
+      "hasResults": true
+    },
+    {
+      "task": "voxel-chinese-architecture",
+      "id": "mimo-v2.6-flash",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/voxel-chinese-architecture/mimo-v2.6-flash",
+      "sourceCommit": "d669e6c018d172bcf0391ebb46170d5e2c5645d1",
+      "sourceTree": "3f07b00cabdd22563b609538a401bae6fb2936fb",
+      "archiveTag": "candidate/voxel-chinese-architecture/mimo-v2.6-flash",
+      "destination": "tasks/voxel-chinese-architecture/solutions/mimo-v2.6-flash",
+      "hasResults": true
+    },
+    {
+      "task": "voxel-chinese-architecture",
+      "id": "mimo-v2.6-pro",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/voxel-chinese-architecture/mimo-v2.6-pro",
+      "sourceCommit": "29b64063850ee0db0a355e194d315f4b84bd0535",
+      "sourceTree": "80bd12997c435a506b302316e8a0f0e4eb500fee",
+      "archiveTag": "candidate/voxel-chinese-architecture/mimo-v2.6-pro",
+      "destination": "tasks/voxel-chinese-architecture/solutions/mimo-v2.6-pro",
+      "hasResults": true
+    },
+    {
+      "task": "voxel-waterfall",
+      "id": "cursor-kimi-k3",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/voxel-waterfall/cursor-kimi-k3",
+      "sourceCommit": "b20ca12e6f7bc2ba42262c8473c2a48e736873c8",
+      "sourceTree": "8d6b9fa7dce2da7c1ae4ed4ee5d01adf00201ac5",
+      "archiveTag": "candidate/voxel-waterfall/cursor-kimi-k3",
+      "destination": "tasks/voxel-waterfall/solutions/cursor-kimi-k3",
+      "hasResults": false
+    },
+    {
+      "task": "voxel-waterfall",
+      "id": "deepseek-v4.1-flash",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/voxel-waterfall/deepseek-v4.1-flash",
+      "sourceCommit": "dc6dff1f498008969044c1d470dfe9cab95d1928",
+      "sourceTree": "e656c0f4bb6565eb803c2acfb53d815150b9a087",
+      "archiveTag": "candidate/voxel-waterfall/deepseek-v4.1-flash",
+      "destination": "tasks/voxel-waterfall/solutions/deepseek-v4.1-flash",
+      "hasResults": false
+    },
+    {
+      "task": "voxel-waterfall",
+      "id": "gemini-3.7-flash",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/voxel-waterfall/gemini-3.7-flash",
+      "sourceCommit": "3ed2640245f12e55d7a9e5f46c061a1255d29b05",
+      "sourceTree": "3296108ea7fbf96f182e6dffda4187c347d36186",
+      "archiveTag": "candidate/voxel-waterfall/gemini-3.7-flash",
+      "destination": "tasks/voxel-waterfall/solutions/gemini-3.7-flash",
+      "hasResults": false
+    },
+    {
+      "task": "voxel-waterfall",
+      "id": "gemini-3.8-flash",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/voxel-waterfall/gemini-3.8-flash",
+      "sourceCommit": "eb6c4d62790fd471dc5c693e28ea846b867c4356",
+      "sourceTree": "2e16bf4a7a213f914746e568f3149bd0597ca838",
+      "archiveTag": "candidate/voxel-waterfall/gemini-3.8-flash",
+      "destination": "tasks/voxel-waterfall/solutions/gemini-3.8-flash",
+      "hasResults": false
+    },
+    {
+      "task": "voxel-waterfall",
+      "id": "glm-5.3",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/voxel-waterfall/glm-5.3",
+      "sourceCommit": "9e1e83a5352194f9fe00a96169edbfb2776fe454",
+      "sourceTree": "bd6d2d56365212b0213fdc1844aff7fd32207df1",
+      "archiveTag": "candidate/voxel-waterfall/glm-5.3",
+      "destination": "tasks/voxel-waterfall/solutions/glm-5.3",
+      "hasResults": false
+    },
+    {
+      "task": "voxel-waterfall",
+      "id": "gpt-5.6-sol",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/voxel-waterfall/gpt-5.6-sol",
+      "sourceCommit": "8c4c2c22b28c7c1cc6ae513cd5519db6f170f2a3",
+      "sourceTree": "9a4c8165cc4db8482e4d68aec50c9a8950632749",
+      "archiveTag": "candidate/voxel-waterfall/gpt-5.6-sol",
+      "destination": "tasks/voxel-waterfall/solutions/gpt-5.6-sol",
+      "hasResults": false
+    },
+    {
+      "task": "voxel-waterfall",
+      "id": "gpt-6-sol",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/voxel-waterfall/gpt-6-sol",
+      "sourceCommit": "bd1d2df8fbda80a4273ecd5331fd3c32257b301e",
+      "sourceTree": "122db08906735e4d354b29e6a533d29ed69f4124",
+      "archiveTag": "candidate/voxel-waterfall/gpt-6-sol",
+      "destination": "tasks/voxel-waterfall/solutions/gpt-6-sol",
+      "hasResults": false
+    },
+    {
+      "task": "voxel-waterfall",
+      "id": "grok-4.6",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/voxel-waterfall/grok-4.6",
+      "sourceCommit": "828cfbd1badcc6dd2b0f0cbecd6684002ebfe8cb",
+      "sourceTree": "3f1c0153ebc903577fbf44a72e750db53b9aaf60",
+      "archiveTag": "candidate/voxel-waterfall/grok-4.6",
+      "destination": "tasks/voxel-waterfall/solutions/grok-4.6",
+      "hasResults": false
+    },
+    {
+      "task": "voxel-waterfall",
+      "id": "grok-4.6-high",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/voxel-waterfall/grok-4.6-high",
+      "sourceCommit": "b885efd553fbbde94afe8012498d4d5a61966980",
+      "sourceTree": "63bbd8f62016b6558f9759daaeb60cd5979f1623",
+      "archiveTag": "candidate/voxel-waterfall/grok-4.6-high",
+      "destination": "tasks/voxel-waterfall/solutions/grok-4.6-high",
+      "hasResults": false
+    },
+    {
+      "task": "voxel-waterfall",
+      "id": "grok-4.7",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/voxel-waterfall/grok-4.7",
+      "sourceCommit": "0c9e8efb25c0068cd18442e0e771f005155d3c0b",
+      "sourceTree": "833c2ef2e0a8b22faeb098a8fbec3f27cd359b1f",
+      "archiveTag": "candidate/voxel-waterfall/grok-4.7",
+      "destination": "tasks/voxel-waterfall/solutions/grok-4.7",
+      "hasResults": true
+    },
+    {
+      "task": "voxel-waterfall",
+      "id": "grok-bot",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/voxel-waterfall/grok-bot",
+      "sourceCommit": "2f5fea0f0cd3b6dfc6f2c445e92436d0f3cb8aff",
+      "sourceTree": "bfe8b5e4dacb576e73f5ee0dc7fc990251d01cc5",
+      "archiveTag": "candidate/voxel-waterfall/grok-bot",
+      "destination": "tasks/voxel-waterfall/solutions/grok-bot",
+      "hasResults": true
+    },
+    {
+      "task": "voxel-waterfall",
+      "id": "mimo-v2.6-flash",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/voxel-waterfall/mimo-v2.6-flash",
+      "sourceCommit": "724cee69c5a2aa6ff45065639fb62cf92b06f36f",
+      "sourceTree": "a2a78da812d0e20a86dcebf05b1b6bd94f14690f",
+      "archiveTag": "candidate/voxel-waterfall/mimo-v2.6-flash",
+      "destination": "tasks/voxel-waterfall/solutions/mimo-v2.6-flash",
+      "hasResults": false
+    },
+    {
+      "task": "voxel-waterfall",
+      "id": "minimax-m3",
+      "modelIdKnown": true,
+      "sourceRef": "origin/llm/voxel-waterfall/minimax-m3",
+      "sourceCommit": "0f5116c5fa8f620053929ee1e84b4d147eaa779c",
+      "sourceTree": "9fc5a4d615a74b33f4b8b9206cfa80b30409a709",
+      "archiveTag": "candidate/voxel-waterfall/minimax-m3",
+      "destination": "tasks/voxel-waterfall/solutions/minimax-m3",
+      "hasResults": false
+    },
+    {
+      "task": "voxel-waterfall",
+      "id": "space-bunny-free",
+      "modelIdKnown": true,
+      "sourceRef": "llm/voxel-waterfall/space-bunny-free",
+      "sourceCommit": "3516ff6d8a2aa87fea247ba113da52fefec46aa6",
+      "sourceTree": "d3f2621bf198840c953234dea0c053b91049db08",
+      "archiveTag": "candidate/voxel-waterfall/space-bunny-free",
+      "destination": "tasks/voxel-waterfall/solutions/space-bunny-free",
+      "hasResults": false
+    }
+  ],
+  "emptyRemoteBranches": [
+    {
+      "ref": "origin/llm/cs-pvp-diorama/opus-5.5",
+      "commit": "ee2c9f2cc8b9b410ebd55d1c195e96a9cdbd4ce3"
+    },
+    {
+      "ref": "origin/llm/gargantua-schwarzschild-raytracer/fable-5",
+      "commit": "830739e3c4aade4b7ee072c121860b7a9ee87b7e"
+    },
+    {
+      "ref": "origin/llm/gargantua-schwarzschild-raytracer/opus-5.5",
+      "commit": "ee2c9f2cc8b9b410ebd55d1c195e96a9cdbd4ce3"
+    },
+    {
+      "ref": "origin/llm/ui-ux-design/deepseek-v4-pro",
+      "commit": "5167a9d822a579eb0e7d84006d5524a41f1e54fb"
+    },
+    {
+      "ref": "origin/llm/ui-ux-design/glm-5.3-flash",
+      "commit": "5167a9d822a579eb0e7d84006d5524a41f1e54fb"
+    },
+    {
+      "ref": "origin/llm/ui-ux-design/opus-5.5",
+      "commit": "ee2c9f2cc8b9b410ebd55d1c195e96a9cdbd4ce3"
+    },
+    {
+      "ref": "origin/llm/voxel-chinese-architecture/claude-fable-5.1",
+      "commit": "92f242facd27735adbd92794a6fe88068f01f4d1"
+    },
+    {
+      "ref": "origin/llm/voxel-chinese-architecture/opus-5.5",
+      "commit": "ee2c9f2cc8b9b410ebd55d1c195e96a9cdbd4ce3"
+    },
+    {
+      "ref": "origin/llm/voxel-waterfall/opus-5.5",
+      "commit": "ee2c9f2cc8b9b410ebd55d1c195e96a9cdbd4ce3"
+    }
+  ],
+  "localBranchesWithoutSolution": [
+    {
+      "ref": "llm/cs-pvp-diorama/gemini-3.8-flash",
+      "commit": "ee2c9f2cc8b9b410ebd55d1c195e96a9cdbd4ce3"
+    },
+    {
+      "ref": "llm/cs-pvp-diorama/grok-4.7",
+      "commit": "ee2c9f2cc8b9b410ebd55d1c195e96a9cdbd4ce3"
+    },
+    {
+      "ref": "llm/cs-pvp-diorama/mimo-v2.6-pro",
+      "commit": "ee2c9f2cc8b9b410ebd55d1c195e96a9cdbd4ce3"
+    },
+    {
+      "ref": "llm/gargantua-schwarzschild-raytracer/space-bunny-free",
+      "commit": "48447fcd82c65abb929e051e61b94d6031aa81ba"
+    },
+    {
+      "ref": "llm/ui-ux-design/gpt-6-sol",
+      "commit": "ee2c9f2cc8b9b410ebd55d1c195e96a9cdbd4ce3"
+    },
+    {
+      "ref": "llm/ui-ux-design/grok-4.7",
+      "commit": "ee2c9f2cc8b9b410ebd55d1c195e96a9cdbd4ce3"
+    },
+    {
+      "ref": "llm/voxel-waterfall/mimo-v2.6-pro",
+      "commit": "ee2c9f2cc8b9b410ebd55d1c195e96a9cdbd4ce3"
+    }
+  ]
+}
