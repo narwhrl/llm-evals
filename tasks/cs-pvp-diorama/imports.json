@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "taskId": "cs-pvp-diorama",
+  "candidates": [
+    {
+      "candidateId": "claude-opus-5.5",
+      "model": "anthropic/claude-opus-5-5",
+      "baselineMain": "8409ab9ad67e2999707f475ee1e871ebe0f1c7b1",
+      "sourceRef": "local-clone:.runs/cs-pvp-diorama/claude-opus-5.5 (detached, remote removed)",
+      "sourceCommit": "82e6467492021c6a9cb57c4ab8751010d297b59e",
+      "sourceTree": "010ba7e14b9f04b8e87718959912f6572397208d",
+      "archiveTag": "candidate/cs-pvp-diorama/claude-opus-5.5",
+      "destination": "tasks/cs-pvp-diorama/solutions/claude-opus-5.5",
+      "resultReport": "tasks/cs-pvp-diorama/solutions/claude-opus-5.5/RESULTS.md"
+    }
+  ]
+}
