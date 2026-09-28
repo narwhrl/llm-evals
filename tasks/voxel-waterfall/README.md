@@ -5,7 +5,8 @@
 - Task ID: `voxel-waterfall`
 - Original shared baseline: `5945154ab7bd4a9e080f50f4efa4bbef472f7f4d`
 - Canonical candidate path: `tasks/voxel-waterfall/solution/`
-- Archive: Fourteen candidates on `llm/voxel-waterfall` at `tasks/voxel-waterfall/solutions/<candidate-id>/`. Original commits and source trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json).
+- Archive: Fifteen candidates on `llm/voxel-waterfall` at `tasks/voxel-waterfall/solutions/<candidate-id>/`. Original commits and source trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json).
+- Status: `glm-5.3-flash` was produced from the `8409ab9` baseline in an isolated clone and imported with a result report (RESULTS.md).
 
 | Retired branch | Model | Original candidate commit |
 | --- | --- | --- |

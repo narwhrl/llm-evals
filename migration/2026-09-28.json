@@ -662,6 +662,17 @@
       "archiveTag": "candidate/voxel-waterfall/space-bunny-free",
       "destination": "tasks/voxel-waterfall/solutions/space-bunny-free",
       "hasResults": false
+    },
+    {
+      "task": "voxel-waterfall",
+      "id": "glm-5.3-flash",
+      "modelIdKnown": true,
+      "sourceRef": "local-clone:.runs/voxel-waterfall/glm-5.3-flash (detached at 8409ab9ad67e2999707f475ee1e871ebe0f1c7b1, remote removed)",
+      "sourceCommit": "0beb2f1fc26b92c71a1e2d30493900bf454bd77c",
+      "sourceTree": "1eae374d3a68553d37f0c331a90b8bdb45105a7b",
+      "archiveTag": "candidate/voxel-waterfall/glm-5.3-flash",
+      "destination": "tasks/voxel-waterfall/solutions/glm-5.3-flash",
+      "hasResults": true
     }
   ],
   "emptyRemoteBranches": [

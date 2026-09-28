@@ -1,0 +1,208 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  font-size: 13px;
+  color: #e8eef7;
+  background: #101828;
+}
+
+.viewport {
+  position: fixed;
+  inset: 0;
+}
+
+.canvas-host {
+  position: absolute;
+  inset: 0;
+}
+
+.error-box {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #101828;
+  color: #ff9c8a;
+  padding: 24px;
+  text-align: center;
+}
+
+.panel {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 268px;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  background: rgba(13, 20, 34, 0.82);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 12px 14px;
+  user-select: none;
+}
+
+.panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.panel-head strong {
+  font-size: 14px;
+}
+
+.icon-btn {
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #e8eef7;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.26);
+}
+
+.panel section {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 8px 0;
+}
+
+.panel h3 {
+  font-size: 12px;
+  font-weight: 600;
+  color: #9db4d0;
+  margin-bottom: 6px;
+  letter-spacing: 0.05em;
+}
+
+.row {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.row-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3px;
+  color: #cdd9e8;
+}
+
+.row-label em {
+  font-style: normal;
+  color: #8fd0ff;
+}
+
+input[type='range'] {
+  width: 100%;
+  accent-color: #4da3ff;
+  height: 18px;
+}
+
+.chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  flex: 1;
+  min-width: 44px;
+  padding: 4px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #cdd9e8;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.chip:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.chip.active {
+  background: #2f7fd4;
+  border-color: #2f7fd4;
+  color: #fff;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  cursor: pointer;
+}
+
+.check input {
+  accent-color: #4da3ff;
+}
+
+.btn-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.btn-row button {
+  flex: 1;
+  padding: 6px 0;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #e8eef7;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.btn-row button:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.panel footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 8px;
+  color: #8ba0bb;
+  font-size: 11px;
+}
+
+.reopen {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(13, 20, 34, 0.82);
+  color: #e8eef7;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.hint {
+  position: absolute;
+  left: 16px;
+  bottom: 14px;
+  color: rgba(232, 238, 247, 0.55);
+  font-size: 12px;
+  pointer-events: none;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
