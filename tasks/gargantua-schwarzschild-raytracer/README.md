@@ -6,7 +6,7 @@
 - Canonical candidate path: `tasks/gargantua-schwarzschild-raytracer/solution/`
 - Candidate result report: `tasks/gargantua-schwarzschild-raytracer/solution/RESULTS.md`
 - Prompt: [`task.md`](task.md)
-- Status: Prepared on `main`; no evaluation round or candidate branch has started.
+- Status: Twelve candidates archived on `llm/gargantua-schwarzschild-raytracer` at `tasks/gargantua-schwarzschild-raytracer/solutions/<candidate-id>/`. Original commits and source trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json); `cursor-c343` has no confirmed model ID or result report.
 
 ## Shared Inputs
 
@@ -18,8 +18,8 @@ The candidate must use React/Vite and a locally vendored Three.js ESM build at t
 
 Before starting a round:
 
-1. Designate the current `main` commit as the shared baseline. Create every `llm/gargantua-schwarzschild-raytracer/<model-id>` worktree from that exact SHA and require the full SHA in every candidate's `RESULTS.md`.
-2. In each worktree, inspect `solution/` for the documented React/Vite source, lockfile, local `vendor/` contents, vendor provenance/licensing note, README, and result report. Verify that no candidate source is imported from another model branch.
+1. Designate the current `main` commit as the shared baseline. Create every isolated model clone from that exact SHA and require the full SHA in every candidate's `RESULTS.md`.
+2. In each clone, inspect `solution/` for the documented React/Vite source, lockfile, local `vendor/` contents, vendor provenance/licensing note, README, and result report. Verify that no candidate source is imported from another model's work.
 3. Install according to the candidate's documented command, run its documented production build, and serve the produced static files with its documented static-server command. Record exact commands, exit codes, package-install failures, network requests, browser console output, and asset-loading failures.
 4. Use a clean desktop browser profile at `1440 × 900` and a mobile profile at `390 × 844` with device scale factor `2`. Start at the base URL, wait for the documented ready condition, and confirm a stable full scene appears before any interaction.
 5. Inspect both source and runtime integrity. The visible main image must originate from the custom full-screen fragment shader; source must contain a numerical Schwarzschild null-geodesic integration path, event-horizon termination, curved-path disk intersections, and ordered multiple-crossing contribution logic. Reject a solution that replaces these with a black sphere, ordinary disk mesh, static image, video, screenshot, cubemap, panorama, remote asset, or one-pass flat-ring effect.
