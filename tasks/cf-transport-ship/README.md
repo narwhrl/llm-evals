@@ -6,13 +6,13 @@
 - Canonical candidate path: `tasks/cf-transport-ship/solution/`
 - Candidate result report: `tasks/cf-transport-ship/solution/RESULTS.md`
 - Prompt: [`task.md`](task.md)
-- Status: Prepared on `main`. Candidate implementations belong only on `llm/cf-transport-ship/<model-id>` branches.
+- Status: One candidate archived on `llm/cf-transport-ship` at `tasks/cf-transport-ship/solutions/<candidate-id>/`. Original commit and source tree are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json).
 
 ## Shared Inputs
 
 This task intentionally provides no starter project or fixed executable tests. Map construction, weapon feel, bot behavior, rendering, and asset strategy are part of the evaluated response. Every candidate must receive the same repository baseline, task prompt, tool permissions, runtime conditions, browser viewport, and review procedure.
 
-The deliverable must run locally in a browser and support a production build without services that require credentials. Runtime must not depend on remote art or audio. Candidate code and its result report belong under the canonical candidate path; model identity belongs only in the candidate branch and worktree path.
+The deliverable must run locally in a browser and support a production build without services that require credentials. Runtime must not depend on remote art or audio. Each model writes its code and result report under the canonical candidate path in its isolated clone; the curator archives the completed tree under that model's candidate ID.
 
 The map is a playable reconstruction of the publicly documented CrossFire team-deathmatch layout 「运输船」. Official game assets, trademarks, logos, character models, textures, audio, and extracted data are not allowed. Similarity is judged from spatial routes, sightlines, cover types, and the gunfight, not from copied art.
 
@@ -21,7 +21,7 @@ The map is a playable reconstruction of the publicly documented CrossFire team-d
 Before starting a round:
 
 1. Designate the current `main` commit as the shared baseline and record its full SHA in every candidate result report.
-2. Create each candidate branch and linked worktree from that exact SHA according to the repository workflow.
+2. Create each isolated model clone from that exact SHA according to the repository workflow.
 3. Evaluate every candidate in the same browser at a `1440 × 900` desktop viewport.
 4. Install, run the documented dev command, and play from a clean session. Confirm pointer lock, movement, crouch, jump, and collision against cabins, containers, crates, railings, stairs, and the under-deck passage.
 5. Stand in the defender doorway and confirm a clear eye-level sightline to the attacker doorway. Walk both side lanes and confirm a wooden crate blocks view while a rifle round still damages a target behind it. Enter the right-hand flank passage from spawn, reach the raised end, and confirm the overlook does not expose the enemy spawn interior.
