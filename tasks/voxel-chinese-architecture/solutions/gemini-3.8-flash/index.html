@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D 体素中国古典建筑群 - Voxel Chinese Architecture</title>
+  <link rel="stylesheet" href="./src/style.css" />
+</head>
+<body>
+  <div id="canvas-container"></div>
+
+  <!-- Top-Left Title HUD -->
+  <div class="hud-header">
+    <div class="hud-title">
+      <span>🏛️</span>
+      <span>紫禁禅韵 · 中国古典体素建筑群</span>
+    </div>
+    <div class="hud-subtitle">中轴对称 · 斗拱飞檐 · 歇山重檐 · 院落流转</div>
+    <div class="hud-stats" id="hud-stats">
+      <span>体素构建中...</span>
+    </div>
+  </div>
+
+  <!-- Bottom-Left Camera Preset Controls -->
+  <div class="hud-panel" id="view-controls">
+    <div class="panel-title">
+      <span>视角导览</span>
+      <button class="btn" id="btn-autorotate" style="padding: 2px 8px; font-size: 11px;">旋转: 开</button>
+    </div>
+    <div class="btn-group">
+      <button class="btn active" data-view="panorama">全景俯瞰</button>
+      <button class="btn" data-view="gate">山门迎客</button>
+      <button class="btn" data-view="courtyard">中庭御道</button>
+      <button class="btn" data-view="mainhall">大殿雄姿</button>
+      <button class="btn" data-view="pagoda">千佛宝塔</button>
+      <button class="btn" data-view="towers">钟鼓晨昏</button>
+    </div>
+  </div>
+
+  <!-- Top-Right Lighting Presets -->
+  <div class="hud-panel" id="light-controls">
+    <div class="panel-title">
+      <span>光影时序</span>
+    </div>
+    <div class="btn-group">
+      <button class="btn active" data-light="dawn">金辉晨曦</button>
+      <button class="btn" data-light="noon">午后晴明</button>
+      <button class="btn" data-light="dusk">落霞晚照</button>
+      <button class="btn" data-light="night">禅意月夜</button>
+    </div>
+  </div>
+
+  <!-- Bottom-Right Architectural Legend & Help -->
+  <div class="hud-panel" id="legend-panel">
+    <div class="panel-title">
+      <span>建筑群架构</span>
+    </div>
+    <div class="legend-list">
+      <div class="legend-item" data-focus="gate">
+        <div class="color-dot" style="background: #36454f;"></div>
+        <span>山门殿 (三解脱门)</span>
+      </div>
+      <div class="legend-item" data-focus="bell">
+        <div class="color-dot" style="background: #3d5447;"></div>
+        <span>东钟楼 (重檐攒尖)</span>
+      </div>
+      <div class="legend-item" data-focus="drum">
+        <div class="color-dot" style="background: #932720;"></div>
+        <span>西鼓楼 (重檐攒尖)</span>
+      </div>
+      <div class="legend-item" data-focus="courtyard">
+        <div class="color-dot" style="background: #e8e8df;"></div>
+        <span>放生池 · 拱桥 · 龙鼎</span>
+      </div>
+      <div class="legend-item" data-focus="westwing">
+        <div class="color-dot" style="background: #932720;"></div>
+        <span>西配殿 (药师殿)</span>
+      </div>
+      <div class="legend-item" data-focus="eastwing">
+        <div class="color-dot" style="background: #932720;"></div>
+        <span>东配殿 (弥陀殿)</span>
+      </div>
+      <div class="legend-item" data-focus="mainhall">
+        <div class="color-dot" style="background: #dca028;"></div>
+        <span>大雄宝殿 (重檐歇山)</span>
+      </div>
+      <div class="legend-item" data-focus="pagoda">
+        <div class="color-dot" style="background: #ffc400;"></div>
+        <span>千佛宝塔 (五层宝刹)</span>
+      </div>
+    </div>
+    <div class="hint-text">
+      🖱️ 左键旋转 · 右键平移 · 滚轮缩放<br/>
+      ✨ 纯原生 Three.js 构建 · InstancedMesh 极速渲染
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

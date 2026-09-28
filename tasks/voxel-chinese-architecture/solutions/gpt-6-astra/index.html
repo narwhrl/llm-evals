@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f3f1e9" />
+    <meta name="description" content="栖云古院：由体素搭建的中国古典建筑群。游览重檐主殿、东西配殿、山门与双塔，感受方寸间的东方营造。" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23a34836'/%3E%3Cpath d='M6 13h20M9 10h14M12 7h8M8 17h16v9H8zM14 18v8M19 18v8' stroke='%23fff1d3' fill='none' stroke-width='2'/%3E%3C/svg%3E" />
+    <title>栖云古院 · 方寸山河</title>
+  </head>
+  <body>
+    <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <symbol id="icon-orbit" viewBox="0 0 24 24"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z M4 7.5l8 4.5 8-4.5M12 12v9" /></symbol>
+      <symbol id="icon-front" viewBox="0 0 24 24"><path d="m3 9 9-6 9 6H3ZM5 10v10h14V10M9 20v-7h6v7M3 21h18" /></symbol>
+      <symbol id="icon-plan" viewBox="0 0 24 24"><path d="M4 4h16v16H4zM9 4v16M15 4v16M4 9h16M4 15h16" /></symbol>
+      <symbol id="icon-reset" viewBox="0 0 24 24"><path d="M4 10a8 8 0 1 1 1 7M4 4v6h6" /></symbol>
+      <symbol id="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"/></symbol>
+      <symbol id="icon-plus" viewBox="0 0 24 24"><path d="M5 12h14M12 5v14"/></symbol>
+      <symbol id="icon-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    </svg>
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="方寸山河，回到场景首页">
+        <span class="seal" aria-hidden="true">筑</span>
+        <span class="brand-text">方寸山河<small>VOXEL ATLAS</small></span>
+      </a>
+      <div class="collection"><span>数字营造手记</span><span class="divider">/</span><span>中国古典建筑</span></div>
+      <button class="light-control" id="light-toggle" type="button" aria-pressed="false" title="切换晨光与暮色">
+        <svg class="icon"><use href="#icon-sun" /></svg><span id="light-label">切换暮色</span>
+      </button>
+    </header>
+    <main>
+      <section class="scene-view" aria-labelledby="scene-title">
+        <div class="scene-heading">
+          <div class="eyebrow"><span class="red-line"></span>山水之间，营造之美</div>
+          <h1 id="scene-title">栖云古院<span class="title-stamp" aria-label="虚构场景">意境</span></h1>
+          <p>QIYUN COURTYARD <span>·</span> 一方体素，千年风骨</p>
+        </div>
+        <div class="scene-number" aria-hidden="true">NO. <strong>001</strong><span>东方营造系列</span></div>
+        <div id="canvas-host" aria-busy="true">
+          <div id="loading" role="status">正在搭建栖云古院…</div>
+        </div>
+        <p id="scene-description" class="sr-only">六座体素建筑构成中轴对称院落：前方为山门，石径穿过荷池和庭院，通往后方最大的重檐主殿；东西配殿相向而立，双塔位于后部两侧。青绿琉璃瓦配朱红柱墙、斗拱和白石台阶。聚焦画布后，方向键旋转，Shift 加方向键平移，加减键缩放，R 恢复全景。</p>
+        <div class="scene-caption"><span class="status-dot"></span><span id="scene-status" role="status">正在准备场景</span><span class="caption-divider">/</span><span>程序化体素构筑</span></div>
+        <div class="compass" aria-hidden="true"><span>北</span><svg viewBox="0 0 48 48"><path d="M24 7 32 33 24 28 16 33Z"/><path d="M24 7v21"/></svg><small>N</small></div>
+      </section>
+      <aside class="field-notes" aria-label="建筑与布局说明">
+        <div class="notes-heading"><span>院落图记</span><small>FIELD NOTES</small></div>
+        <div class="plan-wrap">
+          <svg class="site-plan" viewBox="0 0 200 210" role="img" aria-label="院落平面图：北侧双塔夹主殿，中部东西配殿，南侧山门，中轴石径连接各院落">
+            <path class="plan-wall" d="M20 181V22h160v159h-58m-44 0H20"/>
+            <path class="plan-path" d="M96 65h8v117h-8zM51 99h98v8H51z"/>
+            <path class="plan-axis" d="M100 8v191"/>
+            <g class="plan-buildings"><path d="M70 37h60v28H70zM33 31h23v23H33zM144 31h23v23h-23zM35 82h22v43H35zM143 82h22v43h-22zM80 172h40v19H80z"/></g>
+            <g class="plan-roofs"><path d="M75 42h50v18H75zM39 35h11v15H39zM150 35h11v15h-11zM40 87h12v33H40zM148 87h12v33h-12zM85 177h30v9H85z"/></g>
+            <path class="plan-pools" d="M65 138h19v19H65zM116 138h19v19h-19z"/>
+            <text x="100" y="54">主殿</text><text x="100" y="206">入院</text>
+            <path class="plan-entry" d="m96 196 4-4 4 4"/>
+          </svg>
+          <span class="plan-label">中轴为序 · 左右相生</span>
+        </div>
+        <ol class="building-list">
+          <li><span class="list-number">01</span><div><h2>栖云殿</h2><p>重檐庑殿 · 中轴主殿</p></div><span class="list-count">一座</span></li>
+          <li><span class="list-number">02</span><div><h2>听松堂 · 观澜堂</h2><p>飞檐相向 · 东西配殿</p></div><span class="list-count">两座</span></li>
+          <li><span class="list-number">03</span><div><h2>栖云门</h2><p>朱门迎客 · 入院之始</p></div><span class="list-count">一座</span></li>
+          <li><span class="list-number">04</span><div><h2>东西宝塔</h2><p>三层攒尖 · 双塔相望</p></div><span class="list-count">两座</span></li>
+        </ol>
+        <div class="materials"><span>营造色谱</span><div><span><i class="swatch jade"></i>琉璃</span><span><i class="swatch vermilion"></i>朱漆</span><span><i class="swatch stone"></i>白石</span></div></div>
+        <p class="notes-foot">以方块为材，写一座东方院落。<br />非实址复原，取意于中国古典营造。</p>
+      </aside>
+    </main>
+    <footer class="controls-bar">
+      <p class="interaction-hint"><span class="mouse-icon" aria-hidden="true"></span><span>拖动旋转<span class="hint-dot">·</span>滚轮缩放<span class="hint-dot">·</span>右键平移</span></p>
+      <div class="view-controls" role="group" aria-label="观察视角">
+        <button type="button" data-view="overview" aria-pressed="true"><svg class="icon"><use href="#icon-orbit"/></svg>鸟瞰</button>
+        <button type="button" data-view="axis" aria-pressed="false"><svg class="icon"><use href="#icon-front"/></svg>中轴</button>
+        <button type="button" data-view="plan" aria-pressed="false"><svg class="icon"><use href="#icon-plan"/></svg>俯视</button>
+      </div>
+      <div class="zoom-controls" role="group" aria-label="缩放与复位">
+        <button id="zoom-out" type="button" aria-label="缩小" title="缩小"><svg class="icon"><use href="#icon-minus"/></svg></button>
+        <span id="zoom-value" aria-label="缩放比例">100%</span>
+        <button id="zoom-in" type="button" aria-label="放大" title="放大"><svg class="icon"><use href="#icon-plus"/></svg></button>
+        <span class="control-divider"></span>
+        <button id="reset" type="button" aria-label="恢复初始全景" title="恢复初始全景（R）"><svg class="icon"><use href="#icon-reset"/></svg></button>
+      </div>
+    </footer>
+    <noscript><p class="noscript">此场景需要 JavaScript 和 WebGL 2。请启用 JavaScript 后刷新页面。</p></noscript>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
