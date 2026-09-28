@@ -6,20 +6,20 @@
 - Canonical candidate path: `tasks/cs-pvp-diorama/solution/`
 - Candidate result report: `tasks/cs-pvp-diorama/solution/RESULTS.md`
 - Prompt: [`task.md`](task.md)
-- Status: Prepared on `main`; no evaluation round or candidate branch has started.
+- Status: Eleven candidates archived on `llm/cs-pvp-diorama` at `tasks/cs-pvp-diorama/solutions/<candidate-id>/`. Original commits and source trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json).
 
 ## Shared Inputs
 
 This task intentionally provides no starter project or fixed executable tests. Rendering engine, web framework, asset strategy, scene architecture, and interaction implementation are part of the evaluated response. Every candidate must receive the same repository baseline, task prompt, tool permissions, runtime conditions, browser viewport, and review procedure.
 
-The deliverable must run locally in a browser and support a production build without services that require credentials. Candidate code and its result report belong under the canonical candidate path; model identity belongs only in the candidate branch and worktree path.
+The deliverable must run locally in a browser and support a production build without services that require credentials. Each model writes its code and result report under the canonical candidate path in its isolated clone; the curator archives the completed tree under that model's candidate ID.
 
 ## Evaluation Procedure
 
 Before starting a round:
 
 1. Designate the current `main` commit as the shared baseline and record its full SHA in every candidate result report.
-2. Create each candidate branch and linked worktree from that exact SHA according to the repository workflow.
+2. Create each isolated model clone from that exact SHA according to the repository workflow.
 3. Evaluate every candidate in the same browser/runtime at a `1440 × 900` desktop viewport.
 4. Load the scene from a clean browser session, wait for its documented initialization path, and inspect it from multiple orbit angles and zoom levels.
 5. Exercise pointer drag/orbit and zoom controls; confirm that interaction remains responsive and that no visible UI, people, or geometry outside the square base appears.
