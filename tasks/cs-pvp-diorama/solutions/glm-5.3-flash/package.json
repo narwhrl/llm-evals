@@ -1,0 +1,16 @@
+{
+  "name": "cs-pvp-diorama-glm-5.3-flash",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "CS PVP diorama candidate - rain-night defusal map miniature (glm-5.3-flash)",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "three": "0.186.1",
+    "vite": "8.3.1"
+  }
+}
