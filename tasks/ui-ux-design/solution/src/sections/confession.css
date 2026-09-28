@@ -1,0 +1,78 @@
+.confession {
+  padding-top: 72px;
+}
+
+.confession-callout {
+  margin: 0 0 28px;
+  font-size: 15px;
+}
+
+.confession-struck {
+  position: relative;
+  padding-right: 96px; /* 给竖排朱批留位 */
+}
+
+.confession-fake {
+  font-size: clamp(20px, 2.6vw, 26px);
+  line-height: 2.2;
+  margin: 0 0 8px;
+  color: var(--ink);
+}
+
+.strike-clause {
+  position: relative;
+  white-space: nowrap;
+}
+.strike-clause.is-struck {
+  color: var(--pencil);
+}
+
+.confession-notes {
+  position: absolute;
+  top: -6px;
+  right: 34px;
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 14px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.confession-notes.show {
+  opacity: 1;
+}
+.confession-notes .zhu-note {
+  max-height: 150px;
+}
+
+.confession-honest {
+  margin-top: 44px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.confession-honest.show {
+  opacity: 1;
+  transform: none;
+}
+.confession-honest p {
+  margin: 0 0 6px;
+  color: var(--ink);
+}
+
+@media (max-width: 720px) {
+  .confession-struck {
+    padding-right: 0;
+  }
+  .confession-notes {
+    position: static;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 10px;
+  }
+  .confession-notes .zhu-note {
+    max-height: none;
+  }
+  .strike-clause {
+    white-space: normal;
+  }
+}

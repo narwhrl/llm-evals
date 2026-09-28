@@ -1,0 +1,326 @@
+/* 《未定稿》— 纸面语言设计令牌
+   暖纸 / 墨 / 朱砂 / 石墨。衬线是"定稿之声"，等宽是"工作之声"。 */
+
+:root {
+  --paper: #f4efe4;
+  --paper-deep: #ebe4d2;
+  --paper-lift: #f9f5ec;
+  --ink: #262016;
+  --graphite: #6b6153;
+  --pencil: #a89c85;
+  --grid-line: rgba(107, 97, 83, 0.16);
+  --vermilion: #b3402a;
+  --vermilion-ink: #8f3221;
+  --vermilion-wash: rgba(179, 64, 42, 0.12);
+
+  --font-settled: "Songti SC", "STSong", "Noto Serif CJK SC", "Source Han Serif SC",
+    "SimSun", Georgia, serif;
+  --font-kai: "Kaiti SC", "STKaiti", "KaiTi", "楷体", "Songti SC", serif;
+  --font-work: ui-monospace, "SF Mono", Consolas, "Liberation Mono", "Courier New",
+    monospace;
+
+  --cell: clamp(26px, 4.2vw, 34px);
+  --col: min(92vw, 880px);
+  --rule-gap: 18px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--paper);
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-settled);
+  font-size: 17px;
+  line-height: 2;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--vermilion-wash);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--vermilion);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -60px;
+  z-index: 60;
+  padding: 8px 14px;
+  background: var(--paper-lift);
+  border: 1px solid var(--ink);
+  font-family: var(--font-work);
+  font-size: 13px;
+  transition: top 0.15s ease;
+}
+.skip-link:focus-visible {
+  top: 12px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- 页面骨架：一根贯穿全篇的朱丝栏 ---- */
+
+.page-root {
+  position: relative;
+  min-height: 100vh;
+}
+
+.margin-rule {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(50% + var(--col) / 2 + var(--rule-gap));
+  width: 1.5px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--vermilion) 6%,
+    var(--vermilion) 94%,
+    transparent
+  );
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.rule-marker {
+  position: absolute;
+  top: -14px;
+  font-family: var(--font-kai);
+  font-size: 15px;
+  color: var(--vermilion);
+  background: var(--paper);
+  padding: 2px 3px;
+  line-height: 1.3;
+}
+
+/* ---- 稿纸格子 ---- */
+
+.ms-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.ms-cell {
+  width: var(--cell);
+  height: var(--cell);
+  border-right: 1px solid var(--grid-line);
+  border-bottom: 1px solid var(--grid-line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex: none;
+}
+
+.ms-char {
+  font-size: calc(var(--cell) * 0.62);
+  line-height: 1;
+  font-family: var(--font-work);
+  color: var(--graphite);
+  user-select: none;
+}
+
+.ms-char.is-ink {
+  font-family: var(--font-settled);
+  color: var(--ink);
+}
+
+.ms-char.is-pencil {
+  color: var(--pencil);
+}
+
+/* 划痕：朱笔横线 */
+.strike-line {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  background: var(--vermilion);
+  transform: scaleX(0);
+  transform-origin: left center;
+  border-radius: 1px;
+  pointer-events: none;
+}
+.strike-line.is-drawn {
+  transform: scaleX(1);
+  transition: transform 0.28s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+/* 圈点：定稿标记（格角朱点） */
+.settle-dot {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--vermilion);
+  opacity: 0.8;
+}
+
+/* ---- 通用章法 ---- */
+
+.chapter {
+  position: relative;
+  width: var(--col);
+  margin: 0 auto;
+  padding: 96px 0;
+}
+
+.chapter-head {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 40px;
+}
+
+.chapter-no {
+  font-family: var(--font-work);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  color: var(--vermilion);
+  flex: none;
+}
+
+.chapter-title {
+  font-family: var(--font-settled);
+  font-size: clamp(24px, 3.4vw, 32px);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.chapter-lede {
+  color: var(--graphite);
+  max-width: 34em;
+  margin: 0 0 36px;
+}
+
+.work-note {
+  font-family: var(--font-work);
+  font-size: 13px;
+  color: var(--graphite);
+  line-height: 1.9;
+}
+
+.pencil-note {
+  font-family: var(--font-kai);
+  color: var(--pencil);
+  font-size: 14px;
+}
+
+/* 朱批（竖排批注） */
+.zhu-note {
+  writing-mode: vertical-rl;
+  font-family: var(--font-kai);
+  font-size: 14px;
+  line-height: 1.1;
+  color: var(--vermilion);
+  letter-spacing: 0.08em;
+}
+
+/* 按钮基形 */
+.brush-btn {
+  font-family: var(--font-settled);
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  padding: 10px 22px;
+  border: 1.5px solid var(--ink);
+  border-radius: 2px;
+  background: var(--paper-lift);
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.brush-btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.brush-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.brush-btn:disabled:hover {
+  background: var(--paper-lift);
+  color: var(--ink);
+}
+
+@media (max-width: 720px) {
+  :root {
+    --rule-gap: 10px;
+  }
+  body {
+    font-size: 16px;
+  }
+  .chapter {
+    padding: 64px 0;
+  }
+  .margin-rule {
+    left: auto;
+    right: 6px;
+  }
+  .zhu-note {
+    writing-mode: horizontal-tb;
+  }
+}
+
+/* 卷尾 */
+.colophon {
+  text-align: center;
+  padding: 56px 20px 84px;
+  color: var(--graphite);
+}
+.colophon p {
+  margin: 0;
+  line-height: 2.2;
+}
+
+/* 减少动效：全局收束为瞬时状态 */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

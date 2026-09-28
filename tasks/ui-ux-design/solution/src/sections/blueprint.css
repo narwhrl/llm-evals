@@ -1,0 +1,98 @@
+.blueprint-toggle {
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  z-index: 70;
+  color: var(--pencil);
+  border: 1px dashed var(--pencil);
+  padding: 6px 12px;
+  background: rgba(244, 239, 228, 0.9);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+.blueprint-toggle:hover,
+.blueprint-toggle[aria-pressed='true'] {
+  color: var(--vermilion);
+  border-color: var(--vermilion);
+}
+
+.blueprint {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+}
+
+.blueprint-lines {
+  position: absolute;
+  inset: 0;
+}
+.bp-h {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed rgba(107, 97, 83, 0.4);
+}
+.bp-v {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-left: 1px dashed rgba(107, 97, 83, 0.4);
+}
+.bp-label {
+  position: absolute;
+  left: 16px;
+  font-family: var(--font-work);
+  font-size: 12px;
+  color: var(--graphite);
+  background: var(--paper-lift);
+  border: 1px solid var(--grid-line);
+  padding: 4px 10px;
+  max-width: 88%;
+}
+
+.blueprint-panel {
+  position: absolute;
+  right: 14px;
+  bottom: 58px;
+  width: min(400px, 92vw);
+  max-height: 62vh;
+  overflow: auto;
+  background: var(--paper-lift);
+  border: 1px solid var(--graphite);
+  padding: 18px 20px;
+  pointer-events: auto;
+  box-shadow: 0 6px 24px rgba(38, 32, 22, 0.12);
+}
+.blueprint-title {
+  font-family: var(--font-work);
+  font-size: 13px;
+  color: var(--vermilion);
+  margin: 0 0 12px;
+  letter-spacing: 0.1em;
+}
+.blueprint-item {
+  position: relative;
+  font-family: var(--font-work);
+  font-size: 12.5px;
+  line-height: 1.9;
+  color: var(--graphite);
+  margin: 0 0 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 6px;
+}
+.blueprint-from {
+  color: var(--pencil);
+  position: relative;
+}
+.blueprint-strike {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 55%;
+  border-top: 1.5px solid var(--vermilion);
+}
+.blueprint-to {
+  color: var(--ink);
+}

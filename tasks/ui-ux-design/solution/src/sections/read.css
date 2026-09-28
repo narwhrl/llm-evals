@@ -1,0 +1,52 @@
+.read-chapter {
+  position: relative;
+  height: 280vh;
+}
+
+.read-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.read-grid {
+  border-left: 1px solid var(--grid-line);
+  border-top: 1px solid var(--grid-line);
+}
+
+.read-cell.is-read {
+  background: rgba(255, 252, 242, 0.6);
+}
+
+.read-caret {
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: 3px;
+  height: 2px;
+  background: var(--vermilion);
+  animation: caret-blink 1.1s steps(2) infinite;
+}
+@keyframes caret-blink {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.read-progress {
+  margin-top: 22px;
+  color: var(--graphite);
+}
+
+.chapter-head .rule-marker {
+  right: calc(-1 * var(--rule-gap) - 4px);
+  transform: translateX(50%);
+}
+@media (max-width: 720px) {
+  .chapter-head .rule-marker {
+    right: -10px;
+  }
+}

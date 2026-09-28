@@ -1,0 +1,133 @@
+.machine {
+  font-family: var(--font-work);
+  font-size: 14.5px;
+  line-height: 2.1;
+  background: var(--paper-lift);
+  border: 1px solid var(--grid-line);
+  padding: 26px 28px;
+  position: relative;
+}
+
+.machine-line {
+  position: relative;
+  white-space: pre-wrap;
+  color: var(--graphite);
+}
+.machine-line:first-child {
+  color: var(--ink);
+}
+.machine-line.is-struck {
+  color: var(--pencil);
+}
+
+.machine-error {
+  margin-top: 14px;
+  margin-right: -34px; /* 破格：错误伸出稿纸栏，像真的审到栏外 */
+  padding: 12px 16px;
+  border-left: 3px solid var(--vermilion);
+  background: var(--vermilion-wash);
+  color: var(--vermilion-ink);
+  animation: err-in 0.3s ease-out;
+}
+@keyframes err-in {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.machine-error-sub {
+  color: var(--graphite);
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+.machine-choices {
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.machine-choice {
+  text-align: left;
+  border: 1.5px solid var(--grid-line);
+  background: var(--paper);
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.machine-choice:hover {
+  border-color: var(--vermilion);
+  background: var(--paper-lift);
+}
+.machine-choice[aria-pressed='true'] {
+  border-color: var(--vermilion);
+  box-shadow: inset 0 0 0 1px var(--vermilion);
+}
+.machine-choice-label {
+  font-family: var(--font-settled);
+  font-size: 15px;
+  color: var(--ink);
+}
+.machine-choice-label::before {
+  content: '朱 ';
+  color: var(--vermilion);
+}
+.machine-choice-hint {
+  font-size: 13px;
+  color: var(--graphite);
+}
+
+.machine-fix {
+  color: var(--ink);
+}
+.machine-fix.is-shame {
+  color: var(--vermilion-ink);
+}
+.machine-run {
+  color: var(--ink);
+}
+.machine-aside {
+  color: var(--pencil);
+  font-family: var(--font-kai);
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.type-caret {
+  display: inline-block;
+  width: 0.55em;
+  height: 1em;
+  background: var(--vermilion);
+  vertical-align: -0.12em;
+  margin-left: 2px;
+  animation: caret-blink 1s steps(2) infinite;
+}
+
+.machine-foot {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.machine-record {
+  font-size: 12.5px;
+  color: var(--vermilion-ink);
+}
+
+@media (max-width: 720px) {
+  .machine {
+    padding: 18px 16px;
+    font-size: 13.5px;
+  }
+  .machine-error {
+    margin-right: 0;
+  }
+}
