@@ -38,6 +38,17 @@
     },
     {
       "task": "cs-pvp-diorama",
+      "id": "glm-5.3-flash",
+      "modelIdKnown": true,
+      "sourceRef": "local-clone:.runs/cs-pvp-diorama/glm-5.3-flash (detached at 8409ab9ad67e2999707f475ee1e871ebe0f1c7b1, remote removed)",
+      "sourceCommit": "9c9d5278dc7518b172710fdc7580d4792d1683a1",
+      "sourceTree": "d9bfa7199bdaedf59fe42414807ef688432323b3",
+      "archiveTag": "candidate/cs-pvp-diorama/glm-5.3-flash",
+      "destination": "tasks/cs-pvp-diorama/solutions/glm-5.3-flash",
+      "hasResults": true
+    },
+    {
+      "task": "cs-pvp-diorama",
       "id": "gpt-5.6-sol",
       "modelIdKnown": true,
       "sourceRef": "origin/llm/cs-pvp-diorama/gpt-5.6-sol",
