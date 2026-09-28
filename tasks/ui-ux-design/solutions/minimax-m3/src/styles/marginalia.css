@@ -1,0 +1,54 @@
+/* ========================================================================
+   Marginalia — handwritten-style annotations attached to paragraphs.
+   ======================================================================== */
+
+.marginalia {
+  font-family: var(--font-serif-en);
+  font-style: italic;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--ink-rin);
+  letter-spacing: 0.01em;
+  opacity: 0;
+  transform: scale(0.94);
+  transform-origin: left top;
+  transition:
+    opacity 600ms var(--ease-ink),
+    transform 600ms var(--ease-ink);
+  pointer-events: none;
+  position: relative;
+}
+
+.marginalia.is-bloomed {
+  opacity: 1;
+  transform: none;
+}
+
+.marginalia--right {
+  margin-top: 0.6em;
+  padding-left: 1em;
+  border-left: 1px solid color-mix(in srgb, var(--ink-rin) 40%, transparent);
+  max-width: 28ch;
+}
+
+.marginalia--below {
+  display: block;
+  margin: 0.2em 0 1.4em 2em;
+  font-size: 0.78rem;
+  color: color-mix(in srgb, var(--ink-rin) 80%, transparent);
+  /* Handwriting feel via slight skew */
+  transform-origin: left center;
+}
+
+.marginalia--below.is-bloomed {
+  transform: none;
+}
+
+/* Mobile: marginalia collapses into a small printed annotation beneath the paragraph */
+@media (max-width: 720px) {
+  .marginalia {
+    margin: 0.2em 0 1em 1em;
+    padding-left: 0.8em;
+    border-left-width: 1px;
+  }
+}

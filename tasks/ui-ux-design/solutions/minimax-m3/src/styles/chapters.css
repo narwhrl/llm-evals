@@ -1,0 +1,296 @@
+/* ========================================================================
+   Manuscript chapters — three-column page: [river] [body] [margin].
+   ======================================================================== */
+
+.page {
+  position: relative;
+  padding-left: 0;
+}
+
+.manuscript {
+  position: relative;
+  z-index: 1;
+  padding-left: clamp(110px, 14vw, 180px);
+  padding-right: clamp(24px, 5vw, 80px);
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.chapter {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  /* Each chapter occupies a tall slot so the river has room to flow. */
+  min-height: 100vh;
+  padding: 12vh 0 14vh;
+  scroll-margin-top: 12vh;
+}
+
+.chapter__inner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.chapter__head {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: baseline;
+  gap: 1.2rem 1.6rem;
+  margin-bottom: 3rem;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 700ms var(--ease-ink), transform 700ms var(--ease-ink);
+}
+.chapter__head.is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+.chapter__numeral {
+  font-family: var(--font-stamp);
+  font-size: var(--type-h2);
+  color: var(--ink-aku);
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  display: inline-block;
+  padding: 0.2em 0.4em;
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+  transform: rotate(-3deg);
+  background: color-mix(in srgb, var(--ink-aku) 8%, transparent);
+}
+
+.chapter__title-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+}
+
+.chapter__title {
+  font-family: var(--font-serif-cn);
+  font-weight: 700;
+  font-size: var(--type-h1);
+  line-height: 1.05;
+  letter-spacing: 0.05em;
+  margin: 0;
+  color: var(--ink-sum);
+}
+
+.chapter__subtitle {
+  font-family: var(--font-serif-en);
+  font-style: italic;
+  font-size: 0.92rem;
+  color: color-mix(in srgb, var(--ink-rin) 80%, var(--ink-sum));
+  letter-spacing: 0.02em;
+}
+
+.chapter__rule {
+  width: 6.5rem;
+  height: 1px;
+  background: var(--ink-sum);
+  opacity: 0.45;
+  align-self: center;
+  justify-self: end;
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 900ms var(--ease-ink) 240ms;
+}
+.chapter__head.is-revealed .chapter__rule {
+  transform: scaleX(1);
+}
+
+/* Three-column grid: body + margin. River is fixed-position, lives to the left. */
+.chapter__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 14rem);
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: stretch;
+  flex: 1;
+}
+
+.chapter__body {
+  position: relative;
+  max-width: 58ch;
+}
+
+.chapter__paragraph {
+  font-family: var(--font-serif-cn);
+  font-size: 1.18rem;
+  line-height: 1.85;
+  margin: 0 0 1.1em 0;
+  letter-spacing: 0.02em;
+  text-indent: 2em;
+  color: var(--ink-sum);
+  opacity: 0;
+  /* Clip-path reveal: top-down like ink filling a column */
+  clip-path: inset(0 0 100% 0);
+  transition:
+    opacity 600ms var(--ease-ink),
+    clip-path 900ms var(--ease-ink);
+  position: relative;
+}
+.chapter__paragraph.is-revealed {
+  opacity: 1;
+  clip-path: inset(0 0 0 0);
+}
+.chapter__paragraph::first-letter {
+  font-family: var(--font-serif-cn);
+  font-weight: 700;
+  color: var(--ink-aku);
+}
+
+/* Right-margin column: holds marginalia (right) and seals. Fills the chapter. */
+.chapter__margin {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  padding-top: 1rem;
+  border-left: 1px solid color-mix(in srgb, var(--ink-sum) 12%, transparent);
+  padding-left: 1.4rem;
+  position: relative;
+}
+
+.chapter__seat {
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* Per-chapter visual variation. Each chapter gets ONE restrained accent. */
+.chapter--xu .chapter__paragraph::first-letter {
+  font-size: 1.4em;
+}
+.chapter--zhu .chapter__paragraph {
+  text-indent: 2.4em;
+}
+.chapter--gai .chapter__numeral {
+  position: relative;
+}
+.chapter--gai .chapter__numeral::after {
+  content: '改';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.62em;
+  color: var(--ink-rin);
+  transform: translate(2px, 2px) rotate(2deg);
+  mix-blend-mode: multiply;
+  opacity: 0.7;
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+}
+/* 改 chapter — the river visibly KNOTS. Add a horizontal indigo slash through the chapter */
+.chapter--gai .chapter__body::before {
+  content: '';
+  position: absolute;
+  left: -1.2rem;
+  right: -0.6rem;
+  top: 58%;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    var(--ink-rin) 20%,
+    var(--ink-rin) 80%,
+    transparent 100%
+  );
+  opacity: 0.42;
+  pointer-events: none;
+}
+.chapter--fu .chapter__paragraph {
+  color: color-mix(in srgb, var(--ink-sum) 88%, transparent);
+}
+.chapter--ba .chapter__paragraph::first-letter {
+  font-size: 1.6em;
+  color: var(--ink-aku);
+}
+
+/* Colophon */
+.colophon {
+  display: flex;
+  gap: 1.6rem;
+  align-items: center;
+  padding: 4vh 0 18vh;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1200ms var(--ease-ink), transform 1200ms var(--ease-ink);
+}
+.colophon.is-visible {
+  opacity: 1;
+  transform: none;
+}
+.colophon__seal {
+  flex: 0 0 auto;
+}
+.colophon__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+  font-family: var(--font-serif-cn);
+  font-size: 1.05rem;
+}
+.colophon__date {
+  font-family: var(--font-serif-en);
+  font-style: italic;
+  color: var(--ink-och);
+  letter-spacing: 0.08em;
+}
+.colophon__line {
+  color: var(--ink-sum);
+}
+.colophon__sign {
+  font-family: var(--font-serif-en);
+  font-style: italic;
+  color: color-mix(in srgb, var(--ink-sum) 60%, transparent);
+  font-size: 0.92rem;
+}
+
+/* Mobile — single column, marginalia inline, seals in flow */
+@media (max-width: 720px) {
+  .manuscript {
+    padding-left: clamp(72px, 18vw, 100px);
+    padding-right: 18px;
+  }
+  .chapter {
+    padding: 6vh 0 6vh;
+    min-height: auto;
+  }
+  .chapter__head {
+    grid-template-columns: auto 1fr;
+    gap: 0.8rem 1rem;
+  }
+  .chapter__rule {
+    display: none;
+  }
+  .chapter__numeral {
+    font-size: 1.1rem;
+  }
+  .chapter__title {
+    font-size: clamp(1.6rem, 6vw, 2.1rem);
+  }
+  .chapter__grid {
+    grid-template-columns: 1fr;
+    gap: 1.4rem;
+  }
+  .chapter__margin {
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-left: none;
+    border-top: 1px solid color-mix(in srgb, var(--ink-sum) 12%, transparent);
+    padding-left: 0;
+    padding-top: 0.8rem;
+  }
+  .chapter__seat {
+    flex: 0 0 auto;
+  }
+  .chapter__paragraph {
+    font-size: 1.04rem;
+    line-height: 1.75;
+    text-indent: 1.5em;
+  }
+  .chapter--gai .chapter__body::before {
+    display: none;
+  }
+}

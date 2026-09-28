@@ -1,0 +1,25 @@
+:root {
+  /* 纸与墨：暖纸、墨黑、朱红（只用于判断）、铅蓝（我的犹豫） */
+  --paper: #f3efe4;
+  --paper-deep: #eae4d3;
+  --paper-edge: #dcd4bf;
+  --ink: #211d17;
+  --ink-soft: #5b544a;
+  --ink-faint: #9b9284;
+  --vermilion: #c22e28;
+  --vermilion-deep: #9c211d;
+  --pencil-blue: #4a5f7a;
+  --pencil-blue-faint: #8fa0b5;
+
+  --font-serif: 'Noto Serif SC', 'Songti SC', 'Noto Serif CJK SC', 'Source Han Serif SC',
+    'SimSun', serif;
+  --font-mono: 'Cascadia Mono', 'Consolas', ui-monospace, 'Courier New', monospace;
+
+  --measure: 34rem;
+  --stage-pad: clamp(1.25rem, 4vw, 4rem);
+
+  /* 运动：先重量，后缓动 */
+  --ease-press: cubic-bezier(0.2, 1.35, 0.35, 1);
+  --ease-throw: cubic-bezier(0.35, 0, 0.25, 1);
+  --ease-slam: cubic-bezier(0.85, 0, 0.15, 1);
+}
