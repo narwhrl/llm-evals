@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>运输船 · 团队竞技</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23143a5c'/%3E%3Cpath d='M6 18h20l-3 7H9z' fill='%23c8b273'/%3E%3Cpath d='M16 6v10M12 10l4-4 4 4' stroke='%23fff' stroke-width='2' fill='none'/%3E%3C/svg%3E" />
+</head>
+<body>
+  <div id="app">
+    <canvas id="gl"></canvas>
+    <div id="hud" class="hidden">
+      <div id="crosshair"><span class="ch t"></span><span class="ch b"></span><span class="ch l"></span><span class="ch r"></span><span class="ch dot"></span></div>
+      <div id="hitmarker"></div>
+      <div id="topbar">
+        <div id="score-blue">0</div>
+        <div id="match-mid"><div id="match-time">10:00</div><div id="match-goal">目标 100</div></div>
+        <div id="score-red">0</div>
+      </div>
+      <div id="killfeed"></div>
+      <div id="minimap-wrap"><canvas id="minimap" width="220" height="260"></canvas><div id="minimap-label">运输船</div></div>
+      <div id="status-left">
+        <div id="hp-bar"><div id="hp-fill"></div><span id="hp-num">100</span></div>
+        <div id="armor-bar"><div id="armor-fill"></div><span id="armor-num">100</span></div>
+        <div id="state-icons"><span id="icon-protect" title="出生保护">🛡</span><span id="icon-crouch" title="蹲伏">⤓</span><span id="icon-silent" title="静步">🔇</span></div>
+      </div>
+      <div id="status-right">
+        <div id="weapon-name">AR-47</div>
+        <div id="ammo"><span id="ammo-mag">30</span><span id="ammo-sep">/</span><span id="ammo-reserve">90</span></div>
+        <div id="nade-pips"><span class="pip pip-he" title="高爆手雷">◆</span><span class="pip pip-smoke" title="烟雾弹">◇</span></div>
+        <div id="slot-pips"><span data-slot="0">1</span><span data-slot="1">2</span><span data-slot="2">3</span><span data-slot="3">4</span></div>
+      </div>
+      <div id="dmg-overlay"></div>
+      <div id="prot-overlay"></div>
+      <div id="center-msg"></div>
+      <div id="scoreboard" class="hidden"></div>
+    </div>
+    <div id="menu">
+      <div class="menu-panes">
+        <div class="menu-left">
+          <h1>运输船</h1>
+          <p class="sub">经典团队竞技 · 5 vs 5 · 本地对战</p>
+          <div class="menu-section" id="sec-team">
+            <h3>选择阵营</h3>
+            <div class="team-row">
+              <button class="team-btn selected" data-team="blue"><b>保卫者</b><i>船首 · 蓝色系</i></button>
+              <button class="team-btn" data-team="red"><b>潜伏者</b><i>船尾 · 暗色系</i></button>
+            </div>
+          </div>
+          <div class="menu-section" id="sec-weapon">
+            <h3>主武器</h3>
+            <div id="weapon-list"></div>
+          </div>
+          <div class="menu-section" id="sec-diff">
+            <h3>电脑难度</h3>
+            <div class="diff-row">
+              <button class="diff-btn" data-diff="easy">简单</button>
+              <button class="diff-btn selected" data-diff="normal">普通</button>
+              <button class="diff-btn" data-diff="hard">困难</button>
+            </div>
+          </div>
+          <div class="menu-section" id="sec-mode">
+            <h3>对局时长</h3>
+            <div class="diff-row">
+              <button class="mode-btn selected" data-mode="official">正式局（100 杀 / 10 分钟）</button>
+              <button class="mode-btn" data-mode="practice">练习局（25 杀 / 3 分钟）</button>
+            </div>
+          </div>
+        </div>
+        <div class="menu-right">
+          <div id="weapon-detail"></div>
+          <button id="btn-start">开始游戏</button>
+          <button id="btn-settings" class="ghost">设置</button>
+          <p class="hint">进入游戏后点击画面锁定鼠标 · ESC 暂停</p>
+          <p class="hint keys">WASD 移动 · Shift 静步 · C 蹲 · 空格跳 · R 换弹 · G 快速投掷 · Tab 战绩</p>
+        </div>
+      </div>
+    </div>
+    <div id="pause" class="overlay hidden">
+      <h2>已暂停</h2>
+      <button id="btn-resume">继续游戏</button>
+      <button id="btn-pause-settings" class="ghost">设置</button>
+      <button id="btn-quit" class="ghost">返回菜单</button>
+    </div>
+    <div id="death" class="overlay hidden">
+      <h2>你已阵亡</h2>
+      <p id="death-info"></p>
+      <div id="respawn-count">3</div>
+    </div>
+    <div id="end" class="overlay hidden">
+      <h2 id="end-title">胜利</h2>
+      <div id="end-score"></div>
+      <div id="end-board"></div>
+      <button id="btn-again">再来一局</button>
+      <button id="btn-menu" class="ghost">返回菜单</button>
+    </div>
+    <div id="settings" class="overlay hidden">
+      <h2>设置</h2>
+      <div class="settings-grid" id="settings-grid"></div>
+      <button id="btn-settings-close">关闭</button>
+    </div>
+    <div id="loading"><div class="load-box"><h2>运输船</h2><div id="load-bar"><div id="load-fill"></div></div><p id="load-step">准备资源…</p></div></div>
+    <div id="webgl-error" class="overlay hidden"><h2>无法启动 WebGL</h2><p>当前浏览器或驱动不支持 WebGL，游戏需要硬件加速的 WebGL 才能运行。</p></div>
+    <div id="dev-panel" class="hidden"></div>
+  </div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
