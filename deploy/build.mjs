@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// 把 origin 上每个 llm/* 分支的 tasks/<task-id>/solution/ 构建到 deploy/public/<task-id>/<model-id>/，
+// 把 origin 上每个 llm/<task-id> 分支的 solutions/<candidate-id>/ 构建到 deploy/public/<task-id>/<candidate-id>/，
 // 供单个 Worker 以路径前缀方式托管。用法：
 //   node deploy/build.mjs                 # 构建全部
 //   node deploy/build.mjs ui-ux-design/kimi-k3 [其他 task/model ...]   # 只构建指定候选
@@ -37,23 +37,28 @@ function discoverTargets(filter) {
   const targets = [];
   const skipped = [];
   for (const ref of refs) {
-    const rest = ref.replace("refs/remotes/origin/llm/", "");
-    const slash = rest.indexOf("/");
-    if (slash < 0) continue;
-    const task = rest.slice(0, slash);
-    const model = rest.slice(slash + 1);
-    if (filter.length && !filter.includes(`${task}/${model}`)) continue;
-
-    const probe = spawnSync(`git cat-file -e ${ref}:tasks/${task}/solution/package.json`, {
+    const task = ref.replace("refs/remotes/origin/llm/", "");
+    if (!/^[a-z0-9][a-z0-9-]*$/.test(task)) continue;
+    const tree = `tasks/${task}/solutions`;
+    const probe = spawnSync("git", ["rev-parse", "--verify", `${ref}:${tree}`], {
       cwd: REPO_ROOT,
-      shell: true,
       stdio: "ignore",
     });
-    if (probe.status !== 0) {
-      skipped.push(`${task}/${model}`);
-      continue;
+    if (probe.status !== 0) continue;
+    const models = run(`git ls-tree -d --name-only ${ref}:${tree}`, REPO_ROOT, true).trim().split("\n").filter(Boolean);
+    for (const model of models) {
+      if (!/^[a-z0-9][a-z0-9.-]*$/.test(model)) continue;
+      if (filter.length && !filter.includes(`${task}/${model}`)) continue;
+      const packageProbe = spawnSync("git", ["cat-file", "-e", `${ref}:${tree}/${model}/package.json`], {
+        cwd: REPO_ROOT,
+        stdio: "ignore",
+      });
+      if (packageProbe.status !== 0) {
+        skipped.push(`${task}/${model}`);
+        continue;
+      }
+      targets.push({ ref, task, model });
     }
-    targets.push({ ref, task, model });
   }
   targets.sort((a, b) => (a.task + a.model).localeCompare(b.task + b.model));
   return { targets, skipped };
@@ -87,7 +92,7 @@ function buildOne({ ref, task, model }) {
   run(`git worktree add --detach --force ${quote(fwd(tmp))} ${ref}`);
 
   try {
-    const solution = join(tmp, "tasks", task, "solution");
+    const solution = join(tmp, "tasks", task, "solutions", model);
     const install = existsSync(join(solution, "package-lock.json"))
       ? "npm ci --no-audit --no-fund"
       : "npm install --no-audit --no-fund";
@@ -514,7 +519,7 @@ async function main() {
 
   const { targets, skipped } = discoverTargets(filter);
   if (!targets.length) throw new Error("没有找到可构建的候选实现");
-  console.log(`准备构建 ${targets.length} 个候选实现，并发 ${CONCURRENCY}，已跳过 ${skipped.length} 个空分支`);
+  console.log(`准备构建 ${targets.length} 个候选实现，并发 ${CONCURRENCY}，已跳过 ${skipped.length} 个缺少 package.json 的目录`);
 
   const results = [];
   let cursor = 0;

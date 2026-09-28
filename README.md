@@ -1,27 +1,28 @@
 # LLM Coding Capability Benchmark
 
-This repository provides a reproducible way to compare the coding capabilities of different large language models under the same task, context, tools, and acceptance criteria. `main` stores the shared baseline; each `llm/*` branch stores only the candidate implementation produced by its designated model from that baseline.
+This repository compares coding models under the same task, context, tools, and acceptance criteria. `main` stores shared inputs. Each `llm/<task-id>` branch collects the completed candidates for one task.
 
 ## Branching Model
 
 - `main`: The shared baseline, including task descriptions, starter code, fixed tests, test data, evaluation configuration, and repository rules. It must not contain a model-specific candidate solution.
-- `llm/<task-id>/<model-id>`: The candidate implementation for one model on one task. Use complete, stable identifiers, for example `llm/voxel-waterfall/gpt-5.6-sol`.
-- All model branches in the same evaluation round must start from the same `main` commit. If the task or acceptance criteria change, create a new baseline commit before starting another round.
+- `llm/<task-id>`: Completed candidate collection for one task. Each implementation lives at `tasks/<task-id>/solutions/<candidate-id>/`.
+- `candidate/<task-id>/<candidate-id>` tag: The original, unmodified candidate commit, with its implementation at `tasks/<task-id>/solution/`. The tag supports exact historical diffs against that candidate's recorded baseline.
+- All model runs in an evaluation round start in separate clones from the same pinned `main` commit. A task branch is an archive and gallery source, not a model's starting point.
 
 ## Tasks
 
 | Task | Round record | Candidate branches |
 | --- | --- | --- |
-| `voxel-waterfall` | [`tasks/voxel-waterfall/`](tasks/voxel-waterfall/) | GPT-5.6-SOL, Grok 4.6 |
-| `ui-ux-design` | [`tasks/ui-ux-design/`](tasks/ui-ux-design/) | Prepared; no candidate branches yet |
-| `cs-pvp-diorama` | [`tasks/cs-pvp-diorama/`](tasks/cs-pvp-diorama/) | Prepared; no candidate branches yet |
-| `voxel-chinese-architecture` | [`tasks/voxel-chinese-architecture/`](tasks/voxel-chinese-architecture/) | Prepared; no candidate branches yet |
-| `gargantua-schwarzschild-raytracer` | [`tasks/gargantua-schwarzschild-raytracer/`](tasks/gargantua-schwarzschild-raytracer/) | Prepared; no candidate branches yet |
-| `cf-transport-ship` | [`tasks/cf-transport-ship/`](tasks/cf-transport-ship/) | Prepared; no candidate branches yet |
+| `voxel-waterfall` | [`tasks/voxel-waterfall/`](tasks/voxel-waterfall/) | `llm/voxel-waterfall` |
+| `ui-ux-design` | [`tasks/ui-ux-design/`](tasks/ui-ux-design/) | `llm/ui-ux-design` |
+| `cs-pvp-diorama` | [`tasks/cs-pvp-diorama/`](tasks/cs-pvp-diorama/) | `llm/cs-pvp-diorama` |
+| `voxel-chinese-architecture` | [`tasks/voxel-chinese-architecture/`](tasks/voxel-chinese-architecture/) | `llm/voxel-chinese-architecture` |
+| `gargantua-schwarzschild-raytracer` | [`tasks/gargantua-schwarzschild-raytracer/`](tasks/gargantua-schwarzschild-raytracer/) | `llm/gargantua-schwarzschild-raytracer` |
+| `cf-transport-ship` | [`tasks/cf-transport-ship/`](tasks/cf-transport-ship/) | `llm/cf-transport-ship` |
 
 ## Repository and Worktree Layout
 
-`llm-evals/` is the Git repository and permanent `main` worktree. Task inputs are tracked under `tasks/`; linked model worktrees are local-only under the ignored `.worktrees/` directory:
+`llm-evals/` is the permanent `main` checkout. Task inputs are tracked under `tasks/`. Model runs use isolated, ignored clones under `.runs/`:
 
 ```text
 llm-evals/                              # repository root; always main
@@ -32,48 +33,42 @@ llm-evals/                              # repository root; always main
 │       ├── starter/                    # optional shared starter code
 │       └── tests/                      # optional fixed acceptance tests
 ├── deploy/                             # candidate gallery build and deployment
-│   ├── build.mjs                       # builds every llm/* branch into public/
+│   ├── build.mjs                       # builds candidates from task branches into public/
 │   ├── wrangler.jsonc                  # Worker, static assets, custom domain
 │   └── public/                         # generated gallery output (ignored)
-└── .worktrees/                         # ignored local linked worktrees
-    └── <task-id>/
-        ├── <model-id>/                 # llm/<task-id>/<model-id>
-        └── <other-model-id>/
+├── .runs/                              # ignored isolated model clones
+│   └── <task-id>/<model-id>/
+└── .worktrees/                         # ignored temporary gallery worktrees
 ```
 
-Every candidate branch uses the same tracked implementation path, `tasks/<task-id>/solution/`. Model identity belongs in the branch and local worktree path, not in a model-specific source directory; this keeps candidate diffs path-aligned.
+Every model first writes to the same `tasks/<task-id>/solution/` path in its isolated clone. The curator imports that completed tree into `solutions/<candidate-id>/` on the task branch. [`migration/2026-09-28.json`](migration/2026-09-28.json) maps migrated candidates to their original refs, commits, tree hashes, and archive tags. `cursor-c343` is a source identifier with an unknown model identity.
 
 ## Standard Evaluation Workflow
 
 1. On `main`, prepare `tasks/<task-id>/` with the prompt, starter code, executable acceptance criteria, fixed tests, and evaluation configuration.
 2. Commit that complete baseline and record its SHA before running any model.
-3. From the repository root, create every model branch and linked worktree from that exact SHA:
+3. From the repository root, create a separate clone for each model. Expose only `main` and detach it at the pinned baseline:
 
    ```bash
-   git worktree add \
-     -b llm/<task-id>/<model-id> \
-     .worktrees/<task-id>/<model-id> \
-     <baseline-sha>
+   git clone --no-local --single-branch --branch main --no-tags . .runs/<task-id>/<model-id>
+   git -C .runs/<task-id>/<model-id> checkout --detach <baseline-sha>
+   git -C .runs/<task-id>/<model-id> remote remove origin
    ```
 
 4. Give every model the same task text, repository contents, tool permissions, and runtime conditions.
-5. Run the model only in `.worktrees/<task-id>/<model-id>/`. Commit its implementation at `tasks/<task-id>/solution/` only to `llm/<task-id>/<model-id>`; never import another model's implementation.
-6. Run the same tests, builds, static checks, and runtime scenarios in every model worktree, and preserve their exact results.
-7. Compare each candidate from the repository root with the recorded baseline and its verification evidence:
+5. Run each model only in its clone. Commit its implementation and result report at `tasks/<task-id>/solution/`. Run the same tests, builds, static checks, and runtime scenarios in every clone, and preserve their exact results.
+6. Fetch each completed commit into the main repository, tag it `candidate/<task-id>/<candidate-id>`, and verify the tag points to the original commit. Import only its `solution/` tree into `tasks/<task-id>/solutions/<candidate-id>/` on `llm/<task-id>`; confirm the source and destination Git tree hashes match.
+7. Compare the original candidate tag with its recorded baseline and evidence:
 
    ```bash
-   git diff <baseline-sha>...llm/<task-id>/<model-id>
+   git diff <baseline-sha>...candidate/<task-id>/<candidate-id> -- tasks/<task-id>/solution/
    ```
 
-8. After preserving the candidate commit and evidence, remove only the linked worktree when it is no longer needed:
-
-   ```bash
-   git worktree remove .worktrees/<task-id>/<model-id>
-   ```
+8. Preserve any needed generated evidence, then remove a completed clone when it is no longer in use.
 
 ## Candidate Gallery
 
-Every pushed candidate branch is built and published to one Cloudflare Worker, so all implementations can be viewed side by side at predictable paths.
+Every pushed task branch is built and published to one Cloudflare Worker, so all implementations can be viewed side by side at predictable paths.
 
 - Live site: <https://llm-evals-result.narwh.dev/>
 - URL layout: `https://llm-evals-result.narwh.dev/<task-id>/<model-id>/`
@@ -94,14 +89,14 @@ Rebuild a subset while iterating; `BUILD_CONCURRENCY` (default `4`) controls how
 node deploy/build.mjs ui-ux-design/kimi-k3 voxel-waterfall/grok-4.6
 ```
 
-To publish a new candidate, push its `llm/<task-id>/<model-id>` branch and run both commands again. Branches are discovered from `origin`, so no configuration change is needed; any branch without `tasks/<task-id>/solution/package.json` is skipped and listed in the summary.
+To publish a new candidate, import it into and push `llm/<task-id>`, then run both commands again. The gallery discovers candidate directories with a `package.json` from the remote task branches.
 
 ### How the Build Works
 
 `deploy/build.mjs`:
 
-1. Fetches `origin` and selects every `llm/<task-id>/<model-id>` branch that has a `tasks/<task-id>/solution/package.json`.
-2. Creates a temporary detached worktree under `.worktrees/.deploy-tmp/`, runs `npm ci` (or `npm install` when the branch has no `package-lock.json`), then `npm run build -- --base=/<task-id>/<model-id>/ --outDir=<repository>/deploy/public/<task-id>/<model-id> --emptyOutDir`, and removes the temporary worktree again.
+1. Fetches `origin` and selects every `tasks/<task-id>/solutions/<candidate-id>/package.json` on an `llm/<task-id>` branch.
+2. Creates a temporary detached worktree under `.worktrees/.deploy-tmp/`, runs `npm ci` (or `npm install` when the candidate has no `package-lock.json`), then `npm run build -- --base=/<task-id>/<candidate-id>/ --outDir=<repository>/deploy/public/<task-id>/<candidate-id> --emptyOutDir`, and removes the temporary worktree again.
 3. Regenerates `deploy/public/index.html` from every candidate directory present in `deploy/public/`, so a partial rebuild still lists everything that would be deployed.
 4. Prints a per-candidate summary and exits non-zero if any candidate failed to build.
 
