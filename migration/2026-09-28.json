@@ -662,6 +662,17 @@
       "archiveTag": "candidate/gargantua-schwarzschild-raytracer/glm-5.3-flash",
       "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/glm-5.3-flash",
       "hasResults": true
+    },
+    {
+      "task": "cf-transport-ship",
+      "id": "glm-5.3",
+      "modelIdKnown": true,
+      "sourceRef": "local-clone:.runs/cf-transport-ship/glm-5.3 (detached at 5fa8bcece6e97e2877483d32c6e9a8501cd7b243, remote removed)",
+      "sourceCommit": "19bb1c9f168cd118ec984a0852917c5181cb3036",
+      "sourceTree": "ce252625ef38494f06e6087a691a2bc57794477e",
+      "archiveTag": "candidate/cf-transport-ship/glm-5.3",
+      "destination": "tasks/cf-transport-ship/solutions/glm-5.3",
+      "hasResults": true
     }
   ],
   "emptyRemoteBranches": [

@@ -6,7 +6,7 @@
 - Canonical candidate path: `tasks/cf-transport-ship/solution/`
 - Candidate result report: `tasks/cf-transport-ship/solution/RESULTS.md`
 - Prompt: [`task.md`](task.md)
-- Status: No archived candidates. The task is ready for a new evaluation round from a pinned `main` baseline.
+- Status: One candidate archived on `llm/cf-transport-ship` at `tasks/cf-transport-ship/solutions/<candidate-id>/`. `glm-5.3` was produced from the `5fa8bce` baseline in an isolated clone and imported with a result report; provenance is recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json).
 
 ## Shared Inputs
 
