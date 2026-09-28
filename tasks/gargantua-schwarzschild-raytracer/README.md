@@ -6,7 +6,7 @@
 - Canonical candidate path: `tasks/gargantua-schwarzschild-raytracer/solution/`
 - Candidate result report: `tasks/gargantua-schwarzschild-raytracer/solution/RESULTS.md`
 - Prompt: [`task.md`](task.md)
-- Status: Twelve candidates archived on `llm/gargantua-schwarzschild-raytracer` at `tasks/gargantua-schwarzschild-raytracer/solutions/<candidate-id>/`. Original commits and source trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json); `cursor-c343` has no confirmed model ID or result report.
+- Status: Thirteen candidates archived on `llm/gargantua-schwarzschild-raytracer` at `tasks/gargantua-schwarzschild-raytracer/solutions/<candidate-id>/`. Original commits and source trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json); `cursor-c343` has no confirmed model ID or result report. `glm-5.3-flash` was produced from the `8409ab9` baseline in an isolated clone and imported with a result report.
 
 ## Shared Inputs
 

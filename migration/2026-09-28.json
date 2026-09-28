@@ -662,6 +662,17 @@
       "archiveTag": "candidate/voxel-waterfall/space-bunny-free",
       "destination": "tasks/voxel-waterfall/solutions/space-bunny-free",
       "hasResults": false
+    },
+    {
+      "task": "gargantua-schwarzschild-raytracer",
+      "id": "glm-5.3-flash",
+      "modelIdKnown": true,
+      "sourceRef": "local-clone:.runs/gargantua-schwarzschild-raytracer/glm-5.3-flash (detached at 8409ab9ad67e2999707f475ee1e871ebe0f1c7b1, remote removed)",
+      "sourceCommit": "9586e8a689991fc4b5c932d6453f1782b2f8674a",
+      "sourceTree": "708dc1bc1b16414e8e127b6aa1ac7c190e445166",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/glm-5.3-flash",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/glm-5.3-flash",
+      "hasResults": true
     }
   ],
   "emptyRemoteBranches": [
