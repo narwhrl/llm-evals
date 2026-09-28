@@ -1,0 +1,346 @@
+/* GARGANTUA HUD — dark translucent glass, no external fonts or assets. */
+
+:root {
+  --hud-bg: rgba(10, 14, 22, 0.72);
+  --hud-bg-solid: #0d1420;
+  --hud-border: rgba(140, 190, 255, 0.16);
+  --hud-text: #d7e3f4;
+  --hud-dim: #8fa3bd;
+  --hud-accent: #ffb457;
+  --hud-accent-2: #6fd3ff;
+}
+
+.hud {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 320px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  box-sizing: border-box;
+  padding: 14px 14px 10px;
+  border: 1px solid var(--hud-border);
+  border-radius: 14px;
+  background: var(--hud-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--hud-text);
+  font-size: 12px;
+  line-height: 1.45;
+  user-select: none;
+  z-index: 10;
+}
+
+.hud::-webkit-scrollbar {
+  width: 6px;
+}
+.hud::-webkit-scrollbar-thumb {
+  background: rgba(140, 190, 255, 0.25);
+  border-radius: 3px;
+}
+
+.hud-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.hud-title {
+  margin: 0;
+  font-size: 15px;
+  letter-spacing: 0.22em;
+  font-weight: 600;
+  color: var(--hud-accent);
+}
+
+.hud-sub {
+  margin: 2px 0 0;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--hud-dim);
+}
+
+.hud-icon-btn {
+  border: 1px solid var(--hud-border);
+  background: transparent;
+  color: var(--hud-dim);
+  border-radius: 8px;
+  padding: 3px 9px;
+  font-size: 11px;
+  cursor: pointer;
+}
+.hud-icon-btn:hover {
+  color: var(--hud-text);
+  border-color: var(--hud-accent-2);
+}
+
+.hud-section {
+  border-top: 1px solid rgba(140, 190, 255, 0.1);
+  padding: 10px 0;
+}
+
+.hud-heading {
+  margin: 0 0 8px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--hud-dim);
+  text-transform: uppercase;
+}
+
+.hud-kv {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 4px 0;
+  color: var(--hud-dim);
+}
+
+.hud-value {
+  color: var(--hud-text);
+  text-align: right;
+}
+
+.hud-btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.hud-btn {
+  border: 1px solid var(--hud-border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--hud-text);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.hud-btn:hover {
+  border-color: var(--hud-accent-2);
+}
+.hud-btn.is-active {
+  border-color: var(--hud-accent);
+  background: rgba(255, 180, 87, 0.14);
+  color: var(--hud-accent);
+}
+.hud-btn.is-live {
+  border-color: var(--hud-accent-2);
+  background: rgba(111, 211, 255, 0.12);
+  color: var(--hud-accent-2);
+}
+.hud-btn-warn:hover {
+  border-color: #ff7d6b;
+  color: #ff9d8e;
+}
+
+.hud-btn-grid,
+.hud-debug-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.hud-debug-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid var(--hud-border);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--hud-text);
+  border-radius: 8px;
+  padding: 4px 7px;
+  font-size: 10.5px;
+  cursor: pointer;
+  text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.hud-debug-btn:hover {
+  border-color: var(--hud-accent-2);
+}
+.hud-debug-btn.is-active {
+  border-color: var(--hud-accent);
+  background: rgba(255, 180, 87, 0.14);
+}
+.hud-debug-num {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 5px;
+  background: rgba(111, 211, 255, 0.16);
+  color: var(--hud-accent-2);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+.hud-debug-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.param {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: "label value" "range range";
+  gap: 1px 8px;
+  margin: 7px 0;
+}
+
+.param-label {
+  grid-area: label;
+  color: var(--hud-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.param-value {
+  grid-area: value;
+  color: var(--hud-accent-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.param-range {
+  grid-area: range;
+  width: 100%;
+  margin: 2px 0 0;
+  height: 18px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.param-range::-webkit-slider-runnable-track {
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(140, 190, 255, 0.22);
+}
+.param-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  margin-top: -4.5px;
+  border-radius: 50%;
+  background: var(--hud-accent);
+  border: none;
+}
+.param-range::-moz-range-track {
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(140, 190, 255, 0.22);
+}
+.param-range::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--hud-accent);
+  border: none;
+}
+
+.hud-keys {
+  margin: 10px 0 2px;
+  padding: 0;
+  list-style: none;
+  color: var(--hud-dim);
+  font-size: 10.5px;
+}
+.hud-keys li {
+  margin: 2px 0;
+}
+
+.hud-collapsed {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  z-index: 10;
+}
+
+.hud-chip {
+  border: 1px solid var(--hud-border);
+  background: var(--hud-bg);
+  backdrop-filter: blur(8px);
+  color: var(--hud-text);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 11px;
+  cursor: pointer;
+}
+.hud-chip-dim {
+  color: var(--hud-dim);
+  cursor: default;
+}
+
+/* ---- App-level overlays ---- */
+
+.stage {
+  position: fixed;
+  inset: 0;
+}
+
+.stage canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.overlay-card {
+  border: 1px solid var(--hud-border);
+  background: var(--hud-bg-solid);
+  color: var(--hud-text);
+  border-radius: 12px;
+  padding: 14px 22px;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-align: center;
+  max-width: 80vw;
+}
+
+.overlay-card strong {
+  color: var(--hud-accent);
+}
+
+/* ---- Mobile: HUD becomes a bottom drawer ---- */
+
+@media (max-width: 720px) {
+  .hud {
+    top: auto;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    width: auto;
+    max-height: 46vh;
+    border-radius: 14px;
+  }
+  .hud-collapsed {
+    top: auto;
+    bottom: 14px;
+    right: 12px;
+    left: 12px;
+    justify-content: space-between;
+  }
+}

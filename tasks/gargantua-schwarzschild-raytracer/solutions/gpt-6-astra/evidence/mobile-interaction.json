@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "params": {
+    "fov": 42,
+    "distance": 37.86590933463334,
+    "azimuth": 338.24644549763036,
+    "elevation": 14.39810426540283,
+    "timeScale": 1,
+    "innerRadius": 3,
+    "outerRadius": 10,
+    "thickness": 0.085,
+    "temperature": 6800,
+    "emission": 1.85,
+    "orbitalSpeed": 1,
+    "turbulence": 0.65,
+    "turbulenceSpeed": 0.6,
+    "starDensity": 0.8,
+    "galaxy": 0.55,
+    "bloom": 0.4,
+    "bloomThreshold": 1,
+    "exposure": 1,
+    "vignette": 0.25,
+    "grain": 0.012,
+    "dispersion": 0.0005
+  },
+  "quality": "high",
+  "preset": 0,
+  "debug": 0,
+  "hud": true,
+  "panel": false,
+  "playing": false,
+  "capture": true,
+  "time": 12.5,
+  "ready": true,
+  "render": {
+    "width": 526,
+    "height": 1139,
+    "devicePixelRatio": 2,
+    "fps": 0,
+    "budget": {
+      "scale": 0.9,
+      "dpr": 1.5,
+      "steps": 360,
+      "step": 0.035,
+      "crossings": 5,
+      "bloomLevels": 4
+    },
+    "contextLost": false
+  }
+}

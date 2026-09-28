@@ -1,0 +1,242 @@
+[
+  {
+    "preset": 0,
+    "debug": 0,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=0&debug=0&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 0,
+    "debug": 1,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=0&debug=1&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 0,
+    "debug": 2,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=0&debug=2&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 0,
+    "debug": 3,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=0&debug=3&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 0,
+    "debug": 4,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=0&debug=4&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 0,
+    "debug": 5,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=0&debug=5&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 0,
+    "debug": 6,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=0&debug=6&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 0,
+    "debug": 7,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=0&debug=7&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 0,
+    "debug": 8,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=0&debug=8&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 0,
+    "debug": 9,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=0&debug=9&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 1,
+    "debug": 0,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=1&debug=0&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 1,
+    "debug": 1,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=1&debug=1&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 1,
+    "debug": 2,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=1&debug=2&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 1,
+    "debug": 3,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=1&debug=3&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 1,
+    "debug": 4,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=1&debug=4&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 1,
+    "debug": 5,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=1&debug=5&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 1,
+    "debug": 6,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=1&debug=6&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 1,
+    "debug": 7,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=1&debug=7&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 1,
+    "debug": 8,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=1&debug=8&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 1,
+    "debug": 9,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=1&debug=9&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 2,
+    "debug": 0,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=2&debug=0&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 2,
+    "debug": 1,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=2&debug=1&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 2,
+    "debug": 2,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=2&debug=2&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 2,
+    "debug": 3,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=2&debug=3&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 2,
+    "debug": 4,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=2&debug=4&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 2,
+    "debug": 5,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=2&debug=5&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 2,
+    "debug": 6,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=2&debug=6&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 2,
+    "debug": 7,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=2&debug=7&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 2,
+    "debug": 8,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=2&debug=8&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 2,
+    "debug": 9,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=2&debug=9&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 3,
+    "debug": 0,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=3&debug=0&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 3,
+    "debug": 1,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=3&debug=1&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 3,
+    "debug": 2,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=3&debug=2&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 3,
+    "debug": 3,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=3&debug=3&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 3,
+    "debug": 4,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=3&debug=4&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 3,
+    "debug": 5,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=3&debug=5&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 3,
+    "debug": 6,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=3&debug=6&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 3,
+    "debug": 7,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=3&debug=7&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 3,
+    "debug": 8,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=3&debug=8&time=12.5&hud=0",
+    "ready": true
+  },
+  {
+    "preset": 3,
+    "debug": 9,
+    "url": "http://127.0.0.1:4186/?capture=1&quality=high&preset=3&debug=9&time=12.5&hud=0",
+    "ready": true
+  }
+]

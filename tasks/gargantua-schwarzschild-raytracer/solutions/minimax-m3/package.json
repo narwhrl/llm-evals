@@ -1,0 +1,21 @@
+{
+  "name": "gargantua-schwarzschild-raytracer",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Full-screen Schwarzschild geodesic black hole raytracer with local Three.js.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "vite preview --host --port 4173"
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "4.3.4",
+    "vite": "5.4.11"
+  }
+}

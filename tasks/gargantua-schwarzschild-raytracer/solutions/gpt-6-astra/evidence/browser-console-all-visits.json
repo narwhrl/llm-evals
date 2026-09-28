@@ -1,0 +1,8 @@
+[
+  {
+    "level": "error",
+    "message": "NotFoundError: Failed to execute 'setPointerCapture' on 'Element': No active pointer with the given id is found.\n    at yl.bl (http://127.0.0.1:4186/assets/index-Dffduts-.js:4228:72116)\n    at document.querySelector.onclick (http://127.0.0.1:4186/qa.html:46:106)",
+    "timestamp": "2026-09-22T17:27:54.263Z",
+    "url": "http://127.0.0.1:4186/assets/index-Dffduts-.js"
+  }
+]
