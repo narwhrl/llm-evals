@@ -1,0 +1,18 @@
+{
+  "name": "voxel-chinese-architecture",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A voxel-style classical Chinese temple complex built with Three.js - open the page and the whole ensemble is in view.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 4173 --strictPort"
+  },
+  "dependencies": {
+    "three": "0.170.0"
+  },
+  "devDependencies": {
+    "vite": "5.4.11"
+  }
+}

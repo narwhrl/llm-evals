@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>体素中国古建筑群</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: #1d2438;
+      }
+      canvas {
+        display: block;
+      }
+      #caption {
+        position: fixed;
+        left: 18px;
+        bottom: 14px;
+        color: rgba(255, 244, 224, 0.92);
+        font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+        font-size: 14px;
+        letter-spacing: 2px;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+        pointer-events: none;
+        user-select: none;
+      }
+      #caption small {
+        display: block;
+        font-size: 11px;
+        letter-spacing: 1px;
+        opacity: 0.72;
+        margin-top: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="caption">
+      体素中国古建筑群 · Voxel Chinese Architecture
+      <small>拖拽旋转 · 滚轮缩放 · 右键平移</small>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

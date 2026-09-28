@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "taskId": "voxel-chinese-architecture",
+  "candidates": [
+    {
+      "candidateId": "glm-5.3-flash",
+      "model": "account:bigmodel-individual-coding-plan/GLM-5.3-Flash",
+      "baselineMain": "8409ab9ad67e2999707f475ee1e871ebe0f1c7b1",
+      "sourceRef": "local-clone:.runs/voxel-chinese-architecture/glm-5.3-flash (detached, remote removed)",
+      "sourceCommit": "2c9ee36d2d853bf884c6a82fcbf8f0a9df32eec4",
+      "sourceTree": "6aec9e3fec6e9baa22c774996cf3c6bd6cc77b9d",
+      "archiveTag": "candidate/voxel-chinese-architecture/glm-5.3-flash",
+      "destination": "tasks/voxel-chinese-architecture/solutions/glm-5.3-flash",
+      "resultReport": "tasks/voxel-chinese-architecture/solutions/glm-5.3-flash/RESULTS.md"
+    }
+  ]
+}
