@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "taskId": "ui-ux-design",
+  "candidates": [
+    {
+      "candidateId": "glm-5.3-flash",
+      "model": "account:bigmodel-individual-coding-plan/GLM-5.3-Flash",
+      "baselineMain": "8409ab9ad67e2999707f475ee1e871ebe0f1c7b1",
+      "sourceRef": "local-clone:.runs/ui-ux-design/glm-5.3-flash (detached, remote removed)",
+      "sourceCommit": "3370396e06e0ca860ab7e1834984bf44836dde7c",
+      "sourceTree": "0659ac7bd1b7be8572d6270fd782cf2150548a10",
+      "archiveTag": "candidate/ui-ux-design/glm-5.3-flash",
+      "destination": "tasks/ui-ux-design/solutions/glm-5.3-flash",
+      "resultReport": "tasks/ui-ux-design/solutions/glm-5.3-flash/RESULTS.md"
+    }
+  ]
+}

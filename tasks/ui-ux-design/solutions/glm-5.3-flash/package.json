@@ -1,0 +1,20 @@
+{
+  "name": "ui-ux-design-undecided-draft",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "《未定稿》— 一台用草稿思考的机器的自画像。稿纸上的每个字被起草、划掉、重写，由访客的注意力定稿。",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 4173 --strictPort"
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "4.3.4",
+    "vite": "5.4.11"
+  }
+}
