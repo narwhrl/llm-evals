@@ -84,8 +84,19 @@ export class AudioEngine {
         case 'land': this.burst(out, .16, .16, 40, 750); break;
         case 'throw': this.burst(out, .12, .08, 350, 4200); break;
         case 'explosion': this.burst(out, .72, .65, 35, 3000); this.tone(out, 70, .52, .33, 'sawtooth', 25); break;
-        case 'hit': if (e.actor === game.player.id) this.tone(out, e.zone === 'head' ? 1350 : 910, .08, .08, 'sine', e.zone === 'head' ? 680 : 440); else if (e.target === game.player.id) this.burst(out, .12, .12, 450, 4700); break;
-        case 'death': if (e.actor === game.player.id) { this.tone(out, 840, .11, .09, 'sine', 980); this.tone(out, 1190, .16, .07, 'sine', 770); } break;
+        case 'hit':
+          if (e.actor === game.player.id && e.target !== game.player.id) {
+            this.tone(out, e.zone === 'head' ? 1480 : 1080, .13, .16, 'sine', e.zone === 'head' ? 860 : 620);
+            if (e.zone === 'head') this.tone(out, 1860, .1, .09, 'triangle', 1180);
+          } else if (e.target === game.player.id) this.burst(out, .12, .12, 450, 4700);
+          break;
+        case 'death':
+          if (e.actor === game.player.id && e.target !== game.player.id) {
+            this.tone(out, 660, .19, .17, 'triangle', 880);
+            this.tone(out, 990, .28, .13, 'sine', 1320);
+            this.burst(out, .12, .08, 1200, 6000);
+          }
+          break;
         case 'melee': this.burst(out, .18, .09, 300, 7000); break;
       }
       // The scheduled sources keep their own gain nodes until onended.

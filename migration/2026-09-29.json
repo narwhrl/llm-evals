@@ -15,6 +15,21 @@
       "importedTree": "849c95632139a86cc1738402db6ad1cebe052837",
       "resultReport": "tasks/cf-transport-ship/solutions/gpt-6-sol/RESULTS.md",
       "comparisonNote": "The earlier glm-5.3 candidate used baseline 5fa8bce; do not draw same-baseline comparison conclusions."
+    },
+    {
+      "task": "cf-transport-ship",
+      "candidate": "gpt-6-sol",
+      "revision": 2,
+      "model": "OpenAI gpt-6-sol",
+      "startingMain": "7c210c2dd734915419097074108efadec416e2e4",
+      "sourceRef": "local-clone:.runs/cf-transport-ship/gpt-6-sol (feedback revision from original candidate commit)",
+      "sourceCommit": "ea47e0681731968a38a5b8bd38f3839477ae2d96",
+      "sourceTree": "4b3245f2fab9feaa5dc0300d748b91f4a681b44e",
+      "archiveTag": "candidate/cf-transport-ship/gpt-6-sol-r2",
+      "destination": "tasks/cf-transport-ship/solutions/gpt-6-sol",
+      "importedTree": "4b3245f2fab9feaa5dc0300d748b91f4a681b44e",
+      "resultReport": "tasks/cf-transport-ship/solutions/gpt-6-sol/RESULTS.md",
+      "supersedesSourceCommit": "87160c192979416217e122eafccf4ca95adb4e2f"
     }
   ]
 }

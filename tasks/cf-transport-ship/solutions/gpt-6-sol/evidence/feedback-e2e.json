@@ -1,0 +1,44 @@
+{
+  "horizontal": {
+    "yaw": -0.21,
+    "moves": [
+      [
+        100,
+        0
+      ]
+    ]
+  },
+  "vertical": {
+    "pitch": -0.21,
+    "moves": [
+      [
+        100,
+        0
+      ],
+      [
+        0,
+        100
+      ]
+    ]
+  },
+  "firstShot": {
+    "at": 0.24999999999999997,
+    "damage": 59.147999999999996,
+    "target": 5
+  },
+  "finalShot": {
+    "at": 2.9833333333333276,
+    "damage": 95.39999999999999,
+    "target": 5
+  },
+  "hit": {
+    "visible": true,
+    "detail": "爆头 · 60 HP"
+  },
+  "kill": {
+    "visible": true,
+    "text": "◆ 击杀确认蓝鲸 1+1 击杀 · 本局 1",
+    "score": 1
+  },
+  "errors": []
+}

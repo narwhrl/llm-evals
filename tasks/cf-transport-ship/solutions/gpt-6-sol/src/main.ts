@@ -88,7 +88,7 @@ document.addEventListener('keyup', e => { held.delete(e.code); if (e.code === 'T
 canvas.addEventListener('mousemove', e => {
   if (document.pointerLockElement !== canvas || game.phase !== 'playing' || !game.player.alive) return;
   const p = game.player, factor = p.ads ? settings.scopeSensitivity : 1;
-  p.yaw += e.movementX * settings.sensitivity * factor;
+  p.yaw -= e.movementX * settings.sensitivity * factor;
   p.pitch = Math.max(-1.43, Math.min(1.43, p.pitch + e.movementY * settings.sensitivity * factor * (settings.invertY ? 1 : -1)));
 });
 canvas.addEventListener('mousedown', e => {

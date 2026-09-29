@@ -4,7 +4,7 @@
 - **完整可用模型标识：** OpenAI `gpt-6-sol`（本次运行界面未提供更细的版本后缀）
 - **候选 ID：** `gpt-6-sol`
 - **起始 `main`：** `7c210c2dd734915419097074108efadec416e2e4`
-- **候选提交：** 不可变标签 `candidate/cf-transport-ship/gpt-6-sol` 指向本候选的最终提交；完整对象 SHA 记录在任务分支的导入溯源文件中。提交无法在自身内容里写入自身 SHA 而保持 SHA 不变。
+- **候选提交：** 原始不可变标签 `candidate/cf-transport-ship/gpt-6-sol` 指向首版提交；本次反馈修订另以不可变修订标签保存。完整对象 SHA 记录在任务分支的导入溯源文件中。提交无法在自身内容里写入自身 SHA 而保持 SHA 不变。
 - **工作区：** 独立克隆 `.runs/cf-transport-ship/gpt-6-sol/`，代码仅写在 `tasks/cf-transport-ship/solution/`；根检出一直保持 `main`。
 
 ## 实施结果
@@ -40,3 +40,20 @@ Windows 11 企业版 `10.0.26200`，Intel Core Ultra 9 285H；系统枚举 GameV
 - `docs/ACCEPTANCE.md` 逐项列出 A01–A32；未验证的交互不冒充通过。尤其是完整玩家路线/跳箱、头身腿固定靶、近战与高爆弹极端情形、同分结算、音频听辨、全屏切换和硬件浏览器性能。
 - 程序美术仍偏低多边形；烟雾边缘与第一人称武器近景的精细度不及目标参考。侧道内部与精确箱顶路线为资料不足时的独立近似。
 - 需要人工使用普通桌面浏览器从出生点持续游玩、逐条走查路线与跳箱链，并在实际 GPU 上做 10 分钟性能与声音验收。其余安装、构建、自动化对局和画面证据不需人工干预。
+
+## 2026-09-29 鼠标与战斗反馈修订
+
+本次仍在上述起始 `main` 的隔离候选克隆中完成，原始候选标签不移动。浏览器复现记录：原版在原生指针锁定下鼠标右移 100 像素，水平角变为 `+0.21`，实际镜头向左；默认垂直向下为 `-0.21`，方向正确。普通命中在对局时间 0.25 秒后不可见，击杀提示在 1.5 秒后不可见。修订后水平角变为 `-0.21`，命中十字和伤害文字显示 0.48 秒，击杀卡片显示 2.2 秒；爆头采用金色强调，命中和击杀合成音更明确。原有反转 Y 轴选项未改动。
+
+在 `solution/` 下实际执行：
+
+| 命令 | 实测结果 |
+| --- | --- |
+| `node scripts/feedback-e2e.mjs`（当时脚本默认指向开发服务器 5175） | 修复前退出 1：方向、命中时长、击杀时长三个断言失败；修复后退出 0。提交前将脚本默认端口改为项目常规的 5173。 |
+| `npm test` | 退出 0；2 个文件、12 项通过。 |
+| `npm run build` | 退出 0；TypeScript 和 Vite 通过，仍有原有 >500 kB 包体非阻断警告。 |
+| `npm run build -- --base=/cf-transport-ship/gpt-6-sol/ --outDir=dist-subpath --emptyOutDir` | 退出 0；生产子路径构建通过。 |
+| `TEST_URL=http://127.0.0.1:4175/cf-transport-ship/gpt-6-sol/ node scripts/feedback-e2e.mjs` | 退出 0；原生鼠标右移与下移方向正确，真实弹道两次造成伤害，击杀比分加 1，0 页面错误。`evidence/feedback-e2e.json`，并人工目视检查 `feedback-hit.png`、`feedback-kill.png`，文字、准星和卡片可读。 |
+| `TEST_URL=http://127.0.0.1:4175/cf-transport-ship/gpt-6-sol/ npm run test:e2e` | 退出 0；十人开局、指针锁定、移动、射击和 Esc 暂停仍通过，0 页面错误、0 外部请求。 |
+
+以上生产子路径验证由 `npm run preview -- --base=/cf-transport-ship/gpt-6-sol/ --outDir=dist-subpath --port=4175 --strictPort` 托管。自动化浏览器用 SwiftShader，合成音已接入命中和击杀事件，但听感仍需桌面人工试听；没有新增运行时依赖。
