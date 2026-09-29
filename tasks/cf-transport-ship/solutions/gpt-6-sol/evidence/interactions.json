@@ -1,0 +1,139 @@
+{
+  "base": "http://127.0.0.1:4174/cf-transport-ship/gpt-6-sol/",
+  "storedFov": 82,
+  "startPlayer": {
+    "id": 0,
+    "team": "red",
+    "alive": true,
+    "health": 100,
+    "armor": 100,
+    "kills": 0,
+    "deaths": 0,
+    "x": -5.8,
+    "y": 0,
+    "z": -33.2,
+    "selected": "longshot",
+    "ammo": 5
+  },
+  "movedPlayer": {
+    "id": 0,
+    "team": "red",
+    "alive": true,
+    "health": 100,
+    "armor": 100,
+    "kills": 0,
+    "deaths": 0,
+    "x": -5.8,
+    "y": 0,
+    "z": -32.192499999999995,
+    "selected": "longshot",
+    "ammo": 5
+  },
+  "scoped": {
+    "visible": true,
+    "fov": 26.292533129869017
+  },
+  "ammoAfterShot": 4,
+  "ammoAfterBlockedShot": 4,
+  "reload": {
+    "finish": 5.666666666666661,
+    "now": 3.0666666666666607
+  },
+  "boardVisible": true,
+  "pauseCycles": [
+    {
+      "paused": true,
+      "frozen": true
+    },
+    {
+      "paused": true,
+      "frozen": true
+    },
+    {
+      "paused": true,
+      "frozen": true
+    },
+    {
+      "paused": true,
+      "frozen": true
+    },
+    {
+      "paused": true,
+      "frozen": true
+    }
+  ],
+  "pistol": "revolver",
+  "knife": "knife",
+  "selectedGrenade": "smoke",
+  "smokeInventory": 0,
+  "resize": {
+    "width": 1920,
+    "height": 1080,
+    "canvasWidth": 1920,
+    "crosshair": "960px"
+  },
+  "restartCycles": [
+    {
+      "actors": 10,
+      "score": {
+        "red": 0,
+        "blue": 0
+      },
+      "smoke": 0,
+      "grenades": 0,
+      "geometries": 1000,
+      "textures": 9
+    },
+    {
+      "actors": 10,
+      "score": {
+        "red": 0,
+        "blue": 0
+      },
+      "smoke": 0,
+      "grenades": 0,
+      "geometries": 1000,
+      "textures": 9
+    },
+    {
+      "actors": 10,
+      "score": {
+        "red": 0,
+        "blue": 0
+      },
+      "smoke": 0,
+      "grenades": 0,
+      "geometries": 1000,
+      "textures": 9
+    },
+    {
+      "actors": 10,
+      "score": {
+        "red": 0,
+        "blue": 0
+      },
+      "smoke": 0,
+      "grenades": 0,
+      "geometries": 1000,
+      "textures": 9
+    },
+    {
+      "actors": 10,
+      "score": {
+        "red": 0,
+        "blue": 0
+      },
+      "smoke": 0,
+      "grenades": 0,
+      "geometries": 1000,
+      "textures": 9
+    }
+  ],
+  "refreshedFov": 82,
+  "offlineReload": {
+    "actors": 10,
+    "canvasWidth": 1920
+  },
+  "errors": [],
+  "external": []
+}

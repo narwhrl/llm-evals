@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "date": "2026-09-29",
+  "imports": [
+    {
+      "task": "cf-transport-ship",
+      "candidate": "gpt-6-sol",
+      "model": "OpenAI gpt-6-sol",
+      "startingMain": "7c210c2dd734915419097074108efadec416e2e4",
+      "sourceRef": "local-clone:.runs/cf-transport-ship/gpt-6-sol (detached at pinned main before candidate commit)",
+      "sourceCommit": "87160c192979416217e122eafccf4ca95adb4e2f",
+      "sourceTree": "849c95632139a86cc1738402db6ad1cebe052837",
+      "archiveTag": "candidate/cf-transport-ship/gpt-6-sol",
+      "destination": "tasks/cf-transport-ship/solutions/gpt-6-sol",
+      "importedTree": "849c95632139a86cc1738402db6ad1cebe052837",
+      "resultReport": "tasks/cf-transport-ship/solutions/gpt-6-sol/RESULTS.md",
+      "comparisonNote": "The earlier glm-5.3 candidate used baseline 5fa8bce; do not draw same-baseline comparison conclusions."
+    }
+  ]
+}
