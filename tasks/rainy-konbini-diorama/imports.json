@@ -87,6 +87,18 @@
       "destination": "tasks/rainy-konbini-diorama/solutions/kimi-k3",
       "resultReport": "tasks/rainy-konbini-diorama/solutions/kimi-k3/RESULTS.md",
       "note": "Pinned to main ac801cf. tasks/rainy-konbini-diorama/task.md is byte-identical to the earlier baselines; only the task README status line changed. Imported blob-for-blob from the annotated candidate tag (per-file blob hashes match). Run without subagents or other models per the user's instruction; visual acceptance was done by the model itself through kimi-webbridge at a verified 1440x900 viewport, with door, signal, orbit and zoom exercised deterministically via a non-UI __DIORAMA__ debug handle. The candidate found and fixed six defects itself during acceptance (missing cylGeo import runtime error, roof reading as a flat blob, dim interior vs street, RoomEnvironment washing out the wet road, an inverted automatic-door driver condition pinning the doors shut, distant rain streaks reading as scratches)."
+    },
+    {
+      "candidateId": "gpt-5.6-sol",
+      "model": "gpt-5.6-sol",
+      "baselineMain": "ac801cf8a2e5948209f48055903a94984c20f91d",
+      "sourceRef": "local-clone:.runs/rainy-konbini-diorama/gpt-5.6-sol (detached at ac801cf8a2e5948209f48055903a94984c20f91d)",
+      "sourceCommit": "3bc223a779520a402f3b0ae04219ca2ae1ed43b7",
+      "sourceTree": "c1a8f1634ec8242c2273be1de4fbfa6aff2d0df6",
+      "archiveTag": "candidate/rainy-konbini-diorama/gpt-5.6-sol",
+      "destination": "tasks/rainy-konbini-diorama/solutions/gpt-5.6-sol",
+      "resultReport": "tasks/rainy-konbini-diorama/solutions/gpt-5.6-sol/RESULTS.md",
+      "note": "Pinned to main ac801cf. Run without subagents or other models per the user's instruction. Production build passed; Kimi WebBridge visual acceptance confirmed the store-centered rainy diorama, orbit and zoom, HTTP 200 asset loading, no runtime errors, and animated rain/light/door/puddle behavior. Imported tree hash matches the source solution tree."
     }
   ]
 }
