@@ -51,6 +51,18 @@
       "destination": "tasks/rainy-konbini-diorama/solutions/claude-opus-5.5",
       "resultReport": "tasks/rainy-konbini-diorama/solutions/claude-opus-5.5/RESULTS.md",
       "note": "Pinned to main 087676f. tasks/rainy-konbini-diorama/task.md is byte-identical to eac83c1 and 7f83cb6; only the task README status line and unrelated docs changed."
+    },
+    {
+      "candidateId": "glm-5.3",
+      "model": "GLM-5.3 (account:bigmodel-individual-coding-plan/GLM-5.3, ZCode agent)",
+      "baselineMain": "7c210c2dd734915419097074108efadec416e2e4",
+      "sourceRef": "local-clone:.runs/rainy-konbini-diorama/glm-5.3 (detached, remote removed)",
+      "sourceCommit": "b7cd3f0b3d2ef8bd0a2a78f56abc02b0e9a0d40a",
+      "sourceTree": "d6dd908adb75d3af7f72b90bc4c90431b4f717ec",
+      "archiveTag": "candidate/rainy-konbini-diorama/glm-5.3",
+      "destination": "tasks/rainy-konbini-diorama/solutions/glm-5.3",
+      "resultReport": "tasks/rainy-konbini-diorama/solutions/glm-5.3/RESULTS.md",
+      "note": "Pinned to main 7c210c2. tasks/rainy-konbini-diorama/task.md is byte-identical to the earlier baselines; only task README status lines and unrelated docs differ. Verified tree hashes match after import. The candidate self-verified via programmatic pixel statistics and passive in-page diagnostic hooks because the session could not display screenshots inline; see the candidate RESULTS.md for the full acceptance record, including two defects it found and fixed itself (custom-shader colorspace crushing the sky to black; a cool fresnel wash on the storefront glass masking the warm interior)."
     }
   ]
 }
