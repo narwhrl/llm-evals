@@ -1,0 +1,33 @@
+# 在 `.runs/voxel-chinese-architecture/glm-5.3-flash` 独立完成模型运行
+
+## 边界（按 AGENTS.md 角色划分）
+
+本次只做**模型运行**：在既有的隔离克隆（已 detach 在本轮固定基线 `8409ab9ad67e2999707f475ee1e871ebe0f1c7b1`，工作树干净）内实现、验证、提交 `tasks/voxel-chinese-architecture/solution/`。**不改 main、不建 task branch、不做导入**（打 candidate tag / 导入 solutions/ / 更新 migration JSON 是 curator 后续步骤）。期间只读 pinned 基线与自身产出，不读其他模型已归档候选。
+
+## 技术方案（vanilla Three.js + Vite）
+
+- 依赖：`three@0.170.0`、`vite@5.4.11`（与上轮候选一致的可用版本，npm 直装）；无 React、无后端、无远程 CDN 请求。
+- 体素引擎：`VoxelWorld` 用稀疏 Map 收集体素（对称布局用 x=0 镜像辅助函数），落盘时只输出**暴露面体素**（六邻域检查）到一个 `InstancedMesh`（BoxGeometry + MeshLambertMaterial + instanceColor），灯光/灯笼自发光体素单独一个 MeshBasicMaterial 实例网格。预估 2–3 万实例，性能无忧。
+- 场景（中轴对称，南入口 +z）：山门 → 中央石板道 → 庭院（香炉、石狮、灯笼柱）→ 三层台基主殿（歇山顶黄琉璃瓦、斗拱、红柱、格门窗，全场体量最大）；东西配殿对称；钟楼/鼓楼两座方形两层攒尖顶塔楼；主殿后 7 层宝塔；红墙围合、甬道铺装 + 草地、树木点缀。≥5 座建筑、动线清晰。
+- 环境与光影：黄昏暖色（渐变天空 CanvasTexture 背景 + 雾），DirectionalLight 金色暖光 castShadow（4096 shadow map、PCFSoft、normalBias 防立方体阴影痤疮）+ HemisphereLight；ACESFilmic tone mapping。
+- 相机：OrbitControls（damping），默认机位一屏看全建筑群，无需操作；`maxPolarAngle` 限制不入地。
+- 文件：`package.json`（dev/build/preview 脚本，preview 为 `--port 4173 --strictPort`）、`vite.config.js`、`index.html`、`src/{main,world,palette,scene-build}` 等模块、`solution/.gitignore`（node_modules/、dist/）、`solution/README.md`（运行方式）、`solution/RESULTS.md`（按 gargantua 轮的报告格式，含模型标识、基线 SHA、实际命令与结果、限制）。
+
+## 实施步骤
+
+1. 环境准备：fnm Node 路径 export（Node v24.21.0）。
+2. 在克隆内 `tasks/voxel-chinese-architecture/solution/` 编写全部代码。
+3. `npm install` → `npm run build`。
+4. 后台启动 preview：`node node_modules/vite/bin/vite.js preview --port 4173 --strictPort`（避免 npx 孤儿进程）；`curl --noproxy '*' http://[::1]:4173/` 确认 200。
+5. **kimi-webbridge 视觉验收**（1440×900，自审截图，不用子代理）：
+   - 守护进程 status/start；Windows 每次请求写临时 JSON 文件 + `curl.exe --data-binary @file` 后删除；路径用正斜杠。
+   - navigate 到 http://localhost:4173/ （session 名 `voxel-arch-glm53flash`）；`Emulation.setDeviceMetricsOverride` 1440×900 dsf 1；先挂 `Page.addScriptToEvaluateOnNewDocument` 控制台错误收集器再 reload。
+   - 默认机位截图 → Read 自审；CDP 鼠标拖拽 OrbitControls 从多个方位/俯仰/高度环视 + 滚轮缩放，逐一截图自审；核对中轴对称、建筑层级、屋顶形制、铺装、阴影、首屏无操作可见全貌。
+   - `window.__errors` 为空、`network list` 全部本地请求；发现视觉/控制台问题则修复重建重验（循环直至通过）。
+6. 进程回收：`netstat -ano | grep :4173` 找 PID → `taskkill //PID <n> //F`，确认端口释放，不留服务。
+7. 在克隆内提交：`feat: add voxel Chinese architecture scene solution`（仅 solution/ 下文件）。
+8. 汇报：基线、执行的命令与真实结果、验收结论、已知限制（如用户 Chrome 缩放导致 DPR≈1.1–1.25、隐藏标签页 rAF 节流等）。
+
+## 已知环境坑（已纳入方案）
+
+Git Bash 需 fnm Node 绝对路径；localhost curl 需 `--noproxy '*'`；Vite preview 监听 IPv6 `[::1]`；kimi-webbridge evaluate 长任务用 `window.__x` 全局轮询而非 await；后台标签 rAF 节流。
