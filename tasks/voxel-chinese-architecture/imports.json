@@ -24,6 +24,18 @@
       "destination": "tasks/voxel-chinese-architecture/solutions/claude-opus-5.5",
       "resultReport": "tasks/voxel-chinese-architecture/solutions/claude-opus-5.5/RESULTS.md",
       "note": "Pinned to main 9e0c2b7, which differs from glm-5.3-flash's 8409ab9 baseline. Run without subagents or other models per the user's instruction. Visual acceptance was done by the model itself through kimi-webbridge at a verified 1440x900 viewport, with no console errors and only same-origin requests. The model found and fixed three defects itself: a stray column above the main hall roof, a canvas that was not resized when DPR changed, and the default framing. Imported tree hash matches the source solution tree."
+    },
+    {
+      "candidateId": "gpt-6.1-sol",
+      "model": "new-provider/gpt-6.1-sol",
+      "baselineMain": "595fb2780259cfd4a46451102012ce1b7d57cce4",
+      "sourceRef": "local-clone:.runs/voxel-chinese-architecture/gpt-6.1-sol (detached, remote removed)",
+      "sourceCommit": "f1521ff47fc71fd24a75375c58aebabd35156a74",
+      "sourceTree": "d438f7e818362cbef9a30658bf5ad2468af4a174",
+      "archiveTag": "candidate/voxel-chinese-architecture/gpt-6.1-sol",
+      "destination": "tasks/voxel-chinese-architecture/solutions/gpt-6.1-sol",
+      "resultReport": "tasks/voxel-chinese-architecture/solutions/gpt-6.1-sol/RESULTS.md",
+      "note": "Generated independently without subagents or other models. Baseline differs from earlier candidates; no cross-candidate ranking is asserted. Self-inspected Kimi WebBridge evidence verifies actual 1440x900 desktop and 390x844 mobile views, plan view, dusk, orbit, drag and zoom. Six candidate tests and the production build pass; production audit reports zero known vulnerabilities. Source files and screenshots are imported without modification; exact tree equality is verified separately."
     }
   ]
 }
