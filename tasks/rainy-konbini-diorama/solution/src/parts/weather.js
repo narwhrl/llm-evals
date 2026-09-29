@@ -4,7 +4,7 @@ import { STORE } from './store.js';
 
 // Everything that moves. All state is preallocated in build(); update() only
 // writes into existing typed arrays and reuses scratch objects.
-const RAIN_COUNT = 130;
+const RAIN_COUNT = 720;
 const DRIP_COUNT = 70;
 const RIPPLE_COUNT = 30;
 
@@ -29,53 +29,84 @@ export function buildWeather(scene, refs) {
   group.name = 'weather';
 
   // ---- rain ---------------------------------------------------------------
+  // Rain has to read as DENSITY, not as individual streaks. A sparse set of
+  // long, equally bright lines crossing in screen space reads as a spider web,
+  // so: many short drops, all tilted the same way by wind, each with its own
+  // brightness so depth still separates near from far, confined to a band that
+  // hugs the diorama rather than filling the empty sky above it.
   const rainPos = new Float32Array(RAIN_COUNT * 2 * 3);
+  const rainCol = new Float32Array(RAIN_COUNT * 2 * 3);
+  const rainX = new Float32Array(RAIN_COUNT);
   const rainY = new Float32Array(RAIN_COUNT);
+  const rainZ = new Float32Array(RAIN_COUNT);
   const rainSpeed = new Float32Array(RAIN_COUNT);
   const rainLen = new Float32Array(RAIN_COUNT);
-  const DROP_TOP = 6.5;
+  const DROP_TOP = 4.6;
+  // Shared wind: every drop leans the same way, so the field reads as weather
+  // rather than as a set of unrelated lines. Declared before the seeding loop
+  // below, which calls placeDrop.
+  const WIND_X = 0.055;
   for (let i = 0; i < RAIN_COUNT; i += 1) {
     rainY[i] = Math.random() * DROP_TOP;
-    rainSpeed[i] = 8 + Math.random() * 9;
-    rainLen[i] = 0.1 + Math.random() * 0.14;
-    placeDrop(rainPos, i, rainY[i], rainLen[i]);
+    rainSpeed[i] = 7 + Math.random() * 7;
+    rainLen[i] = 0.09 + Math.random() * 0.1;
+    placeDrop(rainPos, i, rainY[i], rainLen[i], rainX, rainZ);
+    // Brighter drops read as nearer, which is what stops the field flattening
+    // into one uniform sheet.
+    const b = 0.3 + Math.random() * 0.7;
+    const o = i * 6;
+    rainCol[o] = rainCol[o + 3] = 0.62 * b;
+    rainCol[o + 1] = rainCol[o + 4] = 0.75 * b;
+    rainCol[o + 2] = rainCol[o + 5] = 0.91 * b;
   }
   const rainGeo = new THREE.BufferGeometry();
   rainGeo.setAttribute('position', new THREE.BufferAttribute(rainPos, 3));
-  const rainMat = new THREE.LineBasicMaterial({ color: 0x9fc0e8, transparent: true, opacity: 0.1 });
+  rainGeo.setAttribute('color', new THREE.BufferAttribute(rainCol, 3));
+  const rainMat = new THREE.LineBasicMaterial({
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.12,
+  });
   const rain = new THREE.LineSegments(rainGeo, rainMat);
   rain.frustumCulled = false;
   group.add(rain);
 
-  function placeDrop(arr, i, y, len) {
+  function placeDrop(arr, i, y, len, xs, zs) {
     let x;
     let z;
     do {
       x = (Math.random() - 0.5) * 23;
       z = (Math.random() - 0.5) * 23;
     } while (sheltered(x, z));
+    xs[i] = x;
+    zs[i] = z;
     const o = i * 6;
     arr[o] = x;
     arr[o + 1] = y;
     arr[o + 2] = z;
-    arr[o + 3] = x + 0.05;
+    arr[o + 3] = x + WIND_X;
     arr[o + 4] = y + len;
     arr[o + 5] = z;
   }
 
-  // A brighter, sparser near layer gives the rain some depth.
-  const NEAR_COUNT = 34;
+  // A slightly brighter, faster near layer for parallax. Kept short and low:
+  // long bright drops are what turned this into a visible net.
+  const NEAR_COUNT = 40;
+  const NEAR_LEN = 0.3;
+  const NEAR_TOP = 4.2;
   const nearPos = new Float32Array(NEAR_COUNT * 2 * 3);
+  const nearX = new Float32Array(NEAR_COUNT);
   const nearY = new Float32Array(NEAR_COUNT);
+  const nearZ = new Float32Array(NEAR_COUNT);
   const nearSpeed = new Float32Array(NEAR_COUNT);
   for (let i = 0; i < NEAR_COUNT; i += 1) {
-    nearY[i] = Math.random() * 9;
-    nearSpeed[i] = 14 + Math.random() * 8;
-    placeDrop(nearPos, i, nearY[i], 0.6);
+    nearY[i] = Math.random() * NEAR_TOP;
+    nearSpeed[i] = 12 + Math.random() * 7;
+    placeDrop(nearPos, i, nearY[i], NEAR_LEN, nearX, nearZ);
   }
   const nearGeo = new THREE.BufferGeometry();
   nearGeo.setAttribute('position', new THREE.BufferAttribute(nearPos, 3));
-  const near = new THREE.LineSegments(nearGeo, new THREE.LineBasicMaterial({ color: 0xcfe2ff, transparent: true, opacity: 0.14 }));
+  const near = new THREE.LineSegments(nearGeo, new THREE.LineBasicMaterial({ color: 0xcfe2ff, transparent: true, opacity: 0.16 }));
   near.frustumCulled = false;
   group.add(near);
 
@@ -130,37 +161,47 @@ export function buildWeather(scene, refs) {
 
   function update(time, dt) {
     // Rain: fall and wrap, skipping sheltered footprints.
+    // Both vertices of every segment are rewritten from the same x/y/z each
+    // frame. Writing only the first vertex on respawn left the second stranded
+    // at its old position, which stretched each recycled drop into a long line
+    // across the scene — the crossed lines were what read as a spider web.
     for (let i = 0; i < RAIN_COUNT; i += 1) {
       rainY[i] -= rainSpeed[i] * dt;
       if (rainY[i] < 0) {
-        rainY[i] = DROP_TOP + Math.random() * 2;
+        rainY[i] = DROP_TOP + Math.random() * 1.5;
         let x;
         let z;
         do {
           x = (Math.random() - 0.5) * 23;
           z = (Math.random() - 0.5) * 23;
         } while (sheltered(x, z));
-        const o = i * 6;
-        rainPos[o] = x;
-        rainPos[o + 2] = z;
+        rainX[i] = x;
+        rainZ[i] = z;
       }
       const o = i * 6;
+      rainPos[o] = rainX[i];
       rainPos[o + 1] = rainY[i];
+      rainPos[o + 2] = rainZ[i];
+      rainPos[o + 3] = rainX[i] + WIND_X;
       rainPos[o + 4] = rainY[i] + rainLen[i];
+      rainPos[o + 5] = rainZ[i];
     }
     rainGeo.attributes.position.needsUpdate = true;
 
     for (let i = 0; i < NEAR_COUNT; i += 1) {
       nearY[i] -= nearSpeed[i] * dt;
       if (nearY[i] < 0) {
-        nearY[i] = 8 + Math.random() * 1.5;
-        const o = i * 6;
-        nearPos[o] = (Math.random() - 0.5) * 20;
-        nearPos[o + 2] = (Math.random() - 0.5) * 20;
+        nearY[i] = NEAR_TOP + Math.random() * 1.2;
+        nearX[i] = (Math.random() - 0.5) * 20;
+        nearZ[i] = (Math.random() - 0.5) * 20;
       }
       const o = i * 6;
+      nearPos[o] = nearX[i];
       nearPos[o + 1] = nearY[i];
-      nearPos[o + 4] = nearY[i] + 0.34;
+      nearPos[o + 2] = nearZ[i];
+      nearPos[o + 3] = nearX[i] + WIND_X;
+      nearPos[o + 4] = nearY[i] + NEAR_LEN;
+      nearPos[o + 5] = nearZ[i];
     }
     nearGeo.attributes.position.needsUpdate = true;
 

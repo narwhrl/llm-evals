@@ -103,6 +103,35 @@ Three `THREE.Material: parameter 'transparent' has value of undefined` warnings
 from `flat()` (`false || undefined`) and a removed-API warning for
 `PCFSoftShadowMap` were also resolved. The final build loads with a clean console.
 
+## Correction after review — the rain rendered as a spider web
+
+The user reviewed the published candidate and reported that the rain looked like
+a spider web falling through the scene. It did, and there were two independent
+causes:
+
+1. **Recycled drops were stretched into long lines.** The rain update loop wrote
+   only the *first* vertex of each line segment on respawn and left the second
+   vertex at its old position. Every drop that reached the ground was therefore
+   redrawn as a segment running from its new location back to wherever it had
+   been, potentially across the whole 23-unit volume. Those accumulated into a
+   mesh of crossing lines. Both vertices are now rewritten every frame from a
+   single source of truth (`rainX`/`rainY`/`rainZ`), which removes the whole
+   class of bug.
+2. **The field was too sparse and too long to read as weather.** 130 drops of
+   0.1–0.24 units, all identically bright, spread over a volume reaching y = 6.5
+   — above the horizon, where the rain had nothing to sit against and read as
+   floating wire. Rain now uses 720 drops of 0.09–0.19 units at opacity 0.12,
+   confined to y ≤ 4.6, each with its own brightness via vertex colours so near
+   and far still separate, all leaning the same way on a shared wind vector.
+   The faster near-parallax layer was shortened from 0.6 to 0.3 units and pulled
+   down from y ≤ 9 to y ≤ 4.2; those long bright drops were the most visible
+   part of the net.
+
+The corrected candidate is committed separately and the original archive tag is
+left untouched; see the supersession note in `imports.json`. All evidence
+screenshots were recaptured after the fix.
+
+
 ## Known limitations
 
 - Requires a WebGL-capable browser.
