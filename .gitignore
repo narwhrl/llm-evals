@@ -1,2 +1,6 @@
 /.worktrees/
 /.runs/
+# Candidate runtime output and local dependencies
+node_modules/
+dist/
+*.png
