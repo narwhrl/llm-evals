@@ -6,7 +6,7 @@
 - Canonical candidate path: `tasks/rainy-konbini-diorama/solution/`
 - Candidate result report: `tasks/rainy-konbini-diorama/solution/RESULTS.md`
 - Prompt: [`task.md`](task.md)
-- Status: Two candidates archived on `llm/rainy-konbini-diorama` at `tasks/rainy-konbini-diorama/solutions/<candidate-id>/` — `gpt-6-sol` and `minimax-m3.1-flash-preview`. Source commits and trees are recorded in [`imports.json`](imports.json) on the task branch. The two candidates were pinned to different `main` baselines (`eac83c1` and `7f83cb6`); the task inputs are byte-identical between them, so only the recorded provenance differs.
+- Status: Three candidates archived on `llm/rainy-konbini-diorama` at `tasks/rainy-konbini-diorama/solutions/<candidate-id>/`: `gpt-6-sol`, `minimax-m3.1-flash-preview`, and `claude-opus-5.5`. Source commits and trees are recorded in [`imports.json`](imports.json) on the task branch. Each candidate is pinned to a different `main` baseline (`eac83c1`, `7f83cb6`, and `087676f`). The task prompt is byte-identical across all three, so only the recorded provenance differs.
 
 ## Shared Inputs
 
