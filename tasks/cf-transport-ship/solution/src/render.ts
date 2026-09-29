@@ -17,6 +17,7 @@ export class GameRenderer {
   private viewModels = new Map<WeaponId, ReturnType<typeof createViewModel>>();
   private grenadeView = new THREE.Group(); private lastWeapon: WeaponId | 'grenade' | '' = '';
   private shotFlashUntil = 0; private lastShot = 0; private lastTime = 0;
+  aimProgress = 0;
   private lastShotOrigins = new Map<number, THREE.Vector3>();
   private cameraDir = new THREE.Vector3();
   private smokeMaterial = new THREE.MeshBasicMaterial({ color: 0x9faeb0, transparent: true, opacity: .16, depthWrite: false, side: THREE.DoubleSide });
@@ -47,7 +48,9 @@ export class GameRenderer {
     this.camera.aspect = width / height; this.viewCamera.aspect = width / height;
     this.camera.updateProjectionMatrix(); this.viewCamera.updateProjectionMatrix();
   }
-  reset() {
+  reset(fov = 78) {
+    this.aimProgress = 0; this.lastTime = 0; this.lastShot = 0; this.shotFlashUntil = 0; this.lastWeapon = '';
+    this.camera.fov = fov; this.camera.updateProjectionMatrix();
     for (const rig of this.humans.values()) { this.scene.remove(rig.root); this.disposeObject(rig.root); }
     this.humans.clear();
     for (const effect of this.effects) { this.scene.remove(effect.mesh); this.disposeObject(effect.mesh, true); }
@@ -77,15 +80,18 @@ export class GameRenderer {
       rig.root.visible = actor.alive || game.now < actor.respawnAt - 1.1;
     }
   }
-  private updateView(game: Game, settings: Settings) {
+  private updateView(game: Game, settings: Settings, frameDt: number) {
     const player = game.player;
     if (!player) return;
     const height = eyeHeight(player.body), movingBob = settings.bob && player.body.grounded ? Math.sin(game.now * (player.moving > .1 ? 10 : 2)) * Math.min(player.moving / 5, 1) * .023 : 0;
     this.camera.position.set(player.body.x, player.body.y + height + movingBob, player.body.z);
     direction(player.yaw, player.pitch, this.cameraDir);
     this.camera.lookAt(this.camera.position.clone().add(this.cameraDir));
-    const targetFov = player.ads && player.selected === 'longshot' ? 24 : settings.fov;
-    this.camera.fov += (targetFov - this.camera.fov) * .22;
+    const aiming = game.phase === 'playing' && player.alive && player.ads && player.selected === 'longshot';
+    const step = Math.min(1, Math.max(0, frameDt) / .3);
+    this.aimProgress = Math.max(0, Math.min(1, this.aimProgress + (aiming ? step : -step)));
+    const aim = this.aimProgress * this.aimProgress * (3 - 2 * this.aimProgress);
+    this.camera.fov = settings.fov + (24 - settings.fov) * aim;
     this.camera.updateProjectionMatrix();
     this.viewCamera.fov = 68; this.viewCamera.updateProjectionMatrix();
     const weapon = player.selected;
@@ -102,13 +108,15 @@ export class GameRenderer {
       const reloadProgress = g.reloadEnd > game.now ? 1 - (g.reloadEnd - game.now) / Math.max(.01, id === 'longshot' ? 2.8 : id === 'revolver' ? 1.7 : id === 'vector' ? 1.84 : 2.2) : 0;
       const recoil = Math.max(0, 1 - (game.now - this.lastShot) * 9);
       const sway = settings.bob ? Math.sin(game.now * 10) * Math.min(player.moving / 5, 1) : 0;
-      model.root.position.set(.42 + sway * .011, -.48 + Math.abs(sway) * .014 - recoil * .04, -1.13 + recoil * .08);
-      model.root.rotation.x = -.08 * recoil + (reloadProgress > 0 ? Math.sin(Math.PI * reloadProgress) * .38 : 0);
+      const scopeLift = id === 'longshot' ? aim : 0;
+      model.root.position.set(.42 + sway * .011 - scopeLift * .36, -.48 + Math.abs(sway) * .014 - recoil * .04 + scopeLift * .2, -1.13 + recoil * .08 + scopeLift * .25);
+      model.root.rotation.x = -.08 * recoil + (reloadProgress > 0 ? Math.sin(Math.PI * reloadProgress) * .38 : 0) - scopeLift * .06;
       model.root.rotation.z = reloadProgress > 0 ? Math.sin(Math.PI * reloadProgress) * -.29 : sway * .006;
+      model.root.rotation.y = scopeLift * -.04;
       model.magazine.position.y = -.14 - (reloadProgress > .3 && reloadProgress < .73 ? Math.sin((reloadProgress - .3) / .43 * Math.PI) * .18 : 0);
       model.leftHand.position.y = -.15 - (reloadProgress > 0 ? Math.sin(Math.PI * reloadProgress) * .11 : 0);
       model.flash.visible = game.now < this.shotFlashUntil;
-      model.root.visible = player.alive && !(player.ads && player.selected === 'longshot');
+      model.root.visible = player.alive && !(id === 'longshot' && this.aimProgress >= .98);
     }
     this.grenadeView.visible = player.alive && weapon === 'grenade';
   }
@@ -168,10 +176,10 @@ export class GameRenderer {
       group.traverse(o => { if (o instanceof THREE.Mesh) (o.material as THREE.MeshBasicMaterial).opacity = .1 * strength; });
     }
   }
-  render(game: Game, settings: Settings, width: number, height: number) {
+  render(game: Game, settings: Settings, width: number, height: number, frameDt = 0) {
     const dt = Math.max(0, game.now - this.lastTime); this.lastTime = game.now;
     if (this.renderer.domElement.width !== Math.floor(width * this.renderer.getPixelRatio()) || this.renderer.domElement.height !== Math.floor(height * this.renderer.getPixelRatio())) this.resize(width, height, settings.quality);
-    if (game.actors.length) { this.syncHumans(game); this.updateView(game, settings); }
+    if (game.actors.length) { this.syncHumans(game); this.updateView(game, settings, frameDt); }
     this.syncGrenades(game); this.syncSmoke(game);
     const seaMat = this.world.sea.material as THREE.ShaderMaterial; seaMat.uniforms.uTime.value = game.now;
     this.world.sky.rotation.y = game.now * .00015;

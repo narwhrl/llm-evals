@@ -31,9 +31,9 @@ function requestLock() {
     .catch(() => { pointerRequested = false; game.pause(); ui.showPause(); ui.toast('无法锁定鼠标。请点击页面并允许浏览器的指针锁定。'); });
 }
 function startMatch() {
-  clearInput(); renderer.reset();
+  clearInput(); renderer.reset(settings.fov);
   game.start(ui.team, ui.primary, ui.difficulty, ui.practiceMinutes);
-  endShown = false; accumulator = 0; ui.showGame(); requestLock();
+  endShown = false; accumulator = 0; ui.resetMatchFeedback(); ui.showGame(); requestLock();
 }
 ui.onStart = (team, primary, difficulty, minutes) => { ui.team = team; ui.primary = primary; ui.difficulty = difficulty; ui.practiceMinutes = minutes; startMatch(); };
 ui.onResume = () => { if (game.phase === 'paused') requestLock(); };
@@ -120,8 +120,8 @@ function frame(now: number) {
     }
     if (steps === 7) accumulator = 0;
   } else accumulator = 0;
-  renderer.render(game, settings, innerWidth, innerHeight);
-  if (game.actors.length) ui.update(game);
+  renderer.render(game, settings, innerWidth, innerHeight, elapsed);
+  if (game.actors.length) ui.update(game, renderer.aimProgress);
   if (game.phase === 'ended' && !endShown) { endShown = true; ui.showEnd(game); clearInput(); if (document.pointerLockElement) document.exitPointerLock(); audio.pause(); }
   if (scoreboardHeld && game.phase !== 'playing') ui.setScoreboard(false);
   requestAnimationFrame(frame);

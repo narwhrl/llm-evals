@@ -36,9 +36,11 @@ try {
     const shot = game.attack(player);
     return { at: game.now, damage: shot?.damage, target: shot?.target?.id };
   });
-  await page.waitForFunction(start => window.__shipTest.game.now > start + .25, firstShot.at);
+  await page.waitForFunction(() => !document.querySelector('#hit-marker').classList.contains('hidden'));
   const hit = await page.evaluate(() => ({ visible: !document.querySelector('#hit-marker').classList.contains('hidden'), detail: document.querySelector('#hit-detail')?.textContent }));
   await page.screenshot({ path: resolve(evidence, 'feedback-hit.png') });
+  await page.waitForTimeout(700);
+  const hitExpired = await page.evaluate(() => document.querySelector('#hit-marker').classList.contains('hidden'));
 
   const finalShot = await page.evaluate(() => {
     const game = window.__shipTest.game, target = game.actors.find(actor => actor.team !== game.playerTeam && actor.alive);
@@ -47,11 +49,13 @@ try {
     const shot = game.attack(game.player);
     return { at: game.now, damage: shot?.damage, target: shot?.target?.id };
   });
-  await page.waitForFunction(start => window.__shipTest.game.now > start + 1.5, finalShot.at);
+  await page.waitForFunction(() => !document.querySelector('#kill-marker').classList.contains('hidden'));
   const kill = await page.evaluate(() => ({ visible: !document.querySelector('#kill-marker').classList.contains('hidden'), text: document.querySelector('#kill-marker').textContent, score: window.__shipTest.game.score[window.__shipTest.game.playerTeam] }));
   await page.screenshot({ path: resolve(evidence, 'feedback-kill.png') });
-  const report = { horizontal, vertical, firstShot, finalShot, hit, kill, errors };
+  await page.waitForTimeout(2400);
+  const killExpired = await page.evaluate(() => document.querySelector('#kill-marker').classList.contains('hidden'));
+  const report = { horizontal, vertical, firstShot, finalShot, hit, hitExpired, kill, killExpired, errors };
   await writeFile(resolve(evidence, 'feedback-e2e.json'), JSON.stringify(report, null, 2));
   console.log(JSON.stringify(report, null, 2));
-  if (!(horizontal.moves.some(([x]) => x > 0) && horizontal.yaw < 0 && vertical.pitch < 0 && firstShot.damage > 0 && finalShot.damage > 0 && hit.visible && hit.detail && kill.visible && kill.score === 1 && errors.length === 0)) process.exitCode = 1;
+  if (!(horizontal.moves.some(([x]) => x > 0) && horizontal.yaw < 0 && vertical.pitch < 0 && firstShot.damage > 0 && finalShot.damage > 0 && hit.visible && hit.detail && hitExpired && kill.visible && killExpired && kill.score === 1 && errors.length === 0)) process.exitCode = 1;
 } finally { await browser.close(); }

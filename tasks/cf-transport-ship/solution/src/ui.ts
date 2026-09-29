@@ -45,7 +45,7 @@ export class UI {
         <div id="kill-feed" class="kill-feed"></div>
         <div id="crosshair" class="crosshair"><i class="ch up"></i><i class="ch down"></i><i class="ch left"></i><i class="ch right"></i><i class="ch center"></i></div>
         <div id="hit-marker" class="hit-marker hidden">✕</div><div id="hit-detail" class="hit-detail hidden"></div><div id="kill-marker" class="kill-marker hidden" role="status" aria-live="polite"><span>◆ 击杀确认</span><strong id="kill-name"></strong><small id="kill-count"></small></div>
-        <div id="scope" class="scope hidden"><div class="scope-circle"><div class="scope-v"></div><div class="scope-h"></div><div class="scope-dot"></div><span class="scope-range">M90 / ×6</span></div></div>
+        <div id="scope" class="scope hidden"><div id="scope-circle" class="scope-circle"><div class="scope-v"></div><div class="scope-h"></div><div class="scope-dot"></div><span class="scope-range">M90 / ×6</span></div></div>
         <div class="hud-bottom left"><div class="side-caption">COMBAT STATUS</div><div class="vitals"><div><span>生命值</span><strong id="hp-value">100</strong><small>HP</small></div><div><span>护甲值</span><strong id="armor-value">100</strong><small>AP</small></div></div><div class="meter"><span id="hp-meter"></span></div><div class="meter armor"><span id="armor-meter"></span></div><div id="status-text" class="status-text">战斗准备就绪</div></div>
         <div class="hud-bottom right"><div class="side-caption">ACTIVE LOADOUT <span id="slot-number">01 / PRIMARY</span></div><div class="weapon-name" id="weapon-name">AR-47 突击步枪</div><div class="ammo-line"><strong id="mag-value">30</strong><span>/</span><b id="reserve-value">90</b><small id="ammo-label">弹药</small></div><div class="inventory"><span id="he-count">高爆弹 × 1</span><span id="smoke-count">烟雾弹 × 1</span></div></div>
         <div id="debug" class="debug hidden"></div>
@@ -120,10 +120,15 @@ export class UI {
   }
   setScoreboard(visible: boolean) { this.el('scoreboard').classList.toggle('hidden', !visible); }
   toast(message: string) { this.el('toast').textContent = message; this.el('toast').classList.remove('hidden'); window.setTimeout(() => this.el('toast').classList.add('hidden'), 3600); }
+  resetMatchFeedback() {
+    this.hitUntil = 0; this.killUntil = 0; this.feed = []; this.reveals = []; this.lastHud = -1;
+    this.el('hit-marker').classList.add('hidden'); this.el('hit-detail').classList.add('hidden'); this.el('kill-marker').classList.add('hidden');
+    this.el('kill-feed').innerHTML = '';
+  }
   consume(events: GameEvent[], game: Game) {
     for (const e of events) {
       if (e.type === 'hit' && e.actor === game.player.id && e.target !== game.player.id && e.amount && e.amount > 0) {
-        this.hitUntil = game.now + .48;
+        this.hitUntil = performance.now() + 480;
         const marker = this.el('hit-marker'), detail = this.el('hit-detail');
         marker.classList.toggle('headshot', e.zone === 'head');
         detail.classList.toggle('headshot', e.zone === 'head');
@@ -138,7 +143,7 @@ export class UI {
         const killer = game.getActor(e.actor!)!, victim = game.getActor(e.target!)!;
         if (killer && victim) this.feed.unshift({ html: `<span class="${killer.team}">${esc(killer.name)}</span><b>${esc(e.text || '击杀')}</b><span class="${victim.team}">${esc(victim.name)}</span>`, until: game.now + 5 });
         if (killer?.id === game.player.id && victim?.id !== game.player.id) {
-          this.killUntil = game.now + 2.2;
+          this.killUntil = performance.now() + 2200;
           this.el('kill-name').textContent = victim.name;
           this.el('kill-count').textContent = `+1 击杀 · 本局 ${killer.kills}`;
           const marker = this.el('kill-marker'); marker.classList.remove('hidden');
@@ -154,14 +159,19 @@ export class UI {
     this.feed = this.feed.filter(f => f.until > game.now).slice(0, 5);
     this.reveals = this.reveals.filter(r => r.until > game.now).slice(-15);
   }
-  update(game: Game) {
+  update(game: Game, aimProgress = 0) {
     if (!game.actors.length) return;
     const player = game.player;
-    this.el('hit-marker').classList.toggle('hidden', game.now >= this.hitUntil);
-    this.el('hit-detail').classList.toggle('hidden', game.now >= this.hitUntil);
-    this.el('kill-marker').classList.toggle('hidden', game.now >= this.killUntil);
-    this.el('scope').classList.toggle('hidden', !(player.alive && player.ads && player.selected === 'longshot'));
-    this.el('crosshair').classList.toggle('hidden', !player.alive || (player.ads && player.selected === 'longshot'));
+    const feedbackNow = performance.now();
+    this.el('hit-marker').classList.toggle('hidden', feedbackNow >= this.hitUntil);
+    this.el('hit-detail').classList.toggle('hidden', feedbackNow >= this.hitUntil);
+    this.el('kill-marker').classList.toggle('hidden', feedbackNow >= this.killUntil);
+    const scopeBlend = aimProgress * aimProgress * (3 - 2 * aimProgress);
+    this.el('scope').classList.toggle('hidden', !player.alive || aimProgress <= 0);
+    this.el('scope').style.opacity = String(scopeBlend);
+    this.el('scope-circle').style.transform = `scale(${1.18 - .18 * scopeBlend})`;
+    this.el('crosshair').classList.toggle('hidden', !player.alive || aimProgress >= 1);
+    this.el('crosshair').style.opacity = String(1 - scopeBlend);
     const spread = player.selected === 'grenade' || player.selected === 'knife' ? 11 : 7 + player.moving * 1.4 + player.shotCount * 1.8;
     this.el('crosshair').style.setProperty('--gap', `${spread}px`);
     this.el('death').classList.toggle('hidden', player.alive || game.phase === 'ended');

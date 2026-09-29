@@ -430,7 +430,7 @@ export class Game {
     const speed = this.input.crouch ? 2.25 : this.input.quiet ? 2.8 : a.selected === 'knife' ? 5.25 : 4.65;
     const forward = clamp(this.input.forward, -1, 1), strafe = clamp(this.input.strafe, -1, 1);
     const magnitude = Math.max(1, Math.hypot(forward, strafe));
-    const fx = Math.sin(a.yaw), fz = Math.cos(a.yaw), rx = Math.cos(a.yaw), rz = -Math.sin(a.yaw);
+    const fx = Math.sin(a.yaw), fz = Math.cos(a.yaw), rx = -Math.cos(a.yaw), rz = Math.sin(a.yaw);
     const vx = (fx * forward + rx * strafe) * speed / magnitude;
     const vz = (fz * forward + rz * strafe) * speed / magnitude;
     const wasGrounded = a.body.grounded;
