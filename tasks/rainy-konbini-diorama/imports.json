@@ -18,18 +18,27 @@
       "model": "minimax/MiniMax-M3.1-Flash-Preview",
       "baselineMain": "7f83cb63a506043f0f59e4a965c42f83df423ad1",
       "sourceRef": "local-clone:.runs/rainy-konbini-diorama/minimax-m3.1-flash-preview (detached, remote removed)",
-      "sourceCommit": "947d1b9787d7c056bb39bbed2a367e403016e944",
-      "sourceTree": "96147853b75be44db54844d7f3763858074a7951",
-      "archiveTag": "candidate/rainy-konbini-diorama/minimax-m3.1-flash-preview-r2",
+      "sourceCommit": "b86798eb84c6e44a0701908c600e75c74dbabfed",
+      "sourceTree": "429f2a0a4ec883a138b4532821b254f3601c1f94",
+      "archiveTag": "candidate/rainy-konbini-diorama/minimax-m3.1-flash-preview-r3",
       "destination": "tasks/rainy-konbini-diorama/solutions/minimax-m3.1-flash-preview",
       "resultReport": "tasks/rainy-konbini-diorama/solutions/minimax-m3.1-flash-preview/RESULTS.md",
       "note": "Pinned to the current main tip, which differs from gpt-6-sol's eac83c1 baseline. The task inputs are byte-identical between the two commits; only three unrelated task README status lines changed. See the candidate RESULTS.md.",
-      "supersedes": {
-        "sourceCommit": "528f4e99a1086f184f6b50fd7e0c1a994a7c5172",
-        "sourceTree": "4b7cd57dc3967636b27f3a8bd8ce51675da4408c",
-        "archiveTag": "candidate/rainy-konbini-diorama/minimax-m3.1-flash-preview",
-        "reason": "Published first, then reported by the user as rendering the rain as a spider web. The rain update loop left the second line vertex stale when a drop recycled, stretching each recycled drop into a long line across the scene; the field was also too sparse and reached too high. Both tags are retained so the correction is auditable."
-      }
+      "supersedes": [
+        {
+          "sourceCommit": "947d1b9787d7c056bb39bbed2a367e403016e944",
+          "sourceTree": "96147853b75be44db54844d7f3763858074a7951",
+          "archiveTag": "candidate/rainy-konbini-diorama/minimax-m3.1-flash-preview-r2",
+          "reason": "Second revision. Rain recycled into long stretched lines that read as a spider web; the field was also too sparse and reached above the horizon. Fixed by rewriting both line vertices every frame from one source of truth, and by raising the count to 720 while shortening drops and confining them to y <= 4.6."
+        },
+        {
+          "sourceCommit": "528f4e99a1086f184f6b50fd7e0c1a994a7c5172",
+          "sourceTree": "4b7cd57dc3967636b27f3a8bd8ce51675da4408c",
+          "archiveTag": "candidate/rainy-konbini-diorama/minimax-m3.1-flash-preview",
+          "reason": "First published revision, kept so the whole correction chain stays auditable. Superseded twice: first by the rain fix above, then by r3."
+        }
+      ],
+      "r3Note": "Third revision, after the user asked for better overall lighting, shadow quality and model precision. Three of the changes are defects rather than taste and are recorded in the candidate RESULTS.md: the interior was over-lit into a featureless white void; the fascia shop name was drawn in the same colour as its own background and rendered invisible; and the canvas was sized to its backing store rather than to the stage, so on any non-1x display the scene overflowed and was silently cropped. All evidence screenshots were recaptured at a verified 1440 x 900 after that last fix; the two earlier evidence sets were captured while the overflow was in effect."
     },
     {
       "candidateId": "claude-opus-5.5",
