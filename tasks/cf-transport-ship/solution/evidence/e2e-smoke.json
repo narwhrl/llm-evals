@@ -1,0 +1,53 @@
+{
+  "base": "http://127.0.0.1:4174/cf-transport-ship/gpt-6-sol/",
+  "entered": {
+    "phase": "playing",
+    "locked": true,
+    "actors": 10
+  },
+  "beforePlayer": {
+    "id": 0,
+    "team": "red",
+    "alive": true,
+    "health": 100,
+    "armor": 100,
+    "kills": 0,
+    "deaths": 0,
+    "x": -5.8,
+    "y": 0,
+    "z": -33.2,
+    "selected": "vandal",
+    "ammo": 30
+  },
+  "afterMovePlayer": {
+    "id": 0,
+    "team": "red",
+    "alive": true,
+    "health": 100,
+    "armor": 100,
+    "kills": 0,
+    "deaths": 0,
+    "x": -5.8,
+    "y": 0,
+    "z": -30.02249999999998,
+    "selected": "vandal",
+    "ammo": 30
+  },
+  "afterShotPlayer": {
+    "id": 0,
+    "team": "red",
+    "alive": true,
+    "health": 100,
+    "armor": 100,
+    "kills": 0,
+    "deaths": 0,
+    "x": -5.8,
+    "y": 0,
+    "z": -30.02249999999998,
+    "selected": "vandal",
+    "ammo": 29
+  },
+  "paused": "paused",
+  "errors": [],
+  "external": []
+}
