@@ -6,7 +6,7 @@
 - Canonical candidate path: `tasks/rainy-konbini-diorama/solution/`
 - Candidate result report: `tasks/rainy-konbini-diorama/solution/RESULTS.md`
 - Prompt: [`task.md`](task.md)
-- Status: No archived candidates. The task is ready for an evaluation round from a pinned `main` baseline.
+- Status: Two candidates archived on `llm/rainy-konbini-diorama` at `tasks/rainy-konbini-diorama/solutions/<candidate-id>/` — `gpt-6-sol` and `minimax-m3.1-flash-preview`. Source commits and trees are recorded in [`imports.json`](imports.json) on the task branch. The two candidates were pinned to different `main` baselines (`eac83c1` and `7f83cb6`); the task inputs are byte-identical between them, so only the recorded provenance differs.
 
 ## Shared Inputs
 
