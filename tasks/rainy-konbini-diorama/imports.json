@@ -30,6 +30,18 @@
         "archiveTag": "candidate/rainy-konbini-diorama/minimax-m3.1-flash-preview",
         "reason": "Published first, then reported by the user as rendering the rain as a spider web. The rain update loop left the second line vertex stale when a drop recycled, stretching each recycled drop into a long line across the scene; the field was also too sparse and reached too high. Both tags are retained so the correction is auditable."
       }
+    },
+    {
+      "candidateId": "claude-opus-5.5",
+      "model": "anthropic/claude-opus-5-5",
+      "baselineMain": "087676f533866018deb19bd8e51ef5db3287719c",
+      "sourceRef": "local-clone:.runs/rainy-konbini-diorama/claude-opus-5.5 (detached, remote removed)",
+      "sourceCommit": "98d1f78d4238a72427648e49f3d15b666fd9d7d5",
+      "sourceTree": "71cee4fd6f7cfe9b5a085ac1223ddee586efafe1",
+      "archiveTag": "candidate/rainy-konbini-diorama/claude-opus-5.5",
+      "destination": "tasks/rainy-konbini-diorama/solutions/claude-opus-5.5",
+      "resultReport": "tasks/rainy-konbini-diorama/solutions/claude-opus-5.5/RESULTS.md",
+      "note": "Pinned to main 087676f. tasks/rainy-konbini-diorama/task.md is byte-identical to eac83c1 and 7f83cb6; only the task README status line and unrelated docs changed."
     }
   ]
 }
