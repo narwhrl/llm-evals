@@ -6,8 +6,11 @@ import './style.css';
 const mount = document.querySelector('#stage');
 
 const scene = new THREE.Scene();
+// Opening framing. Pulled in and tilted slightly down from the first pass so
+// the corner fills the frame instead of floating in the lower right with a
+// third of the image left as empty sky.
 const camera = new THREE.PerspectiveCamera(38, 1, 0.5, 140);
-camera.position.set(16.2, 10.4, 21.4);
+camera.position.set(15.4, 10.7, 19.8);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -19,7 +22,7 @@ renderer.shadowMap.type = THREE.PCFShadowMap;
 mount.append(renderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
-controls.target.set(-0.5, 1.75, -2.0);
+controls.target.set(0.4, 1.5, -1.4);
 controls.enableDamping = true;
 controls.dampingFactor = 0.075;
 controls.enablePan = false;
@@ -38,7 +41,15 @@ function resize() {
   const h = Math.max(1, mount.clientHeight);
   camera.aspect = w / h;
   camera.updateProjectionMatrix();
-  renderer.setSize(w, h, false);
+  // Re-read the ratio on every resize: browser zoom and dragging the window to
+  // a display with a different density both change it, and a renderer left on
+  // the startup ratio keeps drawing at the wrong resolution.
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  // updateStyle must stay on. With it off the canvas keeps its intrinsic
+  // backing-store size in CSS pixels, so on any display where the pixel ratio
+  // is not 1 the canvas overflows #stage by exactly that factor and the scene
+  // is silently cropped to its top-left corner.
+  renderer.setSize(w, h);
 }
 
 let last = performance.now();

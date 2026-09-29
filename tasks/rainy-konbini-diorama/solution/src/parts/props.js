@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { P } from '../palette.js';
 import {
   make, slab, BOX, CYL, TORUS, PLANE, CONE, toon, flat, textured, tube,
-  canvasTexture, posterTexture, glowTexture, smearTexture,
+  canvasTexture, posterTexture, glowTexture, smearTexture, groundShadow, lightCone,
 } from '../kit.js';
 import { STORE } from './store.js';
 
@@ -57,6 +57,7 @@ export function buildProps(scene) {
     rot: [-Math.PI / 2, 0, 0],
     outline: false,
   }));
+  group.add(groundShadow((vx0 + vx1) / 2, (vz0 + vz1) / 2 + 0.16, 1.15, 0.85, 0.6));
 
   // ---- bicycle ------------------------------------------------------------
   const bike = new THREE.Group();
@@ -77,6 +78,7 @@ export function buildProps(scene) {
   bike.add(make(BOX(0.2, 0.18, 0.2), toon(0x8f97a4), { pos: [0.56, 0.76, 0] }));
   bike.add(make(BOX(0.34, 0.03, 0.03), toon(0x2a303c), { pos: [0.34, 0.24, 0.1], rot: [0.3, 0, 0.5] }));
   group.add(bike);
+  group.add(groundShadow(-4.75, -1.02, 0.85, 0.4, 0.5));
 
   // A second bike leaning in the alley, silhouetted.
   const bike2 = bike.clone();
@@ -84,6 +86,7 @@ export function buildProps(scene) {
   bike2.rotation.set(0, -0.7, 0.16);
   bike2.scale.setScalar(0.98);
   group.add(bike2);
+  group.add(groundShadow(3.6, -5.4, 0.85, 0.4, 0.45, 0.14));
 
   // ---- umbrella stand -----------------------------------------------------
   const ux = 1.05;
@@ -104,12 +107,14 @@ export function buildProps(scene) {
       outline: false,
     }));
   }
+  group.add(groundShadow(ux, uz, 0.34, 0.34, 0.5));
 
   // ---- bins ---------------------------------------------------------------
   for (const [bx, bz, col, lid] of [[-6.95, -0.95, 0x3d6d5a, 0x2a5145], [-6.28, -0.82, 0x40506a, 0x2e3a4d]]) {
     group.add(make(CYL(0.27, 0.24, 0.82, 14), toon(col), { pos: [bx, 0.41, bz], cast: true }));
     group.add(make(CYL(0.29, 0.29, 0.07, 14), toon(lid), { pos: [bx, 0.85, bz] }));
     group.add(make(CYL(0.3, 0.3, 0.05, 14), toon(lid), { pos: [bx, 0.16, bz], outline: false }));
+    group.add(groundShadow(bx, bz, 0.52, 0.5, 0.55));
   }
 
   // ---- streetlight --------------------------------------------------------
@@ -123,6 +128,10 @@ export function buildProps(scene) {
   const streetLamp = new THREE.PointLight(P.lampWarm, 9, 11, 1.7);
   streetLamp.position.set(lx - 1.31, 4.28, lz);
   group.add(streetLamp);
+  // Visible shaft: the reason a streetlight reads at all on a wet night.
+  const cone = lightCone(0.24, 2.5, 4.3, P.lampWarm, 0.075);
+  cone.position.set(lx - 1.31, 2.15, lz);
+  group.add(cone);
   group.add(make(PLANE(3.6, 3.6), textured(glowTexture(P.lampWarm), { blending: THREE.AdditiveBlending, opacity: 0.55 }), {
     pos: [lx - 1.31, 0.115, lz],
     rot: [-Math.PI / 2, 0, 0],
@@ -133,17 +142,23 @@ export function buildProps(scene) {
     rot: [-Math.PI / 2, 0, 0],
     outline: false,
   }));
+  group.add(groundShadow(lx, lz, 0.5, 0.5, 0.6));
   lights.push({ light: streetLamp, base: 9, kind: 'steady', seed: 0.0 });
 
   // ---- utility poles and wires --------------------------------------------
+  // Both poles stand on the west side of the block. A pole anywhere near the
+  // near kerb is metres from the opening camera and reads as a black column
+  // straight through the shopfront, which is the one thing the framing cannot
+  // recover from.
   const poles = [
     { x: -9.3, z: 2.2, h: 6.4, arms: 3 },
-    { x: 1.7, z: 9.5, h: 6.0, arms: 2 },
+    { x: -9.6, z: -6.6, h: 5.6, arms: 2 },
   ];
   const tops = [];
   for (const p of poles) {
     group.add(make(CYL(0.17, 0.21, p.h, 10), toon(P.pole), { pos: [p.x, p.h / 2, p.z], cast: true }));
     group.add(slab(p.x - 0.26, p.x + 0.26, 0, 0.5, p.z - 0.26, p.z + 0.26, toon(0x6a6258), { outline: false }));
+    group.add(groundShadow(p.x, p.z, 0.5, 0.5, 0.55));
     const anchors = [];
     for (let a = 0; a < p.arms; a += 1) {
       const ay = p.h - 0.35 - a * 0.62;
@@ -169,15 +184,15 @@ export function buildProps(scene) {
       [b[0] - (b[0] - mid[0]) * 0.5, b[1] + (mid[1] - b[1]) * 0.5, b[2] - (b[2] - mid[2]) * 0.5], b], radius, toon(wireColor), { steps: 22, radial: 4 });
   }
   const [t1, t2] = tops;
-  for (let i = 0; i < Math.min(3, Math.min(t1.anchors.length, t2.anchors.length)); i += 1) {
+  for (let i = 0; i < Math.min(4, Math.min(t1.anchors.length, t2.anchors.length)); i += 1) {
     group.add(span(t1.anchors[i], t2.anchors[i], 0.5, 0.012));
   }
-  // Service drops. The one to the shop is kept high and short so it does not
-  // cut across the signage from the default viewing angle.
-  group.add(span(t1.anchors[1], [STORE.x1 - 0.1, 4.62, STORE.z1 - 0.4], 0.12, 0.012));
-  group.add(span(t1.anchors[3], [4.7, 4.62, -3.0], 0.2, 0.012));
-  group.add(span(t2.anchors[0], [10.2, 5.4, 6.0], 0.35, 0.012));
-
+  // Service drops. Both are kept high so neither cuts across the signage from
+  // the default viewing angle: one lands on the shop's roof edge, the other
+  // runs on to the neighbour block across the alley.
+  group.add(span(t1.anchors[2], [STORE.x1 - 0.1, 4.62, STORE.z1 - 0.4], 0.12, 0.012));
+  group.add(span(t1.anchors[5], [4.7, 4.62, -3.0], 0.2, 0.012));
+  group.add(span(t2.anchors[0], [-5.7, 4.72, -7.6], 0.24, 0.012));
   // ---- road sign ----------------------------------------------------------
   const sx = 3.4;
   const sz = 2.2;
@@ -217,6 +232,7 @@ export function buildProps(scene) {
   const discMat = flat(0xffffff);
   discMat.map = discTex;
   group.add(make(PLANE(0.4, 0.4), discMat, { pos: [sx, 1.2, sz + 0.07], outline: false }));
+  group.add(groundShadow(sx, sz, 0.28, 0.28, 0.5));
 
   // ---- notice board -------------------------------------------------------
   const nx = 2.55;
@@ -234,14 +250,18 @@ export function buildProps(scene) {
   const noticeLight = new THREE.PointLight(0xbfe4ff, 1.5, 3, 1.8);
   noticeLight.position.set(nx, 1.3, nz + 0.4);
   group.add(noticeLight);
+  group.add(groundShadow(nx, nz, 0.85, 0.4, 0.45));
 
   // ---- crates and a stack of boxes outside the shop ------------------------
   group.add(slab(-7.9, -7.3, 0.1, 0.52, -1.0, -0.4, toon(P.crate), { cast: true }));
   group.add(slab(-7.86, -7.34, 0.52, 0.84, -0.96, -0.44, toon(0x8a6d45), { cast: true }));
+  group.add(groundShadow(-7.6, -0.7, 0.75, 0.5, 0.5));
   group.add(slab(-8.4, -8.0, 0.1, 0.44, -0.9, -0.5, toon(0x6f7787), { outline: false }));
   // Newspaper box.
   group.add(slab(-5.0, -4.55, 0.1, 0.86, -0.85, -0.35, toon(0x2f6f8f), { cast: true }));
   group.add(slab(-4.96, -4.59, 0.5, 0.78, -0.36, -0.33, flat(0xdce9f5, { opacity: 0.7 }), { outline: false }));
+  group.add(groundShadow(-4.78, -0.6, 0.45, 0.4, 0.45));
+  group.add(groundShadow(-6.5, -2.0, 0.95, 0.62, 0.5));
 
   scene.add(group);
   return { group, lights };

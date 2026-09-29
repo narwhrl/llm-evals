@@ -26,26 +26,32 @@ export const P = {
   // store shell
   wall: 0xc6cedb,
   wallSide: 0xaab3c2,
+  // The alley flank is a second, darker render of the same wall. At the side
+  // tone it catches enough light to read as a bright slab and the alley stops
+  // being the dark slot the composition wants it to be.
+  wallAlley: 0x78828f,
   wallBack: 0x98a2b2,
   trim: 0x2f8f76,
   trimDeep: 0x1d6553,
   orange: 0xef8a3c,
   orangeDeep: 0xcf6d24,
-  awning: 0xece6d8,
+  awning: 0xd6cebb,
   awningTrim: 0xd8564a,
   kick: 0x4b5668,
   frame: 0x3b4557,
   roof: 0x515c72,
 
-  // interior — kept warm so the shop reads golden against the cool street
-  floor: 0xe8dcc4,
+  // interior — kept warm so the shop reads golden against the cool street, but
+  // pulled off pure white: surfaces this light sit on the top step of the toon
+  // ramp under the shop's own lamps and lose all their form.
+  floor: 0xd8cbb0,
   floorGuide: 0xe8bd52,
-  ceiling: 0xf7ecd8,
-  wallIn: 0xf2e6cf,
-  wallInShade: 0xdcd0bb,
-  shelf: 0xf6f1e6,
-  shelfEdge: 0xa89e8e,
-  counter: 0xf2ece0,
+  ceiling: 0xe9dcc6,
+  wallIn: 0xded1b8,
+  wallInShade: 0xc8bca6,
+  shelf: 0xe4ddcd,
+  shelfEdge: 0x9c9284,
+  counter: 0xdfd8c8,
   warm: 0xffd49a,
   warmDeep: 0xffb055,
 
@@ -64,8 +70,8 @@ export const P = {
   signPost: 0xbcc3ce,
   ac: 0xd6dbe3,
   notice: 0x2b3345,
-  neighbour: 0x9aa3b2,
-  neighbourDark: 0x7d8697,
+  neighbour: 0x8a93a4,
+  neighbourDark: 0x6f7889,
   crate: 0x9a7b4f,
   shrub: 0x3c5a49,
   shrubLight: 0x4e6f59,

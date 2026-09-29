@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { P } from '../palette.js';
-import { make, slab, BOX, CYL, PLANE, CIRCLE, toon, flat, textured, glowTexture, smearTexture } from '../kit.js';
+import { make, slab, BOX, CYL, PLANE, CIRCLE, toon, flat, textured, glowTexture, smearTexture, canvasTexture, groundShadow, wetRim } from '../kit.js';
 import { ROAD_A, ROAD_B, WALK } from './base.js';
 import { STORE } from './store.js';
 
@@ -90,22 +90,100 @@ export function buildStreet(scene) {
   group.add(alleyGlow);
 
   // ---- neighbour block forming the alley's far wall ------------------------
+  // This is the second-largest mass in the frame and it was reading as one flat
+  // slab, so it now carries a storey band, framed and partly lit windows, a
+  // shuttered ground-floor shopfront with its sign, an external alley stair
+  // and roof plant. Every piece is kept inside the block's own footprint.
   const nx0 = ax1;
   const nx1 = ROAD_B.x0;
   const nz0 = -8.2;
   const nz1 = -1.6;
   group.add(slab(nx0, nx1, 0, 4.4, nz0, nz1, toon(P.neighbour), { cast: true, receive: true }));
   group.add(slab(nx0 - 0.08, nx1 + 0.1, 4.4, 4.62, nz0 - 0.1, nz1 + 0.1, toon(P.neighbourDark), { cast: true }));
-  // Windows facing the alley and the street.
+
+  // Storey band and corner pilasters.
+  group.add(slab(nx0 - 0.1, nx1 + 0.1, 2.52, 2.66, nz0 - 0.06, nz1 + 0.06, toon(0x4a5266), { outline: false }));
+  group.add(slab(nx0 - 0.06, nx1 + 0.06, 0.12, 0.3, nz0 - 0.06, nz1 + 0.06, toon(0x39414f), { outline: false }));
+  for (const cz of [nz0 + 0.06, nz1 - 0.06]) {
+    group.add(slab(nx0 - 0.09, nx1 + 0.09, 0, 4.4, cz - 0.09, cz + 0.09, toon(0x525b70), { outline: false }));
+  }
+
+  // Alley-facing windows: recessed reveal, glazing, mullions, sill. One is lit
+  // and one has a blind half drawn, which is what stops a grid of identical
+  // rectangles from reading as wallpaper.
   for (let i = 0; i < 3; i += 1) {
     const wz = nz0 + 1.0 + i * 2.0;
-    group.add(slab(nx0 - 0.06, nx0 - 0.02, 1.5, 2.5, wz, wz + 0.9, toon(0x2c3446), { outline: false }));
-    group.add(slab(nx0 - 0.1, nx0 - 0.04, 1.44, 1.52, wz - 0.08, wz + 0.98, toon(0x8b939f), { outline: false }));
+    const lit = i === 1;
+    group.add(slab(nx0 - 0.09, nx0 - 0.02, 1.42, 2.58, wz - 0.08, wz + 0.98, toon(0x39424f), { outline: false }));
+    group.add(slab(nx0 - 0.1, nx0 - 0.045, 1.5, 2.5, wz, wz + 0.9, lit
+      ? flat(0xffc978, { opacity: 0.5, transparent: true })
+      : flat(0x1a2334, { opacity: 0.92, transparent: true }), { outline: false }));
+    for (let m = 1; m <= 2; m += 1) {
+      const mz = wz + m * 0.3;
+      group.add(slab(nx0 - 0.13, nx0 - 0.02, 1.5, 2.5, mz - 0.028, mz + 0.028, toon(0x8b939f), { outline: false }));
+    }
+    group.add(slab(nx0 - 0.13, nx0 - 0.02, 1.98, 2.02, wz, wz + 0.9, toon(0x8b939f), { outline: false }));
+    group.add(slab(nx0 - 0.17, nx0 - 0.02, 1.34, 1.42, wz - 0.1, wz + 1.0, toon(0x8b939f), { outline: false }));
+    if (i === 2) {
+      group.add(slab(nx0 - 0.14, nx0 - 0.04, 2.1, 2.5, wz + 0.02, wz + 0.88, flat(0xd6c8a6, { opacity: 0.7, transparent: true }), { outline: false }));
+    }
   }
+  const neighbourWindowLight = new THREE.PointLight(0xffc078, 2.2, 4.5, 1.9);
+  neighbourWindowLight.position.set(nx0 - 0.5, 2.0, nz0 + 3.0);
+  group.add(neighbourWindowLight);
+
+  // Street-facing windows on the upper floors.
   for (let i = 0; i < 2; i += 1) {
     const wz = nz0 + 1.4 + i * 2.6;
-    group.add(slab(nx1 + 0.02, nx1 + 0.06, 2.0, 3.0, wz, wz + 1.1, toon(0x1f2739), { outline: false }));
+    group.add(slab(nx1 + 0.02, nx1 + 0.09, 1.92, 3.08, wz - 0.08, wz + 1.18, toon(0x39424f), { outline: false }));
+    group.add(slab(nx1 + 0.08, nx1 + 0.11, 2.0, 3.0, wz, wz + 1.1, flat(i === 0 ? 0x2b3a52 : 0x1a2334, { opacity: 0.9, transparent: true }), { outline: false }));
+    for (let m = 1; m <= 2; m += 1) {
+      const mz = wz + m * 0.366;
+      group.add(slab(nx1 + 0.02, nx1 + 0.14, 2.0, 3.0, mz - 0.028, mz + 0.028, toon(0x8b939f), { outline: false }));
+    }
+    group.add(slab(nx1 + 0.02, nx1 + 0.14, 2.48, 2.52, wz, wz + 1.1, toon(0x8b939f), { outline: false }));
+    group.add(slab(nx1 + 0.02, nx1 + 0.16, 1.82, 1.92, wz - 0.1, wz + 1.2, toon(0x8b939f), { outline: false }));
   }
+
+  // Ground-floor shopfront on the street side: roller shutter, shutter box and
+  // a faded sign band. This is the panel the camera sees most often.
+  const shutterMat = toon(0x5d6578);
+  group.add(slab(nx1, nx1 + 0.05, 0.3, 2.34, -6.5, -3.5, shutterMat, { cast: true }));
+  for (let i = 0; i < 10; i += 1) {
+    const sy = 0.38 + i * 0.19;
+    group.add(slab(nx1 + 0.05, nx1 + 0.08, sy, sy + 0.095, -6.46, -3.54, toon(0x737d92), { outline: false }));
+  }
+  group.add(slab(nx1, nx1 + 0.13, 2.34, 2.52, -6.6, -3.4, toon(0x3c4457)));
+  const neighbourSignMap = canvasTexture(384, 112, (ctx, w, h) => {
+    ctx.fillStyle = '#262d3d';
+    ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = 'rgba(200,212,232,0.85)';
+    ctx.fillRect(0, 8, w, 3);
+    ctx.fillRect(0, h - 11, w, 3);
+    ctx.fillStyle = '#b9c2d4';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = '700 50px "Yu Gothic", Meiryo, sans-serif';
+    ctx.fillText('大衆酒場 はな', w / 2, h / 2 + 1);
+    // Weathering so it does not read as a fresh decal.
+    ctx.fillStyle = 'rgba(20,26,38,0.28)';
+    for (let i = 0; i < 40; i += 1) {
+      ctx.fillRect(Math.random() * w, Math.random() * h, 4 + Math.random() * 22, 1 + Math.random() * 3);
+    }
+  });
+  const neighbourSignMat = flat(0xffffff);
+  neighbourSignMat.map = neighbourSignMap;
+  group.add(slab(nx1, nx1 + 0.08, 2.66, 3.34, -6.7, -3.3, toon(0x2f3648), { cast: true }));
+  group.add(make(PLANE(3.24, 0.6), neighbourSignMat, { pos: [nx1 + 0.1, 3.0, -5.0], rot: [0, Math.PI / 2, 0], outline: false }));
+  // Warm light leaking under the shutter, and the doorway beside it.
+  group.add(make(PLANE(3.0, 1.5), textured(glowTexture(0xffb974), { blending: THREE.AdditiveBlending, opacity: 0.22 }), {
+    pos: [nx1 + 0.7, 0.15, -5.0],
+    rot: [-Math.PI / 2, 0, 0],
+    outline: false,
+  }));
+  group.add(slab(nx1, nx1 + 0.07, 0.3, 2.34, -3.3, -2.1, toon(0x222937), { outline: false }));
+  group.add(slab(nx1 + 0.07, nx1 + 0.1, 0.9, 1.6, -3.1, -2.3, flat(0xffcf90, { opacity: 0.35, transparent: true }), { outline: false }));
+
   // Small balcony with plants.
   group.add(slab(nx0 - 0.7, nx0, 2.6, 2.72, -6.4, -4.8, toon(0x6f7787)));
   group.add(slab(nx0 - 0.72, nx0 - 0.66, 2.72, 3.2, -6.4, -4.8, toon(0x7b8393), { outline: false }));
@@ -113,10 +191,41 @@ export function buildStreet(scene) {
     group.add(make(CYL(0.13, 0.1, 0.24, 8), toon(P.crate), { pos: [nx0 - 0.35, 2.84, -6.1 + i * 0.6] }));
     group.add(make(new THREE.IcosahedronGeometry(0.2, 0), toon(P.shrubLight), { pos: [nx0 - 0.35, 3.02, -6.1 + i * 0.6], scale: [1, 0.7, 1], outline: false }));
   }
-  // Drainpipe and an exterior condenser.
+
+  // External alley stair up to a first-floor door — the detail that gives the
+  // flank a believable scale.
+  const stairMat = toon(0x5f6879);
+  for (let i = 0; i < 8; i += 1) {
+    const sy = 0.16 + i * 0.17;
+    const sz = -3.05 + i * 0.155;
+    group.add(slab(nx0 - 0.62, nx0, sy, sy + 0.055, sz, sz + 0.16, stairMat, { outline: false }));
+  }
+  group.add(slab(nx0 - 0.72, nx0, 1.5, 1.6, -1.95, -0.85, toon(0x6f7787), { cast: true }));
+  group.add(slab(nx0 - 0.06, nx0 - 0.02, 1.6, 2.66, -1.8, -1.0, toon(0x2f3a4e), { outline: false }));
+  group.add(slab(nx0 - 0.09, nx0 - 0.03, 1.72, 2.54, -1.72, -1.08, flat(0xffc478, { opacity: 0.4, transparent: true }), { outline: false }));
+  group.add(make(CYL(0.035, 0.035, 1.1, 6), toon(0x8b939f), { pos: [nx0 - 0.62, 2.15, -0.95] }));
+  group.add(make(CYL(0.035, 0.035, 1.1, 6), toon(0x8b939f), { pos: [nx0 - 0.62, 2.15, -1.9] }));
+  group.add(slab(nx0 - 0.66, nx0 - 0.58, 2.66, 2.72, -1.95, -0.85, toon(0x8b939f), { outline: false }));
+  for (let i = 0; i < 5; i += 1) {
+    const pz = -3.0 + i * 0.5;
+    group.add(make(CYL(0.03, 0.03, 0.86, 6), toon(0x8b939f), { pos: [nx0 - 0.62, 0.95 + (3.0 - pz) * 0.28, pz] }));
+  }
+  group.add(groundShadow(nx0 - 0.5, -2.2, 0.7, 1.4, 0.45, 0.14));
+
+  // Drainpipe, condenser and roof plant.
   group.add(make(CYL(0.09, 0.09, 4.3, 8), toon(0x8b939f), { pos: [nx1 + 0.1, 2.15, -2.2] }));
   group.add(slab(nx1 + 0.02, nx1 + 0.42, 1.2, 1.9, -7.0, -6.1, toon(P.ac), { cast: true }));
   group.add(slab(nx1 + 0.42, nx1 + 0.46, 1.26, 1.84, -6.94, -6.16, toon(0x8f97a4), { outline: false }));
+  group.add(make(CYL(0.36, 0.36, 0.6, 12), toon(0x99a1ae), { pos: [nx0 + 0.62, 4.92, -6.6], cast: true }));
+  group.add(make(CYL(0.4, 0.4, 0.07, 12), toon(0x5c6474), { pos: [nx0 + 0.62, 5.25, -6.6] }));
+  for (const az of [-3.0, -4.2]) {
+    group.add(make(CYL(0.022, 0.022, 1.5, 5), toon(0x6f7787), { pos: [nx0 + 0.3, 5.35, az] }));
+    group.add(slab(nx0 + 0.1, nx0 + 0.5, 6.08, 6.12, az - 0.22, az + 0.22, toon(0x6f7787), { outline: false }));
+  }
+  // Satellite dish on the alley parapet.
+  group.add(make(CYL(0.34, 0.02, 0.16, 16), toon(0xb9c0cc), { pos: [nx0 - 0.3, 4.95, -3.6], rot: [0, 0, 1.15], cast: true }));
+  group.add(slab(nx0 - 0.12, nx0 - 0.02, 4.62, 4.86, -3.68, -3.52, toon(0x6d7684), { outline: false }));
+
 
   // ---- standing water -----------------------------------------------------
   const puddles = [];
@@ -135,6 +244,7 @@ export function buildStreet(scene) {
       outline: false,
     });
     group.add(m);
+    group.add(wetRim(x, z, rx, rz, 0x8fb4e8, 0.16));
     puddles.push({ x, z, rx, rz });
   }
 
