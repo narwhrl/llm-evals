@@ -6,7 +6,7 @@
 - Canonical candidate path: `tasks/ui-ux-design/solution/`
 - Candidate result report: `tasks/ui-ux-design/solution/RESULTS.md`
 - Prompt: [`task.md`](task.md)
-- Status: Fifteen candidates archived on `llm/ui-ux-design` at `tasks/ui-ux-design/solutions/<candidate-id>/`. Historical source commits and trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json); later imports are recorded in `imports.json` on the task branch.
+- Status: Sixteen candidates archived on `llm/ui-ux-design` at `tasks/ui-ux-design/solutions/<candidate-id>/`. Historical source commits and trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json); later imports are recorded in `imports.json` on the task branch.
 
 ## Shared Inputs
 
