@@ -231,7 +231,10 @@ export function signTexture() {
     ctx.fillRect(0, 74, w, 5);
     ctx.fillRect(0, h - 79, w, 5);
 
-    ctx.fillStyle = hex(P.wall);
+    // The shop name is the single most important mark in the scene, so it is
+    // drawn in the deep trim green against the pale fascia — never in the
+    // fascia colour itself, which would render the name invisible.
+    ctx.fillStyle = hex(P.trimDeep);
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'left';
     fitText(ctx, 'ハローストア', 620, 104);
@@ -253,8 +256,7 @@ export function signTexture() {
     ctx.fillStyle = hex(P.trimDeep);
     ctx.fillRect(742, 86, 46, 70);
     ctx.fillStyle = hex(P.wall);
-    ctx.fillRect(750, 96, 30, 14);
-  });
+    ctx.fillRect(750, 96, 30, 14);  });
 }
 
 /** Blade sign hanging perpendicular to the fascia. */
@@ -442,4 +444,141 @@ export function glowTexture(color) {
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, w, h);
   });
+}
+
+/**
+ * Yellow tactile paving with the raised dot grip. Repeated along its length by
+ * the caller, so the strip reads as a run of tiles rather than one long decal.
+ */
+export function tactileTexture() {
+  return canvasTexture(128, 128, (ctx, w, h) => {
+    ctx.fillStyle = '#9d7f36';
+    ctx.fillRect(0, 0, w, h);
+    const step = w / 4;
+    for (let y = 0; y < 4; y += 1) {
+      for (let x = 0; x < 4; x += 1) {
+        const cx = step * (x + 0.5);
+        const cy = step * (y + 0.5);
+        ctx.fillStyle = 'rgba(28,22,10,0.45)';
+        ctx.beginPath();
+        ctx.arc(cx + 1.5, cy + 1.5, step * 0.3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#c9a648';
+        ctx.beginPath();
+        ctx.arc(cx, cy, step * 0.3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = 'rgba(255,240,196,0.45)';
+        ctx.beginPath();
+        ctx.arc(cx - step * 0.08, cy - step * 0.08, step * 0.15, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+  });
+}
+
+/**
+ * Feathered irregular stain. One texture, reused at different scales for
+ * asphalt repair patches, polished tyre tracks and oil at the kerb — the road
+ * needs tonal variation or the light reflections have nothing to break on.
+ */
+export function grimeTexture(seed = 1) {
+  return canvasTexture(128, 128, (ctx, w, h) => {
+    ctx.clearRect(0, 0, w, h);
+    let s = Math.max(1, Math.floor(seed * 9301));
+    const rnd = () => {
+      s = (s * 9301 + 49297) % 233280;
+      return s / 233280;
+    };
+    ctx.fillStyle = 'rgba(14,18,28,0.62)';
+    ctx.beginPath();
+    const n = 16;
+    for (let i = 0; i <= n; i += 1) {
+      const a = (i / n) * Math.PI * 2;
+      const r = w * (0.28 + rnd() * 0.18);
+      const x = w / 2 + Math.cos(a) * r;
+      const y = h / 2 + Math.sin(a) * r;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.globalCompositeOperation = 'destination-out';
+    const g = ctx.createRadialGradient(w / 2, h / 2, w * 0.2, w / 2, h / 2, w * 0.5);
+    g.addColorStop(0, 'rgba(0,0,0,0)');
+    g.addColorStop(1, 'rgba(0,0,0,1)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, w, h);
+    ctx.globalCompositeOperation = 'source-over';
+  });
+}
+
+/**
+ * Faint bright rim at a puddle's edge — the sky catching the meniscus. Without
+ * it a dark ellipse on dark tarmac reads as a stain rather than as water.
+ */
+let rimGeo;
+export function wetRim(x, z, rx, rz, color, opacity = 0.16) {
+  if (!rimGeo) rimGeo = new THREE.RingGeometry(0.93, 1, 30);
+  const m = new THREE.Mesh(rimGeo, new THREE.MeshBasicMaterial({
+    color,
+    transparent: true,
+    opacity,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  }));
+  m.position.set(x, 0.054, z);
+  m.rotation.x = -Math.PI / 2;
+  m.scale.set(rx, rz, 1);
+  m.renderOrder = 2;
+  return m;
+}
+
+/** Dark elliptical falloff used to seat objects on the ground. */
+let shadowBlob;
+export function groundShadow(x, z, rx, rz, strength = 0.5, y = 0.02) {
+  if (!shadowBlob) {
+    shadowBlob = canvasTexture(128, 128, (ctx, w, h) => {
+      const grad = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2);
+      grad.addColorStop(0, 'rgba(6,9,18,0.95)');
+      grad.addColorStop(0.55, 'rgba(6,9,18,0.5)');
+      grad.addColorStop(1, 'rgba(6,9,18,0)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, w, h);
+    });
+  }
+  const m = make(CIRCLE(1, 20), new THREE.MeshBasicMaterial({
+    map: shadowBlob,
+    transparent: true,
+    opacity: strength,
+    depthWrite: false,
+  }), { pos: [x, y, z], rot: [-Math.PI / 2, 0, 0], scale: [rx, rz, 1], outline: false });
+  m.renderOrder = 1;
+  return m;
+}
+
+/**
+ * Cone of light under a lamp. Fades downward, which is what a light shaft
+ * through falling rain actually looks like.
+ */
+export function lightCone(radiusTop, radiusBottom, height, color, opacity = 0.1) {
+  const tex = canvasTexture(16, 128, (ctx, w, h) => {
+    const grad = ctx.createLinearGradient(0, 0, 0, h);
+    grad.addColorStop(0, hex(color));
+    grad.addColorStop(0.35, `${hex(color)}80`);
+    grad.addColorStop(1, `${hex(color)}00`);
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, w, h);
+  });
+  const geo = new THREE.CylinderGeometry(radiusTop, radiusBottom, height, 18, 1, true);
+  const mat = new THREE.MeshBasicMaterial({
+    map: tex,
+    transparent: true,
+    opacity,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+  });
+  const m = new THREE.Mesh(geo, mat);
+  m.renderOrder = 3;
+  return m;
 }

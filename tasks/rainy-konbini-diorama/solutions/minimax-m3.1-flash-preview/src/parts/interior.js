@@ -227,20 +227,24 @@ export function buildInterior(scene) {
   }
 
   // ---- lights -------------------------------------------------------------
-  // The interior is deliberately over-lit relative to the street: the whole
-  // point of the scene is the warm/cool contrast seen through the glass. The
-  // range is kept tight so the warmth does not flood the pavement outside.
+  // The interior is over-lit relative to the street on purpose: the whole point
+  // of the scene is the warm/cool contrast seen through the glass. But it is
+  // deliberately NOT pushed further. Once the irradiance here saturates the
+  // three-step toon ramp, every surface lands on the top step and the tone
+  // mapper desaturates the whole shop to white — the shelves, the fridge and
+  // the stock all collapse into one blown-out surface. Holding the lamps near
+  // the bottom of the ramp is what keeps the product colour readable.
   const lamps = [
-    [-3.9, 2.9, -2.7, 12], [-0.5, 2.9, -2.7, 11],
-    [-2.2, 2.9, -5.3, 13], [-2.2, 2.9, -7.2, 10],
-    [-3.5, 1.7, -2.2, 5],
+    [-3.9, 2.9, -2.7, 5.0], [-0.5, 2.9, -2.7, 4.4],
+    [-2.2, 2.9, -5.3, 5.4], [-2.2, 2.9, -7.2, 4.2],
+    [-3.5, 1.7, -2.2, 2.2],
   ];
   for (const [lx, ly, lz, power] of lamps) {
-    const l = new THREE.PointLight(0xffd49a, power, 7, 1.5);
+    const l = new THREE.PointLight(0xffd49a, power, 6.2, 1.5);
     l.position.set(lx, ly, lz);
     group.add(l);
   }
-  const ceilingGlow = new THREE.PointLight(0xffe2b4, 8, 7, 1.6);
+  const ceilingGlow = new THREE.PointLight(0xffe2b4, 3.4, 6.2, 1.6);
   ceilingGlow.position.set(-0.3, 1.4, -2.0);
   group.add(ceilingGlow);
 

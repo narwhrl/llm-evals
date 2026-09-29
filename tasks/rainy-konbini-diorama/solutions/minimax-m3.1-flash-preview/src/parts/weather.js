@@ -290,7 +290,10 @@ export function buildWeather(scene, refs) {
         tmpColor.setHex(key === 'green' ? P.trafficGreen : key === 'amber' ? P.trafficAmber : P.trafficRed);
         mat.color.copy(tmpColor);
       } else {
-        mat.color.setHex(0x1b2130);
+        // A dark tint of the lens's own hue rather than neutral grey: an unlit
+        // lens still catches a little of the street, and the three-lamp stack
+        // keeps reading as a signal head instead of a blank box.
+        mat.color.setHex(key === 'green' ? 0x14291d : key === 'amber' ? 0x2b2114 : 0x2b1618);
       }
     }
     const pulse = 0.9 + Math.sin(time * 1.7) * 0.06;

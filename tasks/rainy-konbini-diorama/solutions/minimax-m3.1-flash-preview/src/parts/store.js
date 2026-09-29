@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { P } from '../palette.js';
 import {
   make, slab, BOX, CYL, PLANE, toon, flat, textured,
-  signTexture, bladeTexture, posterTexture, runoffTexture, canvasTexture,
+  signTexture, bladeTexture, posterTexture, runoffTexture, glowTexture, canvasTexture,
 } from '../kit.js';
 
 // The convenience store. Front wall faces +Z (the east–west road), the east
@@ -32,7 +32,7 @@ export function buildStore(scene) {
   // ---- shell -------------------------------------------------------------
   group.add(slab(x0, x1, 0, wallTop, z0, z0 + 0.24, toon(P.wallBack), { cast: true, receive: true })); // back
   group.add(slab(x0, x0 + 0.24, 0, wallTop, z0, z1, toon(P.wallSide), { cast: true, receive: true })); // west
-  group.add(slab(x1 - 0.24, x1, 0, wallTop, z0, z1, toon(P.wallSide), { cast: true, receive: true })); // east (alley)
+  group.add(slab(x1 - 0.24, x1, 0, wallTop, z0, z1, toon(P.wallAlley), { cast: true, receive: true })); // east (alley)
 
   // Front: kick panel, glazing, door opening, header.
   group.add(slab(x0, x1, 0, STORE.glassBottom, z1 - 0.22, z1, toon(P.kick), { receive: true }));
@@ -121,7 +121,7 @@ export function buildStore(scene) {
   const signMap = signTexture();
   const signFaceMat = flat(0xffffff);
   signFaceMat.map = signMap;
-  const signGlowMat = new THREE.MeshBasicMaterial({ color: P.signGlow, transparent: true, opacity: 0.22, blending: THREE.AdditiveBlending, depthWrite: false });
+  const signGlowMat = new THREE.MeshBasicMaterial({ color: P.signGlow, transparent: true, opacity: 0.13, blending: THREE.AdditiveBlending, depthWrite: false });
   group.add(slab(x0 - 0.1, x1 + 0.1, STORE.fasciaY0, STORE.fasciaY1, z1 + 0.02, z1 + 0.16, toon(P.wall), { cast: true }));
   const signFace = make(PLANE(x1 - x0 + 0.2, STORE.fasciaY1 - STORE.fasciaY0), signFaceMat, {
     pos: [(x0 + x1) / 2, (STORE.fasciaY0 + STORE.fasciaY1) / 2, z1 + 0.17],
@@ -182,6 +182,15 @@ export function buildStore(scene) {
   awn.rotation.x = Math.atan2(awnY0 - awnY1, awnLen);
   awn.castShadow = true;
   awning.add(awn);
+  // Two accent bands along the canopy. A plain slab at this size reads as a
+  // blown-out white wedge and pulls the eye off the fascia it is meant to
+  // shelter; the banding gives it a direction and a scale.
+  for (const band of [[-3.4, -2.86, P.trim], [0.4, 0.94, P.orange]]) {
+    const stripe = new THREE.Mesh(BOX(band[1] - band[0], 0.09, awnLen + 0.012), toon(band[2]));
+    stripe.position.set((band[0] + band[1]) / 2, (awnY0 + awnY1) / 2, z1 + awnLen / 2);
+    stripe.rotation.x = awn.rotation.x;
+    awning.add(stripe);
+  }
   // Scalloped valance at the leading edge.
   group.add(slab(x0 - 0.25, x1 + 0.25, awnY1 - 0.3, awnY1 - 0.02, z1 + awnLen - 0.06, z1 + awnLen, toon(P.awningTrim)));
   for (let i = 0; i < 11; i += 1) {
@@ -196,7 +205,7 @@ export function buildStore(scene) {
 
   // ---- alley wall dressing ----------------------------------------------
   // Service door and a weak wall lamp on the east elevation.
-  group.add(slab(x1, x1 + 0.06, 0, 2.1, -7.6, -6.7, toon(P.wallSide), { outline: false }));
+  group.add(slab(x1, x1 + 0.06, 0, 2.1, -7.6, -6.7, toon(P.wallAlley), { outline: false }));
   group.add(slab(x1 + 0.04, x1 + 0.1, 0.06, 2.06, -7.56, -6.74, toon(0xb6bfcd), { outline: false }));
   group.add(make(CYL(0.13, 0.13, 0.1, 10), toon(0x8f97a6), { pos: [x1 + 0.14, 1.1, -6.75], rot: [0, 0, Math.PI / 2] }));
   const alleyLamp = flat(0xfff0c0);
@@ -206,6 +215,87 @@ export function buildStore(scene) {
   // Drainpipe running down the alley corner.
   group.add(make(CYL(0.08, 0.08, 3.4, 8), toon(0x7d8695), { pos: [x1 + 0.1, 1.7, z0 + 0.35] }));
   group.add(slab(x1 + 0.02, x1 + 0.22, 3.3, 3.42, z0 + 0.25, z0 + 0.45, toon(0x6d7684)));
+
+  // ---- east elevation detail ---------------------------------------------
+  // The alley flank is the largest unbroken surface the default orbit sees, so
+  // it carries the detail a real shop side has: panel seams, a high strip
+  // window, a bracketed condenser, a louvred vent and pipe brackets.
+  const seamMat = toon(0xa4aebe);
+  for (const sy of [1.22, 2.48]) {
+    group.add(slab(x1, x1 + 0.028, sy, sy + 0.055, z0 + 0.3, z1 - 0.15, seamMat, { outline: false }));
+  }
+  group.add(slab(x1, x1 + 0.028, 0, wallTop, -5.05, -4.99, seamMat, { outline: false }));
+  group.add(slab(x1, x1 + 0.028, 0, wallTop, -2.35, -2.29, seamMat, { outline: false }));
+
+  // High strip window, lit from inside by the stockroom.
+  group.add(slab(x1, x1 + 0.05, 2.02, 2.58, -4.45, -2.6, toon(0x2a3444), { outline: false }));
+  group.add(slab(x1 + 0.05, x1 + 0.075, 2.07, 2.53, -4.4, -2.65, flat(0xffd9a0, { opacity: 0.42, transparent: true }), { outline: false }));
+  for (let m = 1; m <= 2; m += 1) {
+    const mz = -4.4 + m * 0.585;
+    group.add(slab(x1 + 0.02, x1 + 0.1, 2.02, 2.58, mz - 0.03, mz + 0.03, toon(P.frame), { outline: false }));
+  }
+  group.add(slab(x1 + 0.02, x1 + 0.12, 1.95, 2.02, -4.5, -2.55, toon(0x8b939f)));
+  group.add(slab(x1 + 0.02, x1 + 0.12, 2.58, 2.64, -4.5, -2.55, toon(0x8b939f), { outline: false }));
+  // Warm glow from the stockroom window, cast onto the alley floor.
+  group.add(make(PLANE(2.6, 2.2), textured(glowTexture(0xffcf90), { blending: THREE.AdditiveBlending, opacity: 0.3 }), {
+    pos: [x1 + 1.5, 0.14, -3.5],
+    rot: [-Math.PI / 2, 0, 0],
+    outline: false,
+  }));
+
+  // Condenser unit on brackets.
+  group.add(slab(x1 + 0.1, x1 + 0.64, 1.32, 1.94, -3.35, -2.5, toon(P.ac), { cast: true }));
+  group.add(slab(x1 + 0.64, x1 + 0.68, 1.39, 1.87, -3.29, -2.56, toon(0x6b7383), { outline: false }));
+  for (let f = 0; f < 4; f += 1) {
+    const fy = 1.44 + f * 0.12;
+    group.add(slab(x1 + 0.66, x1 + 0.69, fy, fy + 0.05, -3.26, -2.59, toon(0x8f97a4), { outline: false }));
+  }
+  for (const bz of [-3.28, -2.57]) {
+    group.add(slab(x1, x1 + 0.13, 1.24, 1.33, bz - 0.035, bz + 0.035, toon(0x6d7684), { outline: false }));
+  }
+
+  // Louvred vent low on the flank.
+  group.add(slab(x1, x1 + 0.055, 0.5, 1.04, -8.0, -7.05, toon(0x59616f), { outline: false }));
+  for (let i = 0; i < 6; i += 1) {
+    const ly = 0.56 + i * 0.077;
+    group.add(slab(x1 + 0.05, x1 + 0.085, ly, ly + 0.034, -7.95, -7.1, toon(0x8b939f), { outline: false }));
+  }
+  // Small stencilled bay number beside the service door.
+  {
+    const mat = flat(0xffffff);
+    mat.map = canvasTexture(96, 96, (ctx, w, h) => {
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = 'rgba(214,226,244,0.9)';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.font = '700 52px sans-serif';
+      ctx.fillText('2', w / 2, h / 2 + 3);
+    });
+    group.add(make(PLANE(0.3, 0.3), mat, { pos: [x1 + 0.02, 1.72, -6.24], rot: [0, Math.PI / 2, 0], outline: false }));
+  }
+
+  // ---- rear elevation detail ---------------------------------------------
+  // Only visible from high or rear orbits, but a blank back wall is exactly
+  // what makes a diorama look unfinished when the camera swings round.
+  group.add(slab(x0 + 0.2, x1 - 0.2, 2.3, 2.86, z0 - 0.05, z0 - 0.02, toon(0x2a3444), { outline: false }));
+  group.add(slab(x0 + 0.25, x1 - 0.25, 2.35, 2.81, z0 - 0.08, z0 - 0.05, flat(0x7f93b4, { opacity: 0.3, transparent: true }), { outline: false }));
+  for (let m = 0; m < 5; m += 1) {
+    const mx = x0 + 0.2 + m * ((x1 - x0 - 0.4) / 4);
+    group.add(slab(mx - 0.035, mx + 0.035, 2.3, 2.86, z0 - 0.09, z0 - 0.02, toon(P.frame), { outline: false }));
+  }
+  group.add(slab(x0 + 0.15, x1 - 0.15, 2.22, 2.3, z0 - 0.11, z0 - 0.02, toon(0x8b939f)));
+  // Rear wall seams and a wall-mounted meter cabinet.
+  for (const sy of [1.18, 2.44]) {
+    group.add(slab(x0 + 0.3, x1 - 0.3, sy, sy + 0.055, z0 - 0.028, z0, seamMat, { outline: false }));
+  }
+  group.add(slab(x0 + 0.5, x0 + 1.2, 0.95, 1.55, z0 - 0.12, z0, toon(0x7d8695), { cast: true }));
+  group.add(slab(x0 + 0.56, x0 + 1.14, 1.02, 1.48, z0 - 0.14, z0 - 0.12, flat(0x39424f), { outline: false }));
+  // Rear vent louvres.
+  group.add(slab(x1 - 2.2, x1 - 0.6, 1.5, 2.0, z0 - 0.05, z0, toon(0x59616f), { outline: false }));
+  for (let i = 0; i < 5; i += 1) {
+    const ly = 1.55 + i * 0.08;
+    group.add(slab(x1 - 2.15, x1 - 0.65, ly, ly + 0.035, z0 - 0.08, z0 - 0.05, toon(0x8b939f), { outline: false }));
+  }
 
   // A single small sticker low in the leftmost bay. The rest of the glazing is
   // deliberately left clear so the interior reads from the street.
