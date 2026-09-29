@@ -18,12 +18,18 @@
       "model": "minimax/MiniMax-M3.1-Flash-Preview",
       "baselineMain": "7f83cb63a506043f0f59e4a965c42f83df423ad1",
       "sourceRef": "local-clone:.runs/rainy-konbini-diorama/minimax-m3.1-flash-preview (detached, remote removed)",
-      "sourceCommit": "528f4e99a1086f184f6b50fd7e0c1a994a7c5172",
-      "sourceTree": "4b7cd57dc3967636b27f3a8bd8ce51675da4408c",
-      "archiveTag": "candidate/rainy-konbini-diorama/minimax-m3.1-flash-preview",
+      "sourceCommit": "947d1b9787d7c056bb39bbed2a367e403016e944",
+      "sourceTree": "96147853b75be44db54844d7f3763858074a7951",
+      "archiveTag": "candidate/rainy-konbini-diorama/minimax-m3.1-flash-preview-r2",
       "destination": "tasks/rainy-konbini-diorama/solutions/minimax-m3.1-flash-preview",
       "resultReport": "tasks/rainy-konbini-diorama/solutions/minimax-m3.1-flash-preview/RESULTS.md",
-      "note": "Pinned to the current main tip, which differs from gpt-6-sol's eac83c1 baseline. The task inputs are byte-identical between the two commits; only three unrelated task README status lines changed. See the candidate RESULTS.md."
+      "note": "Pinned to the current main tip, which differs from gpt-6-sol's eac83c1 baseline. The task inputs are byte-identical between the two commits; only three unrelated task README status lines changed. See the candidate RESULTS.md.",
+      "supersedes": {
+        "sourceCommit": "528f4e99a1086f184f6b50fd7e0c1a994a7c5172",
+        "sourceTree": "4b7cd57dc3967636b27f3a8bd8ce51675da4408c",
+        "archiveTag": "candidate/rainy-konbini-diorama/minimax-m3.1-flash-preview",
+        "reason": "Published first, then reported by the user as rendering the rain as a spider web. The rain update loop left the second line vertex stale when a drop recycled, stretching each recycled drop into a long line across the scene; the field was also too sparse and reached too high. Both tags are retained so the correction is auditable."
+      }
     }
   ]
 }
