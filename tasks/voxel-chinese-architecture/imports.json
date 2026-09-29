@@ -12,6 +12,18 @@
       "archiveTag": "candidate/voxel-chinese-architecture/glm-5.3-flash",
       "destination": "tasks/voxel-chinese-architecture/solutions/glm-5.3-flash",
       "resultReport": "tasks/voxel-chinese-architecture/solutions/glm-5.3-flash/RESULTS.md"
+    },
+    {
+      "candidateId": "claude-opus-5.5",
+      "model": "anthropic/claude-opus-5-5",
+      "baselineMain": "9e0c2b766c60255b1d1b7fd06f94ea188236d630",
+      "sourceRef": "local-clone:.runs/voxel-chinese-architecture/claude-opus-5.5 (detached, remote removed)",
+      "sourceCommit": "588808afe79bf1678f2ac54dc955980477cb56ca",
+      "sourceTree": "c4b97a892275efd1433b50b07a2644b90d242e72",
+      "archiveTag": "candidate/voxel-chinese-architecture/claude-opus-5.5",
+      "destination": "tasks/voxel-chinese-architecture/solutions/claude-opus-5.5",
+      "resultReport": "tasks/voxel-chinese-architecture/solutions/claude-opus-5.5/RESULTS.md",
+      "note": "Pinned to main 9e0c2b7, which differs from glm-5.3-flash's 8409ab9 baseline. Run without subagents or other models per the user's instruction. Visual acceptance was done by the model itself through kimi-webbridge at a verified 1440x900 viewport, with no console errors and only same-origin requests. The model found and fixed three defects itself: a stray column above the main hall roof, a canvas that was not resized when DPR changed, and the default framing. Imported tree hash matches the source solution tree."
     }
   ]
 }

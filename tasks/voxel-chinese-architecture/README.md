@@ -6,7 +6,7 @@
 - Canonical candidate path: `tasks/voxel-chinese-architecture/solution/`
 - Candidate result report: `tasks/voxel-chinese-architecture/solution/RESULTS.md`
 - Prompt: [`task.md`](task.md)
-- Status: Nine candidates archived on `llm/voxel-chinese-architecture` at `tasks/voxel-chinese-architecture/solutions/<candidate-id>/`. Historical source commits and trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json); later imports are recorded in [`imports.json`](imports.json).
+- Status: Ten candidates archived on `llm/voxel-chinese-architecture` at `tasks/voxel-chinese-architecture/solutions/<candidate-id>/`. Historical source commits and trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json); later imports are recorded in [`imports.json`](imports.json).
 
 ## Shared Inputs
 
