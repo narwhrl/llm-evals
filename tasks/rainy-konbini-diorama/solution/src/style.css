@@ -1,0 +1,32 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #080d1c;
+}
+
+body {
+  background: radial-gradient(circle at 50% 34%, #1b2846 0%, #0d1428 46%, #070b16 100%);
+}
+
+#stage {
+  position: fixed;
+  inset: 0;
+  touch-action: none;
+}
+
+#stage canvas {
+  display: block;
+  cursor: grab;
+}
+
+#stage canvas:active {
+  cursor: grabbing;
+}
