@@ -63,6 +63,18 @@
       "destination": "tasks/rainy-konbini-diorama/solutions/glm-5.3",
       "resultReport": "tasks/rainy-konbini-diorama/solutions/glm-5.3/RESULTS.md",
       "note": "Pinned to main 7c210c2. tasks/rainy-konbini-diorama/task.md is byte-identical to the earlier baselines; only task README status lines and unrelated docs differ. Verified tree hashes match after import. The candidate self-verified via programmatic pixel statistics and passive in-page diagnostic hooks because the session could not display screenshots inline; see the candidate RESULTS.md for the full acceptance record, including two defects it found and fixed itself (custom-shader colorspace crushing the sky to black; a cool fresnel wash on the storefront glass masking the warm interior)."
+    },
+    {
+      "candidateId": "mimo-v2.6-flash",
+      "model": "xiaomi-mimo/mimo-v2.6-flash",
+      "baselineMain": "7c210c2dd734915419097074108efadec416e2e4",
+      "sourceRef": "local-clone:.runs/rainy-konbini-diorama/mimo-v2.6-flash (detached, remote removed)",
+      "sourceCommit": "702462a891894e4c7de3ba53ae4ed65ebdde4eb6",
+      "sourceTree": "2638e3b4726bdd436f0e1f5aa29ae6baaf7596b2",
+      "archiveTag": "candidate/rainy-konbini-diorama/mimo-v2.6-flash",
+      "destination": "tasks/rainy-konbini-diorama/solutions/mimo-v2.6-flash",
+      "resultReport": "tasks/rainy-konbini-diorama/solutions/mimo-v2.6-flash/RESULTS.md",
+      "note": "Pinned to main 7c210c2 (same baseline as glm-5.3). Verified tree hashes match after import. Run without subagents or other models per the user's instruction. All seven 1440x900 evidence screenshots were verified against node-side decodes and color-statistic comparisons with fresh in-page re-renders of the same cameras, because the session's image channel intermittently served stale or mismatched images for file reads; see the candidate RESULTS.md for the full acceptance record, including seven classes of defects it found and fixed itself (blade-sign axes, roof slab, puddle/road tone, invisible alley floor, corrupted color literals, interior/geometry fixes, bundle-size regression from exporting THREE)."
     }
   ]
 }
