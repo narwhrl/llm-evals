@@ -22,12 +22,12 @@
     ]
   },
   "firstShot": {
-    "at": 0.24999999999999997,
+    "at": 0.6833333333333338,
     "damage": 59.147999999999996,
     "target": 5
   },
   "finalShot": {
-    "at": 2.9833333333333276,
+    "at": 4.499999999999989,
     "damage": 95.39999999999999,
     "target": 5
   },
@@ -35,10 +35,12 @@
     "visible": true,
     "detail": "爆头 · 60 HP"
   },
+  "hitExpired": true,
   "kill": {
     "visible": true,
     "text": "◆ 击杀确认蓝鲸 1+1 击杀 · 本局 1",
     "score": 1
   },
+  "killExpired": true,
   "errors": []
 }

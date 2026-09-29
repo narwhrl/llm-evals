@@ -4,7 +4,7 @@
 - **完整可用模型标识：** OpenAI `gpt-6-sol`（本次运行界面未提供更细的版本后缀）
 - **候选 ID：** `gpt-6-sol`
 - **起始 `main`：** `7c210c2dd734915419097074108efadec416e2e4`
-- **候选提交：** 原始不可变标签 `candidate/cf-transport-ship/gpt-6-sol` 指向首版提交；本次反馈修订另以不可变修订标签保存。完整对象 SHA 记录在任务分支的导入溯源文件中。提交无法在自身内容里写入自身 SHA 而保持 SHA 不变。
+- **候选提交：** 原始不可变标签 `candidate/cf-transport-ship/gpt-6-sol` 指向首版提交；后续修订分别以不可变修订标签保存。完整对象 SHA 记录在任务分支的导入溯源文件中。提交无法在自身内容里写入自身 SHA 而保持 SHA 不变。
 - **工作区：** 独立克隆 `.runs/cf-transport-ship/gpt-6-sol/`，代码仅写在 `tasks/cf-transport-ship/solution/`；根检出一直保持 `main`。
 
 ## 实施结果
@@ -57,3 +57,20 @@ Windows 11 企业版 `10.0.26200`，Intel Core Ultra 9 285H；系统枚举 GameV
 | `TEST_URL=http://127.0.0.1:4175/cf-transport-ship/gpt-6-sol/ npm run test:e2e` | 退出 0；十人开局、指针锁定、移动、射击和 Esc 暂停仍通过，0 页面错误、0 外部请求。 |
 
 以上生产子路径验证由 `npm run preview -- --base=/cf-transport-ship/gpt-6-sol/ --outDir=dist-subpath --port=4175 --strictPort` 托管。自动化浏览器用 SwiftShader，合成音已接入命中和击杀事件，但听感仍需桌面人工试听；没有新增运行时依赖。
+
+## 2026-09-29 横移、开镜与提示生命周期修订
+
+仍沿用起始 `main` 提交 `7c210c2dd734915419097074108efadec416e2e4` 的同一隔离候选克隆。浏览器修复前复现：面朝 +Z 时按 D 向世界 +X 移动，与屏幕右侧相反；狙击开镜遮罩从隐藏瞬间变为不透明，武器立即消失；命中提示在暂停 0.85 秒后仍显示，击杀提示重新开局且比分重置为 0 后仍显示。修订将 A/D 的横向基向量与镜头右方向对齐；狙击镜圈、FOV 和武器位置按约 0.3 秒连续过渡；反馈改用真实经过时间到期，并在新对局清空旧提示和击杀列表。
+
+在 `solution/` 下实际执行：
+
+| 命令 | 实测结果 |
+| --- | --- |
+| `TEST_URL=http://127.0.0.1:5175/ node scripts/controls-feedback-e2e.mjs` | 修复前退出 1，采到 D 向 +X、遮罩立即不透明、暂停和重开后提示保留；修复后退出 0。初版测试靶位未命中而等待超时，调整为先前验证过的清晰射线后完成有效复现。 |
+| `npm run typecheck`、`npm test`、`npm run build` | 均退出 0；12 项现有测试通过，Vite 仍有 >500 kB 包体非阻断警告。 |
+| `npm run build -- --base=/cf-transport-ship/gpt-6-sol/ --outDir=dist-subpath --emptyOutDir` | 退出 0；子路径资源构建正确。 |
+| `TEST_URL=http://127.0.0.1:4175/cf-transport-ship/gpt-6-sol/ node scripts/controls-feedback-e2e.mjs` | 退出 0；D 为 -X、A 为 +X；开镜早期遮罩透明度 0.68、FOV 41.3°、武器仍可见，完成后为 1 / 24° / 武器隐藏；退镜早期透明度 0.65，结束后 0。暂停后命中提示消失，重新开始后击杀提示清除，0 页面错误。`evidence/controls-feedback-e2e.json`；人工目视检查 `scope-aimed.png` 和 `scope-closing.png`。 |
+| `TEST_URL=http://127.0.0.1:4175/cf-transport-ship/gpt-6-sol/ node scripts/feedback-e2e.mjs` | 退出 0；原生鼠标方向及真实两次弹道命中通过；命中与击杀提示显示后均按真实时间消失，0 页面错误。 |
+| `TEST_URL=http://127.0.0.1:4175/cf-transport-ship/gpt-6-sol/ npm run test:e2e` | 退出 0；10 人开局、锁定、移动、射击、暂停仍通过，0 页面错误、0 外部请求。 |
+
+生产验证由 `npm run preview -- --base=/cf-transport-ship/gpt-6-sol/ --outDir=dist-subpath --port=4175 --strictPort` 托管。自动化 Chromium 使用 SwiftShader；普通桌面 GPU 上的流畅度与狙击动画主观手感仍需人工验收。

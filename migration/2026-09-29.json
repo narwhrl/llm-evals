@@ -30,6 +30,21 @@
       "importedTree": "4b3245f2fab9feaa5dc0300d748b91f4a681b44e",
       "resultReport": "tasks/cf-transport-ship/solutions/gpt-6-sol/RESULTS.md",
       "supersedesSourceCommit": "87160c192979416217e122eafccf4ca95adb4e2f"
+    },
+    {
+      "task": "cf-transport-ship",
+      "candidate": "gpt-6-sol",
+      "revision": 3,
+      "model": "OpenAI gpt-6-sol",
+      "startingMain": "7c210c2dd734915419097074108efadec416e2e4",
+      "sourceRef": "local-clone:.runs/cf-transport-ship/gpt-6-sol (controls and feedback revision from r2)",
+      "sourceCommit": "3beb3ed3bc13149a7965e365fea5cbb9c3209162",
+      "sourceTree": "c63f0a3e8d717506491eebac82ea2f266f818b98",
+      "archiveTag": "candidate/cf-transport-ship/gpt-6-sol-r3",
+      "destination": "tasks/cf-transport-ship/solutions/gpt-6-sol",
+      "importedTree": "c63f0a3e8d717506491eebac82ea2f266f818b98",
+      "resultReport": "tasks/cf-transport-ship/solutions/gpt-6-sol/RESULTS.md",
+      "supersedesSourceCommit": "ea47e0681731968a38a5b8bd38f3839477ae2d96"
     }
   ]
 }

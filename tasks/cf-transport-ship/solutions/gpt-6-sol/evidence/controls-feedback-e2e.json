@@ -1,0 +1,46 @@
+{
+  "rightX": -1.859999999999999,
+  "leftX": 1.6274999999999993,
+  "aimEarly": {
+    "visible": true,
+    "opacity": 0.679838,
+    "fov": 41.28872345199981,
+    "weaponVisible": true
+  },
+  "aimFull": {
+    "visible": true,
+    "opacity": 1,
+    "fov": 24,
+    "weaponVisible": false
+  },
+  "aimRelease": {
+    "visible": true,
+    "opacity": 0.648,
+    "fov": 43.007999999999996,
+    "weaponVisible": true
+  },
+  "aimReleased": {
+    "visible": false,
+    "opacity": 0,
+    "fov": 78,
+    "weaponVisible": true
+  },
+  "hit": {
+    "damage": 59.147999999999996,
+    "target": 5,
+    "selected": "vandal"
+  },
+  "hitAfterPause": {
+    "visible": false,
+    "gameNow": 10.933333333333456
+  },
+  "kill": {
+    "damage": 95.39999999999999,
+    "target": 5
+  },
+  "killAfterRestart": {
+    "visible": false,
+    "score": 0
+  },
+  "errors": []
+}
