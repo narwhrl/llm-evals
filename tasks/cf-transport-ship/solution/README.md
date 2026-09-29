@@ -26,7 +26,7 @@ npm run preview
 npm run build -- --base=/cf-transport-ship/gpt-6-sol/ --outDir=dist-subpath --emptyOutDir
 ```
 
-把 `dist-subpath/` 部署在对应前缀后直接打开 `.../cf-transport-ship/gpt-6-sol/`。普通构建的 `dist/` 可由任意静态 HTTP 服务器托管。`npm run test:e2e` 使用本机 Playwright Chromium；须先运行开发服务器，可用 `TEST_URL` 指向静态预览地址。`node scripts/visual.mjs` 保存固定机位实机截图；`node scripts/match-run.mjs` 跑两分钟练习局并保存结算与帧时间。测试浏览器使用软件渲染的数据不代表独立显卡帧率。
+把 `dist-subpath/` 部署在对应前缀后直接打开 `.../cf-transport-ship/gpt-6-sol/`。普通构建的 `dist/` 可由任意静态 HTTP 服务器托管。`npm run test:e2e` 使用本机 Playwright Chromium；须先运行开发服务器，可用 `TEST_URL` 指向静态预览地址。`node scripts/feedback-e2e.mjs` 通过浏览器指针锁定验证鼠标方向，并用真实弹道验证命中与击杀反馈，截图保存在 `evidence/feedback-*.png`。`node scripts/visual.mjs` 保存固定机位实机截图；`node scripts/match-run.mjs` 跑两分钟练习局并保存结算与帧时间。测试浏览器使用软件渲染的数据不代表独立显卡帧率。
 
 本地预览子路径构建时，预览服务器也需要同一 base：
 
