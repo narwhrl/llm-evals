@@ -1,0 +1,1078 @@
+/* 《双缝》—— 印样与光学台。
+   象牙白纸面、石墨细线、单一朱红。衬线是我的声音，等宽是仪器的读数。
+   不用圆角堆叠、阴影卡片、渐变按钮：这是一台仪器，不是一张落地页。 */
+
+@property --plate-h {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 46vh;
+}
+
+:root {
+  --paper: #f3eee3;
+  --paper-2: #ebe3d2;
+  --paper-3: #e2d8c3;
+  --ink: #191714;
+  --ink-2: #3d382f;
+  --graphite: #6c6559;
+  --faint: #97907f;
+  --rule: rgba(25, 23, 20, 0.17);
+  --rule-strong: rgba(25, 23, 20, 0.34);
+  --vermilion: #b4321f;
+  --vermilion-soft: rgba(180, 50, 31, 0.14);
+  --plate-ink: #f0eade;
+
+  --serif: "Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", "STSong", "SimSun", Georgia,
+    "Times New Roman", serif;
+  --sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", system-ui,
+    -apple-system, "Segoe UI", sans-serif;
+  --mono: "Cascadia Mono", ui-monospace, "SFMono-Regular", Consolas, "Noto Sans Mono CJK SC",
+    "Microsoft YaHei", monospace;
+
+  --measure: 40rem;
+  --plate-h: 46vh;
+  --ease-out: cubic-bezier(0.16, 0.72, 0.28, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--paper);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: var(--sans);
+  font-size: 16.5px;
+  line-height: 1.95;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  color: var(--paper);
+  background: var(--ink);
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--vermilion);
+  outline-offset: 3px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 40;
+  padding: 10px 16px;
+  color: var(--paper);
+  background: var(--ink);
+  font-family: var(--mono);
+  font-size: 12px;
+  text-decoration: none;
+  transform: translateY(-160%);
+  transition: transform 0.18s var(--ease-out);
+}
+
+.skip:focus {
+  transform: translateY(0);
+}
+
+/* ── 文档骨架 ─────────────────────────────────────────── */
+
+.shell {
+  transition: --plate-h 900ms var(--ease-out);
+}
+
+.shell[data-rig="dark"] {
+  --plate-h: 62vh;
+}
+
+.shell[data-rig="choose"] {
+  --plate-h: 44vh;
+}
+
+.deck {
+  padding-bottom: calc(var(--plate-h) + 7vh);
+}
+
+.chapter {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 88vh;
+  padding: 12vh 0;
+}
+
+.chapter + .chapter {
+  border-top: 1px solid var(--rule);
+}
+
+.measure {
+  width: min(100% - 3rem, var(--measure));
+  margin-inline: auto;
+}
+
+.measure--wide {
+  width: min(100% - 3rem, 52rem);
+}
+
+.index {
+  margin: 0 0 1.6rem;
+  color: var(--vermilion);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+}
+
+.kicker {
+  margin: 0 0 1.2rem;
+  color: var(--graphite);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.18em;
+}
+
+.display {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(3.1rem, 12vw, 6.4rem);
+  font-weight: 400;
+  line-height: 0.96;
+  letter-spacing: 0.02em;
+}
+
+.latin {
+  display: block;
+  margin-top: 1.1rem;
+  color: var(--graphite);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.42em;
+}
+
+.lede {
+  max-width: 30rem;
+  margin: 2.6rem 0 0;
+  font-family: var(--serif);
+  font-size: clamp(1.32rem, 3.4vw, 1.72rem);
+  line-height: 1.72;
+  letter-spacing: 0.01em;
+}
+
+.prose {
+  max-width: 34rem;
+  margin: 2.2rem 0 0;
+  color: var(--ink-2);
+}
+
+.prose p {
+  margin: 0 0 1.5em;
+}
+
+.marginal {
+  margin: 2.4rem 0 0;
+  padding-left: 1.1rem;
+  border-left: 1px solid var(--vermilion);
+  color: var(--graphite);
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.9;
+  letter-spacing: 0.02em;
+}
+
+.callout {
+  margin: 2.6rem 0 0;
+  padding: 1.15rem 1.3rem;
+  border: 1px solid var(--rule-strong);
+  background: rgba(255, 253, 247, 0.55);
+  font-size: 15px;
+  line-height: 1.85;
+}
+
+.callout strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--vermilion);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+}
+
+/* 读法：仪器的四个量，各自是我的一件事。 */
+.key {
+  margin: 2.6rem 0 0;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--rule);
+}
+
+.key__title {
+  margin: 0 0 0.35rem;
+  color: var(--vermilion);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+}
+
+.key__note {
+  margin: 0 0 1.1rem;
+  color: var(--graphite);
+  font-size: 14px;
+}
+
+.key__rows {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0;
+}
+
+.key__row {
+  display: grid;
+  grid-template-columns: 5.6rem minmax(0, 1fr);
+  gap: 0 1rem;
+  align-items: baseline;
+}
+
+.key__row dt {
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+.key__row dd {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.colophon {
+  margin: 3rem 0 0;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--rule);
+  color: var(--graphite);
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 2.1;
+  letter-spacing: 0.03em;
+}
+
+/* ── 三段自述 ─────────────────────────────────────────── */
+
+.ledger {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--rule);
+}
+
+.ledger__item {
+  display: grid;
+  grid-template-columns: 3.4rem minmax(0, 1fr);
+  gap: 0 1.4rem;
+  padding: 2.3rem 0;
+  border-bottom: 1px solid var(--rule);
+  transition: opacity 420ms var(--ease-out);
+}
+
+/* 未显影的段落：留白与铅笔灰，等着被看见。 */
+.ledger__item[data-read="false"] {
+  color: var(--faint);
+}
+
+.ledger__item[data-read="false"] .ledger__title {
+  color: var(--faint);
+}
+
+.ledger__num {
+  color: var(--faint);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+}
+
+.ledger__item[data-read="true"] .ledger__num {
+  color: var(--vermilion);
+}
+
+.ledger__title {
+  margin: 0 0 0.9rem;
+  font-family: var(--serif);
+  font-size: 1.42rem;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}
+
+.ledger__text {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 16px;
+  line-height: 2.05;
+}
+
+.ledger__item[data-read="false"] .ledger__text {
+  color: var(--faint);
+}
+
+.ledger__note {
+  margin: 0.9rem 0 0;
+  color: var(--faint);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  line-height: 1.9;
+}
+
+/* 可标记的句子：隐藏层的入口。 */
+.markable {
+  position: relative;
+  color: inherit;
+  background-image: linear-gradient(to top, var(--vermilion-soft) 0 42%, transparent 42%);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.markable:hover {
+  background-image: linear-gradient(to top, rgba(180, 50, 31, 0.26) 0 42%, transparent 42%);
+}
+
+.markable[data-marked="true"] {
+  background-image: linear-gradient(to top, rgba(180, 50, 31, 0.4) 0 42%, transparent 42%);
+}
+
+.markable__phi {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.55em;
+  height: 1.55em;
+  margin-left: 0.35em;
+  padding: 0 0.35em;
+  border: 1px solid var(--vermilion);
+  color: var(--vermilion);
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1;
+  vertical-align: 0.08em;
+}
+
+.markable[data-marked="true"] .markable__phi {
+  color: var(--paper);
+  background: var(--vermilion);
+}
+
+.markable__ring,
+.markable::before {
+  content: "";
+  position: absolute;
+  left: -0.92em;
+  top: 0.18em;
+  width: 0.64em;
+  height: 0.64em;
+  border: 1px solid var(--vermilion);
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: transform 1.2s var(--ease-out), opacity 0.18s linear;
+}
+
+.markable[data-arming="true"]::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 撤回去的那一句 */
+.markable[data-withdrawn="true"] {
+  background-image: none;
+  color: var(--faint);
+  text-decoration: line-through;
+  text-decoration-color: var(--vermilion);
+  cursor: default;
+}
+
+/* ── 抉择 ─────────────────────────────────────────────── */
+
+/* 三个来源并排放：这是一个"选一个"的时刻，选项必须能一眼比较。 */
+.choices {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  margin: 2.2rem 0 0;
+  padding: 1px;
+  border: 1px solid var(--rule);
+  background: var(--rule);
+  list-style: none;
+}
+
+.choices > li {
+  display: flex;
+}
+
+.choice {
+  display: block;
+  flex: 1 1 auto;
+  width: 100%;
+  padding: 1.15rem 1.15rem 1.25rem;
+  border: 0;
+  background: var(--paper);
+  text-align: left;
+  cursor: pointer;
+  transition: background 200ms var(--ease-out), color 200ms var(--ease-out);
+}
+
+.choice:hover {
+  background: #fbf8f1;
+}
+
+.choice[aria-pressed="true"] {
+  color: var(--paper);
+  background: var(--ink);
+}
+
+.choice__glyph {
+  display: inline-block;
+  margin-right: 0.7em;
+  color: var(--vermilion);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.choice[aria-pressed="true"] .choice__glyph {
+  color: #e8877a;
+}
+
+.choice__title {
+  font-family: var(--serif);
+  font-size: 1.16rem;
+  line-height: 1.6;
+}
+
+.choice__text {
+  display: block;
+  margin-top: 0.45rem;
+  color: var(--graphite);
+  font-size: 13.5px;
+  line-height: 1.8;
+}
+
+.choice[aria-pressed="true"] .choice__text {
+  color: rgba(240, 234, 222, 0.78);
+}
+
+.choice__consequence {
+  display: block;
+  margin-top: 0.7rem;
+  padding-top: 0.7rem;
+  border-top: 1px dashed var(--rule);
+  color: var(--faint);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  line-height: 1.9;
+}
+
+.choice[aria-pressed="true"] .choice__consequence {
+  color: rgba(240, 234, 222, 0.6);
+  border-top-color: rgba(240, 234, 222, 0.24);
+}
+
+/* ── 收束 ─────────────────────────────────────────────── */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+  gap: 1px;
+  margin: 2.6rem 0 0;
+  padding: 1px;
+  border: 1px solid var(--rule);
+  background: var(--rule);
+}
+
+.stat {
+  padding: 0.95rem 1.05rem;
+  background: var(--paper);
+}
+
+.stat__label {
+  display: block;
+  color: var(--faint);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+}
+
+.stat__value {
+  display: block;
+  margin-top: 0.35rem;
+  font-family: var(--mono);
+  font-size: 1.16rem;
+  letter-spacing: -0.01em;
+}
+
+.withdraw-stamp {
+  display: inline-block;
+  margin: 1.6rem 0 0;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid var(--vermilion);
+  color: var(--vermilion);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+}
+
+.ending-line {
+  margin: 2.4rem 0 0;
+  padding: 1.2rem 0 1.2rem 1.4rem;
+  border-left: 2px solid var(--vermilion);
+  font-family: var(--serif);
+  font-size: 1.28rem;
+  line-height: 1.9;
+}
+
+/* ── 装置：曝光底片 ───────────────────────────────────── */
+
+.plate {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 20;
+  height: var(--plate-h);
+  pointer-events: none;
+  transition: height 900ms var(--ease-out);
+  contain: layout paint;
+}
+
+/* 底片压在上缘：一条硬边加一道接触阴影，让它读成一件实物而不是浮在文字上。 */
+.plate::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--rule-strong);
+}
+
+.plate::after {
+  content: "";
+  position: absolute;
+  top: -26px;
+  left: 0;
+  right: 0;
+  height: 26px;
+  background: linear-gradient(to top, rgba(25, 23, 20, 0.11), rgba(25, 23, 20, 0));
+  pointer-events: none;
+}
+
+.plate__canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.plate__legend {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 1.1rem;
+  padding: 0.9rem clamp(1rem, 3vw, 2rem);
+  color: var(--graphite);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+}
+
+.plate__legend b {
+  color: var(--vermilion);
+  font-weight: 400;
+}
+
+.plate__silence {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--plate-ink);
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 5vw, 2.6rem);
+  letter-spacing: 0.3em;
+  opacity: 0;
+  transition: opacity 620ms var(--ease-out);
+}
+
+.plate__silence[data-on="true"] {
+  opacity: 1;
+}
+
+/* 底片下半部用弹性列排布：缝轨与读数块各自占自己的行，不再靠魔法数字对齐。 */
+.plate__stack {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  pointer-events: none;
+}
+
+/* 缝轨：真按钮，能聚焦、能用键盘。 */
+.rail {
+  position: relative;
+  flex: none;
+  height: 3.4rem;
+  margin-bottom: 0.15rem;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.rail__line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--rule-strong);
+}
+
+.rail__zero {
+  position: absolute;
+  top: -0.5rem;
+  bottom: -0.5rem;
+  width: 1px;
+  background: var(--rule);
+}
+
+.rail__slot {
+  position: absolute;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  transform: translate(-50%, -50%);
+  cursor: grab;
+  touch-action: none;
+}
+
+.rail__slot[data-role="third"],
+.rail__slot[data-role="rule"] {
+  cursor: default;
+  pointer-events: none;
+}
+
+.rail__stem {
+  width: 1px;
+  height: 1.5rem;
+  background: var(--ink);
+}
+
+.rail__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  transform: rotate(45deg);
+}
+
+.rail__slot:active {
+  cursor: grabbing;
+}
+
+.rail__slot[data-role="slit-a"] .rail__dot,
+.rail__slot[data-role="slit-b"] .rail__dot {
+  border-color: var(--vermilion);
+  background: var(--vermilion);
+}
+
+.rail__slot[data-role="slit-b"] {
+  z-index: 2;
+}
+
+.rail__slot[data-role="third"] .rail__stem {
+  background: var(--vermilion);
+}
+
+.rail__slot[data-role="mark"] .rail__dot {
+  border-radius: 50%;
+  transform: none;
+  border-color: var(--vermilion);
+}
+
+.rail__slot[data-role="rule"] .rail__dot {
+  background: var(--ink);
+}
+
+.rail__label {
+  position: absolute;
+  top: -1.2rem;
+  left: 50%;
+  color: var(--faint);
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.rail__handle-hint {
+  position: absolute;
+  top: 1.5rem;
+  left: 50%;
+  color: var(--vermilion);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* 读数：仪表盘 */
+.bench {
+  position: relative;
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.6rem 1.6rem;
+  padding: 0.7rem clamp(1rem, 3vw, 2rem) 0.75rem;
+  border-top: 1px solid var(--rule);
+  pointer-events: auto;
+}
+
+.bench__readings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.5rem;
+  margin: 0;
+}
+
+.reading {
+  min-width: 4.6rem;
+}
+
+.reading__label {
+  display: block;
+  color: var(--graphite);
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+}
+
+.reading__value {
+  display: block;
+  margin-top: 0.1rem;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.reading__value[data-alert="true"] {
+  color: var(--vermilion);
+}
+
+.bench__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.instrument-button {
+  padding: 0.42rem 0.85rem;
+  border: 1px solid var(--rule-strong);
+  background: transparent;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  transition: background 160ms var(--ease-out), color 160ms var(--ease-out);
+}
+
+.instrument-button:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.instrument-button[data-primary="true"] {
+  border-color: var(--vermilion);
+  color: var(--vermilion);
+}
+
+.instrument-button[data-primary="true"]:hover {
+  background: var(--vermilion);
+  color: var(--paper);
+}
+
+.instrument-button[hidden] {
+  display: none;
+}
+
+/* 收束时压在亮线上的一行字 */
+.slab {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 0 1.5rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 900ms var(--ease-out);
+}
+
+.slab[data-on="true"] {
+  opacity: 1;
+}
+
+.slab__inner {
+  padding: 0.9rem 1.3rem;
+  background: var(--paper);
+  text-align: center;
+}
+
+.slab__title {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: clamp(1.1rem, 3.2vw, 1.5rem);
+  line-height: 1.5;
+}
+
+.slab__credit {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--graphite);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+}
+
+/* 底片显影成墨色时，仪器自己的刻度与读数一起翻面。 */
+.plate[data-dark="true"] .plate__legend,
+.plate[data-dark="true"] .reading__value,
+.plate[data-dark="true"] .rail__label {
+  color: rgba(240, 234, 222, 0.82);
+}
+
+.plate[data-dark="true"] .reading__label,
+.plate[data-dark="true"] .rail__zero {
+  color: rgba(240, 234, 222, 0.45);
+  background: rgba(240, 234, 222, 0.22);
+}
+
+.plate[data-dark="true"] .reading__value[data-alert="true"] {
+  color: #e8877a;
+}
+
+.plate[data-dark="true"] .bench {
+  border-top-color: rgba(240, 234, 222, 0.28);
+}
+
+.plate[data-dark="true"] .rail__line {
+  background: rgba(240, 234, 222, 0.34);
+}
+
+.plate[data-dark="true"] .rail__stem {
+  background: var(--plate-ink);
+}
+
+.plate[data-dark="true"] .rail__dot {
+  border-color: var(--plate-ink);
+  background: transparent;
+}
+
+.plate[data-dark="true"] .rail__slot[data-role="slit-a"] .rail__dot,
+.plate[data-dark="true"] .rail__slot[data-role="slit-b"] .rail__dot,
+.plate[data-dark="true"] .rail__slot[data-role="mark"] .rail__dot {
+  border-color: #e8877a;
+  background: #e8877a;
+}
+
+.plate[data-dark="true"] .instrument-button {
+  border-color: rgba(240, 234, 222, 0.42);
+  color: var(--plate-ink);
+}
+
+.plate[data-dark="true"] .instrument-button:hover {
+  background: var(--plate-ink);
+  color: var(--ink);
+}
+
+.plate[data-dark="true"] .instrument-button[data-primary="true"] {
+  border-color: #e8877a;
+  color: #e8877a;
+}
+
+.plate[data-dark="true"] .instrument-button[data-primary="true"]:hover {
+  background: #e8877a;
+  color: var(--ink);
+}
+
+/* 无 canvas 时的降级：用重复渐变把条纹画出来，并说明发生了什么。 */
+.plate__fallback {
+  position: absolute;
+  inset: 0;
+  display: none;
+  place-content: center;
+  gap: 0.6rem;
+  padding: 2rem;
+  text-align: center;
+}
+
+.plate[data-fallback="true"] .plate__fallback {
+  display: grid;
+}
+
+.plate[data-fallback="true"] .plate__canvas {
+  display: none;
+}
+
+.fallback__fringes {
+  height: 42%;
+  min-height: 90px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--ink) 0 2px,
+    transparent 2px 13px
+  );
+  opacity: 0.82;
+}
+
+.fallback__note {
+  max-width: 30rem;
+  margin: 0 auto;
+  color: var(--graphite);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  line-height: 1.9;
+}
+
+/* ── 移动端 ───────────────────────────────────────────── */
+
+@media (max-width: 720px) {
+  body {
+    font-size: 16px;
+  }
+
+  :root {
+    --plate-h: 44vh;
+  }
+
+  .shell[data-rig="dark"] {
+    --plate-h: 54vh;
+  }
+
+  .shell[data-rig="choose"] {
+    --plate-h: 40vh;
+  }
+
+  .choices {
+    grid-template-columns: 1fr;
+  }
+
+  .measure,
+  .measure--wide {
+    width: calc(100% - 2.4rem);
+  }
+
+  .chapter {
+    min-height: 78vh;
+    padding: 9vh 0;
+  }
+
+  .ledger__item {
+    grid-template-columns: 2.6rem minmax(0, 1fr);
+    gap: 0 0.9rem;
+  }
+
+  .rail {
+    height: 3rem;
+  }
+
+  .reading--optional {
+    display: none;
+  }
+
+  .rail__handle-hint {
+    font-size: 9.5px;
+  }
+
+  .bench {
+    gap: 0.4rem;
+    padding: 0.55rem clamp(0.9rem, 3vw, 1.2rem) 0.6rem;
+  }
+
+  .bench__readings {
+    gap: 0.25rem 0.95rem;
+  }
+
+  .reading {
+    min-width: 3.7rem;
+  }
+
+  .reading__value {
+    font-size: 12px;
+  }
+
+  .instrument-button {
+    padding: 0.36rem 0.7rem;
+    font-size: 10.5px;
+  }
+}
+
+@media (max-height: 620px) and (min-width: 721px) {
+  :root {
+    --plate-h: 52vh;
+  }
+}
+
+/* ── reduced-motion：静态定稿，不做连续动画 ───────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .shell,
+  .plate {
+    transition: none;
+  }
+
+  .ledger__item {
+    opacity: 1 !important;
+  }
+}

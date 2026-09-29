@@ -1,0 +1,20 @@
+{
+  "name": "double-slit-portrait",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "《双缝》— 一台只有在两个问题之间才有形状的机器。自画像即干涉图样。",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 4191 --strictPort"
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "4.3.4",
+    "vite": "5.4.11"
+  }
+}
