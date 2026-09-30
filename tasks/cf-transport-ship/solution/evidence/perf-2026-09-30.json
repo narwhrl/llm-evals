@@ -1,0 +1,51 @@
+{
+  "note": "Values copied from window.__cf.state() snapshots taken in the browser during this run. The FPS is capped by the display's 120 Hz vsync.",
+  "environment": {
+    "os": "Windows 10.0.26200 x64",
+    "cpu": "Intel(R) Core(TM) Ultra 9 285H",
+    "gpu": "Intel(R) Arc(TM) 140T GPU (ANGLE D3D11)",
+    "browser": "Chrome 153.0.0.0 (controlled through the Kimi WebBridge extension 2.0.22 and CDP)",
+    "display": "120 Hz",
+    "node": "v24.21.0"
+  },
+  "runs": [
+    {
+      "name": "dev 1440x900 medium full 5v5, 120 s after warm-up (script t9)",
+      "url": "http://127.0.0.1:5190/?debug&seed=31",
+      "viewport": [1440, 900], "devicePixelRatio": 1, "renderPixelRatio": 1, "quality": "medium",
+      "frames": 14346, "fps": 120, "avgMs": 8.33, "p50Ms": 8.3, "p95Ms": 8.4, "p99Ms": 8.4, "maxMs": 8.5, "hitches": 0,
+      "render": { "calls": 340, "triangles": 150000, "geometries": 115, "textures": 33, "programs": 31 },
+      "jsHeapMB": 103,
+      "audio": { "peakVoices": 20, "played": 1432 },
+      "decalsCapped": 160,
+      "score": [14, 12],
+      "consoleErrors": []
+    },
+    {
+      "name": "dev 1920x1080 medium full 5v5, about 20 s sample (script t36)",
+      "url": "http://127.0.0.1:5190/?debug&seed=61",
+      "viewport": [1920, 1080], "devicePixelRatio": 1, "renderPixelRatio": 1, "quality": "medium",
+      "frames": 240, "fps": 120, "avgMs": 8.33, "p50Ms": 8.3, "p95Ms": 8.4, "p99Ms": 8.5, "maxMs": 8.5, "hitches": 0,
+      "render": { "calls": 301, "triangles": 151106, "geometries": 113, "textures": 33, "programs": 31 },
+      "crosshairCenter": [960, 540], "canvas": [1920, 1080], "cameraAspect": 1.778,
+      "caveat": "The stats window keeps only the most recent 240 frames, so this is a short sample, not a 120-second run."
+    }
+  ],
+  "restartLoop": {
+    "name": "5 consecutive restarts through the '重新开始' pause button with trusted clicks, after the decal-counter fix (script t35)",
+    "perRestart": [
+      { "restarts": 12, "actors": 10, "grenades": 0, "smokes": 0, "decals": 0, "geometries": 93, "textures": 32, "heapMB": 70 },
+      { "restarts": 13, "actors": 10, "grenades": 0, "smokes": 0, "decals": 0, "geometries": 93, "textures": 32, "heapMB": 71 },
+      { "restarts": 14, "actors": 10, "grenades": 0, "smokes": 0, "decals": 0, "geometries": 81, "textures": 13, "heapMB": 73 },
+      { "restarts": 15, "actors": 10, "grenades": 0, "smokes": 0, "decals": 5, "geometries": 100, "textures": 31, "heapMB": 72 },
+      { "restarts": 16, "actors": 10, "grenades": 0, "smokes": 0, "decals": 5, "geometries": 100, "textures": 31, "heapMB": 73 }
+    ],
+    "sceneObjectsPerRestart": 379,
+    "comment": "The scene graph stays at 379 objects on every restart, and the heap stays flat at about 70–73 MB. renderer.info geometry and texture counts fluctuate between snapshots (81–100 geometries, 13–32 textures) without growing monotonically; the cause of that fluctuation was not investigated. Snapshots 3–5 were taken a few seconds into play, after new decals had appeared. Before the fix, the decal counter kept accumulating across restarts (8, 16, 24, 32, 40); only the counter was affected, since the decal instances themselves were already hidden."
+  },
+  "fullMatch": {
+    "name": "fastForward(600) through the real fixed-step simulation (script t9)",
+    "result": { "endedBy": "time", "score": [71, 66], "winner": "潜伏者", "endCount": 1, "extraStepsAfterEnd": 0 },
+    "restartAfterResults": { "restarts": 1, "actors": 10, "grenades": 0, "smokes": 0 }
+  }
+}
