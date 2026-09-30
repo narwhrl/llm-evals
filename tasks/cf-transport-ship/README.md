@@ -6,7 +6,7 @@
 - Canonical candidate path: `tasks/cf-transport-ship/solution/`
 - Candidate result report: `tasks/cf-transport-ship/solution/RESULTS.md`
 - Prompt: [`task.md`](task.md)
-- Status: One candidate archived on `llm/cf-transport-ship` at `tasks/cf-transport-ship/solutions/<candidate-id>/`. `glm-5.3` was produced from the `5fa8bce` baseline in an isolated clone and imported with a result report; provenance is recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json).
+- Status: Three candidates archived on `llm/cf-transport-ship` at `tasks/cf-transport-ship/solutions/<candidate-id>/`: `glm-5.3`, `gpt-6-sol`, and `claude-opus-5.5`. `glm-5.3` was produced from the `5fa8bce` baseline, and its provenance is recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json). `gpt-6-sol` (revision 3) and `claude-opus-5.5` were both produced from the `7c210c2` baseline, and their provenance is recorded in [`migration/2026-09-29.json`](../../migration/2026-09-29.json). Draw same-baseline comparisons only between `gpt-6-sol` and `claude-opus-5.5`.
 
 ## Shared Inputs
 

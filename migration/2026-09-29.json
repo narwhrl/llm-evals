@@ -45,6 +45,21 @@
       "importedTree": "c63f0a3e8d717506491eebac82ea2f266f818b98",
       "resultReport": "tasks/cf-transport-ship/solutions/gpt-6-sol/RESULTS.md",
       "supersedesSourceCommit": "ea47e0681731968a38a5b8bd38f3839477ae2d96"
+    },
+    {
+      "task": "cf-transport-ship",
+      "candidate": "claude-opus-5.5",
+      "model": "anthropic/claude-opus-5-5",
+      "startingMain": "7c210c2dd734915419097074108efadec416e2e4",
+      "sourceRef": "local-clone:.runs/cf-transport-ship/claude-opus-5-5 (detached at pinned main before candidate commits)",
+      "sourceCommit": "dd356e9408b7f7b0b84ddccb92889c0cc2eadaa6",
+      "sourceTree": "6ea47ba95f70374d5e6c1e7c9eda0b91142f90af",
+      "archiveTag": "candidate/cf-transport-ship/claude-opus-5.5",
+      "destination": "tasks/cf-transport-ship/solutions/claude-opus-5.5",
+      "importedTree": "6ea47ba95f70374d5e6c1e7c9eda0b91142f90af",
+      "resultReport": "tasks/cf-transport-ship/solutions/claude-opus-5.5/RESULTS.md",
+      "importedOn": "2026-09-30",
+      "comparisonNote": "Same 7c210c2 baseline as gpt-6-sol; glm-5.3 used 5fa8bce."
     }
   ]
 }
