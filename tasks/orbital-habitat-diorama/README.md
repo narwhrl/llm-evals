@@ -6,7 +6,7 @@
 - Canonical candidate path: `tasks/orbital-habitat-diorama/solution/`
 - Candidate result report: `tasks/orbital-habitat-diorama/solution/RESULTS.md`
 - Prompt: [`task.md`](task.md)
-- Status: No archived candidates. The task is ready for an evaluation round from a pinned `main` baseline.
+- Status: One candidate archived on `llm/orbital-habitat-diorama` at `tasks/orbital-habitat-diorama/solutions/<candidate-id>/`: `zcode-harness` (ZCode multi-agent harness, `7b2f86c` baseline). Source commits and trees are recorded in `migration/2026-09-30.json` on the task branch.
 
 ## Shared Inputs
 

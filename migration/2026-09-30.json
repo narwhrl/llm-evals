@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "date": "2026-09-30",
+  "imports": [
+    {
+      "task": "orbital-habitat-diorama",
+      "candidate": "zcode-harness",
+      "model": "ZCode multi-agent harness; coordinator anthropic/claude-opus-5-5, implementation subagents new-provider/gpt-6.1-sol (per-role models in RESULTS.md)",
+      "startingMain": "7b2f86cc1643ff70650e668db7f69b1a630efaec",
+      "sourceRef": "local-clone:.runs/orbital-habitat-diorama/zcode-harness (detached at pinned main before candidate commits)",
+      "sourceCommit": "66dc7370c2354f474a93a16b97e01d233b531d8f",
+      "sourceTree": "c3063fdff02a84396b293edf705098dd71668a1f",
+      "archiveTag": "candidate/orbital-habitat-diorama/zcode-harness",
+      "destination": "tasks/orbital-habitat-diorama/solutions/zcode-harness",
+      "importedTree": "c3063fdff02a84396b293edf705098dd71668a1f",
+      "resultReport": "tasks/orbital-habitat-diorama/solutions/zcode-harness/RESULTS.md",
+      "importedOn": "2026-09-30",
+      "comparisonNote": "Multi-agent harness run with subagents on more than one model; not a single-model result. Compare only with candidates from the same 7b2f86c baseline and note the harness difference."
+    }
+  ]
+}
