@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "taskId": "orbital-habitat-diorama",
+  "candidates": [
+    {
+      "candidateId": "gpt-6.1-sol",
+      "model": "new-provider/gpt-6.1-sol",
+      "baselineMain": "a7bd9a780ded8c8a22c9186a045c834455835496",
+      "sourceRef": "isolated-clone-worktree:.runs/orbital-habitat-diorama/gpt-6.1-sol",
+      "sourceCommit": "73fa3e3404c9b9f1f1aba7de4d2ae49cc75ac363",
+      "sourceTree": "8aace199bfd429ea96068a543bcf2f81be8d22d3",
+      "archiveTag": "candidate/orbital-habitat-diorama/gpt-6.1-sol",
+      "destination": "tasks/orbital-habitat-diorama/solutions/gpt-6.1-sol",
+      "resultReport": "tasks/orbital-habitat-diorama/solutions/gpt-6.1-sol/RESULTS.md"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+import {mkdirSync,writeFileSync}from'node:fs';
+mkdirSync('public/assets',{recursive:true});
+const land=[[[.05,.22],[.11,.12],[.22,.14],[.29,.28],[.21,.39],[.16,.44],[.14,.33]],[[.22,.43],[.3,.47],[.33,.62],[.28,.83],[.25,.9],[.23,.69]],[[.43,.25],[.48,.19],[.56,.24],[.57,.33],[.5,.39],[.46,.34]],[[.46,.4],[.57,.37],[.61,.5],[.55,.76],[.5,.7],[.46,.52]],[[.55,.18],[.7,.13],[.84,.2],[.88,.31],[.81,.38],[.73,.43],[.7,.58],[.64,.5],[.63,.32]],[[.78,.64],[.87,.61],[.91,.7],[.85,.8],[.8,.77]],[[.35,.05],[.39,.07],[.36,.17],[.33,.12]]];
+const points=p=>p.map(([x,y])=>`${x*2048},${y*1024}`).join(' ');const shapes=(night=false)=>land.map((p,i)=>`<polygon points="${points(p)}" fill="${night?'#0b202e':['#698a62','#65825d','#839374','#748960','#738466','#9b8b66','#d2d9d3'][i]}"/>`).join('');
+let cities='';let seed=411;const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};function inside(x,y,p){let c=false;for(let i=0,j=p.length-1;i<p.length;j=i++){const a=p[i],b=p[j];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])c=!c;}return c;}
+for(let i=0;i<14000;i++){const x=random(),y=random();if(land.some(p=>inside(x,y,p))&&y>.18&&y<.77){const r=.45+random()*1.2;cities+=`<circle cx="${x*2048}" cy="${y*1024}" r="${r}" fill="${random()>.5?'#ffce76':'#da9945'}" opacity="${.35+random()*.65}"/>`;}}
+const wrap=body=>`<svg xmlns="http://www.w3.org/2000/svg" width="2048" height="1024" viewBox="0 0 2048 1024">${body}</svg>`;
+writeFileSync('public/assets/earth-day.svg',wrap(`<defs><filter id="terrain"><feTurbulence baseFrequency=".018" numOctaves="4" seed="22"/><feColorMatrix values="0 0 0 0 0.6 0 0 0 0 0.72 0 0 0 0 0.64 0 0 0 .2 0"/></filter></defs><rect width="2048" height="1024" fill="#174f79"/>${shapes()}<rect width="2048" height="1024" filter="url(#terrain)" opacity=".25"/><path d="M0 0H2048V55 Q1300 95 900 60 T0 70Z M0 975 Q900 940 2048 982V1024H0Z" fill="#d2e3e7"/>`));
+writeFileSync('public/assets/earth-night.svg',wrap(`<rect width="2048" height="1024" fill="#020f24"/>${shapes(true)}${cities}`));
+let clouds='';for(let i=0;i<220;i++){const x=random()*2048,y=70+random()*880;clouds+=`<ellipse cx="${x}" cy="${y}" rx="${15+random()*110}" ry="${4+random()*20}" transform="rotate(${random()*50-25} ${x} ${y})" fill="white" opacity="${.12+random()*.6}"/>`;}
+writeFileSync('public/assets/earth-clouds.svg',wrap(`<defs><filter id="soft"><feGaussianBlur stdDeviation="3"/></filter></defs><g filter="url(#soft)">${clouds}</g>`));
+console.log('Generated matching local 2:1 day, night and cloud maps.');
