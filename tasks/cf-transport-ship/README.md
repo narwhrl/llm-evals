@@ -6,7 +6,7 @@
 - Canonical candidate path: `tasks/cf-transport-ship/solution/`
 - Candidate result report: `tasks/cf-transport-ship/solution/RESULTS.md`
 - Prompt: [`task.md`](task.md)
-- Status: No archived candidates. The task is ready for a new evaluation round from a pinned `main` baseline.
+- Status: Three candidates archived on `llm/cf-transport-ship` at `tasks/cf-transport-ship/solutions/<candidate-id>/`: `glm-5.3`, `gpt-6-sol`, and `claude-opus-5.5`. `glm-5.3` used the `5fa8bce` baseline. `gpt-6-sol` and `claude-opus-5.5` both used the `7c210c2` baseline. Source commits and trees are recorded in `migration/2026-09-28.json` and `migration/2026-09-29.json` on the task branch.
 
 ## Shared Inputs
 
