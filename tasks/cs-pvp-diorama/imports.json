@@ -23,6 +23,17 @@
       "archiveTag": "candidate/cs-pvp-diorama/minimax-m3.1-flash-preview",
       "destination": "tasks/cs-pvp-diorama/solutions/minimax-m3.1-flash-preview",
       "resultReport": "tasks/cs-pvp-diorama/solutions/minimax-m3.1-flash-preview/RESULTS.md"
+    },
+    {
+      "candidateId": "gpt-6.1-sol",
+      "model": "new-provider/gpt-6.1-sol",
+      "baselineMain": "a7bd9a780ded8c8a22c9186a045c834455835496",
+      "sourceRef": "isolated-clone-worktree:.runs/cs-pvp-diorama/gpt-6.1-sol",
+      "sourceCommit": "3d47c7ed283778c4a48ef4d19537ad0c3eb7787d",
+      "sourceTree": "408c32dd49162424d76501e911d88ecdd275f4d7",
+      "archiveTag": "candidate/cs-pvp-diorama/gpt-6.1-sol",
+      "destination": "tasks/cs-pvp-diorama/solutions/gpt-6.1-sol",
+      "resultReport": "tasks/cs-pvp-diorama/solutions/gpt-6.1-sol/RESULTS.md"
     }
   ]
 }

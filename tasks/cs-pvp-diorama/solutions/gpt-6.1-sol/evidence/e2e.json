@@ -1,0 +1,83 @@
+{
+  "checks": [
+    "ready",
+    "no UI",
+    "orbit via real pointer",
+    "wheel zoom",
+    "mobile DPR 2",
+    "local assets",
+    "no console errors"
+  ],
+  "initial": {
+    "state": {
+      "ready": true,
+      "time": 0.3,
+      "camera": [
+        24.000000000000014,
+        27.999999999999996,
+        30.000000000000018
+      ],
+      "target": [
+        0,
+        1.4,
+        0
+      ],
+      "meshCount": 795
+    },
+    "errors": [],
+    "ui": 0
+  },
+  "orbit": {
+    "ready": true,
+    "time": 1.1500000000000004,
+    "camera": [
+      9.098902416295523,
+      25.066993586403672,
+      39.251030424689006
+    ],
+    "target": [
+      0,
+      1.4,
+      0
+    ],
+    "meshCount": 795
+  },
+  "zoom": {
+    "ready": true,
+    "time": 1.5500000000000007,
+    "camera": [
+      0.6851948307681714,
+      18.80733499861137,
+      32.10909849570288
+    ],
+    "target": [
+      0,
+      1.4,
+      0
+    ],
+    "meshCount": 795
+  },
+  "final": {
+    "errors": [],
+    "state": {
+      "ready": true,
+      "time": 6.099999999999986,
+      "camera": [
+        24.000000000000014,
+        27.999999999999996,
+        30.000000000000018
+      ],
+      "target": [
+        0,
+        1.4,
+        0
+      ],
+      "meshCount": 795
+    },
+    "requests": [
+      "http://127.0.0.1:4171/assets/index-Bf2mLeUQ.js",
+      "http://127.0.0.1:4171/favicon.ico",
+      "http://127.0.0.1:4171/favicon.ico"
+    ]
+  }
+}
