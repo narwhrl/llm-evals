@@ -1,0 +1,349 @@
+{
+  "checks": [
+    "no UI",
+    "five required captures",
+    "all focus fixtures",
+    "Earth click/drag separation",
+    "pen",
+    "plant light",
+    "night cruise",
+    "zoom",
+    "mobile",
+    "two full 90s cycles",
+    "local assets",
+    "console"
+  ],
+  "samples": [
+    {
+      "ready": true,
+      "time": 11.298600000023841,
+      "fast": false,
+      "nightCruise": false,
+      "plantOn": true,
+      "focused": null,
+      "lastAction": null,
+      "daylight": 1,
+      "penSpin": 0,
+      "camera": [
+        9,
+        7.9999999999999964,
+        13
+      ],
+      "zoom": 1
+    },
+    {
+      "ready": true,
+      "time": 21.30510000002385,
+      "fast": false,
+      "nightCruise": false,
+      "plantOn": true,
+      "focused": null,
+      "lastAction": null,
+      "daylight": 0.6238050629319539,
+      "penSpin": 0,
+      "camera": [
+        9,
+        7.9999999999999964,
+        13
+      ],
+      "zoom": 1
+    },
+    {
+      "ready": true,
+      "time": 31.356000000000005,
+      "fast": false,
+      "nightCruise": false,
+      "plantOn": true,
+      "focused": null,
+      "lastAction": null,
+      "daylight": 0,
+      "penSpin": 0,
+      "camera": [
+        9,
+        7.9999999999999964,
+        13
+      ],
+      "zoom": 1
+    },
+    {
+      "ready": true,
+      "time": 41.34780000001194,
+      "fast": false,
+      "nightCruise": false,
+      "plantOn": true,
+      "focused": null,
+      "lastAction": null,
+      "daylight": 0,
+      "penSpin": 0,
+      "camera": [
+        9,
+        7.9999999999999964,
+        13
+      ],
+      "zoom": 1
+    },
+    {
+      "ready": true,
+      "time": 51.39789999997618,
+      "fast": false,
+      "nightCruise": false,
+      "plantOn": true,
+      "focused": null,
+      "lastAction": null,
+      "daylight": 0,
+      "penSpin": 0,
+      "camera": [
+        9,
+        7.9999999999999964,
+        13
+      ],
+      "zoom": 1
+    },
+    {
+      "ready": true,
+      "time": 61.466500000000046,
+      "fast": false,
+      "nightCruise": false,
+      "plantOn": true,
+      "focused": null,
+      "lastAction": null,
+      "daylight": 0,
+      "penSpin": 0,
+      "camera": [
+        9,
+        7.9999999999999964,
+        13
+      ],
+      "zoom": 1
+    },
+    {
+      "ready": true,
+      "time": 71.3896000000239,
+      "fast": false,
+      "nightCruise": false,
+      "plantOn": true,
+      "focused": null,
+      "lastAction": null,
+      "daylight": 1,
+      "penSpin": 0,
+      "camera": [
+        9,
+        7.9999999999999964,
+        13
+      ],
+      "zoom": 1
+    },
+    {
+      "ready": true,
+      "time": 81.48989999997625,
+      "fast": false,
+      "nightCruise": false,
+      "plantOn": true,
+      "focused": null,
+      "lastAction": null,
+      "daylight": 1,
+      "penSpin": 0,
+      "camera": [
+        9,
+        7.9999999999999964,
+        13
+      ],
+      "zoom": 1
+    },
+    {
+      "ready": true,
+      "time": 91.49080000001199,
+      "fast": false,
+      "nightCruise": false,
+      "plantOn": true,
+      "focused": null,
+      "lastAction": null,
+      "daylight": 1,
+      "penSpin": 0,
+      "camera": [
+        9,
+        7.9999999999999964,
+        13
+      ],
+      "zoom": 1
+    },
+    {
+      "ready": true,
+      "time": 101.54950000000007,
+      "fast": false,
+      "nightCruise": false,
+      "plantOn": true,
+      "focused": null,
+      "lastAction": null,
+      "daylight": 1,
+      "penSpin": 0,
+      "camera": [
+        9,
+        7.9999999999999964,
+        13
+      ],
+      "zoom": 1
+    },
+    {
+      "ready": true,
+      "time": 111.57600000000004,
+      "fast": false,
+      "nightCruise": false,
+      "plantOn": true,
+      "focused": null,
+      "lastAction": null,
+      "daylight": 0.5541403666260697,
+      "penSpin": 0,
+      "camera": [
+        9,
+        7.9999999999999964,
+        13
+      ],
+      "zoom": 1
+    },
+    {
+      "ready": true,
+      "time": 121.61580000001194,
+      "fast": false,
+      "nightCruise": false,
+      "plantOn": true,
+      "focused": null,
+      "lastAction": null,
+      "daylight": 0,
+      "penSpin": 0,
+      "camera": [
+        9,
+        7.9999999999999964,
+        13
+      ],
+      "zoom": 1
+    },
+    {
+      "ready": true,
+      "time": 131.64149999999995,
+      "fast": false,
+      "nightCruise": false,
+      "plantOn": true,
+      "focused": null,
+      "lastAction": null,
+      "daylight": 0,
+      "penSpin": 0,
+      "camera": [
+        9,
+        7.9999999999999964,
+        13
+      ],
+      "zoom": 1
+    },
+    {
+      "ready": true,
+      "time": 141.65399999999997,
+      "fast": false,
+      "nightCruise": false,
+      "plantOn": true,
+      "focused": null,
+      "lastAction": null,
+      "daylight": 0,
+      "penSpin": 0,
+      "camera": [
+        9,
+        7.9999999999999964,
+        13
+      ],
+      "zoom": 1
+    },
+    {
+      "ready": true,
+      "time": 151.69099999999997,
+      "fast": false,
+      "nightCruise": false,
+      "plantOn": true,
+      "focused": null,
+      "lastAction": null,
+      "daylight": 0,
+      "penSpin": 0,
+      "camera": [
+        9,
+        7.9999999999999964,
+        13
+      ],
+      "zoom": 1
+    },
+    {
+      "ready": true,
+      "time": 161.67600000000016,
+      "fast": false,
+      "nightCruise": false,
+      "plantOn": true,
+      "focused": null,
+      "lastAction": null,
+      "daylight": 1,
+      "penSpin": 0,
+      "camera": [
+        9,
+        7.9999999999999964,
+        13
+      ],
+      "zoom": 1
+    },
+    {
+      "ready": true,
+      "time": 171.7501999999882,
+      "fast": false,
+      "nightCruise": false,
+      "plantOn": true,
+      "focused": null,
+      "lastAction": null,
+      "daylight": 1,
+      "penSpin": 0,
+      "camera": [
+        9,
+        7.9999999999999964,
+        13
+      ],
+      "zoom": 1
+    },
+    {
+      "ready": true,
+      "time": 181.73339999997634,
+      "fast": false,
+      "nightCruise": false,
+      "plantOn": true,
+      "focused": null,
+      "lastAction": null,
+      "daylight": 1,
+      "penSpin": 0,
+      "camera": [
+        9,
+        7.9999999999999964,
+        13
+      ],
+      "zoom": 1
+    },
+    {
+      "ready": true,
+      "time": 191.80089999997637,
+      "fast": false,
+      "nightCruise": false,
+      "plantOn": true,
+      "focused": null,
+      "lastAction": null,
+      "daylight": 1,
+      "penSpin": 0,
+      "camera": [
+        9,
+        7.9999999999999964,
+        13
+      ],
+      "zoom": 1
+    }
+  ],
+  "errors": [],
+  "resources": [
+    "http://127.0.0.1:4183/assets/index-DGAcqP1f.js",
+    "http://127.0.0.1:4183/assets/earth-night.png",
+    "http://127.0.0.1:4183/assets/earth-day.png",
+    "http://127.0.0.1:4183/assets/earth-clouds.svg",
+    "http://127.0.0.1:4183/favicon.ico"
+  ]
+}
