@@ -99,6 +99,17 @@
       "destination": "tasks/rainy-konbini-diorama/solutions/gpt-5.6-sol",
       "resultReport": "tasks/rainy-konbini-diorama/solutions/gpt-5.6-sol/RESULTS.md",
       "note": "Pinned to main ac801cf. Run without subagents or other models per the user's instruction. Production build passed; Kimi WebBridge visual acceptance confirmed the store-centered rainy diorama, orbit and zoom, HTTP 200 asset loading, no runtime errors, and animated rain/light/door/puddle behavior. Imported tree hash matches the source solution tree."
+    },
+    {
+      "candidateId": "gpt-6.1-sol",
+      "model": "new-provider/gpt-6.1-sol",
+      "baselineMain": "a7bd9a780ded8c8a22c9186a045c834455835496",
+      "sourceRef": "isolated-clone-worktree:.runs/rainy-konbini-diorama/gpt-6.1-sol",
+      "sourceCommit": "23bcf36fab1b9b3fd5cbce14952e86a2f7be4b7e",
+      "sourceTree": "ba020fe063695cad49282cc8f9dc3f52348c4c82",
+      "archiveTag": "candidate/rainy-konbini-diorama/gpt-6.1-sol",
+      "destination": "tasks/rainy-konbini-diorama/solutions/gpt-6.1-sol",
+      "resultReport": "tasks/rainy-konbini-diorama/solutions/gpt-6.1-sol/RESULTS.md"
     }
   ]
 }
