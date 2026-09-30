@@ -20,6 +20,7 @@ This repository compares coding models under the same task, context, tools, and 
 | `voxel-chinese-architecture` | [`tasks/voxel-chinese-architecture/`](tasks/voxel-chinese-architecture/) | `llm/voxel-chinese-architecture` |
 | `gargantua-schwarzschild-raytracer` | [`tasks/gargantua-schwarzschild-raytracer/`](tasks/gargantua-schwarzschild-raytracer/) | `llm/gargantua-schwarzschild-raytracer` |
 | `cf-transport-ship` | [`tasks/cf-transport-ship/`](tasks/cf-transport-ship/) | No archived candidates |
+| `orbital-habitat-diorama` | [`tasks/orbital-habitat-diorama/`](tasks/orbital-habitat-diorama/) | No archived candidates |
 
 ## Repository and Worktree Layout
 
