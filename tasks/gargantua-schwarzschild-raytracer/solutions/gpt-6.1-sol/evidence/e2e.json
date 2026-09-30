@@ -1,0 +1,218 @@
+{
+  "matrix": [
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      0,
+      2
+    ],
+    [
+      0,
+      3
+    ],
+    [
+      0,
+      4
+    ],
+    [
+      0,
+      5
+    ],
+    [
+      0,
+      6
+    ],
+    [
+      0,
+      7
+    ],
+    [
+      0,
+      8
+    ],
+    [
+      0,
+      9
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      1,
+      3
+    ],
+    [
+      1,
+      4
+    ],
+    [
+      1,
+      5
+    ],
+    [
+      1,
+      6
+    ],
+    [
+      1,
+      7
+    ],
+    [
+      1,
+      8
+    ],
+    [
+      1,
+      9
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      2,
+      2
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      2,
+      4
+    ],
+    [
+      2,
+      5
+    ],
+    [
+      2,
+      6
+    ],
+    [
+      2,
+      7
+    ],
+    [
+      2,
+      8
+    ],
+    [
+      2,
+      9
+    ],
+    [
+      3,
+      0
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      3,
+      2
+    ],
+    [
+      3,
+      3
+    ],
+    [
+      3,
+      4
+    ],
+    [
+      3,
+      5
+    ],
+    [
+      3,
+      6
+    ],
+    [
+      3,
+      7
+    ],
+    [
+      3,
+      8
+    ],
+    [
+      3,
+      9
+    ]
+  ],
+  "invalid": {
+    "version": 1,
+    "fov": 38,
+    "distance": 28,
+    "azimuth": 0,
+    "elevation": 8,
+    "timeScale": 1,
+    "innerR": 3,
+    "outerR": 11,
+    "thickness": 0.15,
+    "temperature": 10500,
+    "emission": 14,
+    "velocity": 1,
+    "turbulence": 1,
+    "turbSpeed": 1,
+    "stars": 2,
+    "galaxy": 1.6,
+    "bloom": 1.2,
+    "threshold": 0.8,
+    "exposure": 1.1,
+    "vignette": 0.35,
+    "grain": 0.17,
+    "dispersion": 0.25,
+    "quality": "high",
+    "preset": 0,
+    "debug": 0,
+    "hud": false,
+    "playing": false,
+    "time": 0,
+    "capture": true,
+    "name": "01 / EQUATOR",
+    "budget": {
+      "scale": 0.7,
+      "steps": 420
+    }
+  },
+  "errors": [],
+  "resources": [
+    "http://127.0.0.1:4172/assets/index-DR6BaE9H.js",
+    "http://127.0.0.1:4172/assets/index-BhW4kqGq.css"
+  ],
+  "contextRestore": true,
+  "checks": [
+    "21 controls",
+    "40 debug / preset states",
+    "3 render budgets",
+    "persistence/reset",
+    "keyboard",
+    "orbit takeover",
+    "context restoration",
+    "invalid capture query",
+    "mobile DPR2",
+    "local assets"
+  ]
+}

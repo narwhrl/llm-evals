@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "taskId": "gargantua-schwarzschild-raytracer",
+  "candidates": [{
+    "candidateId": "gpt-6.1-sol",
+    "model": "new-provider/gpt-6.1-sol",
+    "baselineMain": "a7bd9a780ded8c8a22c9186a045c834455835496",
+    "sourceRef": "isolated-clone-worktree:.runs/gargantua-schwarzschild-raytracer/gpt-6.1-sol",
+    "sourceCommit": "c5a2e949ef0d20f3d82a5bc0e20f1a94e2fe79ea",
+    "sourceTree": "03673fe899df964ac0a6800ef8e25bb94bef3e32",
+    "archiveTag": "candidate/gargantua-schwarzschild-raytracer/gpt-6.1-sol",
+    "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/gpt-6.1-sol",
+    "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/gpt-6.1-sol/RESULTS.md"
+  }]
+}

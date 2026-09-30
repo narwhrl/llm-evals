@@ -1,0 +1,4 @@
+import assert from 'node:assert/strict';
+const derivative=([u,v])=>[v,-u+1.5*u*u];const add=(s,k,h)=>s.map((x,i)=>x+k[i]*h);
+function trace(b){let s=[1/28,Math.sqrt(1/b**2-(1/28)**2+(1/28)**3)],phi=0;for(let i=0;i<640;i++){const h=Math.max(.006,Math.min(.065,.012/(.035+Math.abs(s[1]))));const a=derivative(s),c=derivative(add(s,a,h/2)),d=derivative(add(s,c,h/2)),e=derivative(add(s,d,h));s=s.map((x,j)=>x+h*(a[j]+2*c[j]+2*d[j]+e[j])/6);phi+=h;if(s[0]>=.998)return {captured:true,phi};if(s[0]<=.0083)return {captured:false,phi};}throw Error('budget exhausted');}
+const below=trace(2.5),near=trace(2.600),above=trace(2.8);assert.equal(below.captured,true);assert.equal(near.captured,false);assert.equal(above.captured,false);assert.ok(near.phi>above.phi);console.log('PASS Schwarzschild critical impact parameter 3sqrt(3)/2:',{below,near,above});
