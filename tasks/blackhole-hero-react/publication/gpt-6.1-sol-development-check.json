@@ -1,0 +1,164 @@
+{
+  "url": "http://127.0.0.1:5176/",
+  "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+  "dpr": 1.5,
+  "viewport": [
+    1707,
+    825
+  ],
+  "visualViewport": [
+    1707.3333740234375,
+    825.3333129882812
+  ],
+  "narrow": false,
+  "reducedMotion": false,
+  "renderer": "ANGLE (Intel, Intel(R) Arc(TM) 140T GPU (48GB) (0x00007D51) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+  "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+  "glError": 0,
+  "contextLost": false,
+  "hostState": "",
+  "canvas": {
+    "backing": [
+      2561,
+      1080
+    ],
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "width": 1707,
+      "height": 720
+    },
+    "display": "block"
+  },
+  "heading": {
+    "text": "Light does not\nleave here",
+    "rect": {
+      "x": 80,
+      "y": 207.25,
+      "width": 448,
+      "height": 142.7916717529297
+    },
+    "font": "68px"
+  },
+  "links": [
+    {
+      "text": "Get started",
+      "rect": {
+        "x": 80,
+        "y": 468.0833435058594,
+        "width": 118.94792175292969,
+        "height": 44
+      }
+    },
+    {
+      "text": "Read the maths",
+      "rect": {
+        "x": 210.9479217529297,
+        "y": 467.41668701171875,
+        "width": 145.4375,
+        "height": 45.333335876464844
+      }
+    }
+  ],
+  "overflow": false,
+  "uniforms": {
+    "uRes": [
+      1793,
+      756
+    ],
+    "uTime": 0.2918,
+    "uTanHalf": 0.3838640350354158,
+    "uFocus": [
+      0.72,
+      0.54
+    ],
+    "uSteps": 300,
+    "uSkyR": 36,
+    "uDiskIn": 3,
+    "uDiskOut": 15,
+    "uThick": 0.26,
+    "uDensity": 1,
+    "uSpin": 0.376991118,
+    "uGrain": 0.48,
+    "uBright": 1,
+    "uDoppler": 0.35,
+    "uStars": 0,
+    "uEncode": 0,
+    "uJitter": [
+      0.375,
+      0.05600000000000005
+    ],
+    "uSeed": 17.508,
+    "uAlpha": 0.14,
+    "uTexel": [
+      0.0005577244841048522,
+      0.0013227513227513227
+    ],
+    "uDecode": 0,
+    "uPack": 1,
+    "uThreshold": 0.85,
+    "uStep": [
+      0,
+      0.013756613756613757
+    ],
+    "uGlow": 0.26,
+    "uExposure": 0.9,
+    "uVignette": 0.28,
+    "uScrimDir": 1,
+    "uScrimAmt": 0.9
+  },
+  "frames": 20,
+  "draws": 160,
+  "errors": [],
+  "consoleErrors": [],
+  "resources": [
+    {
+      "url": "http://127.0.0.1:5176/@vite/client",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5176/src/main.tsx",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5176/@react-refresh",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5176/node_modules/.vite/deps/react.js?v=ab5a4288",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5176/node_modules/.vite/deps/react-dom_client.js?v=ef4d3b4a",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5176/src/demo.tsx",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5176/node_modules/.vite/deps/react_jsx-dev-runtime.js?v=ab5a4288",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5176/node_modules/.vite/deps/rolldown-runtime-BvCyGRYZ.js?v=44cbd00e",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5176/src/index.css",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5176/node_modules/.vite/deps/react-dom.js?v=ab5a4288",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5176/node_modules/vite/dist/client/env.mjs",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:5176/src/components/ui/blackhole-hero-section.tsx",
+      "status": 200
+    }
+  ]
+}

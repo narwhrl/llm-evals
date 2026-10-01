@@ -1,0 +1,358 @@
+[
+  {
+    "name": "live desktop",
+    "pass": true,
+    "data": {
+      "url": "https://llm-evals-result.narwh.dev/blackhole-hero-react/gpt-6.1-sol/",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+      "dpr": 1.0000000298023224,
+      "viewport": [
+        1440,
+        900
+      ],
+      "visualViewport": [
+        1440,
+        900
+      ],
+      "narrow": false,
+      "reducedMotion": false,
+      "renderer": "ANGLE (Intel, Intel(R) Arc(TM) 140T GPU (48GB) (0x00007D51) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "glError": 0,
+      "contextLost": false,
+      "hostState": "",
+      "canvas": {
+        "backing": [
+          1440,
+          720
+        ],
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 1440,
+          "height": 720
+        },
+        "display": "block"
+      },
+      "heading": {
+        "text": "Light does not\nleave here",
+        "rect": {
+          "x": 80,
+          "y": 207.25,
+          "width": 448,
+          "height": 142.7916717529297
+        },
+        "font": "68px"
+      },
+      "links": [
+        {
+          "text": "Get started",
+          "rect": {
+            "x": 80,
+            "y": 468.0833435058594,
+            "width": 118.94792175292969,
+            "height": 44
+          }
+        },
+        {
+          "text": "Read the maths",
+          "rect": {
+            "x": 210.9479217529297,
+            "y": 467.41668701171875,
+            "width": 145.4375,
+            "height": 45.333335876464844
+          }
+        }
+      ],
+      "overflow": false,
+      "uniforms": {
+        "uRes": [
+          1008,
+          504
+        ],
+        "uTime": 0.35829999999999995,
+        "uTanHalf": 0.3838640350354158,
+        "uFocus": [
+          0.72,
+          0.54
+        ],
+        "uSteps": 300,
+        "uSkyR": 36,
+        "uDiskIn": 3,
+        "uDiskOut": 15,
+        "uThick": 0.26,
+        "uDensity": 1,
+        "uSpin": 0.376991118,
+        "uGrain": 0.48,
+        "uBright": 1,
+        "uDoppler": 0.35,
+        "uStars": 0,
+        "uEncode": 0,
+        "uJitter": [
+          -0.25,
+          0.16700000000000004
+        ],
+        "uSeed": 21.497999999999998,
+        "uAlpha": 0.14,
+        "uTexel": [
+          0.000992063492063492,
+          0.001984126984126984
+        ],
+        "uDecode": 0,
+        "uPack": 1,
+        "uThreshold": 0.85,
+        "uStep": [
+          0,
+          0.020634920634920634
+        ],
+        "uGlow": 0.26,
+        "uExposure": 0.9,
+        "uVignette": 0.28,
+        "uScrimDir": 1,
+        "uScrimAmt": 0.9
+      },
+      "frames": 21,
+      "draws": 168,
+      "errors": [],
+      "consoleErrors": [],
+      "resources": [
+        {
+          "url": "https://llm-evals-result.narwh.dev/blackhole-hero-react/gpt-6.1-sol/assets/index-B84cqPxL.css",
+          "status": 200
+        },
+        {
+          "url": "https://llm-evals-result.narwh.dev/blackhole-hero-react/gpt-6.1-sol/assets/index-BOkB_6bN.js",
+          "status": 200
+        },
+        {
+          "url": "https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495",
+          "status": 0
+        }
+      ]
+    },
+    "candidateResources": [
+      {
+        "url": "https://llm-evals-result.narwh.dev/blackhole-hero-react/gpt-6.1-sol/assets/index-B84cqPxL.css",
+        "status": 200
+      },
+      {
+        "url": "https://llm-evals-result.narwh.dev/blackhole-hero-react/gpt-6.1-sol/assets/index-BOkB_6bN.js",
+        "status": 200
+      }
+    ],
+    "infrastructureResources": [
+      {
+        "url": "https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495",
+        "status": 0
+      }
+    ]
+  },
+  {
+    "name": "live network",
+    "data": {
+      "count": 5,
+      "requests": [
+        {
+          "requestId": "98B545F7551B305DBDD265CA20BD2DB1",
+          "url": "https://llm-evals-result.narwh.dev/blackhole-hero-react/gpt-6.1-sol/",
+          "method": "GET",
+          "status": 200,
+          "mimeType": "text/html",
+          "completed": true
+        },
+        {
+          "requestId": "39560.10",
+          "url": "https://llm-evals-result.narwh.dev/blackhole-hero-react/gpt-6.1-sol/assets/index-BOkB_6bN.js",
+          "method": "GET",
+          "status": 304,
+          "mimeType": "text/javascript",
+          "completed": true
+        },
+        {
+          "requestId": "39560.11",
+          "url": "https://llm-evals-result.narwh.dev/blackhole-hero-react/gpt-6.1-sol/assets/index-B84cqPxL.css",
+          "method": "GET",
+          "status": 304,
+          "mimeType": "text/css",
+          "completed": true
+        },
+        {
+          "requestId": "39560.12",
+          "url": "https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495",
+          "method": "GET",
+          "completed": false
+        },
+        {
+          "requestId": "39560.16",
+          "url": "chrome-extension://khgocmkkpikpnmmkgmdnfckapcdkgfaf/inline/injected.js",
+          "method": "GET",
+          "status": 200,
+          "mimeType": "text/javascript",
+          "completed": true
+        }
+      ]
+    }
+  },
+  {
+    "name": "live mobile",
+    "pass": true,
+    "data": {
+      "url": "https://llm-evals-result.narwh.dev/blackhole-hero-react/gpt-6.1-sol/",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+      "dpr": 1.0000000298023224,
+      "viewport": [
+        390,
+        844
+      ],
+      "visualViewport": [
+        390,
+        844
+      ],
+      "narrow": true,
+      "reducedMotion": false,
+      "renderer": "ANGLE (Intel, Intel(R) Arc(TM) 140T GPU (48GB) (0x00007D51) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "glError": 0,
+      "contextLost": false,
+      "hostState": "",
+      "canvas": {
+        "backing": [
+          390,
+          776
+        ],
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 776
+        },
+        "display": "block"
+      },
+      "heading": {
+        "text": "Light does not\nleave here",
+        "rect": {
+          "x": 24,
+          "y": 56,
+          "width": 342,
+          "height": 84
+        },
+        "font": "40px"
+      },
+      "links": [
+        {
+          "text": "Get started",
+          "rect": {
+            "x": 24,
+            "y": 270.72918701171875,
+            "width": 118.94792175292969,
+            "height": 44
+          }
+        },
+        {
+          "text": "Read the maths",
+          "rect": {
+            "x": 154.9479217529297,
+            "y": 270.0625,
+            "width": 145.4375,
+            "height": 45.333335876464844
+          }
+        }
+      ],
+      "overflow": false,
+      "uniforms": {
+        "uRes": [
+          234,
+          466
+        ],
+        "uTime": 0.5999999999999999,
+        "uTanHalf": 0.554309051452769,
+        "uFocus": [
+          0.5,
+          0.24
+        ],
+        "uSteps": 200,
+        "uSkyR": 36,
+        "uDiskIn": 3,
+        "uDiskOut": 15,
+        "uThick": 0.26,
+        "uDensity": 1,
+        "uSpin": 0.376991118,
+        "uGrain": 0.48,
+        "uBright": 1,
+        "uDoppler": 0.35,
+        "uStars": 0,
+        "uEncode": 0,
+        "uJitter": [
+          -0.25,
+          0.16700000000000004
+        ],
+        "uSeed": 35.99999999999999,
+        "uAlpha": 0.14,
+        "uTexel": [
+          0.004273504273504274,
+          0.002145922746781116
+        ],
+        "uDecode": 0,
+        "uPack": 1,
+        "uThreshold": 0.85,
+        "uStep": [
+          0,
+          0.022413793103448276
+        ],
+        "uGlow": 0.221,
+        "uExposure": 0.9,
+        "uVignette": 0.28,
+        "uScrimDir": 3,
+        "uScrimAmt": 0.9
+      },
+      "frames": 33,
+      "draws": 264,
+      "errors": [],
+      "consoleErrors": [],
+      "resources": [
+        {
+          "url": "https://llm-evals-result.narwh.dev/blackhole-hero-react/gpt-6.1-sol/assets/index-B84cqPxL.css",
+          "status": 200
+        },
+        {
+          "url": "https://llm-evals-result.narwh.dev/blackhole-hero-react/gpt-6.1-sol/assets/index-BOkB_6bN.js",
+          "status": 200
+        },
+        {
+          "url": "https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495",
+          "status": 0
+        }
+      ]
+    },
+    "candidateResources": [
+      {
+        "url": "https://llm-evals-result.narwh.dev/blackhole-hero-react/gpt-6.1-sol/assets/index-B84cqPxL.css",
+        "status": 200
+      },
+      {
+        "url": "https://llm-evals-result.narwh.dev/blackhole-hero-react/gpt-6.1-sol/assets/index-BOkB_6bN.js",
+        "status": 200
+      }
+    ],
+    "infrastructureResources": [
+      {
+        "url": "https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495",
+        "status": 0
+      }
+    ]
+  },
+  {
+    "name": "live gallery index",
+    "data": {
+      "url": "https://llm-evals-result.narwh.dev/?q=blackhole-hero-react&task=blackhole-hero-react",
+      "total": 85,
+      "visible": [
+        {
+          "href": "/blackhole-hero-react/gpt-6.1-sol/",
+          "text": "[01]\nIMPLEMENTATION\n↗\n~/ blackhole-hero-react\ngpt-6.1-sol\n3 files / 255 KB\n打开作品 →"
+        }
+      ],
+      "status": "显示 1 / 85 个作品"
+    }
+  }
+]
