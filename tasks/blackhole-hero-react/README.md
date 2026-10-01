@@ -7,7 +7,7 @@
 - Candidate result report: `tasks/blackhole-hero-react/solution/RESULTS.md`
 - Prompt: [`task.md`](task.md)
 - Original prompt: [`starter/original-prompt.md`](starter/original-prompt.md)
-- Status: Shared task prepared; no candidates have been run or archived. The evaluation baseline is not yet pinned.
+- Status: One candidate archived on `llm/blackhole-hero-react`: `gpt-6.1-sol` (`new-provider/gpt-6.1-sol`), generated from baseline `3b8d6817086aebaad6f7850226ab50f88f5ca01b`. The exact source tree is preserved under `solutions/gpt-6.1-sol/` and tag `candidate/blackhole-hero-react/gpt-6.1-sol`; source commits and tree hashes are recorded in `migration/2026-10-01.json` on the task branch.
 
 ## Shared Inputs
 

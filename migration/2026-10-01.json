@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "date": "2026-10-01",
+  "imports": [
+    {
+      "task": "blackhole-hero-react",
+      "candidate": "gpt-6.1-sol",
+      "model": "new-provider/gpt-6.1-sol",
+      "startingMain": "3b8d6817086aebaad6f7850226ab50f88f5ca01b",
+      "sourceRef": "local-clone:.runs/blackhole-hero-react/gpt-6.1-sol; isolated linked worktree .worktree/blackhole-hero-gpt61 on run/blackhole-hero-react/gpt-6.1-sol",
+      "sourceCommit": "7d722c7a57ce45ff4fe5fc5c839cb0ddc50d4c3f",
+      "sourceTree": "1466acce528fd65e554144c2a144465e09351109",
+      "archiveTag": "candidate/blackhole-hero-react/gpt-6.1-sol",
+      "destination": "tasks/blackhole-hero-react/solutions/gpt-6.1-sol",
+      "importedTree": "1466acce528fd65e554144c2a144465e09351109",
+      "resultReport": "tasks/blackhole-hero-react/solutions/gpt-6.1-sol/RESULTS.md",
+      "importedOn": "2026-10-01",
+      "comparisonNote": "Single-model implementation and self visual review, with no subagents. Compare only candidates using the same pinned task baseline and browser/GPU conditions. The complete source solution tree, including screenshots and verification records, was imported without modification."
+    }
+  ]
+}

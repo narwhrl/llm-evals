@@ -1,0 +1,6 @@
+node_modules/
+dist/
+dist-subpath/
+dist-fixture/
+.vite/
+*.local
