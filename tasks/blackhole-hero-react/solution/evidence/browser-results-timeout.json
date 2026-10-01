@@ -1,0 +1,131 @@
+[
+  {
+    "name": "fixture initial production render",
+    "pass": true,
+    "data": {
+      "url": "http://127.0.0.1:4178/evidence/fixture.html",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+      "dpr": 1.0000000298023224,
+      "viewport": [
+        1440,
+        900
+      ],
+      "visualViewport": [
+        1440,
+        900
+      ],
+      "narrow": false,
+      "reducedMotion": false,
+      "renderer": "ANGLE (Intel, Intel(R) Arc(TM) 140T GPU (48GB) (0x00007D51) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "glError": 0,
+      "contextLost": false,
+      "hostState": "",
+      "canvas": {
+        "backing": [
+          1440,
+          720
+        ],
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 1440,
+          "height": 720
+        },
+        "display": "block"
+      },
+      "heading": null,
+      "links": [],
+      "overflow": false,
+      "uniforms": {
+        "uRes": [
+          1008,
+          504
+        ],
+        "uTime": 0.6333700000000001,
+        "uTanHalf": 0.3838640350354158,
+        "uFocus": [
+          0.72,
+          0.54
+        ],
+        "uSteps": 300,
+        "uSkyR": 36,
+        "uDiskIn": 3,
+        "uDiskOut": 15,
+        "uThick": 0.26,
+        "uDensity": 1,
+        "uSpin": 0.376991118,
+        "uGrain": 0.48,
+        "uBright": 1,
+        "uDoppler": 0.35,
+        "uStars": 0,
+        "uEncode": 0,
+        "uJitter": [
+          -0.25,
+          0.16700000000000004
+        ],
+        "uSeed": 38.00220000000001,
+        "uAlpha": 0.14,
+        "uTexel": [
+          0.000992063492063492,
+          0.001984126984126984
+        ],
+        "uDecode": 0,
+        "uPack": 1,
+        "uThreshold": 0.85,
+        "uStep": [
+          0,
+          0.020634920634920634
+        ],
+        "uGlow": 0.26,
+        "uExposure": 0.9,
+        "uVignette": 0.28,
+        "uScrimDir": 0,
+        "uScrimAmt": 0.9
+      },
+      "frames": 29,
+      "draws": 232,
+      "errors": [],
+      "consoleErrors": [],
+      "resources": [
+        {
+          "url": "http://127.0.0.1:4178/assets/fixture-DXQBV7cm.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:4178/assets/fixture-Ll64iiQR.css",
+          "status": 200
+        }
+      ]
+    }
+  },
+  {
+    "name": "gas animation",
+    "pass": true,
+    "data": {
+      "first": {
+        "hash": 1133374211,
+        "lit": 158651,
+        "width": 1440,
+        "height": 720,
+        "time": 0.6833700000000001
+      },
+      "second": {
+        "hash": 3836064570,
+        "lit": 158704,
+        "width": 1440,
+        "height": 720,
+        "time": 0.7833700000000002
+      },
+      "errors": [],
+      "consoleErrors": []
+    }
+  },
+  {
+    "name": "verification interrupted",
+    "pass": false,
+    "data": {
+      "message": "curl exited null"
+    }
+  }
+]

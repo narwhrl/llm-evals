@@ -1,0 +1,2206 @@
+[
+  {
+    "name": "fixture initial production render",
+    "pass": true,
+    "data": {
+      "url": "http://127.0.0.1:4178/evidence/fixture.html",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+      "dpr": 1.0000000298023224,
+      "viewport": [
+        1440,
+        900
+      ],
+      "narrow": false,
+      "reducedMotion": false,
+      "renderer": "ANGLE (Intel, Intel(R) Arc(TM) 140T GPU (48GB) (0x00007D51) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "glError": 0,
+      "contextLost": false,
+      "hostState": "",
+      "canvas": {
+        "backing": [
+          1440,
+          720
+        ],
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 1440,
+          "height": 720
+        },
+        "display": "block"
+      },
+      "heading": null,
+      "links": [],
+      "overflow": false,
+      "uniforms": {
+        "uRes": [
+          1008,
+          504
+        ],
+        "uTime": 0.3168,
+        "uTanHalf": 0.3838640350354158,
+        "uFocus": [
+          0.72,
+          0.54
+        ],
+        "uSteps": 300,
+        "uSkyR": 36,
+        "uDiskIn": 3,
+        "uDiskOut": 15,
+        "uThick": 0.26,
+        "uDensity": 1,
+        "uSpin": 0.376991118,
+        "uGrain": 0.48,
+        "uBright": 1,
+        "uDoppler": 0.35,
+        "uStars": 0,
+        "uEncode": 0,
+        "uJitter": [
+          -0.4375,
+          0.389
+        ],
+        "uSeed": 19.008000000000003,
+        "uAlpha": 0.14,
+        "uTexel": [
+          0.000992063492063492,
+          0.001984126984126984
+        ],
+        "uDecode": 0,
+        "uPack": 1,
+        "uThreshold": 0.85,
+        "uStep": [
+          0,
+          0.020634920634920634
+        ],
+        "uGlow": 0.26,
+        "uExposure": 0.9,
+        "uVignette": 0.28,
+        "uScrimDir": 0,
+        "uScrimAmt": 0.9
+      },
+      "frames": 19,
+      "draws": 152,
+      "errors": [],
+      "consoleErrors": [],
+      "resources": [
+        {
+          "url": "http://127.0.0.1:4178/assets/fixture-Ll64iiQR.css",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:4178/assets/fixture-CGT9k4ex.js",
+          "status": 200
+        }
+      ]
+    }
+  },
+  {
+    "name": "gas animation",
+    "pass": true,
+    "data": {
+      "first": {
+        "hash": 596258410,
+        "lit": 158856,
+        "width": 1440,
+        "height": 720,
+        "time": 0.3668
+      },
+      "second": {
+        "hash": 2714759498,
+        "lit": 158821,
+        "width": 1440,
+        "height": 720,
+        "time": 0.4668
+      },
+      "errors": [],
+      "consoleErrors": []
+    }
+  },
+  {
+    "name": "paused frame is frozen",
+    "pass": true,
+    "data": {
+      "first": {
+        "frames": 39,
+        "time": 0.5168,
+        "hash": "4084f00a0957509f77e170b87cfc15d422f7cad016af14434ce66acdee9bbb84"
+      },
+      "second": {
+        "frames": 39,
+        "time": 0.5168,
+        "hash": "4084f00a0957509f77e170b87cfc15d422f7cad016af14434ce66acdee9bbb84"
+      }
+    }
+  },
+  {
+    "name": "paused prop update",
+    "pass": true,
+    "data": {
+      "url": "http://127.0.0.1:4178/evidence/fixture.html",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+      "dpr": 1.0000000298023224,
+      "viewport": [
+        1440,
+        900
+      ],
+      "narrow": false,
+      "reducedMotion": false,
+      "renderer": "ANGLE (Intel, Intel(R) Arc(TM) 140T GPU (48GB) (0x00007D51) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "glError": 0,
+      "contextLost": false,
+      "hostState": "",
+      "canvas": {
+        "backing": [
+          1440,
+          720
+        ],
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 1440,
+          "height": 720
+        },
+        "display": "block"
+      },
+      "heading": null,
+      "links": [],
+      "overflow": false,
+      "uniforms": {
+        "uRes": [
+          864,
+          432
+        ],
+        "uTime": 0.5168,
+        "uTanHalf": 0.554309051452769,
+        "uFocus": [
+          0.5,
+          0.24
+        ],
+        "uSteps": 200,
+        "uSkyR": 36,
+        "uDiskIn": 3,
+        "uDiskOut": 15,
+        "uThick": 0.26,
+        "uDensity": 1,
+        "uSpin": 0.376991118,
+        "uGrain": 0.48,
+        "uBright": 1,
+        "uDoppler": 0.35,
+        "uStars": 0,
+        "uEncode": 0,
+        "uJitter": [
+          -0.4375,
+          0.389
+        ],
+        "uSeed": 31.008000000000003,
+        "uAlpha": 0.14,
+        "uTexel": [
+          0.0011574074074074073,
+          0.0023148148148148147
+        ],
+        "uDecode": 0,
+        "uPack": 1,
+        "uThreshold": 0.85,
+        "uStep": [
+          0,
+          0.024074074074074074
+        ],
+        "uGlow": 0.26,
+        "uExposure": 0.9,
+        "uVignette": 0.28,
+        "uScrimDir": 3,
+        "uScrimAmt": 0.9
+      },
+      "frames": 55,
+      "draws": 440,
+      "pixelSample": {
+        "hash": 2714759498,
+        "lit": 158821,
+        "width": 1440,
+        "height": 720,
+        "time": 0.4668
+      },
+      "errors": [],
+      "consoleErrors": [],
+      "resources": [
+        {
+          "url": "http://127.0.0.1:4178/assets/fixture-Ll64iiQR.css",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:4178/assets/fixture-CGT9k4ex.js",
+          "status": 200
+        }
+      ]
+    }
+  },
+  {
+    "name": "public DOM attributes and children",
+    "pass": true,
+    "data": {
+      "id": "verification-hero",
+      "label": "Lifecycle test hero",
+      "data": "true",
+      "children": "Lifecycle verification copy",
+      "clicks": 1,
+      "height": "720px"
+    }
+  },
+  {
+    "name": "pause resumes",
+    "pass": true,
+    "data": {
+      "url": "http://127.0.0.1:4178/evidence/fixture.html",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+      "dpr": 1.0000000298023224,
+      "viewport": [
+        1440,
+        900
+      ],
+      "narrow": false,
+      "reducedMotion": false,
+      "renderer": "ANGLE (Intel, Intel(R) Arc(TM) 140T GPU (48GB) (0x00007D51) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "glError": 0,
+      "contextLost": false,
+      "hostState": "",
+      "canvas": {
+        "backing": [
+          1440,
+          720
+        ],
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 1440,
+          "height": 720
+        },
+        "display": "block"
+      },
+      "heading": null,
+      "links": [],
+      "overflow": false,
+      "uniforms": {
+        "uRes": [
+          864,
+          432
+        ],
+        "uTime": 0.5668000000000001,
+        "uTanHalf": 0.554309051452769,
+        "uFocus": [
+          0.5,
+          0.24
+        ],
+        "uSteps": 200,
+        "uSkyR": 36,
+        "uDiskIn": 3,
+        "uDiskOut": 15,
+        "uThick": 0.26,
+        "uDensity": 1,
+        "uSpin": 0.376991118,
+        "uGrain": 0.48,
+        "uBright": 1,
+        "uDoppler": 0.35,
+        "uStars": 0,
+        "uEncode": 0,
+        "uJitter": [
+          0.25,
+          -0.389
+        ],
+        "uSeed": 34.008,
+        "uAlpha": 0.14,
+        "uTexel": [
+          0.0011574074074074073,
+          0.0023148148148148147
+        ],
+        "uDecode": 0,
+        "uPack": 1,
+        "uThreshold": 0.85,
+        "uStep": [
+          0,
+          0.024074074074074074
+        ],
+        "uGlow": 0.26,
+        "uExposure": 0.9,
+        "uVignette": 0.28,
+        "uScrimDir": 3,
+        "uScrimAmt": 0.9
+      },
+      "frames": 58,
+      "draws": 464,
+      "pixelSample": {
+        "hash": 2714759498,
+        "lit": 158821,
+        "width": 1440,
+        "height": 720,
+        "time": 0.4668
+      },
+      "errors": [],
+      "consoleErrors": [],
+      "resources": [
+        {
+          "url": "http://127.0.0.1:4178/assets/fixture-Ll64iiQR.css",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:4178/assets/fixture-CGT9k4ex.js",
+          "status": 200
+        }
+      ]
+    }
+  },
+  {
+    "name": "offscreen remains suspended after visibility event",
+    "pass": true,
+    "data": {
+      "first": 60,
+      "second": 60,
+      "firstTime": 0.6168000000000001,
+      "secondTime": 0.6168000000000001
+    }
+  },
+  {
+    "name": "visible rendering resumes",
+    "pass": true,
+    "data": {
+      "url": "http://127.0.0.1:4178/evidence/fixture.html",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+      "dpr": 1.0000000298023224,
+      "viewport": [
+        1440,
+        900
+      ],
+      "narrow": false,
+      "reducedMotion": false,
+      "renderer": "ANGLE (Intel, Intel(R) Arc(TM) 140T GPU (48GB) (0x00007D51) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "glError": 0,
+      "contextLost": false,
+      "hostState": "",
+      "canvas": {
+        "backing": [
+          1425,
+          720
+        ],
+        "rect": {
+          "x": 0,
+          "y": -6,
+          "width": 1425,
+          "height": 720
+        },
+        "display": "block"
+      },
+      "heading": null,
+      "links": [],
+      "overflow": false,
+      "uniforms": {
+        "uRes": [
+          855,
+          432
+        ],
+        "uTime": 1.9333999999999998,
+        "uTanHalf": 0.554309051452769,
+        "uFocus": [
+          0.5,
+          0.24
+        ],
+        "uSteps": 200,
+        "uSkyR": 36,
+        "uDiskIn": 3,
+        "uDiskOut": 15,
+        "uThick": 0.26,
+        "uDensity": 1,
+        "uSpin": 0.376991118,
+        "uGrain": 0.48,
+        "uBright": 1,
+        "uDoppler": 0.35,
+        "uStars": 0,
+        "uEncode": 0,
+        "uJitter": [
+          0.25,
+          -0.389
+        ],
+        "uSeed": 116.00399999999999,
+        "uAlpha": 0.14,
+        "uTexel": [
+          0.0011695906432748538,
+          0.0023148148148148147
+        ],
+        "uDecode": 0,
+        "uPack": 1,
+        "uThreshold": 0.85,
+        "uStep": [
+          0,
+          0.024074074074074074
+        ],
+        "uGlow": 0.26,
+        "uExposure": 0.9,
+        "uVignette": 0.28,
+        "uScrimDir": 3,
+        "uScrimAmt": 0.9
+      },
+      "frames": 198,
+      "draws": 1584,
+      "pixelSample": {
+        "hash": 2714759498,
+        "lit": 158821,
+        "width": 1440,
+        "height": 720,
+        "time": 0.4668
+      },
+      "errors": [],
+      "consoleErrors": [],
+      "resources": [
+        {
+          "url": "http://127.0.0.1:4178/assets/fixture-Ll64iiQR.css",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:4178/assets/fixture-CGT9k4ex.js",
+          "status": 200
+        }
+      ]
+    }
+  },
+  {
+    "name": "WebGL context loss",
+    "pass": true,
+    "data": {
+      "supported": true,
+      "lost": true,
+      "display": "none",
+      "copy": "Lifecycle verification copy",
+      "frames": 209
+    }
+  },
+  {
+    "name": "WebGL context restoration",
+    "pass": false,
+    "data": {
+      "url": "http://127.0.0.1:4178/evidence/fixture.html",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+      "dpr": 1.0000000298023224,
+      "viewport": [
+        1440,
+        900
+      ],
+      "narrow": false,
+      "reducedMotion": false,
+      "renderer": "ANGLE (Intel, Intel(R) Arc(TM) 140T GPU (48GB) (0x00007D51) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "glError": 1282,
+      "contextLost": false,
+      "hostState": "",
+      "canvas": {
+        "backing": [
+          1425,
+          720
+        ],
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 1425,
+          "height": 720
+        },
+        "display": "block"
+      },
+      "heading": null,
+      "links": [],
+      "overflow": false,
+      "uniforms": {
+        "uRes": [
+          855,
+          432
+        ],
+        "uTime": 2.0251000000000006,
+        "uTanHalf": 0.554309051452769,
+        "uFocus": [
+          0.5,
+          0.24
+        ],
+        "uSteps": 200,
+        "uSkyR": 36,
+        "uDiskIn": 3,
+        "uDiskOut": 15,
+        "uThick": 0.26,
+        "uDensity": 1,
+        "uSpin": 0.376991118,
+        "uGrain": 0.48,
+        "uBright": 1,
+        "uDoppler": 0.35,
+        "uStars": 0,
+        "uEncode": 0,
+        "uJitter": [
+          -0.125,
+          -0.278
+        ],
+        "uSeed": 121.50600000000003,
+        "uAlpha": 0.14,
+        "uTexel": [
+          0.0011695906432748538,
+          0.0023148148148148147
+        ],
+        "uDecode": 0,
+        "uPack": 1,
+        "uThreshold": 0.85,
+        "uStep": [
+          0,
+          0.024074074074074074
+        ],
+        "uGlow": 0.26,
+        "uExposure": 0.9,
+        "uVignette": 0.28,
+        "uScrimDir": 3,
+        "uScrimAmt": 0.9
+      },
+      "frames": 209,
+      "draws": 1672,
+      "pixelSample": {
+        "hash": 2714759498,
+        "lit": 158821,
+        "width": 1440,
+        "height": 720,
+        "time": 0.4668
+      },
+      "errors": [],
+      "consoleErrors": [],
+      "resources": [
+        {
+          "url": "http://127.0.0.1:4178/assets/fixture-Ll64iiQR.css",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:4178/assets/fixture-CGT9k4ex.js",
+          "status": 200
+        }
+      ]
+    }
+  },
+  {
+    "name": "live reduced-motion change freezes frame",
+    "pass": true,
+    "data": {
+      "first": 209,
+      "second": 209,
+      "firstTime": 2.0251000000000006,
+      "secondTime": 2.0251000000000006,
+      "firstHash": "7b5109a2adf300efb7a0571c6dc9dfd2c532b26c4d814242d4985346cb2fc747",
+      "secondHash": "7b5109a2adf300efb7a0571c6dc9dfd2c532b26c4d814242d4985346cb2fc747"
+    }
+  },
+  {
+    "name": "live reduced-motion change resumes",
+    "pass": false,
+    "data": {
+      "url": "http://127.0.0.1:4178/evidence/fixture.html",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+      "dpr": 1.0000000298023224,
+      "viewport": [
+        1440,
+        900
+      ],
+      "narrow": false,
+      "reducedMotion": false,
+      "renderer": "ANGLE (Intel, Intel(R) Arc(TM) 140T GPU (48GB) (0x00007D51) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "glError": 0,
+      "contextLost": false,
+      "hostState": "",
+      "canvas": {
+        "backing": [
+          1425,
+          720
+        ],
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 1425,
+          "height": 720
+        },
+        "display": "block"
+      },
+      "heading": null,
+      "links": [],
+      "overflow": false,
+      "uniforms": {
+        "uRes": [
+          855,
+          432
+        ],
+        "uTime": 2.0251000000000006,
+        "uTanHalf": 0.554309051452769,
+        "uFocus": [
+          0.5,
+          0.24
+        ],
+        "uSteps": 200,
+        "uSkyR": 36,
+        "uDiskIn": 3,
+        "uDiskOut": 15,
+        "uThick": 0.26,
+        "uDensity": 1,
+        "uSpin": 0.376991118,
+        "uGrain": 0.48,
+        "uBright": 1,
+        "uDoppler": 0.35,
+        "uStars": 0,
+        "uEncode": 0,
+        "uJitter": [
+          -0.125,
+          -0.278
+        ],
+        "uSeed": 121.50600000000003,
+        "uAlpha": 0.14,
+        "uTexel": [
+          0.0011695906432748538,
+          0.0023148148148148147
+        ],
+        "uDecode": 0,
+        "uPack": 1,
+        "uThreshold": 0.85,
+        "uStep": [
+          0,
+          0.024074074074074074
+        ],
+        "uGlow": 0.26,
+        "uExposure": 0.9,
+        "uVignette": 0.28,
+        "uScrimDir": 3,
+        "uScrimAmt": 0.9
+      },
+      "frames": 209,
+      "draws": 1672,
+      "pixelSample": {
+        "hash": 2714759498,
+        "lit": 158821,
+        "width": 1440,
+        "height": 720,
+        "time": 0.4668
+      },
+      "errors": [],
+      "consoleErrors": [],
+      "resources": [
+        {
+          "url": "http://127.0.0.1:4178/assets/fixture-Ll64iiQR.css",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:4178/assets/fixture-CGT9k4ex.js",
+          "status": 200
+        }
+      ]
+    }
+  },
+  {
+    "name": "StrictMode and unmount cleanup",
+    "pass": true,
+    "data": {
+      "first": 209,
+      "second": 209,
+      "canvas": null,
+      "errors": [],
+      "consoleErrors": []
+    }
+  },
+  {
+    "name": "mobile reduced-motion initial composition",
+    "pass": true,
+    "data": {
+      "url": "http://127.0.0.1:4176/",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+      "dpr": 1.0000000298023224,
+      "viewport": [
+        390,
+        844
+      ],
+      "narrow": true,
+      "reducedMotion": true,
+      "renderer": "ANGLE (Intel, Intel(R) Arc(TM) 140T GPU (48GB) (0x00007D51) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "glError": 0,
+      "contextLost": false,
+      "hostState": "",
+      "canvas": {
+        "backing": [
+          390,
+          776
+        ],
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 776
+        },
+        "display": "block"
+      },
+      "heading": {
+        "text": "Light does not\nleave here",
+        "rect": {
+          "x": 24,
+          "y": 56,
+          "width": 342,
+          "height": 84
+        },
+        "font": "40px"
+      },
+      "links": [
+        {
+          "text": "Get started",
+          "rect": {
+            "x": 24,
+            "y": 270.72918701171875,
+            "width": 118.94792175292969,
+            "height": 44
+          }
+        },
+        {
+          "text": "Read the maths",
+          "rect": {
+            "x": 154.9479217529297,
+            "y": 270.0625,
+            "width": 145.4375,
+            "height": 45.333335876464844
+          }
+        }
+      ],
+      "overflow": false,
+      "uniforms": {
+        "uRes": [
+          234,
+          466
+        ],
+        "uTime": 6,
+        "uTanHalf": 0.554309051452769,
+        "uFocus": [
+          0.5,
+          0.24
+        ],
+        "uSteps": 200,
+        "uSkyR": 36,
+        "uDiskIn": 3,
+        "uDiskOut": 15,
+        "uThick": 0.26,
+        "uDensity": 1,
+        "uSpin": 0.376991118,
+        "uGrain": 0.48,
+        "uBright": 1,
+        "uDoppler": 0.35,
+        "uStars": 0,
+        "uEncode": 0,
+        "uJitter": [
+          -0.4375,
+          0.389
+        ],
+        "uSeed": 360,
+        "uAlpha": 0.14,
+        "uTexel": [
+          0.004273504273504274,
+          0.002145922746781116
+        ],
+        "uDecode": 0,
+        "uPack": 1,
+        "uThreshold": 0.85,
+        "uStep": [
+          0,
+          0.022413793103448276
+        ],
+        "uGlow": 0.221,
+        "uExposure": 0.9,
+        "uVignette": 0.28,
+        "uScrimDir": 3,
+        "uScrimAmt": 0.9
+      },
+      "frames": 64,
+      "draws": 512,
+      "errors": [],
+      "consoleErrors": [],
+      "resources": [
+        {
+          "url": "http://127.0.0.1:4176/assets/index-C7i6nmmn.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:4176/assets/index-BMtBK8u7.css",
+          "status": 200
+        }
+      ]
+    }
+  },
+  {
+    "name": "reduced-motion desktop resize",
+    "pass": true,
+    "data": {
+      "url": "http://127.0.0.1:4176/",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+      "dpr": 1.0000000298023224,
+      "viewport": [
+        1440,
+        900
+      ],
+      "narrow": false,
+      "reducedMotion": true,
+      "renderer": "ANGLE (Intel, Intel(R) Arc(TM) 140T GPU (48GB) (0x00007D51) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "glError": 0,
+      "contextLost": false,
+      "hostState": "",
+      "canvas": {
+        "backing": [
+          1440,
+          720
+        ],
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 1440,
+          "height": 720
+        },
+        "display": "block"
+      },
+      "heading": {
+        "text": "Light does not\nleave here",
+        "rect": {
+          "x": 80,
+          "y": 207.25,
+          "width": 448,
+          "height": 142.7916717529297
+        },
+        "font": "68px"
+      },
+      "links": [
+        {
+          "text": "Get started",
+          "rect": {
+            "x": 80,
+            "y": 468.0833435058594,
+            "width": 118.94792175292969,
+            "height": 44
+          }
+        },
+        {
+          "text": "Read the maths",
+          "rect": {
+            "x": 210.9479217529297,
+            "y": 467.41668701171875,
+            "width": 145.4375,
+            "height": 45.333335876464844
+          }
+        }
+      ],
+      "overflow": false,
+      "uniforms": {
+        "uRes": [
+          1008,
+          504
+        ],
+        "uTime": 6,
+        "uTanHalf": 0.3838640350354158,
+        "uFocus": [
+          0.72,
+          0.54
+        ],
+        "uSteps": 300,
+        "uSkyR": 36,
+        "uDiskIn": 3,
+        "uDiskOut": 15,
+        "uThick": 0.26,
+        "uDensity": 1,
+        "uSpin": 0.376991118,
+        "uGrain": 0.48,
+        "uBright": 1,
+        "uDoppler": 0.35,
+        "uStars": 0,
+        "uEncode": 0,
+        "uJitter": [
+          -0.4375,
+          0.389
+        ],
+        "uSeed": 360,
+        "uAlpha": 0.14,
+        "uTexel": [
+          0.000992063492063492,
+          0.001984126984126984
+        ],
+        "uDecode": 0,
+        "uPack": 1,
+        "uThreshold": 0.85,
+        "uStep": [
+          0,
+          0.020634920634920634
+        ],
+        "uGlow": 0.26,
+        "uExposure": 0.9,
+        "uVignette": 0.28,
+        "uScrimDir": 1,
+        "uScrimAmt": 0.9
+      },
+      "frames": 96,
+      "draws": 768,
+      "errors": [],
+      "consoleErrors": [],
+      "resources": [
+        {
+          "url": "http://127.0.0.1:4176/assets/index-C7i6nmmn.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:4176/assets/index-BMtBK8u7.css",
+          "status": 200
+        }
+      ]
+    }
+  },
+  {
+    "name": "reduced-motion mobile resize",
+    "pass": true,
+    "data": {
+      "url": "http://127.0.0.1:4176/",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+      "dpr": 1.0000000298023224,
+      "viewport": [
+        390,
+        844
+      ],
+      "narrow": true,
+      "reducedMotion": true,
+      "renderer": "ANGLE (Intel, Intel(R) Arc(TM) 140T GPU (48GB) (0x00007D51) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "glError": 0,
+      "contextLost": false,
+      "hostState": "",
+      "canvas": {
+        "backing": [
+          390,
+          776
+        ],
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 776
+        },
+        "display": "block"
+      },
+      "heading": {
+        "text": "Light does not\nleave here",
+        "rect": {
+          "x": 24,
+          "y": 56,
+          "width": 342,
+          "height": 84
+        },
+        "font": "40px"
+      },
+      "links": [
+        {
+          "text": "Get started",
+          "rect": {
+            "x": 24,
+            "y": 270.72918701171875,
+            "width": 118.94792175292969,
+            "height": 44
+          }
+        },
+        {
+          "text": "Read the maths",
+          "rect": {
+            "x": 154.9479217529297,
+            "y": 270.0625,
+            "width": 145.4375,
+            "height": 45.333335876464844
+          }
+        }
+      ],
+      "overflow": false,
+      "uniforms": {
+        "uRes": [
+          234,
+          466
+        ],
+        "uTime": 6,
+        "uTanHalf": 0.554309051452769,
+        "uFocus": [
+          0.5,
+          0.24
+        ],
+        "uSteps": 200,
+        "uSkyR": 36,
+        "uDiskIn": 3,
+        "uDiskOut": 15,
+        "uThick": 0.26,
+        "uDensity": 1,
+        "uSpin": 0.376991118,
+        "uGrain": 0.48,
+        "uBright": 1,
+        "uDoppler": 0.35,
+        "uStars": 0,
+        "uEncode": 0,
+        "uJitter": [
+          -0.4375,
+          0.389
+        ],
+        "uSeed": 360,
+        "uAlpha": 0.14,
+        "uTexel": [
+          0.004273504273504274,
+          0.002145922746781116
+        ],
+        "uDecode": 0,
+        "uPack": 1,
+        "uThreshold": 0.85,
+        "uStep": [
+          0,
+          0.022413793103448276
+        ],
+        "uGlow": 0.221,
+        "uExposure": 0.9,
+        "uVignette": 0.28,
+        "uScrimDir": 3,
+        "uScrimAmt": 0.9
+      },
+      "frames": 128,
+      "draws": 1024,
+      "errors": [],
+      "consoleErrors": [],
+      "resources": [
+        {
+          "url": "http://127.0.0.1:4176/assets/index-C7i6nmmn.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:4176/assets/index-BMtBK8u7.css",
+          "status": 200
+        }
+      ]
+    }
+  },
+  {
+    "name": "WebGL unavailable fallback",
+    "pass": true,
+    "data": {
+      "url": "http://127.0.0.1:4176/",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+      "dpr": 1.0000000298023224,
+      "viewport": [
+        390,
+        844
+      ],
+      "narrow": true,
+      "reducedMotion": true,
+      "renderer": null,
+      "hostState": "unsupported",
+      "canvas": {
+        "backing": [
+          300,
+          150
+        ],
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "display": "none"
+      },
+      "heading": {
+        "text": "Light does not\nleave here",
+        "rect": {
+          "x": 24,
+          "y": 56,
+          "width": 342,
+          "height": 84
+        },
+        "font": "40px"
+      },
+      "links": [
+        {
+          "text": "Get started",
+          "rect": {
+            "x": 24,
+            "y": 270.72918701171875,
+            "width": 118.94792175292969,
+            "height": 44
+          }
+        },
+        {
+          "text": "Read the maths",
+          "rect": {
+            "x": 154.9479217529297,
+            "y": 270.0625,
+            "width": 145.4375,
+            "height": 45.333335876464844
+          }
+        }
+      ],
+      "overflow": false,
+      "uniforms": {},
+      "frames": 0,
+      "draws": 0,
+      "errors": [],
+      "consoleErrors": [],
+      "resources": [
+        {
+          "url": "http://127.0.0.1:4176/assets/index-C7i6nmmn.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:4176/assets/index-BMtBK8u7.css",
+          "status": 200
+        }
+      ]
+    }
+  },
+  {
+    "name": "WebGL 1 shader and HDR fallback",
+    "pass": false,
+    "data": {
+      "url": "http://127.0.0.1:4176/",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+      "dpr": 1.0000000298023224,
+      "viewport": [
+        390,
+        844
+      ],
+      "narrow": true,
+      "reducedMotion": true,
+      "renderer": "ANGLE (Intel, Intel(R) Arc(TM) 140T GPU (48GB) (0x00007D51) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "webglVersion": "WebGL 1.0 (OpenGL ES 2.0 Chromium)",
+      "glError": 0,
+      "contextLost": false,
+      "hostState": "",
+      "canvas": {
+        "backing": [
+          390,
+          776
+        ],
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 776
+        },
+        "display": "block"
+      },
+      "heading": {
+        "text": "Light does not\nleave here",
+        "rect": {
+          "x": 24,
+          "y": 56,
+          "width": 342,
+          "height": 84
+        },
+        "font": "40px"
+      },
+      "links": [
+        {
+          "text": "Get started",
+          "rect": {
+            "x": 24,
+            "y": 270.72918701171875,
+            "width": 118.94792175292969,
+            "height": 44
+          }
+        },
+        {
+          "text": "Read the maths",
+          "rect": {
+            "x": 154.9479217529297,
+            "y": 270.0625,
+            "width": 145.4375,
+            "height": 45.333335876464844
+          }
+        }
+      ],
+      "overflow": false,
+      "uniforms": {
+        "uRes": [
+          234,
+          466
+        ],
+        "uTime": 6,
+        "uTanHalf": 0.554309051452769,
+        "uFocus": [
+          0.5,
+          0.24
+        ],
+        "uSteps": 200,
+        "uSkyR": 36,
+        "uDiskIn": 3,
+        "uDiskOut": 15,
+        "uThick": 0.26,
+        "uDensity": 1,
+        "uSpin": 0.376991118,
+        "uGrain": 0.48,
+        "uBright": 1,
+        "uDoppler": 0.35,
+        "uStars": 0,
+        "uEncode": 0,
+        "uJitter": [
+          -0.4375,
+          0.389
+        ],
+        "uSeed": 360,
+        "uAlpha": 0.14,
+        "uTexel": [
+          0.004273504273504274,
+          0.002145922746781116
+        ],
+        "uDecode": 0,
+        "uPack": 1,
+        "uThreshold": 0.85,
+        "uStep": [
+          0,
+          0.022413793103448276
+        ],
+        "uGlow": 0.221,
+        "uExposure": 0.9,
+        "uVignette": 0.28,
+        "uScrimDir": 3,
+        "uScrimAmt": 0.9
+      },
+      "frames": 64,
+      "draws": 512,
+      "errors": [],
+      "consoleErrors": [],
+      "resources": [
+        {
+          "url": "http://127.0.0.1:4176/assets/index-C7i6nmmn.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:4176/assets/index-BMtBK8u7.css",
+          "status": 200
+        }
+      ]
+    }
+  },
+  {
+    "name": "root desktop production",
+    "pass": true,
+    "data": {
+      "url": "http://127.0.0.1:4176/",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+      "dpr": 1.0000000298023224,
+      "viewport": [
+        1440,
+        900
+      ],
+      "narrow": false,
+      "reducedMotion": false,
+      "renderer": "ANGLE (Intel, Intel(R) Arc(TM) 140T GPU (48GB) (0x00007D51) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "glError": 0,
+      "contextLost": false,
+      "hostState": "",
+      "canvas": {
+        "backing": [
+          1440,
+          720
+        ],
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 1440,
+          "height": 720
+        },
+        "display": "block"
+      },
+      "heading": {
+        "text": "Light does not\nleave here",
+        "rect": {
+          "x": 80,
+          "y": 207.25,
+          "width": 448,
+          "height": 142.7916717529297
+        },
+        "font": "68px"
+      },
+      "links": [
+        {
+          "text": "Get started",
+          "rect": {
+            "x": 80,
+            "y": 468.0833435058594,
+            "width": 118.94792175292969,
+            "height": 44
+          }
+        },
+        {
+          "text": "Read the maths",
+          "rect": {
+            "x": 210.9479217529297,
+            "y": 467.41668701171875,
+            "width": 145.4375,
+            "height": 45.333335876464844
+          }
+        }
+      ],
+      "overflow": false,
+      "uniforms": {
+        "uRes": [
+          1008,
+          504
+        ],
+        "uTime": 2.416699999999998,
+        "uTanHalf": 0.3838640350354158,
+        "uFocus": [
+          0.72,
+          0.54
+        ],
+        "uSteps": 300,
+        "uSkyR": 36,
+        "uDiskIn": 3,
+        "uDiskOut": 15,
+        "uThick": 0.26,
+        "uDensity": 1,
+        "uSpin": 0.376991118,
+        "uGrain": 0.48,
+        "uBright": 1,
+        "uDoppler": 0.35,
+        "uStars": 0,
+        "uEncode": 0,
+        "uJitter": [
+          0.25,
+          -0.389
+        ],
+        "uSeed": 145.00199999999987,
+        "uAlpha": 0.14,
+        "uTexel": [
+          0.000992063492063492,
+          0.001984126984126984
+        ],
+        "uDecode": 0,
+        "uPack": 1,
+        "uThreshold": 0.85,
+        "uStep": [
+          0,
+          0.020634920634920634
+        ],
+        "uGlow": 0.26,
+        "uExposure": 0.9,
+        "uVignette": 0.28,
+        "uScrimDir": 1,
+        "uScrimAmt": 0.9
+      },
+      "frames": 190,
+      "draws": 1520,
+      "errors": [],
+      "consoleErrors": [],
+      "resources": [
+        {
+          "url": "http://127.0.0.1:4176/assets/index-C7i6nmmn.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:4176/assets/index-BMtBK8u7.css",
+          "status": 200
+        }
+      ]
+    }
+  },
+  {
+    "name": "root mobile resize",
+    "pass": true,
+    "data": {
+      "url": "http://127.0.0.1:4176/",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+      "dpr": 1.0000000298023224,
+      "viewport": [
+        390,
+        844
+      ],
+      "narrow": true,
+      "reducedMotion": false,
+      "renderer": "ANGLE (Intel, Intel(R) Arc(TM) 140T GPU (48GB) (0x00007D51) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "glError": 0,
+      "contextLost": false,
+      "hostState": "",
+      "canvas": {
+        "backing": [
+          390,
+          776
+        ],
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 776
+        },
+        "display": "block"
+      },
+      "heading": {
+        "text": "Light does not\nleave here",
+        "rect": {
+          "x": 24,
+          "y": 56,
+          "width": 342,
+          "height": 84
+        },
+        "font": "40px"
+      },
+      "links": [
+        {
+          "text": "Get started",
+          "rect": {
+            "x": 24,
+            "y": 270.72918701171875,
+            "width": 118.94792175292969,
+            "height": 44
+          }
+        },
+        {
+          "text": "Read the maths",
+          "rect": {
+            "x": 154.9479217529297,
+            "y": 270.0625,
+            "width": 145.4375,
+            "height": 45.333335876464844
+          }
+        }
+      ],
+      "overflow": false,
+      "uniforms": {
+        "uRes": [
+          234,
+          466
+        ],
+        "uTime": 4.016599999999996,
+        "uTanHalf": 0.554309051452769,
+        "uFocus": [
+          0.5,
+          0.24
+        ],
+        "uSteps": 200,
+        "uSkyR": 36,
+        "uDiskIn": 3,
+        "uDiskOut": 15,
+        "uThick": 0.26,
+        "uDensity": 1,
+        "uSpin": 0.376991118,
+        "uGrain": 0.48,
+        "uBright": 1,
+        "uDoppler": 0.35,
+        "uStars": 0,
+        "uEncode": 0,
+        "uJitter": [
+          -0.125,
+          -0.278
+        ],
+        "uSeed": 240.99599999999975,
+        "uAlpha": 0.14,
+        "uTexel": [
+          0.004273504273504274,
+          0.002145922746781116
+        ],
+        "uDecode": 0,
+        "uPack": 1,
+        "uThreshold": 0.85,
+        "uStep": [
+          0,
+          0.022413793103448276
+        ],
+        "uGlow": 0.221,
+        "uExposure": 0.9,
+        "uVignette": 0.28,
+        "uScrimDir": 3,
+        "uScrimAmt": 0.9
+      },
+      "frames": 289,
+      "draws": 2312,
+      "errors": [],
+      "consoleErrors": [],
+      "resources": [
+        {
+          "url": "http://127.0.0.1:4176/assets/index-C7i6nmmn.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:4176/assets/index-BMtBK8u7.css",
+          "status": 200
+        }
+      ]
+    }
+  },
+  {
+    "name": "root desktop resize back",
+    "pass": true,
+    "data": {
+      "url": "http://127.0.0.1:4176/",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+      "dpr": 1.0000000298023224,
+      "viewport": [
+        1440,
+        900
+      ],
+      "narrow": false,
+      "reducedMotion": false,
+      "renderer": "ANGLE (Intel, Intel(R) Arc(TM) 140T GPU (48GB) (0x00007D51) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "glError": 0,
+      "contextLost": false,
+      "hostState": "",
+      "canvas": {
+        "backing": [
+          1440,
+          720
+        ],
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 1440,
+          "height": 720
+        },
+        "display": "block"
+      },
+      "heading": {
+        "text": "Light does not\nleave here",
+        "rect": {
+          "x": 80,
+          "y": 207.25,
+          "width": 448,
+          "height": 142.7916717529297
+        },
+        "font": "68px"
+      },
+      "links": [
+        {
+          "text": "Get started",
+          "rect": {
+            "x": 80,
+            "y": 468.0833435058594,
+            "width": 118.94792175292969,
+            "height": 44
+          }
+        },
+        {
+          "text": "Read the maths",
+          "rect": {
+            "x": 210.9479217529297,
+            "y": 467.41668701171875,
+            "width": 145.4375,
+            "height": 45.333335876464844
+          }
+        }
+      ],
+      "overflow": false,
+      "uniforms": {
+        "uRes": [
+          1008,
+          504
+        ],
+        "uTime": 5.633300000000012,
+        "uTanHalf": 0.3838640350354158,
+        "uFocus": [
+          0.72,
+          0.54
+        ],
+        "uSteps": 300,
+        "uSkyR": 36,
+        "uDiskIn": 3,
+        "uDiskOut": 15,
+        "uThick": 0.26,
+        "uDensity": 1,
+        "uSpin": 0.376991118,
+        "uGrain": 0.48,
+        "uBright": 1,
+        "uDoppler": 0.35,
+        "uStars": 0,
+        "uEncode": 0,
+        "uJitter": [
+          0.125,
+          0.278
+        ],
+        "uSeed": 337.99800000000073,
+        "uAlpha": 0.14,
+        "uTexel": [
+          0.000992063492063492,
+          0.001984126984126984
+        ],
+        "uDecode": 0,
+        "uPack": 1,
+        "uThreshold": 0.85,
+        "uStep": [
+          0,
+          0.020634920634920634
+        ],
+        "uGlow": 0.26,
+        "uExposure": 0.9,
+        "uVignette": 0.28,
+        "uScrimDir": 1,
+        "uScrimAmt": 0.9
+      },
+      "frames": 389,
+      "draws": 3112,
+      "errors": [],
+      "consoleErrors": [],
+      "resources": [
+        {
+          "url": "http://127.0.0.1:4176/assets/index-C7i6nmmn.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:4176/assets/index-BMtBK8u7.css",
+          "status": 200
+        }
+      ]
+    }
+  },
+  {
+    "name": "767px breakpoint",
+    "pass": false,
+    "data": {
+      "url": "http://127.0.0.1:4176/",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+      "dpr": 1.0000000298023224,
+      "viewport": [
+        767,
+        900
+      ],
+      "narrow": false,
+      "reducedMotion": false,
+      "renderer": "ANGLE (Intel, Intel(R) Arc(TM) 140T GPU (48GB) (0x00007D51) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "glError": 0,
+      "contextLost": false,
+      "hostState": "",
+      "canvas": {
+        "backing": [
+          767,
+          828
+        ],
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 767,
+          "height": 828
+        },
+        "display": "block"
+      },
+      "heading": {
+        "text": "Light does not\nleave here",
+        "rect": {
+          "x": 40,
+          "y": 56,
+          "width": 448,
+          "height": 126
+        },
+        "font": "60px"
+      },
+      "links": [
+        {
+          "text": "Get started",
+          "rect": {
+            "x": 40,
+            "y": 288.04168701171875,
+            "width": 118.94792175292969,
+            "height": 44
+          }
+        },
+        {
+          "text": "Read the maths",
+          "rect": {
+            "x": 170.9479217529297,
+            "y": 287.375,
+            "width": 145.4375,
+            "height": 45.333335876464844
+          }
+        }
+      ],
+      "overflow": false,
+      "uniforms": {
+        "uRes": [
+          537,
+          580
+        ],
+        "uTime": 6.358400000000021,
+        "uTanHalf": 0.3838640350354158,
+        "uFocus": [
+          0.72,
+          0.54
+        ],
+        "uSteps": 300,
+        "uSkyR": 36,
+        "uDiskIn": 3,
+        "uDiskOut": 15,
+        "uThick": 0.26,
+        "uDensity": 1,
+        "uSpin": 0.376991118,
+        "uGrain": 0.48,
+        "uBright": 1,
+        "uDoppler": 0.35,
+        "uStars": 0,
+        "uEncode": 0,
+        "uJitter": [
+          0,
+          -0.16699999999999998
+        ],
+        "uSeed": 381.50400000000127,
+        "uAlpha": 0.14,
+        "uTexel": [
+          0.00186219739292365,
+          0.0017241379310344827
+        ],
+        "uDecode": 0,
+        "uPack": 1,
+        "uThreshold": 0.85,
+        "uStep": [
+          0,
+          0.01793103448275862
+        ],
+        "uGlow": 0.26,
+        "uExposure": 0.9,
+        "uVignette": 0.28,
+        "uScrimDir": 1,
+        "uScrimAmt": 0.9
+      },
+      "frames": 434,
+      "draws": 3472,
+      "errors": [],
+      "consoleErrors": [],
+      "resources": [
+        {
+          "url": "http://127.0.0.1:4176/assets/index-C7i6nmmn.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:4176/assets/index-BMtBK8u7.css",
+          "status": 200
+        }
+      ]
+    }
+  },
+  {
+    "name": "768px breakpoint",
+    "pass": true,
+    "data": {
+      "url": "http://127.0.0.1:4176/",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+      "dpr": 1.0000000298023224,
+      "viewport": [
+        768,
+        900
+      ],
+      "narrow": false,
+      "reducedMotion": false,
+      "renderer": "ANGLE (Intel, Intel(R) Arc(TM) 140T GPU (48GB) (0x00007D51) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "glError": 0,
+      "contextLost": false,
+      "hostState": "",
+      "canvas": {
+        "backing": [
+          768,
+          720
+        ],
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 768,
+          "height": 720
+        },
+        "display": "block"
+      },
+      "heading": {
+        "text": "Light does not\nleave here",
+        "rect": {
+          "x": 40,
+          "y": 215.64584350585938,
+          "width": 448,
+          "height": 126
+        },
+        "font": "60px"
+      },
+      "links": [
+        {
+          "text": "Get started",
+          "rect": {
+            "x": 40,
+            "y": 459.6875,
+            "width": 118.94792175292969,
+            "height": 44
+          }
+        },
+        {
+          "text": "Read the maths",
+          "rect": {
+            "x": 170.9479217529297,
+            "y": 459.0208435058594,
+            "width": 145.4375,
+            "height": 45.333335876464844
+          }
+        }
+      ],
+      "overflow": false,
+      "uniforms": {
+        "uRes": [
+          538,
+          504
+        ],
+        "uTime": 8.083400000000038,
+        "uTanHalf": 0.3838640350354158,
+        "uFocus": [
+          0.72,
+          0.54
+        ],
+        "uSteps": 300,
+        "uSkyR": 36,
+        "uDiskIn": 3,
+        "uDiskOut": 15,
+        "uThick": 0.26,
+        "uDensity": 1,
+        "uSpin": 0.376991118,
+        "uGrain": 0.48,
+        "uBright": 1,
+        "uDoppler": 0.35,
+        "uStars": 0,
+        "uEncode": 0,
+        "uJitter": [
+          -0.25,
+          0.16700000000000004
+        ],
+        "uSeed": 485.0040000000023,
+        "uAlpha": 0.14,
+        "uTexel": [
+          0.0018587360594795538,
+          0.001984126984126984
+        ],
+        "uDecode": 0,
+        "uPack": 1,
+        "uThreshold": 0.85,
+        "uStep": [
+          0,
+          0.020634920634920634
+        ],
+        "uGlow": 0.26,
+        "uExposure": 0.9,
+        "uVignette": 0.28,
+        "uScrimDir": 1,
+        "uScrimAmt": 0.9
+      },
+      "frames": 537,
+      "draws": 4296,
+      "errors": [],
+      "consoleErrors": [],
+      "resources": [
+        {
+          "url": "http://127.0.0.1:4176/assets/index-C7i6nmmn.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:4176/assets/index-BMtBK8u7.css",
+          "status": 200
+        }
+      ]
+    }
+  },
+  {
+    "name": "subpath desktop production",
+    "pass": true,
+    "data": {
+      "url": "http://127.0.0.1:4177/blackhole-hero-react/eval/",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+      "dpr": 1.0000000298023224,
+      "viewport": [
+        1440,
+        900
+      ],
+      "narrow": false,
+      "reducedMotion": false,
+      "renderer": "ANGLE (Intel, Intel(R) Arc(TM) 140T GPU (48GB) (0x00007D51) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "glError": 0,
+      "contextLost": false,
+      "hostState": "",
+      "canvas": {
+        "backing": [
+          1440,
+          720
+        ],
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 1440,
+          "height": 720
+        },
+        "display": "block"
+      },
+      "heading": {
+        "text": "Light does not\nleave here",
+        "rect": {
+          "x": 80,
+          "y": 207.25,
+          "width": 448,
+          "height": 142.7916717529297
+        },
+        "font": "68px"
+      },
+      "links": [
+        {
+          "text": "Get started",
+          "rect": {
+            "x": 80,
+            "y": 468.0833435058594,
+            "width": 118.94792175292969,
+            "height": 44
+          }
+        },
+        {
+          "text": "Read the maths",
+          "rect": {
+            "x": 210.9479217529297,
+            "y": 467.41668701171875,
+            "width": 145.4375,
+            "height": 45.333335876464844
+          }
+        }
+      ],
+      "overflow": false,
+      "uniforms": {
+        "uRes": [
+          1008,
+          504
+        ],
+        "uTime": 2.4499999999999984,
+        "uTanHalf": 0.3838640350354158,
+        "uFocus": [
+          0.72,
+          0.54
+        ],
+        "uSteps": 300,
+        "uSkyR": 36,
+        "uDiskIn": 3,
+        "uDiskOut": 15,
+        "uThick": 0.26,
+        "uDensity": 1,
+        "uSpin": 0.376991118,
+        "uGrain": 0.48,
+        "uBright": 1,
+        "uDoppler": 0.35,
+        "uStars": 0,
+        "uEncode": 0,
+        "uJitter": [
+          0.25,
+          -0.389
+        ],
+        "uSeed": 146.99999999999991,
+        "uAlpha": 0.14,
+        "uTexel": [
+          0.000992063492063492,
+          0.001984126984126984
+        ],
+        "uDecode": 0,
+        "uPack": 1,
+        "uThreshold": 0.85,
+        "uStep": [
+          0,
+          0.020634920634920634
+        ],
+        "uGlow": 0.26,
+        "uExposure": 0.9,
+        "uVignette": 0.28,
+        "uScrimDir": 1,
+        "uScrimAmt": 0.9
+      },
+      "frames": 150,
+      "draws": 1200,
+      "errors": [],
+      "consoleErrors": [],
+      "resources": [
+        {
+          "url": "http://127.0.0.1:4177/blackhole-hero-react/eval/assets/index-C7i6nmmn.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:4177/blackhole-hero-react/eval/assets/index-BMtBK8u7.css",
+          "status": 200
+        }
+      ]
+    }
+  },
+  {
+    "name": "subpath mobile production",
+    "pass": true,
+    "data": {
+      "url": "http://127.0.0.1:4177/blackhole-hero-react/eval/",
+      "browser": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+      "dpr": 1.0000000298023224,
+      "viewport": [
+        390,
+        844
+      ],
+      "narrow": true,
+      "reducedMotion": false,
+      "renderer": "ANGLE (Intel, Intel(R) Arc(TM) 140T GPU (48GB) (0x00007D51) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+      "glError": 0,
+      "contextLost": false,
+      "hostState": "",
+      "canvas": {
+        "backing": [
+          390,
+          776
+        ],
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 776
+        },
+        "display": "block"
+      },
+      "heading": {
+        "text": "Light does not\nleave here",
+        "rect": {
+          "x": 24,
+          "y": 56,
+          "width": 342,
+          "height": 84
+        },
+        "font": "40px"
+      },
+      "links": [
+        {
+          "text": "Get started",
+          "rect": {
+            "x": 24,
+            "y": 270.72918701171875,
+            "width": 118.94792175292969,
+            "height": 44
+          }
+        },
+        {
+          "text": "Read the maths",
+          "rect": {
+            "x": 154.9479217529297,
+            "y": 270.0625,
+            "width": 145.4375,
+            "height": 45.333335876464844
+          }
+        }
+      ],
+      "overflow": false,
+      "uniforms": {
+        "uRes": [
+          234,
+          466
+        ],
+        "uTime": 4.058199999999996,
+        "uTanHalf": 0.554309051452769,
+        "uFocus": [
+          0.5,
+          0.24
+        ],
+        "uSteps": 200,
+        "uSkyR": 36,
+        "uDiskIn": 3,
+        "uDiskOut": 15,
+        "uThick": 0.26,
+        "uDensity": 1,
+        "uSpin": 0.376991118,
+        "uGrain": 0.48,
+        "uBright": 1,
+        "uDoppler": 0.35,
+        "uStars": 0,
+        "uEncode": 0,
+        "uJitter": [
+          0.25,
+          -0.389
+        ],
+        "uSeed": 243.49199999999973,
+        "uAlpha": 0.14,
+        "uTexel": [
+          0.004273504273504274,
+          0.002145922746781116
+        ],
+        "uDecode": 0,
+        "uPack": 1,
+        "uThreshold": 0.85,
+        "uStep": [
+          0,
+          0.022413793103448276
+        ],
+        "uGlow": 0.221,
+        "uExposure": 0.9,
+        "uVignette": 0.28,
+        "uScrimDir": 3,
+        "uScrimAmt": 0.9
+      },
+      "frames": 249,
+      "draws": 1992,
+      "errors": [],
+      "consoleErrors": [],
+      "resources": [
+        {
+          "url": "http://127.0.0.1:4177/blackhole-hero-react/eval/assets/index-C7i6nmmn.js",
+          "status": 200
+        },
+        {
+          "url": "http://127.0.0.1:4177/blackhole-hero-react/eval/assets/index-BMtBK8u7.css",
+          "status": 200
+        }
+      ]
+    }
+  },
+  {
+    "name": "accessibility snapshot",
+    "pass": true,
+    "data": {
+      "url": "http://127.0.0.1:4177/blackhole-hero-react/eval/",
+      "title": "Light does not leave here",
+      "tree": [
+        {
+          "role": "main",
+          "children": [
+            {
+              "role": "heading",
+              "name": "Light does not leave here",
+              "children": [
+                {
+                  "role": "StaticText",
+                  "name": "Light does not"
+                },
+                {
+                  "role": "LineBreak",
+                  "name": "\n"
+                },
+                {
+                  "role": "StaticText",
+                  "name": "leave here"
+                }
+              ]
+            },
+            {
+              "role": "StaticText",
+              "name": "The ring above the shadow is the far side of the disc, bent over the top. Nothing put it there but gravity."
+            },
+            {
+              "role": "link",
+              "name": "Get started",
+              "ref": "@e1",
+              "children": [
+                {
+                  "role": "StaticText",
+                  "name": "Get started"
+                }
+              ]
+            },
+            {
+              "role": "link",
+              "name": "Read the maths",
+              "ref": "@e2",
+              "children": [
+                {
+                  "role": "StaticText",
+                  "name": "Read the maths"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+]
