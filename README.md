@@ -21,7 +21,7 @@ This repository compares coding models under the same task, context, tools, and 
 | `gargantua-schwarzschild-raytracer` | [`tasks/gargantua-schwarzschild-raytracer/`](tasks/gargantua-schwarzschild-raytracer/) | `llm/gargantua-schwarzschild-raytracer` |
 | `cf-transport-ship` | [`tasks/cf-transport-ship/`](tasks/cf-transport-ship/) | No archived candidates |
 | `orbital-habitat-diorama` | [`tasks/orbital-habitat-diorama/`](tasks/orbital-habitat-diorama/) | No archived candidates |
-| `blackhole-hero-react` | [`tasks/blackhole-hero-react/`](tasks/blackhole-hero-react/) | No archived candidates |
+| `blackhole-hero-react` | [`tasks/blackhole-hero-react/`](tasks/blackhole-hero-react/) | `llm/blackhole-hero-react` |
 
 ## Repository and Worktree Layout
 
