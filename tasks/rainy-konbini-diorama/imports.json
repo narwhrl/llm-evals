@@ -110,6 +110,18 @@
       "archiveTag": "candidate/rainy-konbini-diorama/gpt-6.1-sol",
       "destination": "tasks/rainy-konbini-diorama/solutions/gpt-6.1-sol",
       "resultReport": "tasks/rainy-konbini-diorama/solutions/gpt-6.1-sol/RESULTS.md"
+    },
+    {
+      "candidateId": "swe-2",
+      "model": "magpie/devin/swe-2",
+      "baselineMain": "63a46c3a79afa751a12eaa90f5c0f98b4b7212f1",
+      "sourceRef": "worktree:.worktrees/rainy-swe2 (detached at 63a46c3a79afa751a12eaa90f5c0f98b4b7212f1, no remote)",
+      "sourceCommit": "10709b841551eb6873380917e18c0b005dde98a5",
+      "sourceTree": "55618b7f04c7ca777b30a3cb5a160ae5f73e0bea",
+      "archiveTag": "candidate/rainy-konbini-diorama/swe-2",
+      "destination": "tasks/rainy-konbini-diorama/solutions/swe-2",
+      "resultReport": "tasks/rainy-konbini-diorama/solutions/swe-2/RESULTS.md",
+      "note": "Pinned to main 63a46c3. tasks/rainy-konbini-diorama/task.md is byte-identical to the earlier baselines; only unrelated task docs changed. Run without subagents or other models per the user's instruction. Visual acceptance was done by the model itself through kimi-webbridge at a verified 1440x900 device-metrics viewport; production build passed and the imported solution tree hash matches the source. The candidate found and fixed three issues itself during acceptance (fascia hidden behind the roof band; interior under-lit through the glass; initial camera framed the building's side rather than the storefront)."
     }
   ]
 }
