@@ -1,240 +1,237 @@
-/**
- * The application store: one mutable state object, a subscriber list, validated mutators, and
- * persistence on every committed change.
- *
- * The capture URL is applied *over* the persisted state and before the first frame, so a capture
- * run is reproducible even if the browser profile still holds a previous session's parameters.
- * Every mutator validates its input, records the outcome in `state.lastCommand`, and never throws —
- * which is what lets `window.__GARGANTUA__.setDebug(...)` reject a bad value safely.
- */
 import {
-  DEFAULT_PARAMETERS,
+  CAMERA_KEYS,
+  DEFAULTS,
+  PARAMS,
   PRESETS,
-  QUALITY_LEVELS,
-  coerceParameter,
-} from './schema.js'
-import { clearPersistedState, defaultState, loadPersistedState, persistState } from './persistence.js'
-import { parseCaptureUrl } from './urlParams.js'
+  QUALITY_PROFILES,
+  STORAGE_KEY,
+  STATE_VERSION,
+  applyPresetToParams,
+  clampParam,
+  defaultState,
+} from './schema.js';
+import { applyUrlState } from './urlParams.js';
 
-export function createStore(search) {
-  const url = parseCaptureUrl(search ?? (typeof window !== 'undefined' ? window.location.search : ''))
-  const persisted = loadPersistedState()
+let storageWarned = false;
 
-  const initial = {
-    ...persisted,
-    capture: url.isCapture,
-    time: url.patch.time ?? 0,
-    rejectedQuery: url.rejected,
-    // Capture mode disables the cinematic loop and the optional audio for determinism.
-    cinematic: url.isCapture ? false : persisted.cinematic,
-    audio: url.isCapture ? false : persisted.audio,
-    lastCommand: null,
+function safeStorageGet() {
+  try {
+    return window.localStorage.getItem(STORAGE_KEY);
+  } catch {
+    return null;
   }
-  if (url.patch.quality) initial.quality = url.patch.quality
-  if (url.patch.preset !== undefined) initial.preset = url.patch.preset
-  if (url.patch.debug !== undefined) initial.debug = url.patch.debug
-  if (url.patch.hudOpen !== undefined) initial.hudOpen = url.patch.hudOpen
+}
 
-  let state = initial
-  // A capture URL that names a preset must actually frame the camera that way, so the preset's
-  // absolute camera parameters are layered over whatever was persisted.
-  if (url.patch.preset !== undefined) {
-    const presetParams = { ...initial.params }
-    for (const [id, raw] of Object.entries(PRESETS[initial.preset].params)) {
-      const coerced = coerceParameter(id, raw)
-      if (coerced !== undefined) presetParams[id] = coerced
+function safeStorageSet(value) {
+  try {
+    window.localStorage.setItem(STORAGE_KEY, value);
+  } catch {
+    if (!storageWarned) {
+      storageWarned = true;
+      console.warn('GARGANTUA: localStorage unavailable; settings will not persist.');
     }
-    state = { ...state, params: presetParams }
+  }
+}
+
+function safeStorageRemove() {
+  try {
+    window.localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    /* storage may be disabled */
+  }
+}
+
+function isObject(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+function normalizeParams(candidate, fallback) {
+  const params = { ...fallback };
+  if (!isObject(candidate)) return params;
+  for (const key of Object.keys(PARAMS)) {
+    if (Object.prototype.hasOwnProperty.call(candidate, key)) {
+      params[key] = clampParam(key, candidate[key]);
+    }
+  }
+  if (params.diskOuter < params.diskInner + 0.5) {
+    params.diskOuter = Math.min(PARAMS.diskOuter.max, params.diskInner + 0.5);
+  }
+  return params;
+}
+
+function hydratePersisted() {
+  const base = defaultState();
+  if (typeof window !== 'undefined' && window.matchMedia?.('(max-width: 760px)').matches) {
+    base.hudOpen = false;
+  }
+  const raw = safeStorageGet();
+  if (!raw) return base;
+  try {
+    const saved = JSON.parse(raw);
+    if (!isObject(saved) || saved.version !== STATE_VERSION) return base;
+    const state = {
+      ...base,
+      params: normalizeParams(saved.params, base.params),
+      quality: QUALITY_PROFILES[saved.quality] ? saved.quality : base.quality,
+      preset: Number.isInteger(saved.preset) && saved.preset >= -1 && saved.preset < PRESETS.length
+        ? saved.preset : base.preset,
+      debug: Number.isInteger(saved.debug) && saved.debug >= 0 && saved.debug <= 9
+        ? saved.debug : base.debug,
+      hudOpen: typeof saved.hudOpen === 'boolean' ? saved.hudOpen : base.hudOpen,
+      playing: typeof saved.playing === 'boolean' ? saved.playing : base.playing,
+    };
+    return state;
+  } catch {
+    return base;
+  }
+}
+
+export function createStore() {
+  const initial = applyUrlState(hydratePersisted(), window.location.search);
+  let state = { ...initial, fps: 0 };
+  const listeners = new Set();
+
+  function emit(meta = {}) {
+    for (const listener of listeners) listener(state, meta);
   }
 
-  const listeners = new Set()
-
-  function emit() {
-    for (const listener of listeners) listener(state)
+  function persist() {
+    const snapshot = {
+      version: STATE_VERSION,
+      params: state.params,
+      quality: state.quality,
+      preset: state.preset,
+      debug: state.debug,
+      hudOpen: state.hudOpen,
+      playing: state.playing,
+    };
+    safeStorageSet(JSON.stringify(snapshot));
   }
 
-  function commit(next, command) {
-    state = command ? { ...next, lastCommand: command } : next
-    persistState(state)
-    emit()
-    return state
+  function setState(patch, meta) {
+    state = { ...state, ...patch };
+    emit(meta);
+    if (meta?.persist !== false && meta?.source !== 'telemetry') persist();
   }
 
   function subscribe(listener) {
-    listeners.add(listener)
-    return () => listeners.delete(listener)
+    listeners.add(listener);
+    return () => listeners.delete(listener);
   }
 
   function getState() {
-    return state
+    return state;
   }
 
-  function setParameters(patch, commandName = 'setParameters') {
-    const params = { ...state.params }
-    const applied = {}
-    for (const [id, raw] of Object.entries(patch || {})) {
-      const value = coerceParameter(id, raw)
-      if (value === undefined) continue
-      params[id] = value
-      applied[id] = value
+  function setParam(key, value, meta = { source: 'user' }) {
+    if (!PARAMS[key]) return state;
+    const params = { ...state.params };
+    params[key] = clampParam(key, value);
+
+    if (key === 'diskInner' && params.diskOuter < params.diskInner + 0.5) {
+      params.diskOuter = Math.min(PARAMS.diskOuter.max, params.diskInner + 0.5);
     }
-    // Keep the annulus self-consistent no matter which handle the user moved.
-    if (applied.diskInner !== undefined || applied.diskOuter !== undefined) {
-      if (params.diskOuter < params.diskInner + 0.5) {
-        if (applied.diskInner !== undefined) params.diskOuter = Math.min(42, params.diskInner + 0.5)
-        else params.diskInner = Math.max(1.6, params.diskOuter - 0.5)
-      }
+    if (key === 'diskOuter' && params.diskOuter < params.diskInner + 0.5) {
+      params.diskOuter = params.diskInner + 0.5;
     }
-    return commit({ ...state, params }, { name: commandName, ok: true, reason: null })
-  }
-
-  function setQuality(level) {
-    const normalised = typeof level === 'string' ? level.trim().toLowerCase() : ''
-    if (!QUALITY_LEVELS.includes(normalised)) {
-      return commit(state, {
-        name: 'setQuality',
-        ok: false,
-        reason: `expected one of ${QUALITY_LEVELS.join(', ')}`,
-      })
+    if (key === 'diskOuter' && params.diskOuter > PARAMS.diskOuter.max) {
+      params.diskOuter = PARAMS.diskOuter.max;
+      params.diskInner = Math.min(params.diskInner, params.diskOuter - 0.5);
     }
-    return commit({ ...state, quality: normalised }, { name: 'setQuality', ok: true, reason: null })
-  }
 
-  function cycleQuality() {
-    const index = QUALITY_LEVELS.indexOf(state.quality)
-    return setQuality(QUALITY_LEVELS[(index + 1) % QUALITY_LEVELS.length])
-  }
-
-  function setPreset(index) {
-    const numeric = typeof index === 'number' ? index : Number.parseInt(index, 10)
-    if (!Number.isInteger(numeric) || numeric < 0 || numeric >= PRESETS.length) {
-      return commit(state, {
-        name: 'setPreset',
-        ok: false,
-        reason: `expected an integer in 0..${PRESETS.length - 1}`,
-      })
+    const patch = { params };
+    const isCamera = CAMERA_KEYS.includes(key);
+    if (isCamera && meta.source !== 'telemetry') {
+      patch.playing = false;
+      patch.preset = -1;
     }
-    const params = { ...state.params, ...PRESETS[numeric].params }
-    for (const id of Object.keys(PRESETS[numeric].params)) {
-      const value = coerceParameter(id, params[id])
-      if (value !== undefined) params[id] = value
+
+    setState(patch, { ...meta, changed: key });
+    return state;
+  }
+
+  function setCameraFromUser(camera, meta = { source: 'user' }) {
+    const params = { ...state.params };
+    for (const key of CAMERA_KEYS) {
+      if (camera && Number.isFinite(camera[key])) params[key] = clampParam(key, camera[key]);
     }
-    // Choosing a preset is an explicit framing request, so the cinematic loop hands the camera over
-    // instead of orbiting away from the framing that was just asked for.
-    return commit(
-      { ...state, params, preset: numeric, cinematic: false },
-      { name: 'setPreset', ok: true, reason: null },
-    )
+    setState({ params, preset: -1, playing: false }, { ...meta, changed: 'camera' });
+    return state;
   }
 
-  function setDebug(index) {
-    const numeric = typeof index === 'number' ? index : Number.parseInt(index, 10)
-    if (!Number.isInteger(numeric) || numeric < 0 || numeric > 9) {
-      return commit(state, { name: 'setDebug', ok: false, reason: 'expected an integer in 0..9' })
+  function setQuality(level, meta = { source: 'user' }) {
+    if (!QUALITY_PROFILES[level]) return false;
+    setState({ quality: level }, { ...meta, changed: 'quality' });
+    return true;
+  }
+
+  function setPreset(index, meta = { source: 'user' }) {
+    if (!Number.isInteger(index) || index < 0 || index >= PRESETS.length) return false;
+    setState({
+      preset: index,
+      playing: false,
+      params: applyPresetToParams(state.params, index),
+    }, { ...meta, changed: 'preset' });
+    return true;
+  }
+
+  function setDebug(index, meta = { source: 'user' }) {
+    if (!Number.isInteger(index) || index < 0 || index > 9) return false;
+    setState({ debug: index }, { ...meta, changed: 'debug' });
+    return true;
+  }
+
+  function setHudOpen(open, meta = { source: 'user' }) {
+    setState({ hudOpen: Boolean(open) }, { ...meta, changed: 'hud' });
+  }
+
+  function setPlaying(playing, meta = { source: 'user' }) {
+    setState({ playing: Boolean(playing) }, { ...meta, changed: 'playing' });
+  }
+
+  function setTime(seconds, meta = { source: 'api' }) {
+    const value = Number(seconds);
+    if (!Number.isFinite(value) || value < 0) return false;
+    setState({ time: Math.min(value, 1_000_000) }, { ...meta, changed: 'time', persist: false });
+    return true;
+  }
+
+  function setTelemetry(sample) {
+    if (!sample) return;
+    const params = { ...state.params };
+    const camera = sample.camera;
+    if (camera) {
+      if (Number.isFinite(camera.fov)) params.fov = clampParam('fov', camera.fov);
+      if (Number.isFinite(camera.distance)) params.distance = clampParam('distance', camera.distance);
+      if (Number.isFinite(camera.azimuth)) params.azimuth = clampParam('azimuth', camera.azimuth);
+      if (Number.isFinite(camera.elevation)) params.elevation = clampParam('elevation', camera.elevation);
     }
-    return commit({ ...state, debug: numeric }, { name: 'setDebug', ok: true, reason: null })
+    const time = Number.isFinite(sample.time) ? sample.time : state.time;
+    const fps = Number.isFinite(sample.fps) ? sample.fps : state.fps;
+    state = { ...state, params, time, fps };
+    emit({ source: 'telemetry' });
   }
 
-  function setTime(seconds) {
-    const numeric = typeof seconds === 'number' ? seconds : Number(seconds)
-    if (!Number.isFinite(numeric) || numeric < 0) {
-      return commit(state, {
-        name: 'setTime',
-        ok: false,
-        reason: 'expected a finite, non-negative number of seconds',
-      })
-    }
-    return commit({ ...state, time: numeric }, { name: 'setTime', ok: true, reason: null })
-  }
-
-  function setHudOpen(open) {
-    return commit({ ...state, hudOpen: !!open }, { name: 'setHudOpen', ok: true, reason: null })
-  }
-
-  function toggleHud() {
-    return setHudOpen(!state.hudOpen)
-  }
-
-  function setCinematic(playing) {
-    return commit({ ...state, cinematic: !!playing }, { name: 'setCinematic', ok: true, reason: null })
-  }
-
-  function toggleCinematic() {
-    return setCinematic(!state.cinematic)
-  }
-
-  function setAudio(enabled) {
-    // Capture runs are silent by contract.
-    const next = state.capture ? false : !!enabled
-    return commit({ ...state, audio: next }, { name: 'setAudio', ok: true, reason: null })
-  }
-
-  function toggleAudio() {
-    return setAudio(!state.audio)
-  }
-
-  function reset() {
-    clearPersistedState()
-    const fresh = defaultState()
-    return commit(
-      {
-        ...fresh,
-        // A capture run keeps its frozen clock and stays paused and silent so the reset cannot
-        // break the determinism the capture contract guarantees. Outside capture the loop also
-        // stays paused: it would otherwise orbit away from the default framing the user just
-        // asked to be restored.
-        capture: state.capture,
-        time: state.time,
-        rejectedQuery: state.rejectedQuery,
-        cinematic: false,
-        audio: state.capture ? false : fresh.audio,
-      },
-      { name: 'reset', ok: true, reason: null },
-    )
-  }
-
-  /**
-   * Pushes the live camera framing back into the parameters so the HUD readouts and the camera
-   * sliders always describe the camera the shader is actually using. Throttled by the caller.
-   */
-  function syncCameraFraming({ azimuth, elevation, distance }) {
-    const params = { ...state.params }
-    const a = coerceParameter('camAzimuth', azimuth)
-    const e = coerceParameter('camElevation', elevation)
-    const d = coerceParameter('camDistance', distance)
-    if (a === params.camAzimuth && e === params.camElevation && d === params.camDistance) return state
-    if (a !== undefined) params.camAzimuth = a
-    if (e !== undefined) params.camElevation = e
-    if (d !== undefined) params.camDistance = d
-    state = { ...state, params }
-    emit()
-    return state
-  }
-
-  /** Called by the engine once the first frame has been rendered with the URL state applied. */
-  function markReady() {
-    state = { ...state, ready: true }
-    emit()
-    return state
+  function reset(meta = { source: 'reset' }) {
+    safeStorageRemove();
+    state = { ...defaultState(), fps: state.fps };
+    emit(meta);
+    persist();
+    return state;
   }
 
   return {
-    subscribe,
     getState,
-    setParameters,
+    subscribe,
+    setParam,
+    setCameraFromUser,
     setQuality,
-    cycleQuality,
     setPreset,
     setDebug,
-    setTime,
     setHudOpen,
-    toggleHud,
-    setCinematic,
-    toggleCinematic,
-    setAudio,
-    toggleAudio,
+    setPlaying,
+    setTime,
+    setTelemetry,
     reset,
-    syncCameraFraming,
-    markReady,
-  }
+  };
 }

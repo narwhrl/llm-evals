@@ -11,5 +11,22 @@
     "archiveTag": "candidate/gargantua-schwarzschild-raytracer/gpt-6.1-sol",
     "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/gpt-6.1-sol",
     "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/gpt-6.1-sol/RESULTS.md"
+  }, {
+    "candidateId": "deepseek-v4.1-flash",
+    "model": "deepseek/deepseek-flash",
+    "baselineMain": "63a46c3a79afa751a12eaa90f5c0f98b4b7212f1",
+    "sourceRef": "local-worktree:.worktrees/gargantua-deepseek-v4.1-flash (branch candidate/gargantua-deepseek-v4.1-flash-2026-10)",
+    "sourceCommit": "eff2788b7853ac43bad53354deebe00446a2bdba",
+    "sourceTree": "19df9b81fe157750f7070d1eb822aebd92e0f48d",
+    "archiveTag": "candidate/gargantua-schwarzschild-raytracer/deepseek-v4.1-flash-2026-10",
+    "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/deepseek-v4.1-flash",
+    "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/deepseek-v4.1-flash/RESULTS.md",
+    "note": "From-scratch implementation from the pinned baseline, produced and accepted in an independent local worktree without reading the earlier candidate. Published under the established candidate id.",
+    "supersedes": [{
+      "sourceCommit": "703a8da77a7e2c42912ac6c438605f36ef184ba8",
+      "sourceTree": "b739129757368139fa353ed11b963464c839855c",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/deepseek-v4.1-flash",
+      "reason": "Earlier revision at the same gallery path. Its tag and commit remain intact for audit; the gallery now serves the rerun from baseline 63a46c3."
+    }]
   }]
 }

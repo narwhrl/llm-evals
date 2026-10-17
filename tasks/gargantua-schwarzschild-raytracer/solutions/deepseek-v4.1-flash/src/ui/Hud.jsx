@@ -1,182 +1,205 @@
-import { memo } from 'react'
-import { DEBUG_VIEWS, PRESETS, QUALITY_LEVELS, SHORTCUTS } from '../state/schema.js'
+import {
+  DEBUG_VIEWS,
+  PRESETS,
+  QUALITY_ORDER,
+  QUALITY_PROFILES,
+} from '../state/schema.js';
+import ControlPanel from './ControlPanel.jsx';
 
-const QUALITY_ABBREVIATION = { standard: 'Std', high: 'High', cinematic: 'Cine' }
+function formatNumber(value, digits = 1) {
+  return Number(value).toFixed(digits);
+}
 
-/**
- * The heads-up display: what the renderer is actually doing, what the shortcuts are, and the way
- * back to a known state. It is anchored to the corners so the critical structure in the middle of
- * the frame stays unobstructed.
- */
-export const Hud = memo(function Hud({
+export default function Hud({
   state,
-  renderInfo,
-  debugView,
+  contextLost,
+  onParam,
   onQuality,
-  onDebugStep,
-  onToggleCinematic,
-  onToggleAudio,
+  onPreset,
+  onDebug,
   onReset,
   onToggleHud,
+  onTogglePlaying,
 }) {
+  const profile = QUALITY_PROFILES[state.quality];
+  const debug = DEBUG_VIEWS[state.debug];
+  const loopLabel = state.capture ? 'FROZEN' : state.playing ? 'CINEMATIC' : 'PAUSED';
+  const presetLabel = state.preset >= 0 ? PRESETS[state.preset].name : 'CUSTOM';
+
+  if (!state.hudOpen) {
+    if (state.capture) return null;
+    return (
+      <div className="hud hud--closed">
+        <button
+          type="button"
+          className="hud-trigger"
+          onClick={() => onToggleHud(true)}
+          aria-label="Open instrument HUD"
+        >
+          <span>OPEN HUD</span>
+          <kbd>H</kbd>
+        </button>
+      </div>
+    );
+  }
+
   return (
-    <>
-      <section className="hud-panel hud-info" aria-label="Render status">
-        <h1 className="hud-title">
-          <span>GARGANTUA</span>
-          <span className="hud-value-accent">{state.capture ? 'CAPTURE' : 'LIVE'}</span>
-        </h1>
-        <p className="hud-subtitle">Schwarzschild null-geodesic raytracer</p>
-
-        <div className="hud-section">
-          <div className="hud-section-title">Render</div>
-          <dl className="hud-grid">
-            <dt>Quality</dt>
-            <dd>
-              {QUALITY_LEVELS.map((level, index) => (
-                <button
-                  key={level}
-                  type="button"
-                  className="hud-button"
-                  style={{ marginLeft: index === 0 ? 0 : 4, padding: '2px 6px' }}
-                  aria-pressed={state.quality === level}
-                  onClick={() => onQuality(level)}
-                >
-                  {QUALITY_ABBREVIATION[level] || level}
-                </button>
-              ))}
-            </dd>
-            <dt>Steps / ray</dt>
-            <dd>{renderInfo.maxSteps}</dd>
-            <dt>Disk crossings</dt>
-            <dd>{renderInfo.maxCrossings}</dd>
-            <dt>Bloom mips</dt>
-            <dd>{renderInfo.bloomMips}</dd>
-            <dt>Buffer</dt>
-            <dd>
-              {renderInfo.renderWidth} × {renderInfo.renderHeight}
-            </dd>
-            <dt>DPR</dt>
-            <dd>{renderInfo.dpr.toFixed(2)}</dd>
-            <dt>FPS</dt>
-            <dd>{renderInfo.fps.toFixed(0)}</dd>
-          </dl>
+    <div className="hud">
+      <header className="hud-top">
+        <div className="brand">
+          <span className="brand-mark">GARGANTUA</span>
+          <span className="brand-sub">SCHWARZSCHILD BLACK HOLE RAYTRACER · M = 1</span>
         </div>
 
-        <div className="hud-section">
-          <div className="hud-section-title">Debug view</div>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-            <span className="hud-value-accent" style={{ fontSize: 18 }}>
-              {state.debug}
-            </span>
-            <span style={{ fontSize: 11.5 }}>{debugView.name}</span>
-            <span style={{ marginLeft: 'auto', display: 'flex', gap: 4 }}>
+        <div className="status-cluster">
+          <span className={`status-pill ${contextLost ? 'is-alert' : ''}`}>
+            <span className={`status-dot ${contextLost ? 'is-alert' : ''}`} />
+            {contextLost ? 'NO SIGNAL' : 'LIVE'}
+          </span>
+          {state.capture && (
+            <span className="status-pill capture-pill">CAPTURE · t={formatNumber(state.time, 2)}s</span>
+          )}
+          <span className="status-pill preset-pill">{presetLabel.toUpperCase()}</span>
+          <div className="segmented" role="group" aria-label="Render quality">
+            {QUALITY_ORDER.map((quality) => (
               <button
+                key={quality}
                 type="button"
-                className="hud-button"
-                onClick={() => onDebugStep(-1)}
-                aria-label="Previous debug view"
+                aria-pressed={state.quality === quality}
+                title={`${QUALITY_PROFILES[quality].label}: ${QUALITY_PROFILES[quality].note}`}
+                onClick={() => onQuality(quality)}
               >
-                −
+                {QUALITY_PROFILES[quality].short}
               </button>
-              <button
-                type="button"
-                className="hud-button"
-                onClick={() => onDebugStep(1)}
-                aria-label="Next debug view"
-              >
-                +
-              </button>
-            </span>
-          </div>
-          <p className="debug-description">{debugView.description}</p>
-        </div>
-
-        <div className="hud-section">
-          <div className="hud-section-title">Camera</div>
-          <dl className="hud-grid">
-            <dt>Distance</dt>
-            <dd>{state.params.camDistance.toFixed(1)} r<sub>s</sub></dd>
-            <dt>Azimuth</dt>
-            <dd>{state.params.camAzimuth.toFixed(1)}°</dd>
-            <dt>Elevation</dt>
-            <dd>{state.params.camElevation.toFixed(1)}°</dd>
-            <dt>FOV</dt>
-            <dd>{state.params.fov.toFixed(1)}°</dd>
-            <dt>Simulation time</dt>
-            <dd>{state.time.toFixed(2)} s</dd>
-          </dl>
-          <div className="hud-button-row">
-            <button
-              type="button"
-              className="hud-button"
-              aria-pressed={state.cinematic}
-              onClick={onToggleCinematic}
-            >
-              {state.cinematic ? 'Pause loop' : 'Play loop'}
-            </button>
-            <button
-              type="button"
-              className="hud-button"
-              aria-pressed={state.audio}
-              onClick={onToggleAudio}
-              disabled={renderInfo.audioUnavailable}
-            >
-              {renderInfo.audioUnavailable ? 'Audio n/a' : state.audio ? 'Audio on' : 'Audio off'}
-            </button>
-            <button type="button" className="hud-button" onClick={onReset}>
-              Reset all
-            </button>
-            <button type="button" className="hud-button" onClick={onToggleHud}>
-              Hide HUD
-            </button>
-          </div>
-        </div>
-
-        <div className="hud-section">
-          <div className="hud-section-title">Shortcuts</div>
-          <div className="shortcut-list">
-            {SHORTCUTS.map((shortcut) => (
-              <div className="shortcut-row" key={shortcut.keys}>
-                <span className="shortcut-keys">{shortcut.keys}</span>
-                <span className="shortcut-action">{shortcut.action}</span>
-              </div>
             ))}
-            <div className="shortcut-row">
-              <span className="shortcut-keys">Drag / wheel</span>
-              <span className="shortcut-action">Orbit and zoom</span>
+          </div>
+          <button
+            type="button"
+            className="status-button"
+            onClick={() => onToggleHud(false)}
+            aria-label="Hide instrument HUD"
+          >
+            HUD <kbd>H</kbd>
+          </button>
+        </div>
+      </header>
+
+      <aside className="instrument-panel" aria-label="Observation console">
+        <div className="panel-head">
+          <div>
+            <span className="panel-kicker">INSTRUMENT / 01</span>
+            <h1 className="panel-title">OBSERVATION CONSOLE</h1>
+          </div>
+          <div className="panel-actions">
+            <button
+              type="button"
+              className="ghost-button"
+              onClick={onTogglePlaying}
+              disabled={state.capture}
+              title={state.capture ? 'Camera loop disabled by the capture contract' : undefined}
+              aria-label={state.playing ? 'Pause cinematic camera loop' : 'Play cinematic camera loop'}
+            >
+              {state.playing ? 'PAUSE' : 'PLAY'}
+            </button>
+            <button type="button" className="ghost-button" onClick={onReset}>
+              RESET
+            </button>
+          </div>
+        </div>
+
+        <section className="panel-section panel-section--status">
+          <div className="section-title">
+            <span>Status</span>
+            <span className="section-hint">metric units · G = c = 1</span>
+          </div>
+          <div className="readout-grid">
+            <div><span>CAMERA</span><b>{loopLabel}</b></div>
+            <div><span>PRESET</span><b>{presetLabel}</b></div>
+            <div><span>AZ / EL</span><b>{formatNumber(state.params.azimuth)}° / {formatNumber(state.params.elevation)}°</b></div>
+            <div><span>DIST / FOV</span><b>{formatNumber(state.params.distance)} M / {formatNumber(state.params.fov)}°</b></div>
+            <div><span>RENDER</span><b>{profile.label} · {profile.maxSteps} steps</b></div>
+            <div><span>FRAME</span><b>{formatNumber(state.fps, 0)} fps · t={formatNumber(state.time, 2)}s</b></div>
+          </div>
+          <div className="debug-readout" aria-live="polite">
+            <span className="debug-number">{String(state.debug).padStart(2, '0')}</span>
+            <div>
+              <b>{debug.name}</b>
+              <p>{debug.detail}</p>
             </div>
           </div>
-        </div>
-      </section>
+          <div className="debug-strip" role="group" aria-label="Debug views">
+            {DEBUG_VIEWS.map((view, index) => (
+              <button
+                key={view.id}
+                type="button"
+                className={`debug-key ${state.debug === index ? 'is-active' : ''}`}
+                aria-pressed={state.debug === index}
+                title={`${index} · ${view.name}`}
+                onClick={() => onDebug(index)}
+              >
+                {index}
+              </button>
+            ))}
+          </div>
+          <div className="shortcut-inline" aria-label="Keyboard shortcuts">
+            <span><kbd>0–9</kbd> debug</span>
+            <span><kbd>⇧1–4</kbd> preset</span>
+            <span><kbd>SPACE</kbd> loop</span>
+            <span><kbd>H</kbd> HUD</span>
+            <span><kbd>R</kbd> reset</span>
+            <span><kbd>Q</kbd> quality</span>
+          </div>
+          <p className="profile-note">{profile.note}</p>
+        </section>
 
-      <button type="button" className="hud-panel hud-button hud-toggle" onClick={onToggleHud}>
-        Show HUD · H
-      </button>
-    </>
-  )
-})
+        <section className="panel-section">
+          <div className="section-title">
+            <span>View presets</span>
+            <span className="section-hint">shift + 1…4</span>
+          </div>
+          <div className="preset-grid">
+            {PRESETS.map((preset, index) => (
+              <button
+                key={preset.id}
+                type="button"
+                className={`preset-button ${state.preset === index ? 'is-active' : ''}`}
+                aria-pressed={state.preset === index}
+                title={preset.blurb}
+                onClick={() => onPreset(index)}
+              >
+                <span className="code">SHIFT + {index + 1}</span>
+                {preset.name}
+              </button>
+            ))}
+          </div>
+        </section>
 
-export const PresetBar = memo(function PresetBar({ active, onPreset }) {
-  return (
-    <nav className="hud-panel preset-bar" aria-label="Camera presets">
-      {PRESETS.map((preset) => (
-        <button
-          key={preset.id}
-          type="button"
-          className="preset-button"
-          aria-pressed={active === preset.id}
-          title={preset.description}
-          onClick={() => onPreset(preset.id)}
-        >
-          <span className="preset-index">{preset.id + 1}</span>
-          {preset.name}
-        </button>
-      ))}
-    </nav>
-  )
-})
+        <ControlPanel params={state.params} onParam={onParam} />
 
-export function debugViewFor(index) {
-  return DEBUG_VIEWS[index] || DEBUG_VIEWS[0]
+        <section className="panel-section">
+          <div className="section-title">
+            <span>Controls</span>
+            <span className="section-hint">21 live parameters</span>
+          </div>
+          <div className="shortcut-grid">
+            <span><kbd>0–9</kbd> debug view</span>
+            <span><kbd>⇧1–4</kbd> preset</span>
+            <span><kbd>SPACE</kbd> camera loop</span>
+            <span><kbd>H</kbd> HUD</span>
+            <span><kbd>R</kbd> reset</span>
+            <span><kbd>Q</kbd> quality</span>
+          </div>
+          <p className="interaction-note">DRAG ORBIT · SCROLL / PINCH ZOOM · TOUCH SUPPORTED</p>
+          <button type="button" className="ghost-button reset-wide" onClick={onReset}>
+            RESET ALL PARAMETERS
+          </button>
+        </section>
+      </aside>
+
+      <footer className="hud-bottom">
+        <span>OBSERVATORY / SCHWARZSCHILD NULL-GEODESIC INTEGRATOR</span>
+        <span>0 EVENT HORIZON · 3M PHOTON SPHERE · 3√3M CRITICAL IMPACT</span>
+      </footer>
+    </div>
+  );
 }

@@ -1,0 +1,153 @@
+{
+  "before": {
+    "camera": {
+      "azimuth": 34,
+      "distance": 30,
+      "elevation": 18.000000000000004,
+      "fov": 48
+    },
+    "capture": true,
+    "contextLost": false,
+    "cssSize": {
+      "height": 900,
+      "width": 1440
+    },
+    "debug": 0,
+    "fps": 120,
+    "frozen": true,
+    "hudOpen": false,
+    "internalSize": {
+      "height": 738,
+      "width": 1181
+    },
+    "params": {
+      "azimuth": 34,
+      "bloomStrength": 0.65,
+      "bloomThreshold": 1.25,
+      "chromatic": 0.32,
+      "diskEmission": 1,
+      "diskInner": 6,
+      "diskOuter": 16,
+      "diskTemperature": 5600,
+      "diskThickness": 0.42,
+      "distance": 30,
+      "elevation": 18.000000000000004,
+      "exposure": 0.92,
+      "fov": 48,
+      "galaxyBrightness": 0.8,
+      "grain": 0.03,
+      "orbitalSpeed": 1,
+      "starDensity": 1,
+      "timeScale": 1,
+      "turbulenceAmount": 0.72,
+      "turbulenceSpeed": 1,
+      "vignette": 0.32
+    },
+    "playing": false,
+    "preset": 0,
+    "quality": "high",
+    "ready": true,
+    "time": 12.5
+  },
+  "during": {
+    "camera": {
+      "azimuth": 34,
+      "distance": 30,
+      "elevation": 18.000000000000004,
+      "fov": 48
+    },
+    "capture": true,
+    "contextLost": true,
+    "cssSize": {
+      "height": 900,
+      "width": 1440
+    },
+    "debug": 0,
+    "fps": 120,
+    "frozen": true,
+    "hudOpen": false,
+    "internalSize": {
+      "height": 738,
+      "width": 1181
+    },
+    "params": {
+      "azimuth": 34,
+      "bloomStrength": 0.65,
+      "bloomThreshold": 1.25,
+      "chromatic": 0.32,
+      "diskEmission": 1,
+      "diskInner": 6,
+      "diskOuter": 16,
+      "diskTemperature": 5600,
+      "diskThickness": 0.42,
+      "distance": 30,
+      "elevation": 18.000000000000004,
+      "exposure": 0.92,
+      "fov": 48,
+      "galaxyBrightness": 0.8,
+      "grain": 0.03,
+      "orbitalSpeed": 1,
+      "starDensity": 1,
+      "timeScale": 1,
+      "turbulenceAmount": 0.72,
+      "turbulenceSpeed": 1,
+      "vignette": 0.32
+    },
+    "playing": false,
+    "preset": 0,
+    "quality": "high",
+    "ready": true,
+    "time": 12.5
+  },
+  "after": {
+    "camera": {
+      "azimuth": 34,
+      "distance": 30,
+      "elevation": 18.000000000000004,
+      "fov": 48
+    },
+    "capture": true,
+    "contextLost": false,
+    "cssSize": {
+      "height": 900,
+      "width": 1440
+    },
+    "debug": 0,
+    "fps": 120,
+    "frozen": true,
+    "hudOpen": false,
+    "internalSize": {
+      "height": 738,
+      "width": 1181
+    },
+    "params": {
+      "azimuth": 34,
+      "bloomStrength": 0.65,
+      "bloomThreshold": 1.25,
+      "chromatic": 0.32,
+      "diskEmission": 1,
+      "diskInner": 6,
+      "diskOuter": 16,
+      "diskTemperature": 5600,
+      "diskThickness": 0.42,
+      "distance": 30,
+      "elevation": 18.000000000000004,
+      "exposure": 0.92,
+      "fov": 48,
+      "galaxyBrightness": 0.8,
+      "grain": 0.03,
+      "orbitalSpeed": 1,
+      "starDensity": 1,
+      "timeScale": 1,
+      "turbulenceAmount": 0.72,
+      "turbulenceSpeed": 1,
+      "vignette": 0.32
+    },
+    "playing": false,
+    "preset": 0,
+    "quality": "high",
+    "ready": true,
+    "time": 12.5
+  },
+  "ready": "true"
+}

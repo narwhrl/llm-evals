@@ -1,189 +1,208 @@
-/**
- * Single source of truth for every configurable value: parameter ranges, quality budgets, camera
- * presets, debug views and the persistence schema version.
- *
- * Sliders, clamping, persistence validation, reset and the URL query contract all read from here,
- * so a value can never be accepted through one path and rejected through another.
- */
+// Single source of truth for persisted settings, URL validation, presets and
+// the render budgets advertised by each quality tier.
 
-export const SCHEMA_VERSION = 1
-export const STORAGE_KEY = 'gargantua.state.v1'
+export const STATE_VERSION = 1;
+export const STORAGE_KEY = 'gargantua.state.v1';
 
-export const QUALITY_LEVELS = ['standard', 'high', 'cinematic']
+export const PARAMS = {
+  fov: {
+    label: 'Field of view', min: 20, max: 85, step: 0.5, default: 48,
+    unit: 'deg', group: 'camera', digits: 1,
+  },
+  distance: {
+    label: 'Camera distance', min: 10, max: 60, step: 0.1, default: 30,
+    unit: 'M', group: 'camera', digits: 1,
+  },
+  azimuth: {
+    label: 'Azimuth', min: 0, max: 360, step: 0.5, default: 34,
+    unit: 'deg', group: 'camera', digits: 1, wrap: true,
+  },
+  elevation: {
+    label: 'Elevation', min: -75, max: 75, step: 0.5, default: 18,
+    unit: 'deg', group: 'camera', digits: 1,
+  },
+  timeScale: {
+    label: 'Time rate', min: 0, max: 3, step: 0.01, default: 1,
+    unit: 'x', group: 'camera', digits: 2,
+  },
+  diskInner: {
+    label: 'Disk inner edge', min: 3.2, max: 13, step: 0.1, default: 6,
+    unit: 'M', group: 'disk', digits: 1,
+  },
+  diskOuter: {
+    label: 'Disk outer edge', min: 8, max: 28, step: 0.1, default: 16,
+    unit: 'M', group: 'disk', digits: 1,
+  },
+  diskThickness: {
+    label: 'Disk half thickness', min: 0.04, max: 1.2, step: 0.01, default: 0.42,
+    unit: 'M', group: 'disk', digits: 2,
+  },
+  diskTemperature: {
+    label: 'Peak temperature', min: 3000, max: 18000, step: 100, default: 5600,
+    unit: 'K', group: 'disk', digits: 0,
+  },
+  diskEmission: {
+    label: 'Emission gain', min: 0.1, max: 3, step: 0.01, default: 1,
+    unit: 'x', group: 'disk', digits: 2,
+  },
+  orbitalSpeed: {
+    label: 'Orbital velocity', min: 0, max: 1.8, step: 0.01, default: 1,
+    unit: 'x', group: 'disk', digits: 2,
+  },
+  turbulenceAmount: {
+    label: 'Turbulence amplitude', min: 0, max: 1.5, step: 0.01, default: 0.72,
+    unit: '', group: 'disk', digits: 2,
+  },
+  turbulenceSpeed: {
+    label: 'Turbulence rate', min: 0, max: 3, step: 0.01, default: 1,
+    unit: 'x', group: 'disk', digits: 2,
+  },
+  starDensity: {
+    label: 'Star density', min: 0, max: 2.5, step: 0.01, default: 1,
+    unit: 'x', group: 'sky', digits: 2,
+  },
+  galaxyBrightness: {
+    label: 'Galaxy brightness', min: 0, max: 2, step: 0.01, default: 0.8,
+    unit: 'x', group: 'sky', digits: 2,
+  },
+  bloomStrength: {
+    label: 'Bloom strength', min: 0, max: 2.5, step: 0.01, default: 0.65,
+    unit: 'x', group: 'post', digits: 2,
+  },
+  bloomThreshold: {
+    label: 'Bloom threshold', min: 0, max: 3, step: 0.01, default: 1.25,
+    unit: '', group: 'post', digits: 2,
+  },
+  exposure: {
+    label: 'Exposure', min: 0.2, max: 3, step: 0.01, default: 0.92,
+    unit: 'EV', group: 'post', digits: 2,
+  },
+  vignette: {
+    label: 'Vignette', min: 0, max: 1, step: 0.01, default: 0.32,
+    unit: '', group: 'post', digits: 2,
+  },
+  grain: {
+    label: 'Film grain', min: 0, max: 0.15, step: 0.001, default: 0.03,
+    unit: '', group: 'post', digits: 3,
+  },
+  chromatic: {
+    label: 'Chromatic dispersion', min: 0, max: 2, step: 0.01, default: 0.32,
+    unit: '', group: 'post', digits: 2,
+  },
+};
 
-/**
- * Quality tiers change real rendering work, not labels:
- *   renderScale   internal buffer size relative to the device-pixel viewport
- *   maxSteps      per-ray RK4 step budget (shader loop bound)
- *   stepScale     RK4 step length multiplier (smaller = finer trajectory)
- *   maxCrossings  how many ordered disk crossings a single ray may collect
- *   bloomMips     length of the bloom mip chain (each mip is a full extra pass pair)
- *   dprCap        devicePixelRatio ceiling
- *   octaves       fbm octave counts for disk turbulence and the sky
- *   bloomRadius   tent upsample width
- */
-export const QUALITY_TIERS = {
+export const PARAM_ORDER = Object.keys(PARAMS);
+
+export const PARAM_GROUPS = [
+  { id: 'camera', label: 'Observation', hint: 'OrbitControls → shader camera' },
+  { id: 'disk', label: 'Accretion disk', hint: 'Curved-path emission / g-factor' },
+  { id: 'sky', label: 'Deep field', hint: 'Procedural lensed background' },
+  { id: 'post', label: 'Optics', hint: 'HDR composite / lens artifacts' },
+];
+
+export const CAMERA_KEYS = ['fov', 'distance', 'azimuth', 'elevation'];
+
+export const QUALITY_PROFILES = {
   standard: {
-    id: 'standard',
-    label: 'Standard',
-    renderScale: 0.75,
-    maxSteps: 200,
-    stepScale: 1.7,
-    maxCrossings: 3,
-    bloomMips: 3,
-    bloomRadius: 1.0,
-    dprCap: 1.25,
-    turbulenceOctaves: 3,
-    skyOctaves: 3,
+    id: 'standard', label: 'Standard', short: 'STD',
+    renderScale: 0.62, dprCap: 1.25, maxSteps: 420, maxCrossings: 4, bloomLevels: 3,
+    note: '0.62x raster · 420 geodesic steps · 4 disk crossings',
   },
   high: {
-    id: 'high',
-    label: 'High',
-    renderScale: 1.0,
-    maxSteps: 360,
-    stepScale: 1.0,
-    maxCrossings: 5,
-    bloomMips: 5,
-    bloomRadius: 1.2,
-    dprCap: 1.75,
-    turbulenceOctaves: 4,
-    skyOctaves: 4,
+    id: 'high', label: 'High', short: 'HIGH',
+    renderScale: 0.82, dprCap: 1.6, maxSteps: 820, maxCrossings: 6, bloomLevels: 4,
+    note: '0.82x raster · 820 geodesic steps · 6 disk crossings',
   },
   cinematic: {
-    id: 'cinematic',
-    label: 'Cinematic',
-    renderScale: 1.4,
-    maxSteps: 620,
-    stepScale: 0.62,
-    maxCrossings: 6,
-    bloomMips: 6,
-    bloomRadius: 2.0,
-    dprCap: 2.0,
-    turbulenceOctaves: 5,
-    skyOctaves: 5,
+    id: 'cinematic', label: 'Cinematic', short: 'CINE',
+    renderScale: 1, dprCap: 2, maxSteps: 1500, maxCrossings: 10, bloomLevels: 5,
+    note: '1.00x raster · 1500 geodesic steps · 10 disk crossings',
   },
-}
+};
 
-export const MAX_RENDER_PIXELS = 1920 * 1200 * 2.6
+export const QUALITY_ORDER = ['standard', 'high', 'cinematic'];
 
-export const DEFAULT_QUALITY = 'standard'
-
-/**
- * The twenty-one required parameters plus `diskOpacity`, which the emission-absorption compositing
- * needs in order to be controllable at all. Each entry drives exactly one uniform or camera value.
- */
-export const PARAMETERS = [
-  // --- camera -------------------------------------------------------------------------------
-  { id: 'fov', group: 'camera', label: 'Field of view', min: 12, max: 110, step: 0.5, value: 40, unit: '°' },
-  { id: 'camDistance', group: 'camera', label: 'Camera distance', min: 2.2, max: 90, step: 0.1, value: 20, unit: 'r\u209B' },
-  { id: 'camAzimuth', group: 'camera', label: 'Camera azimuth', min: -180, max: 180, step: 0.5, value: 24, unit: '°' },
-  { id: 'camElevation', group: 'camera', label: 'Camera elevation', min: -89, max: 89, step: 0.5, value: 8, unit: '°' },
-  { id: 'timeScale', group: 'camera', label: 'Time scale', min: 0, max: 8, step: 0.01, value: 1, unit: '×' },
-
-  // --- accretion disk -----------------------------------------------------------------------
-  { id: 'diskInner', group: 'disk', label: 'Disk inner radius', min: 1.6, max: 20, step: 0.05, value: 3, unit: 'r\u209B' },
-  { id: 'diskOuter', group: 'disk', label: 'Disk outer radius', min: 4, max: 42, step: 0.1, value: 15, unit: 'r\u209B' },
-  { id: 'diskThickness', group: 'disk', label: 'Disk half-thickness', min: 0.01, max: 1.5, step: 0.005, value: 0.16, unit: 'r\u209B' },
-  { id: 'diskTemperature', group: 'disk', label: 'Disk temperature', min: 1200, max: 30000, step: 50, value: 8000, unit: 'K' },
-  { id: 'diskEmission', group: 'disk', label: 'Disk emission', min: 0, max: 4, step: 0.02, value: 1, unit: '×' },
-  { id: 'diskOpacity', group: 'disk', label: 'Disk opacity', min: 0, max: 1, step: 0.01, value: 0.85, unit: '' },
-  { id: 'orbitalSpeed', group: 'disk', label: 'Orbital speed scale', min: 0, max: 1.6, step: 0.01, value: 1, unit: '×' },
-  { id: 'turbulenceAmplitude', group: 'disk', label: 'Turbulence amplitude', min: 0, max: 1.5, step: 0.01, value: 0.6, unit: '' },
-  { id: 'turbulenceSpeed', group: 'disk', label: 'Turbulence speed', min: 0, max: 4, step: 0.01, value: 1, unit: '×' },
-
-  // --- sky ----------------------------------------------------------------------------------
-  { id: 'starDensity', group: 'sky', label: 'Star density', min: 0, max: 2, step: 0.01, value: 0.9, unit: '×' },
-  { id: 'galaxyBrightness', group: 'sky', label: 'Galaxy brightness', min: 0, max: 2.5, step: 0.01, value: 0.6, unit: '×' },
-
-  // --- post-processing ----------------------------------------------------------------------
-  { id: 'bloomStrength', group: 'post', label: 'Bloom strength', min: 0, max: 2, step: 0.01, value: 0.5, unit: '' },
-  { id: 'bloomThreshold', group: 'post', label: 'Bloom threshold', min: 0, max: 4, step: 0.01, value: 1.15, unit: '' },
-  { id: 'exposure', group: 'post', label: 'Exposure', min: 0.05, max: 4, step: 0.01, value: 1, unit: '×' },
-  { id: 'vignette', group: 'post', label: 'Vignette strength', min: 0, max: 1, step: 0.01, value: 0.42, unit: '' },
-  { id: 'filmGrain', group: 'post', label: 'Film grain', min: 0, max: 1, step: 0.01, value: 0.22, unit: '' },
-  { id: 'chromaticAberration', group: 'post', label: 'Chromatic aberration', min: 0, max: 1, step: 0.01, value: 0.22, unit: '' },
-]
-
-export const PARAMETER_GROUPS = [
-  { id: 'camera', label: 'Camera & time' },
-  { id: 'disk', label: 'Accretion disk' },
-  { id: 'sky', label: 'Sky' },
-  { id: 'post', label: 'Post-processing' },
-]
-
-export const PARAMETERS_BY_ID = Object.fromEntries(PARAMETERS.map((p) => [p.id, p]))
-
-export const DEFAULT_PARAMETERS = Object.fromEntries(PARAMETERS.map((p) => [p.id, p.value]))
-
-/**
- * Four visually distinct framings. Each preset sets absolute camera and FOV values so the presets
- * remain distinguishable even after the user has moved the camera.
- */
 export const PRESETS = [
   {
-    id: 0,
-    name: 'Interstellar',
-    description: 'Near edge-on, wide disk sweep',
-    params: { fov: 40, camDistance: 20, camAzimuth: 24, camElevation: 8 },
+    id: 'observer', name: 'Observer', code: '01',
+    azimuth: 34, elevation: 18, distance: 30, fov: 48,
+    blurb: 'Three-quarter view. Front and back disk visible.',
   },
   {
-    id: 1,
-    name: 'Polar Overlook',
-    description: 'High inclination, full annulus',
-    params: { fov: 38, camDistance: 26, camAzimuth: 62, camElevation: 56 },
+    id: 'edge-on', name: 'Edge-on', code: '02',
+    azimuth: 122, elevation: 2.5, distance: 25, fov: 43,
+    blurb: 'Near the disk plane. Doppler limb is brightest.',
   },
   {
-    id: 2,
-    name: 'Photon Ring',
-    // The shadow subtends asin(b_crit / r), so the framing has to keep the aperture wide enough to
-    // reach past b_crit = 2.598 r_s; a narrower field at this distance would be shadow edge to edge.
-    description: 'Close, critical structure dominant',
-    params: { fov: 34, camDistance: 11, camAzimuth: -12, camElevation: 5 },
+    id: 'polar', name: 'Polar', code: '03',
+    azimuth: 214, elevation: 62, distance: 36, fov: 52,
+    blurb: 'High inclination. Full photon ring and spiral lanes.',
   },
   {
-    id: 3,
-    name: 'Wide Field',
-    description: 'Distant, wide lensed starfield',
-    params: { fov: 62, camDistance: 46, camAzimuth: 108, camElevation: -14 },
+    id: 'close-pass', name: 'Close pass', code: '04',
+    azimuth: 306, elevation: -9, distance: 16.5, fov: 63,
+    blurb: 'Low, close orbit. Extreme lensing and secondary images.',
   },
-]
+];
 
-/**
- * Debug views 0-9. `0` is the graded composite; the rest must be mutually distinguishable and
- * diagnostically useful, and the HUD reports the active number with its description.
- */
 export const DEBUG_VIEWS = [
-  { id: 0, name: 'Final composite', description: 'Graded HDR image with bloom and lens effects' },
-  { id: 1, name: 'Integration cost', description: 'RK4 steps taken; hue = horizon / escape / step budget' },
-  { id: 2, name: 'Event horizon mask', description: 'Captured rays in white, critical curve marked' },
-  { id: 3, name: 'Disk crossings', description: 'Image order as hue, number of crossings as brightness' },
-  { id: 4, name: 'Redshift & Doppler', description: 'Signed frequency shift and beaming strength' },
-  { id: 5, name: 'Background lensing', description: 'Escaped-ray direction, graticule in spherical angles' },
-  { id: 6, name: 'Stars & galaxy', description: 'Procedural sky alone, still gravitationally lensed' },
-  { id: 7, name: 'Pre-post HDR', description: 'Raw linear radiance; magenta marks overexposure' },
-  { id: 8, name: 'Deflection angle', description: 'Total swept phi, i.e. how far the ray wound around' },
-  { id: 9, name: 'Impact parameter', description: 'b / b_crit, with the critical curve marked' },
-]
+  { id: 'final', name: 'Final composite', detail: 'Full HDR path-traced frame with bloom, ACES and lens artifacts.' },
+  { id: 'steps', name: 'Geodesic steps', detail: 'Integration steps per ray; red tint marks horizon capture.' },
+  { id: 'horizon', name: 'Horizon mask', detail: 'Red: terminated at the event horizon. Blue: escaped to the sky.' },
+  { id: 'crossings', name: 'Disk crossings', detail: 'Ordered equatorial-plane crossings, coloured by crossing order.' },
+  { id: 'redshift', name: 'Redshift / Doppler', detail: 'Observed/emitted frequency g. Blue is blueshift, red is redshift.' },
+  { id: 'lensmap', name: 'Lensed sky map', detail: 'Escape direction encoded as RGB after curvature deflection.' },
+  { id: 'sky', name: 'Stars + galaxy', detail: 'Procedural deep field only, seen through the gravitational lens.' },
+  { id: 'emission', name: 'Disk emission', detail: 'Temperature and turbulence before Doppler beaming is applied.' },
+  { id: 'hdr', name: 'Pre-post HDR', detail: 'Log-scaled raw radiance before bloom, ACES, grain or vignette.' },
+  { id: 'critical', name: 'Critical curve', detail: 'Impact parameter b / b_crit; the white ridge is the photon ring.' },
+];
 
-export const SHORTCUTS = [
-  { keys: '0 – 9', action: 'Debug view' },
-  { keys: 'Shift + 1 – 4', action: 'Camera preset' },
-  { keys: 'Space', action: 'Play / pause cinematic loop' },
-  { keys: 'H', action: 'Show / hide HUD' },
-  { keys: 'R', action: 'Reset all parameters' },
-  { keys: 'Q', action: 'Cycle quality tier' },
-  { keys: 'M', action: 'Ambient audio' },
-]
+export const DEFAULT_PARAMS = Object.fromEntries(
+  PARAM_ORDER.map((key) => [key, PARAMS[key].default]),
+);
 
-/** Clamp + coerce one raw value against the schema. Returns the default when unusable. */
-export function coerceParameter(id, raw) {
-  const definition = PARAMETERS_BY_ID[id]
-  if (!definition) return undefined
-  const numeric = typeof raw === 'number' ? raw : Number.parseFloat(raw)
-  if (!Number.isFinite(numeric)) return definition.value
-  const clamped = Math.min(definition.max, Math.max(definition.min, numeric))
-  // Snap to the declared step so persisted and queried values round-trip exactly.
-  const snapped = Math.round(clamped / definition.step) * definition.step
-  const decimals = (String(definition.step).split('.')[1] || '').length
-  return Number(Math.min(definition.max, Math.max(definition.min, snapped)).toFixed(decimals))
+export const DEFAULTS = {
+  version: STATE_VERSION,
+  params: { ...DEFAULT_PARAMS },
+  quality: 'high',
+  preset: 0,
+  debug: 0,
+  hudOpen: true,
+  playing: true,
+  time: 0,
+  capture: false,
+  frozen: false,
+};
+
+export function clampParam(key, value) {
+  const def = PARAMS[key];
+  if (!def) return null;
+  const number = Number(value);
+  if (!Number.isFinite(number)) return def.default;
+  let clamped = Math.min(def.max, Math.max(def.min, number));
+  if (def.wrap) {
+    const span = def.max - def.min;
+    clamped = ((clamped - def.min) % span + span) % span + def.min;
+  }
+  return clamped;
+}
+
+export function applyPresetToParams(params, index) {
+  const preset = PRESETS[index];
+  if (!preset) return { ...params };
+  return {
+    ...params,
+    azimuth: preset.azimuth,
+    elevation: preset.elevation,
+    distance: preset.distance,
+    fov: preset.fov,
+  };
+}
+
+export function defaultState() {
+  return {
+    ...DEFAULTS,
+    params: { ...DEFAULT_PARAMS },
+  };
 }

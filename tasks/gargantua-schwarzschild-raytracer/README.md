@@ -6,7 +6,7 @@
 - Canonical candidate path: `tasks/gargantua-schwarzschild-raytracer/solution/`
 - Candidate result report: `tasks/gargantua-schwarzschild-raytracer/solution/RESULTS.md`
 - Prompt: [`task.md`](task.md)
-- Status: Fourteen candidates archived on `llm/gargantua-schwarzschild-raytracer` at `tasks/gargantua-schwarzschild-raytracer/solutions/<candidate-id>/`. Original commits and source trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json); `cursor-c343` has no confirmed model ID or result report. `glm-5.3-flash` and `opus-5.5` were produced from the `8409ab9` baseline in isolated clones and imported with result reports.
+- Status: Fourteen candidates archived on `llm/gargantua-schwarzschild-raytracer` at `tasks/gargantua-schwarzschild-raytracer/solutions/<candidate-id>/`. Original commits and source trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json); `cursor-c343` has no confirmed model ID or result report. `glm-5.3-flash` and `opus-5.5` were produced from the `8409ab9` baseline in isolated clones and imported with result reports. The current `deepseek-v4.1-flash` archive is a from-scratch rerun from the `63a46c3` baseline; it supersedes the earlier `703a8da` revision at the same path, whose tag remains available for audit.
 
 ## Shared Inputs
 

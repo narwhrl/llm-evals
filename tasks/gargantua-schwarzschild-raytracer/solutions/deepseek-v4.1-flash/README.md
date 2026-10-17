@@ -1,157 +1,196 @@
 # GARGANTUA — Schwarzschild Black Hole Raytracer
 
-A real-time full-screen fragment shader black hole: the image is produced by numerically integrating null
-geodesics of the Schwarzschild metric per pixel, in the browser, with React + Vite and a locally
-vendored Three.js.
+A full-screen, real-time Schwarzschild black hole rendered per pixel from a
+custom Three.js fragment shader. React and Vite provide the application shell,
+HUD and React state; the visible image is produced entirely by numerical null
+geodesic integration, a procedural accretion disk, a lensed procedural sky,
+and an HDR post pipeline.
 
-Everything visible — event horizon, photon ring, accretion disk (including its higher-order images),
-lensed starfield and galaxy — is evaluated inside one full-screen fragment shader. Three.js supplies
-the renderer, the HDR render targets and `OrbitControls`; it never supplies the scene.
+There is no backend, login, runtime network request, remote texture, remote
+font, cubemap, video or pre-rendered frame.
 
-## Requirements
+## Quick start
 
-- Node.js 20+ (verified on v24.21.0, npm 11.19.0)
-- A WebGL 2 browser. `EXT_color_buffer_float` is used for the HDR render target; when it is missing
-  the renderer falls back to 8-bit targets and still renders.
-
-## Commands
+Requirements: Node.js 20 or newer (verified with Node 24.21.0) and npm 10+.
 
 ```bash
-npm install          # installs React, Vite and the build-time three@0.180.0 used by `npm run vendor`
-npm run dev          # Vite dev server (defaults to http://localhost:5173/)
-npm run build        # production build into dist/
-npm run preview      # serves the built dist/ on http://localhost:4173/ (strict port)
-npm run vendor       # regenerates vendor/ from node_modules/three and rewrites vendor/README.md
+# Install exactly the versions in package-lock.json
+npm ci
+
+# Development server
+npm run dev -- --host 127.0.0.1 --port 5173
+
+# Production build -> dist/
+npm run build
+
+# Static preview of dist/
+npm run preview -- --host 127.0.0.1 --port 4174
 ```
 
-`npm run preview` is the path used for the acceptance run recorded in `RESULTS.md`: build first, then
-serve `dist/` statically. No dev server is required, and nothing at runtime reaches the network.
+`dist/` is a self-contained static site. Any static file server can host it;
+`vite preview` is only a convenience. The production build was verified with
+the commands above.
 
-## Layout
+## Rendering model
 
-```
-index.html               boot shell + first-paint placeholder
-vite.config.js           aliases `three` and `three/addons/*` at vendor/ (never node_modules)
-scripts/sync-vendor.mjs  vendor/ regenerator, writes the SHA-256 table in vendor/README.md
-vendor/                  the committed Three.js ESM build graph + OrbitControls + MIT licence
-src/
-  main.jsx               React entry (no StrictMode: a second mount would create a second WebGL context)
-  App.jsx                wires store ↔ Engine ↔ HUD, bootstrap/context-loss/no-WebGL overlays, resize
-  state/schema.js        ranges, quality tiers, presets, debug views, shortcuts, clamping
-  state/store.js         subscription store; the only writer of persisted state
-  state/persistence.js   versioned localStorage (key `gargantua.state.v1`)
-  state/urlParams.js     the `?capture=1&quality=…` query contract with safe fallback
-  publicApi.js           `window.__GARGANTUA__`
-  render/Engine.js       renderer, HDR targets, bloom chain, orbit camera, context loss/restore
-  render/FullscreenPass.js
-  shaders/               noise / blackbody / geodesic / disk / sky / scene / post GLSL modules
-  ui/                    HUD, control panel, sliders, shortcut handler, procedural audio
-```
+The core is `src/render/shaders/scene.frag.glsl`.
 
-## Physics and coordinates
+- **Units and chart.** Geometric units with `G = c = 1`, mass `M = 1`; the
+  horizon is `r_s = 2M`, the photon sphere is `3M`, and the critical impact
+  parameter is `b_crit = 3√3 M`.
+- **Per-pixel geodesics.** For each camera ray, the plane through the hole is
+  found. With `u = 1/r` and `φ` measured in that plane, the exact Schwarzschild
+  null orbit equation
 
-Units are geometric: the Schwarzschild radius is `r_s = 1`, so `M = 0.5`, the horizon is at
-`r_h = 1`, the photon sphere at `r_ph = 1.5`, the ISCO at `r_isco = 3`, and the critical impact
-parameter is `b_crit = 3√3·M = 2.59807621`.
+  ```text
+  d²u/dφ² = -u + 3 M u²
+  ```
 
-Each pixel builds an observer ray from the real `PerspectiveCamera` (position, quaternion, FOV,
-aspect), then integrates the Binet form of the null geodesic equation in the orbital plane spanned by
-the camera position and that ray:
+  is integrated with classical RK4. The step tightens near the hole and is
+  also capped by the relative change of `u`; the state is `(u, du/dφ)`.
+- **Termination.** A ray is captured when `u >= 1/r_s`, escapes when
+  `u < 1/r_escape` (`r_escape = max(90M, 2.2 r_camera)`), or is classified at
+  the step budget (inside the photon sphere counts as captured, outside uses
+  the current tangent). Captured rays never sample the sky, so the horizon is
+  genuinely black.
+- **Disk intersections.** Crossings are sign changes of the physical
+  equatorial-plane coordinate along the same integrated path, located by
+  interpolation in `φ`; they are not a flat ring mesh. Crossings inside the
+  radial disk range are composited in path order, front to back, with a
+  semi-transparent emissive slab. This produces primary, secondary and higher
+  order images.
+- **Relativistic emission.** The disk temperature uses a steepened
+  Shakura-Sunyaev profile, a Planckian colour approximation, a Keplerian
+  orbital velocity, the combined Doppler and gravitational factor
+  `g = sqrt(1 - r_s/r) / (γ(1 - β·n_obs))`, and Doppler brightening. Colour is
+  evaluated at `T·g`, intensity uses `g^2.6` for a controlled cinematic HDR
+  range; this exponent is a deliberate presentation choice, not a claim of
+  bolometric `g^4` transfer.
+- **Turbulence.** Multi-octave value noise is sampled in a differentially
+  rotating disk frame, with spiral lanes and a time-varying flow. Disk
+  half-thickness controls the slab chord and opacity.
+- **Sky.** Stars, a Milky Way band, dust lanes and nebular accents are
+  procedural functions of the escaped ray direction. The same lensed escape
+  direction feeds the sky, so arcs and the compressed star ring around the
+  shadow are produced by the geodesics.
+- **Post.** Half-float scene and bloom targets, a soft-knee threshold, a
+  five-level downsample/blur chain, chromatic dispersion, exposure, an
+  ACES RRT+ODT fitted tone map, vignette, film grain, dithering and sRGB
+  encoding. The final composite is not a static image.
 
-```
-u = 1/r          u'' = -u + 3·M·u²        stepped in φ with classical RK4
-```
+## Interaction and HUD
 
-with `u(0) = 1/r_0`, `u'(0) = -dot(direction, e1) / b`, `b = r_0·|perp|`. The in-plane basis is
-`e1 = normalize(cameraPos)`, `e2 = normalize(direction - dot(direction, e1)·e1)`, so `φ` increases
-monotonically along the ray. The step length is adaptive,
-`clamp(min(mix(0.022, 0.20, smoothstep(1.5, 7, r)) · stepScale, 0.35·max(u,ε)/max(|u'|,ε)), 0.0015, 0.45)`,
-and is additionally limited so that `u` can never cross zero inside one step — before that limit
-existed, escaping rays wrapped onto the non-physical branch of the ODE and came back as false horizon
-hits, painting faint black arcs across the sky.
+- `OrbitControls` drives a `PerspectiveCamera`; its position, orientation and
+  FOV are uploaded to the shader every frame.
+- The opening view is a cinematic orbit. Dragging, zooming or changing a camera
+  slider pauses the loop without taking away control. `Space` resumes/pauses.
+- Four presets: Observer, Edge-on, Polar, Close pass. Click the preset buttons
+  or press `Shift+1` … `Shift+4`.
+- HUD: quality, debug view number/name/detail, camera and preset state, frame
+  time/FPS, all 21 controls, preset rail and keyboard reference. `H` hides or
+  shows it; on mobile it becomes a scrollable bottom drawer.
+- Keyboard shortcuts: `0`–`9` debug views, `Shift+1`–`Shift+4` presets,
+  `Space` camera loop, `H` HUD, `R` reset, `Q` cycle quality.
+- 21 live parameters: FOV, camera distance, azimuth, elevation, time rate,
+  disk inner/outer radius, disk half thickness, peak temperature, emission
+  gain, orbital velocity, turbulence amplitude/rate, star density, galaxy
+  brightness, bloom strength/threshold, exposure, vignette, film grain and
+  chromatic dispersion. Each is wired to camera or shader state; none is a
+  decorative label.
+- Settings persist under `gargantua.state.v1` in `localStorage` (versioned;
+  malformed or older payloads fall back to defaults). The reset button,
+  "RESET ALL PARAMETERS" and `R` restore defaults and clear the saved payload.
 
-A ray terminates on (1) `r ≤ r_h`, (2) `r ≥ 400` while receding, or (3) the step budget, and each
-pixel records the count and the reason so the debug views can show them.
+### Debug views
 
-The disk is intersected along the *integrated* path, not as a plane mesh: the shader isolates sign
-changes of the orbital-plane height `y(φ)` between step endpoints, refines them by Newton iteration
-on the Hermite cubic through `(u, u')`, and falls back to full cubic critical-point isolation when a
-thin disk is crossed twice inside one step. Up to `maxCrossings` roots are kept **in path order**, so
-first- and second-order images (the far side of the disk bent over the shadow, and the thin arc under
-it) are separate composited samples with their own absorption weight
-`(1 − exp(−τ)) / (1 − exp(−κ·H_ref))`.
+`0` is the final composite. `1` geodesic step count, `2` horizon/escape mask,
+`3` ordered disk crossings, `4` redshift/Doppler factor, `5` lensed sky
+direction as RGB, `6` stars and galaxy only, `7` disk emission before Doppler,
+`8` log-scaled pre-post HDR radiance, `9` impact parameter relative to
+`b_crit`. The HUD always names the current view.
 
-Disk emission uses a Shakura–Sunyaev profile, a blackbody colour at the local Doppler- and
-gravitationally-shifted temperature, and emissive turbulence that is advected by the local Keplerian
-angular velocity, so the disk is sheared by its own differential rotation. The sky is procedural:
-procedural star placement with per-star temperature and a banded galaxy, both sampled through the
-escaped-ray direction, i.e. after lensing.
+### Quality profiles
 
-Post-processing is an HDR chain: bright pass → 13-tap downsample → 9-tap additive tent upsample into a
-mip chain, then a composite pass doing chromatic aberration → exposure → ACES (Hill RRT+ODT fit) →
-vignette → film grain → dither → sRGB. Debug views `1`–`9` bypass every lens effect.
+| Profile | Internal scale | DPR cap | Geodesic steps | Disk crossings | Bloom levels |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Standard | 0.62× | 1.25 | 420 | 4 | 3 |
+| High | 0.82× | 1.6 | 820 | 6 | 4 |
+| Cinematic | 1.00× | 2.0 | 1500 | 10 | 5 |
 
-## URL capture contract
+The profiles change the actual render targets and shader budgets, not only a
+label. Resize and `devicePixelRatio` are handled by the engine; the internal
+target is capped by the active profile.
 
-```
+## Automation contract
+
+The page applies query parameters before the first capture-ready frame:
+
+```text
 ?capture=1&quality=high&preset=0&debug=0&time=12.5&hud=0
 ```
 
-| Parameter | Accepted | Notes |
-|---|---|---|
-| `capture` | `1` | freezes time, stops the cinematic loop, disables audio |
-| `quality` | `standard` \| `high` \| `cinematic` | anything else falls back to `standard` |
-| `preset` | integer `0`–`3` | |
-| `debug` | integer `0`–`9` | |
-| `time` | finite number ≥ 0, seconds | default `0`; non-finite or negative values are rejected |
-| `hud` | `0` \| `1` | |
+- `capture=1` disables the cinematic loop, freezes simulation time at `time`
+  (default `0`), and suppresses incidental motion. Invalid `quality`, `preset`,
+  `debug`, `hud` and `time` values fall back to defaults instead of failing.
+- After a successful shader compile, first composite and URL-state application,
+  `document.documentElement.dataset.gargantuaReady` is set to `"true"`.
+- `window.__GARGANTUA__` exposes `ready`, `getState()`, `setQuality(level)`,
+  `setPreset(index)`, `setDebug(index)`, `setTime(seconds)`, plus convenience
+  `getTelemetry()`, `setParam(key, value)` and `setHud(open)`.
+  The setters validate input, return an updated state snapshot, and return
+  `null` for invalid input without throwing.
 
-Rejected values never throw and never black-screen: they are recorded as `rejectedQuery` in
-`getState()` and the default is used. Once the shader has compiled and the first frame is presented,
-`document.documentElement.dataset.gargantuaReady = "true"` is set and `window.__GARGANTUA__` exposes
-`ready`, `getState()`, `setQuality(level)`, `setPreset(index)`, `setDebug(index)` and
-`setTime(seconds)`. Each setter validates its argument, returns the updated state, and returns the
-unchanged state (with `lastCommand.rejected`) for invalid input instead of throwing.
+Capture mode does not replace the renderer with a still image; it only freezes
+time and camera motion.
 
-## Controls
+## Local Three.js / vendor
 
-| Keys | Action |
-|---|---|
-| `0` – `9` | debug view (HUD shows the number and meaning) |
-| `Shift + 1` – `4` | camera preset |
-| `Space` | play / pause the cinematic camera loop |
-| `H` | show / hide HUD |
-| `R` | reset all parameters |
-| `Q` | cycle quality tier |
-| `M` | ambient audio (procedural, started only after a user gesture) |
+`vendor/three/` contains the exact runtime Three.js ESM build and OrbitControls
+addon from `three@0.186.1`; `vendor/README.md` records upstream paths, version
+and the MIT licence text location. Vite resolves the bare `three` specifier via
+`resolve.alias` to `vendor/three/three.module.js`, so no `node_modules` copy is
+bundled. `package.json` and `package-lock.json` pin React 19.3.1, Vite 8.3.4,
+the React plugin and Three 0.186.1.
 
-Dragging orbits, the wheel and pinch zoom, and both write the real camera parameters back into the
-store, so the lensed view, the persisted state and the sliders stay in agreement. The cinematic loop
-yields permanently to manual control after the first drag.
+## Layout
 
-## Parameters
+```text
+index.html
+vite.config.js
+package.json / package-lock.json
+src/
+  App.jsx                 React shell, keyboard shortcuts, engine lifecycle
+  publicApi.js            window.__GARGANTUA__ automation surface
+  state/
+    schema.js             parameters, presets, debug views, quality profiles
+    store.js              persistence, reset, telemetry
+    urlParams.js          capture/query parsing and fallbacks
+  render/
+    Engine.js             Three renderer, camera, controls, bloom, recovery
+    shaders/
+      scene.frag.glsl     Schwarzschild geodesics, disk, sky, debug views
+      fullscreen.vert.glsl
+      threshold.frag.glsl
+      downsample.frag.glsl
+      blur.frag.glsl
+      composite.frag.glsl ACES, bloom combine, lens artifacts, sRGB
+  ui/
+    Hud.jsx               observation console
+    ControlPanel.jsx      21 live parameters
+    ParamSlider.jsx
+    Overlays.jsx          boot, context-loss and error overlays
+  styles.css
+vendor/
+  three/                  pinned ESM build + OrbitControls
+  README.md               provenance / version / licence
+evidence/                 final desktop, mobile, debug, preset and recovery
+                          captures plus machine-readable acceptance reports
+```
 
-21 required controls plus `diskOpacity`, which the emission-absorption compositing needs to be
-controllable: FOV, camera distance / azimuth / elevation, time scale, disk inner and outer radius,
-half-thickness, temperature, emission, opacity, orbital speed scale, turbulence amplitude and speed,
-star density, galaxy brightness, bloom strength and threshold, exposure, vignette, film grain and
-chromatic aberration. All state — parameters, quality tier, preset, HUD visibility and debug view —
-is versioned into `localStorage` under `gargantua.state.v1`, and the HUD's **Reset all** button (or
-`R`) restores every default.
+## Verification
 
-## Quality tiers
-
-| | Standard | High | Cinematic |
-|---|---|---|---|
-| internal render scale | 0.75 | 1.0 | 1.4 |
-| max RK4 steps / ray | 200 | 360 | 620 |
-| RK4 step scale | 1.7 | 1.0 | 0.62 |
-| max disk crossings / ray | 3 | 5 | 6 |
-| bloom mip levels | 3 | 5 | 6 |
-| devicePixelRatio cap | 1.25 | 1.75 | 2.0 |
-
-Tiers change the actual GPU work, not just the label.
-
-## Licence
-
-Three.js is MIT-licensed; the full text is at `vendor/LICENSE.three`.
+See [`RESULTS.md`](RESULTS.md) for the exact commands, browser viewports,
+checks, console output and known limitations observed during this candidate's
+run. The evidence directory contains the final desktop and mobile screenshots,
+debug/preset contact sheets, context-loss and recovery captures, and the JSON
+reports from the interaction, parameter and recovery suites.

@@ -1,86 +1,98 @@
-/**
- * `window.__GARGANTUA__` — the automation surface described by the task's capture contract.
- *
- * Every method validates its input, returns the updated state, and never throws: an illegal value is
- * rejected by leaving the state unchanged and recording the reason in `lastCommand`, so a caller can
- * tell a rejection from an acceptance without try/catch.
- */
-import { DEBUG_VIEWS, PRESETS, QUALITY_LEVELS } from './state/schema.js'
-
-function snapshot(store, engine) {
-  const state = store.getState()
-  const info = engine ? engine.describe() : null
-  return {
-    ready: typeof document !== 'undefined' && document.documentElement.dataset.gargantuaReady === 'true',
-    capture: state.capture,
-    quality: state.quality,
-    preset: state.preset,
-    debug: state.debug,
-    time: state.time,
-    hudOpen: state.hudOpen,
-    cinematic: state.cinematic,
-    audio: state.audio,
-    params: { ...state.params },
-    budget: info ? info.budget : null,
-    render: info ? info.render : null,
-    rejectedQuery: state.rejectedQuery.slice(),
-    lastCommand: state.lastCommand,
-    capabilities: {
-      qualityLevels: QUALITY_LEVELS.slice(),
-      presets: PRESETS.map((preset) => preset.name),
-      debugViews: DEBUG_VIEWS.map((view) => view.name),
-    },
+// Stable automation surface. Methods validate their input and return a state
+// snapshot on success or null on rejection; they never throw.
+export function createPublicApi(store, engine) {
+  function snapshot() {
+    const state = store.getState();
+    const telemetry = engine?.getTelemetry?.() || null;
+    return {
+      ready: Boolean(engine?.ready),
+      quality: state.quality,
+      preset: state.preset,
+      debug: state.debug,
+      hudOpen: state.hudOpen,
+      playing: state.playing,
+      capture: state.capture,
+      frozen: state.frozen,
+      time: telemetry && Number.isFinite(telemetry.time) ? telemetry.time : state.time,
+      fps: telemetry && Number.isFinite(telemetry.fps) ? telemetry.fps : state.fps,
+      params: { ...state.params },
+      camera: telemetry?.camera ? { ...telemetry.camera } : null,
+      contextLost: Boolean(telemetry?.contextLost),
+      internalSize: telemetry?.internalSize ? { ...telemetry.internalSize } : null,
+      cssSize: telemetry?.cssSize ? { ...telemetry.cssSize } : null,
+    };
   }
-}
 
-export function installPublicApi(store, engine) {
-  if (typeof window === 'undefined') return
-
-  const api = {
+  return {
     get ready() {
-      return typeof document !== 'undefined' && document.documentElement.dataset.gargantuaReady === 'true'
+      return Boolean(engine?.ready);
     },
+
     getState() {
-      return snapshot(store, engine)
+      try {
+        return snapshot();
+      } catch {
+        return null;
+      }
     },
+
     setQuality(level) {
       try {
-        store.setQuality(level)
+        return store.setQuality(level) ? snapshot() : null;
       } catch {
-        // snapshot() below reports the unchanged state
+        return null;
       }
-      return snapshot(store, engine)
     },
+
     setPreset(index) {
       try {
-        store.setPreset(index)
+        return Number.isInteger(index) && store.setPreset(index) ? snapshot() : null;
       } catch {
-        // reported through lastCommand
+        return null;
       }
-      return snapshot(store, engine)
     },
+
     setDebug(index) {
       try {
-        store.setDebug(index)
+        return Number.isInteger(index) && store.setDebug(index) ? snapshot() : null;
       } catch {
-        // reported through lastCommand
+        return null;
       }
-      return snapshot(store, engine)
     },
+
     setTime(seconds) {
       try {
-        store.setTime(seconds)
+        return store.setTime(seconds) ? snapshot() : null;
       } catch {
-        // reported through lastCommand
+        return null;
       }
-      return snapshot(store, engine)
     },
-  }
 
-  Object.defineProperty(window, '__GARGANTUA__', {
-    value: api,
-    writable: false,
-    configurable: true,
-    enumerable: false,
-  })
+    setParam(key, value) {
+      try {
+        if (!Object.prototype.hasOwnProperty.call(store.getState().params, key)) return null;
+        store.setParam(key, value);
+        return snapshot();
+      } catch {
+        return null;
+      }
+    },
+
+    setHud(open) {
+      try {
+        store.setHudOpen(Boolean(open));
+        return snapshot();
+      } catch {
+        return null;
+      }
+    },
+
+    getTelemetry() {
+      try {
+        return engine?.getTelemetry?.() || null;
+      } catch {
+        return null;
+      }
+    },
+  };
 }

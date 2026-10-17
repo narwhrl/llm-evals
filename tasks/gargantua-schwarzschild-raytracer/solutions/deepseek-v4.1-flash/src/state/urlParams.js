@@ -1,87 +1,63 @@
-/**
- * The URL capture contract.
- *
- *   ?capture=1&quality=high&preset=0&debug=0&time=12.5&hud=0
- *
- * `capture=1` stops the cinematic loop, freezes simulation time at `time` (a finite, non-negative
- * number of seconds, default 0) and disables the optional audio. Every query value is validated
- * here — before the first frame is rendered — and an illegal value falls back to its default
- * instead of producing an exception or a blank canvas.
- */
-import { DEBUG_VIEWS, PRESETS, QUALITY_LEVELS } from './schema.js'
+import { PRESETS, QUALITY_PROFILES, applyPresetToParams } from './schema.js';
 
-const QUALITY_ALIASES = new Map(QUALITY_LEVELS.map((level) => [level.toLowerCase(), level]))
+const INT_RE = /^\d+$/;
+const MAX_TIME = 1_000_000;
 
-function parseFlag(value) {
-  if (value === '1' || value === 'true') return true
-  if (value === '0' || value === 'false') return false
-  return undefined
+function readInt(params, key, min, max) {
+  if (!params.has(key)) return null;
+  const raw = params.get(key);
+  if (!INT_RE.test(raw)) return NaN;
+  const value = Number(raw);
+  return value >= min && value <= max ? value : NaN;
 }
 
-function parseIndex(value, max) {
-  if (value === null || value === '') return undefined
-  if (!/^-?\d+$/.test(value.trim())) return undefined
-  const numeric = Number.parseInt(value, 10)
-  if (numeric < 0 || numeric > max) return undefined
-  return numeric
-}
+// Query parameters are a session override, never persisted. Invalid values
+// fall back to the documented defaults rather than throwing or leaving the
+// previous view in place.
+export function applyUrlState(baseState, search = '') {
+  const query = new URLSearchParams(search);
+  const state = {
+    ...baseState,
+    params: { ...baseState.params },
+    capture: false,
+    frozen: false,
+  };
 
-function parseTime(value) {
-  if (value === null || value === '') return undefined
-  const numeric = Number(value)
-  if (!Number.isFinite(numeric) || numeric < 0) return undefined
-  return numeric
-}
-
-/**
- * Parses the capture URL. Always returns a complete, safe patch: unrecognised or illegal values are
- * reported in `rejected` and simply left out, so applying the patch can never move the app out of
- * its valid range.
- */
-export function parseCaptureUrl(search) {
-  const params = new URLSearchParams(search || '')
-  const patch = {}
-  const rejected = []
-
-  const capture = parseFlag(params.get('capture'))
-  if (capture === undefined) {
-    if (params.has('capture')) rejected.push('capture')
-  } else {
-    patch.capture = capture
+  if (query.has('capture')) {
+    state.capture = query.get('capture') === '1';
   }
 
-  if (params.has('quality')) {
-    const quality = QUALITY_ALIASES.get((params.get('quality') || '').trim().toLowerCase())
-    if (quality) patch.quality = quality
-    else rejected.push('quality')
+  if (query.has('quality')) {
+    const value = query.get('quality');
+    state.quality = QUALITY_PROFILES[value] ? value : 'high';
   }
 
-  if (params.has('preset')) {
-    const preset = parseIndex(params.get('preset'), PRESETS.length - 1)
-    if (preset === undefined) rejected.push('preset')
-    else patch.preset = preset
+  if (query.has('preset')) {
+    const index = readInt(query, 'preset', 0, PRESETS.length - 1);
+    state.preset = Number.isNaN(index) ? 0 : index;
+    state.params = applyPresetToParams(state.params, state.preset);
   }
 
-  if (params.has('debug')) {
-    const debug = parseIndex(params.get('debug'), DEBUG_VIEWS.length - 1)
-    if (debug === undefined) rejected.push('debug')
-    else patch.debug = debug
+  if (query.has('debug')) {
+    const index = readInt(query, 'debug', 0, 9);
+    state.debug = Number.isNaN(index) ? 0 : index;
   }
 
-  if (params.has('time')) {
-    const time = parseTime(params.get('time'))
-    if (time === undefined) rejected.push('time')
-    else patch.time = time
+  if (query.has('hud')) {
+    const value = query.get('hud');
+    state.hudOpen = value === '1' ? true : value === '0' ? false : true;
   }
 
-  if (params.has('hud')) {
-    const hud = parseFlag(params.get('hud'))
-    if (hud === undefined) rejected.push('hud')
-    else patch.hudOpen = hud
+  if (query.has('time')) {
+    const time = Number(query.get('time'));
+    state.time = Number.isFinite(time) && time >= 0 ? Math.min(time, MAX_TIME) : 0;
   }
 
-  // `time` defaults to 0 whenever capture mode is requested without an explicit value.
-  if (patch.capture && patch.time === undefined) patch.time = 0
+  if (state.capture) {
+    // Capture frames are deterministic: no cinematic orbit, no clock advance.
+    state.playing = false;
+    state.frozen = true;
+  }
 
-  return { patch, rejected, isCapture: patch.capture === true }
+  return state;
 }
