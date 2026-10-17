@@ -28,5 +28,15 @@
       "archiveTag": "candidate/gargantua-schwarzschild-raytracer/deepseek-v4.1-flash",
       "reason": "Earlier revision at the same gallery path. Its tag and commit remain intact for audit; the gallery now serves the rerun from baseline 63a46c3."
     }]
+  }, {
+    "candidateId": "swe-2",
+    "model": "magpie/devin/swe-2",
+    "baselineMain": "63a46c3a79afa751a12eaa90f5c0f98b4b7212f1",
+    "sourceRef": "isolated-clone-worktree:.runs/gargantua-schwarzschild-raytracer/swe-2",
+    "sourceCommit": "d80ad9ef38ae057c5bf4ebc1881e8ca130c7048f",
+    "sourceTree": "9264fa55d1b3e382c60ea3ba26bf1eca5097692e",
+    "archiveTag": "candidate/gargantua-schwarzschild-raytracer/swe-2",
+    "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/swe-2",
+    "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/swe-2/RESULTS.md"
   }]
 }
