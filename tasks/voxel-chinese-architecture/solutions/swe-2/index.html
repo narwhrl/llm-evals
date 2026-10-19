@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Voxel 中式建筑群 · 山寺院落</title>
+    <style>
+      html, body { margin: 0; height: 100%; overflow: hidden; background: #1a1410; }
+      #app { width: 100%; height: 100%; }
+      #hint {
+        position: fixed; left: 14px; bottom: 12px; z-index: 5;
+        font: 12px/1.5 "SF Mono", Consolas, monospace;
+        color: rgba(255, 240, 220, 0.55); pointer-events: none;
+        letter-spacing: 0.06em;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <div id="hint">drag to orbit · scroll to zoom · 山门 → 庭院 → 大雄宝殿</div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

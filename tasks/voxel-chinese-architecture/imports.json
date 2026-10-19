@@ -36,6 +36,17 @@
       "destination": "tasks/voxel-chinese-architecture/solutions/gpt-6.1-sol",
       "resultReport": "tasks/voxel-chinese-architecture/solutions/gpt-6.1-sol/RESULTS.md",
       "note": "Generated independently without subagents or other models. Baseline differs from earlier candidates; no cross-candidate ranking is asserted. Self-inspected Kimi WebBridge evidence verifies actual 1440x900 desktop and 390x844 mobile views, plan view, dusk, orbit, drag and zoom. Six candidate tests and the production build pass; production audit reports zero known vulnerabilities. Source files and screenshots are imported without modification; exact tree equality is verified separately."
+    },
+    {
+      "candidateId": "swe-2",
+      "model": "magpie/devin/swe-2",
+      "baselineMain": "63a46c3a79afa751a12eaa90f5c0f98b4b7212f1",
+      "sourceRef": "local-worktree:.worktrees/swe2-voxel-chinese-architecture (detached)",
+      "sourceCommit": "e86a913a4904b8106486dabaf5043598e7a22259",
+      "sourceTree": "b0a1127cdae805ccc62af8530614502699831715",
+      "archiveTag": "candidate/voxel-chinese-architecture/swe-2",
+      "destination": "tasks/voxel-chinese-architecture/solutions/swe-2",
+      "resultReport": "tasks/voxel-chinese-architecture/solutions/swe-2/RESULTS.md"
     }
   ]
 }
