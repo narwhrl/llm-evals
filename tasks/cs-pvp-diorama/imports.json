@@ -1,39 +1,51 @@
 {
-  "schema": 1,
-  "taskId": "cs-pvp-diorama",
-  "candidates": [
-    {
-      "candidateId": "claude-opus-5.5",
-      "model": "anthropic/claude-opus-5-5",
-      "baselineMain": "8409ab9ad67e2999707f475ee1e871ebe0f1c7b1",
-      "sourceRef": "local-clone:.runs/cs-pvp-diorama/claude-opus-5.5 (detached, remote removed)",
-      "sourceCommit": "82e6467492021c6a9cb57c4ab8751010d297b59e",
-      "sourceTree": "010ba7e14b9f04b8e87718959912f6572397208d",
-      "archiveTag": "candidate/cs-pvp-diorama/claude-opus-5.5",
-      "destination": "tasks/cs-pvp-diorama/solutions/claude-opus-5.5",
-      "resultReport": "tasks/cs-pvp-diorama/solutions/claude-opus-5.5/RESULTS.md"
-    },
-    {
-      "candidateId": "minimax-m3.1-flash-preview",
-      "model": "minimax/MiniMax-M3.1-Flash-Preview",
-      "baselineMain": "a294b85b790330294719e0b6b0cd5c022dd72073",
-      "sourceRef": "local-clone:.runs/cs-pvp-diorama/minimax-m3.1-flash-preview (detached, remote removed)",
-      "sourceCommit": "5a00ef885d61d506cf6e5ee10a914fda6f940043",
-      "sourceTree": "9ba5b30c24162267363e1695b26292d6c3fe0a5a",
-      "archiveTag": "candidate/cs-pvp-diorama/minimax-m3.1-flash-preview",
-      "destination": "tasks/cs-pvp-diorama/solutions/minimax-m3.1-flash-preview",
-      "resultReport": "tasks/cs-pvp-diorama/solutions/minimax-m3.1-flash-preview/RESULTS.md"
-    },
-    {
-      "candidateId": "gpt-6.1-sol",
-      "model": "new-provider/gpt-6.1-sol",
-      "baselineMain": "a7bd9a780ded8c8a22c9186a045c834455835496",
-      "sourceRef": "isolated-clone-worktree:.runs/cs-pvp-diorama/gpt-6.1-sol",
-      "sourceCommit": "3d47c7ed283778c4a48ef4d19537ad0c3eb7787d",
-      "sourceTree": "408c32dd49162424d76501e911d88ecdd275f4d7",
-      "archiveTag": "candidate/cs-pvp-diorama/gpt-6.1-sol",
-      "destination": "tasks/cs-pvp-diorama/solutions/gpt-6.1-sol",
-      "resultReport": "tasks/cs-pvp-diorama/solutions/gpt-6.1-sol/RESULTS.md"
-    }
-  ]
+ "schema": 1,
+ "taskId": "cs-pvp-diorama",
+ "candidates": [
+  {
+   "candidateId": "claude-opus-5.5",
+   "model": "anthropic/claude-opus-5-5",
+   "baselineMain": "8409ab9ad67e2999707f475ee1e871ebe0f1c7b1",
+   "sourceRef": "local-clone:.runs/cs-pvp-diorama/claude-opus-5.5 (detached, remote removed)",
+   "sourceCommit": "82e6467492021c6a9cb57c4ab8751010d297b59e",
+   "sourceTree": "010ba7e14b9f04b8e87718959912f6572397208d",
+   "archiveTag": "candidate/cs-pvp-diorama/claude-opus-5.5",
+   "destination": "tasks/cs-pvp-diorama/solutions/claude-opus-5.5",
+   "resultReport": "tasks/cs-pvp-diorama/solutions/claude-opus-5.5/RESULTS.md"
+  },
+  {
+   "candidateId": "minimax-m3.1-flash-preview",
+   "model": "minimax/MiniMax-M3.1-Flash-Preview",
+   "baselineMain": "a294b85b790330294719e0b6b0cd5c022dd72073",
+   "sourceRef": "local-clone:.runs/cs-pvp-diorama/minimax-m3.1-flash-preview (detached, remote removed)",
+   "sourceCommit": "5a00ef885d61d506cf6e5ee10a914fda6f940043",
+   "sourceTree": "9ba5b30c24162267363e1695b26292d6c3fe0a5a",
+   "archiveTag": "candidate/cs-pvp-diorama/minimax-m3.1-flash-preview",
+   "destination": "tasks/cs-pvp-diorama/solutions/minimax-m3.1-flash-preview",
+   "resultReport": "tasks/cs-pvp-diorama/solutions/minimax-m3.1-flash-preview/RESULTS.md"
+  },
+  {
+   "candidateId": "gpt-6.1-sol",
+   "model": "new-provider/gpt-6.1-sol",
+   "baselineMain": "a7bd9a780ded8c8a22c9186a045c834455835496",
+   "sourceRef": "isolated-clone-worktree:.runs/cs-pvp-diorama/gpt-6.1-sol",
+   "sourceCommit": "3d47c7ed283778c4a48ef4d19537ad0c3eb7787d",
+   "sourceTree": "408c32dd49162424d76501e911d88ecdd275f4d7",
+   "archiveTag": "candidate/cs-pvp-diorama/gpt-6.1-sol",
+   "destination": "tasks/cs-pvp-diorama/solutions/gpt-6.1-sol",
+   "resultReport": "tasks/cs-pvp-diorama/solutions/gpt-6.1-sol/RESULTS.md"
+  },
+  {
+   "candidateId": "swe-2",
+   "model": "magpie/devin/swe-2",
+   "baselineMain": "63a46c3a79afa751a12eaa90f5c0f98b4b7212f1",
+   "sourceRef": "worktree:.worktrees/swe2-cs-pvp-diorama (detached at 63a46c3a79afa751a12eaa90f5c0f98b4b7212f1)",
+   "sourceCommit": "39ab8d3a89cf45bd4e77c376b979ba677792875d",
+   "sourceTree": "1a486b48947fe4febca2422d64a5029661775db5",
+   "archiveTag": "candidate/cs-pvp-diorama/swe-2",
+   "destination": "tasks/cs-pvp-diorama/solutions/swe-2",
+   "resultReport": "tasks/cs-pvp-diorama/solutions/swe-2/RESULTS.md",
+   "note": "Run without subagents or other models per the user's instruction. Visual acceptance was done by the model itself through kimi-webbridge at a verified 1440x900 viewport; orbit/drag/zoom, regional fidelity, rain/puddle/light dynamics and network loads were exercised. The candidate found and fixed lighting issues itself during acceptance (initial pass read too dark and lacked the warm-vs-cool contrast the brief asks for). Imported tree hash matches the source solution tree."
+  }
+ ]
 }
