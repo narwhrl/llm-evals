@@ -12,6 +12,17 @@
       "archiveTag": "candidate/orbital-habitat-diorama/gpt-6.1-sol",
       "destination": "tasks/orbital-habitat-diorama/solutions/gpt-6.1-sol",
       "resultReport": "tasks/orbital-habitat-diorama/solutions/gpt-6.1-sol/RESULTS.md"
+    },
+    {
+      "candidateId": "swe-2",
+      "model": "magpie/devin/swe-2",
+      "baselineMain": "63a46c3a79afa751a12eaa90f5c0f98b4b7212f1",
+      "sourceRef": "isolated-worktree:.worktrees/swe2-orbital-habitat-diorama",
+      "sourceCommit": "4b3d1185091beebd4145bcd31d50bc05986d2d0b",
+      "sourceTree": "beb15733517c0cbbd89883eab69cc3b7614f78de",
+      "archiveTag": "candidate/orbital-habitat-diorama/swe-2",
+      "destination": "tasks/orbital-habitat-diorama/solutions/swe-2",
+      "resultReport": "tasks/orbital-habitat-diorama/solutions/swe-2/RESULTS.md"
     }
   ]
 }
