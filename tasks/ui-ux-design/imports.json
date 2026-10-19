@@ -23,6 +23,17 @@
       "archiveTag": "candidate/ui-ux-design/minimax-m3.1-flash-preview",
       "destination": "tasks/ui-ux-design/solutions/minimax-m3.1-flash-preview",
       "resultReport": "tasks/ui-ux-design/solutions/minimax-m3.1-flash-preview/RESULTS.md"
+    },
+    {
+      "candidateId": "swe-2",
+      "model": "magpie/devin/swe-2",
+      "baselineMain": "63a46c3a79afa751a12eaa90f5c0f98b4b7212f1",
+      "sourceRef": "isolated-worktree:.worktrees/swe2-ui-ux-design",
+      "sourceCommit": "c1dd04fa6fab9afe4baedfac62f38747ffa9046d",
+      "sourceTree": "ca17244668bf7904e145d4d2eb3c36c55cf8fe96",
+      "archiveTag": "candidate/ui-ux-design/swe-2",
+      "destination": "tasks/ui-ux-design/solutions/swe-2",
+      "resultReport": "tasks/ui-ux-design/solutions/swe-2/RESULTS.md"
     }
   ]
 }

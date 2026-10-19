@@ -1,0 +1,218 @@
+:root {
+  --paper: #f4f0e6;
+  --paper-2: #ede7d8;
+  --rule: #cdc4ae;
+  --text: #24211c;
+  --text-dim: #6b6558;
+  --ink: #c1342a;
+  --ink-soft: rgba(193, 52, 42, 0.14);
+  --serif: "Iowan Old Style", "Palatino", "Palatino Linotype", Georgia, serif;
+  --mono: "SF Mono", "Cascadia Code", Consolas, monospace;
+  --hand: "Caveat", "Segoe Script", cursive;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--text);
+  font-family: var(--serif);
+  /* faint laid-paper texture: ruled columns + a soft vignette */
+  background-image:
+    radial-gradient(120% 90% at 50% 0%, #faf6ec 0%, var(--paper) 55%, #e9e1cd 100%),
+    repeating-linear-gradient(0deg, transparent 0 27px, rgba(120, 110, 90, 0.05) 27px 28px);
+  cursor: crosshair;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--ink-soft); }
+
+#root { position: relative; }
+
+/* the annotation canvas sits above the prose but below nothing — it is the pen */
+#ink-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none; /* events are captured on window so text stays selectable */
+}
+
+/* the live nib that follows the cursor */
+#nib {
+  position: fixed;
+  z-index: 40;
+  width: 30px;
+  height: 30px;
+  margin: -30px 0 0 -2px;
+  pointer-events: none;
+  transition: transform 0.12s ease;
+  opacity: 0.9;
+}
+#nib.down { transform: rotate(-14deg) scale(0.94); }
+@media (hover: none) { #nib { display: none; } body { cursor: auto; } }
+
+.manuscript {
+  position: relative;
+  z-index: 1;
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  /* the right margin is deliberately wide — that is where the notes live */
+  padding-right: clamp(2rem, 18vw, 12rem);
+}
+
+/* ---- masthead ---- */
+.masthead {
+  min-height: 92svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 4rem;
+}
+.kicker {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.masthead h1 {
+  font-size: clamp(2.6rem, 8vw, 5.2rem);
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  margin: 1rem 0 0;
+}
+.masthead h1 em { font-style: italic; color: var(--ink); }
+.masthead .lede {
+  margin-top: 1.6rem;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--text-dim);
+  max-width: 26rem;
+}
+.scribble-hint {
+  margin-top: 2.4rem;
+  font-family: var(--hand);
+  font-size: 1.3rem;
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.scribble-hint .arrow { animation: nudge 1.6s ease-in-out infinite; }
+@keyframes nudge { 0%,100% { transform: translateX(0);} 50% { transform: translateX(6px);} }
+@media (prefers-reduced-motion: reduce) { .scribble-hint .arrow { animation: none; } }
+
+/* ---- sections ---- */
+section { padding: 5rem 0; }
+section h2 {
+  font-size: 0.72rem;
+  font-family: var(--mono);
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 0 0 1.8rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+}
+section h2 .no { color: var(--ink); font-size: 0.8rem; }
+
+p { font-size: 1.08rem; line-height: 1.85; margin: 0 0 1.4rem; }
+p .u {
+  /* an annotatable phrase — hover underlines it, click circles it */
+  position: relative;
+  cursor: text;
+  text-decoration: underline;
+  text-decoration-color: rgba(193, 52, 42, 0.4);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+  text-decoration-style: wavy;
+  transition: background 0.25s;
+}
+p .u:hover { background: var(--ink-soft); }
+
+/* pull-quote that reads like an editor's marginal note */
+.pull {
+  font-family: var(--hand);
+  font-size: 1.7rem;
+  line-height: 1.4;
+  color: var(--ink);
+  transform: rotate(-1deg);
+  margin: 2.5rem 0;
+  max-width: 24rem;
+}
+
+/* a marginal figure: small framed "exhibit" card */
+.exhibit {
+  border: 1px solid var(--rule);
+  background: var(--paper-2);
+  padding: 1.1rem 1.2rem;
+  margin: 2rem 0;
+  font-size: 0.92rem;
+  box-shadow: 2px 3px 0 rgba(90, 80, 60, 0.12);
+  transform: rotate(0.4deg);
+}
+.exhibit .tag {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+/* the finishing colophon: your accumulated marks, counted */
+.colophon {
+  min-height: 90svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.colophon .stat {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+}
+.colophon .stat b { color: var(--ink); font-weight: 600; }
+.signoff {
+  font-family: var(--hand);
+  font-size: 2rem;
+  color: var(--ink);
+  transform: rotate(-2deg);
+  margin-top: 1.5rem;
+}
+
+.contact-line { font-family: var(--mono); font-size: 0.9rem; margin-top: 2rem; }
+.contact-line a { color: var(--text); text-decoration-color: var(--ink); }
+
+footer {
+  padding: 3rem 0 4rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  border-top: 1px solid var(--rule);
+  margin-top: 4rem;
+}
+
+/* progress ribbon: a thin ink line down the left edge that fills as you read */
+#progress {
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  z-index: 25;
+  background: linear-gradient(var(--ink) var(--p, 0%), transparent var(--p, 0%));
+}
+@media (max-width: 640px) {
+  .manuscript { padding-right: 1.5rem; }
+  .pull { transform: none; }
+}
