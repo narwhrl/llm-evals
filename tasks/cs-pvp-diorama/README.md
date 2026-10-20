@@ -6,7 +6,8 @@
 - Canonical candidate path: `tasks/cs-pvp-diorama/solution/`
 - Candidate result report: `tasks/cs-pvp-diorama/solution/RESULTS.md`
 - Prompt: [`task.md`](task.md)
-- Status: Fifteen candidates archived on `llm/cs-pvp-diorama` at `tasks/cs-pvp-diorama/solutions/<candidate-id>/`. Historical source commits and trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json); later imports are recorded in [`imports.json`](imports.json).
+- Status: Sixteen candidates archived on `llm/cs-pvp-diorama` at `tasks/cs-pvp-diorama/solutions/<candidate-id>/`. Historical source commits and trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json); later imports are recorded in [`imports.json`](imports.json).
+- Status: `minimax-m3.1-flash` (`magpie/minimax-code/MiniMax-M3.1-Flash`) was produced from the `63a46c3` baseline in an isolated worktree (`.worktrees/minimax-m3.1-flash/cs-pvp-diorama`), tagged `candidate/cs-pvp-diorama/minimax-m3.1-flash` at commit `e08f8c5` (tree `f9653f4`), and imported with a result report (RESULTS.md).
 
 ## Shared Inputs
 
