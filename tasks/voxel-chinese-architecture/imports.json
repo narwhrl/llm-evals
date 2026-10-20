@@ -47,6 +47,18 @@
       "archiveTag": "candidate/voxel-chinese-architecture/swe-2",
       "destination": "tasks/voxel-chinese-architecture/solutions/swe-2",
       "resultReport": "tasks/voxel-chinese-architecture/solutions/swe-2/RESULTS.md"
+    },
+    {
+      "candidateId": "minimax-m3.1-flash",
+      "model": "magpie/minimax-code/MiniMax-M3.1-Flash",
+      "baselineMain": "63a46c3a79afa751a12eaa90f5c0f98b4b7212f1",
+      "sourceRef": "worktree:.worktrees/minimax-m3.1-flash/voxel-chinese-architecture (detached at 63a46c3a79afa751a12eaa90f5c0f98b4b7212f1)",
+      "sourceCommit": "b125186",
+      "sourceTree": "e5bb5e62f33eb4398f319ff88fab88a1b9a3807f",
+      "archiveTag": "candidate/voxel-chinese-architecture/minimax-m3.1-flash",
+      "destination": "tasks/voxel-chinese-architecture/solutions/minimax-m3.1-flash",
+      "resultReport": "tasks/voxel-chinese-architecture/solutions/minimax-m3.1-flash/RESULTS.md",
+      "note": "Run without subagents or other models per the user's instruction. Single-model implementation and self visual review. The imported tree hash matches the source solution tree. Visual acceptance was done by the model itself in a local Chrome 153 at a verified 1440x900 viewport and a 390x844 mobile viewport, on both the dev server and the production build served at the root and under a --base sub-path."
     }
   ]
 }

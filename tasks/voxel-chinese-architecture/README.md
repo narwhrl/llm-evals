@@ -6,7 +6,8 @@
 - Canonical candidate path: `tasks/voxel-chinese-architecture/solution/`
 - Candidate result report: `tasks/voxel-chinese-architecture/solution/RESULTS.md`
 - Prompt: [`task.md`](task.md)
-- Status: Eleven candidates archived on `llm/voxel-chinese-architecture` at `tasks/voxel-chinese-architecture/solutions/<candidate-id>/`. Historical source commits and trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json); later imports are recorded in [`imports.json`](imports.json).
+- Status: Twelve candidates archived on `llm/voxel-chinese-architecture` at `tasks/voxel-chinese-architecture/solutions/<candidate-id>/`. Historical source commits and trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json); later imports are recorded in [`imports.json`](imports.json).
+- Status: `minimax-m3.1-flash` (`magpie/minimax-code/MiniMax-M3.1-Flash`) was produced from the `63a46c3` baseline in an isolated worktree (`.worktrees/minimax-m3.1-flash/voxel-chinese-architecture`), tagged `candidate/voxel-chinese-architecture/minimax-m3.1-flash` at commit `b125186` (tree `e5bb5e6`), and imported with a result report (RESULTS.md).
 
 ## Shared Inputs
 
