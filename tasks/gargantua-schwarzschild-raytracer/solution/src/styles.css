@@ -1,0 +1,640 @@
+/*
+ * GARGANTUA — the overlay.
+ *
+ * The renderer owns the whole screen. Everything here floats on top of it and
+ * stays out of the way: the title in one corner, the parameter column on the
+ * right, the shortcuts along the bottom. Nothing is opaque enough to hide the
+ * shadow or the photon ring, and everything folds away.
+ */
+
+:root {
+  --ink: #e8eef6;
+  --ink-dim: #93a3b8;
+  --ink-faint: #5d6c80;
+  --line: rgba(150, 178, 214, 0.16);
+  --line-strong: rgba(150, 178, 214, 0.32);
+  --panel: rgba(8, 12, 20, 0.78);
+  --panel-solid: rgba(8, 12, 20, 0.94);
+  --accent: #ffb26b;
+  --accent-cool: #6fd3ff;
+  --mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: #000;
+  color: var(--ink);
+  font-family: var(--mono);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.app {
+  position: fixed;
+  inset: 0;
+}
+
+.app__stage {
+  position: absolute;
+  inset: 0;
+}
+
+.app__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: grab;
+}
+
+.app__canvas:active {
+  cursor: grabbing;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Overlay frame                                                             */
+/* -------------------------------------------------------------------------- */
+
+.hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.hud > * {
+  pointer-events: auto;
+}
+
+.hud__title {
+  position: absolute;
+  top: 22px;
+  left: 26px;
+  max-width: 46vw;
+  pointer-events: none;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.9);
+}
+
+.hud__name {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: 0.42em;
+  color: var(--ink);
+}
+
+.hud__subtitle {
+  margin: 6px 0 0;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--ink-dim);
+}
+
+.hud__toggle {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  padding: 8px 14px;
+  font: inherit;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--ink-dim);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  transition: color 140ms ease, border-color 140ms ease;
+}
+
+/* The panel owns the right-hand column, so the toggle steps aside of it. */
+.hud--open .hud__toggle {
+  right: 344px;
+}
+
+.hud__toggle:hover {
+  color: var(--ink);
+  border-color: var(--line-strong);
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Status block                                                              */
+/* -------------------------------------------------------------------------- */
+
+.hud__status {
+  position: absolute;
+  top: 68px;
+  left: 26px;
+  width: 330px;
+  padding: 14px 16px 12px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  backdrop-filter: blur(16px);
+}
+
+.status__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  font-size: 11px;
+  line-height: 1.9;
+}
+
+.status__key {
+  color: var(--ink-faint);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.status__value {
+  color: var(--ink);
+  text-align: right;
+}
+
+.status__dim {
+  color: var(--ink-faint);
+}
+
+.status__note {
+  margin: 10px 0 0;
+  font-size: 10.5px;
+  line-height: 1.6;
+  color: var(--ink-dim);
+  border-top: 1px solid var(--line);
+  padding-top: 9px;
+}
+
+.status__note--dim {
+  color: var(--ink-faint);
+  border-top: none;
+  padding-top: 4px;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Presets and chips                                                         */
+/* -------------------------------------------------------------------------- */
+
+.hud__presets {
+  position: absolute;
+  top: 232px;
+  left: 26px;
+  width: 330px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.preset {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 9px 11px;
+  font: inherit;
+  text-align: left;
+  color: var(--ink-dim);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  transition: color 140ms ease, border-color 140ms ease, background 140ms ease;
+}
+
+.preset:hover {
+  color: var(--ink);
+  border-color: var(--line-strong);
+}
+
+.preset--active {
+  color: #0a0d14;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.preset__index {
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  opacity: 0.72;
+}
+
+.preset__name {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+.hud__quality,
+.hud__debug {
+  position: absolute;
+  left: 26px;
+  width: 330px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.hud__quality {
+  top: 372px;
+}
+
+.hud__debug {
+  top: 418px;
+}
+
+.chip {
+  padding: 6px 11px;
+  font: inherit;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: var(--ink-dim);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  transition: color 140ms ease, border-color 140ms ease, background 140ms ease;
+}
+
+.chip:hover {
+  color: var(--ink);
+  border-color: var(--line-strong);
+}
+
+.chip--active {
+  color: #0a0d14;
+  background: var(--accent-cool);
+  border-color: var(--accent-cool);
+}
+
+.chip--tiny {
+  min-width: 27px;
+  padding: 5px 6px;
+  text-align: center;
+}
+
+.hud__debug {
+  gap: 5px;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Parameter panel                                                           */
+/* -------------------------------------------------------------------------- */
+
+.panel {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  bottom: 22px;
+  width: 306px;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel-solid);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  backdrop-filter: blur(18px);
+  overflow: hidden;
+}
+
+.panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 15px 11px;
+  border-bottom: 1px solid var(--line);
+}
+
+.panel__title {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+.button {
+  padding: 5px 10px;
+  font: inherit;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--ink-dim);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 140ms ease, border-color 140ms ease;
+}
+
+.button:hover:not(:disabled) {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.panel__body {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 4px 15px 18px;
+}
+
+.panel__body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.panel__body::-webkit-scrollbar-thumb {
+  background: rgba(150, 178, 214, 0.22);
+  border-radius: 999px;
+}
+
+.panel__group {
+  padding: 12px 0 4px;
+  border-bottom: 1px solid var(--line);
+}
+
+.panel__group:last-child {
+  border-bottom: none;
+}
+
+.panel__groupTitle {
+  margin: 0 0 10px;
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Sliders                                                                   */
+/* -------------------------------------------------------------------------- */
+
+.slider {
+  margin-bottom: 13px;
+}
+
+.slider--disabled {
+  opacity: 0.45;
+}
+
+.slider__head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+
+.slider__label {
+  flex: 1;
+  font-size: 11px;
+  color: var(--ink-dim);
+  cursor: help;
+}
+
+.slider__value {
+  font-size: 10.5px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.slider__reset {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  font-size: 11px;
+  line-height: 1;
+  color: var(--ink-faint);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: color 140ms ease, border-color 140ms ease;
+}
+
+.slider__reset:hover:not(:disabled) {
+  color: var(--accent);
+  border-color: var(--line-strong);
+}
+
+.slider__reset:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+.slider input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 16px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.slider input[type="range"]::-webkit-slider-runnable-track {
+  height: 2px;
+  background: var(--line-strong);
+  border-radius: 999px;
+}
+
+.slider input[type="range"]::-moz-range-track {
+  height: 2px;
+  background: var(--line-strong);
+  border-radius: 999px;
+}
+
+.slider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 11px;
+  height: 11px;
+  margin-top: -4.5px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: none;
+}
+
+.slider input[type="range"]::-moz-range-thumb {
+  width: 11px;
+  height: 11px;
+  border: none;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Shortcut legend                                                           */
+/* -------------------------------------------------------------------------- */
+
+.hud__keys {
+  position: absolute;
+  left: 26px;
+  bottom: 22px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 10px;
+  color: var(--ink-faint);
+  pointer-events: none;
+}
+
+.hud__keys kbd {
+  display: inline-block;
+  min-width: 16px;
+  padding: 1px 4px;
+  text-align: center;
+  color: var(--ink-dim);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  font: inherit;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Context loss notice                                                       */
+/* -------------------------------------------------------------------------- */
+
+.lost {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(2, 4, 8, 0.82);
+  backdrop-filter: blur(6px);
+  z-index: 5;
+}
+
+.lost__card {
+  max-width: 440px;
+  padding: 26px 30px;
+  text-align: center;
+  background: var(--panel-solid);
+  border: 1px solid var(--line-strong);
+  border-radius: 14px;
+}
+
+.lost__card h2 {
+  margin: 0 0 12px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.lost__card p {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.7;
+  color: var(--ink-dim);
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Narrow screens                                                            */
+/* -------------------------------------------------------------------------- */
+
+@media (max-width: 900px) {
+  .hud__title {
+    top: 16px;
+    left: 16px;
+  }
+
+  .hud__name {
+    font-size: 15px;
+    letter-spacing: 0.3em;
+  }
+
+  .hud__subtitle {
+    display: none;
+  }
+
+  .hud__toggle {
+    top: 14px;
+    right: 14px;
+  }
+
+  /* On a phone the panel is a drawer along the bottom, so the toggle keeps
+     the top-right corner. */
+  .hud--open .hud__toggle {
+    right: 14px;
+  }
+
+  .hud__status,
+  .hud__presets,
+  .hud__quality,
+  .hud__debug {
+    left: 16px;
+    width: calc(100vw - 32px);
+  }
+
+  .hud__status {
+    top: 48px;
+    padding: 10px 12px 8px;
+  }
+
+  /* The description of the debug view is two lines of small print and the
+     screen is short; the same text is in the panel. */
+  .status__note {
+    display: none;
+  }
+
+  .hud__presets {
+    top: 122px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+
+  .preset {
+    padding: 7px 6px;
+  }
+
+  .preset__index {
+    font-size: 8px;
+    letter-spacing: 0.08em;
+  }
+
+  .preset__name {
+    font-size: 10px;
+  }
+
+  .hud__quality {
+    top: 196px;
+  }
+
+  .hud__debug {
+    top: 236px;
+  }
+
+  .panel {
+    top: auto;
+    right: 8px;
+    left: 8px;
+    bottom: 8px;
+    width: auto;
+    max-height: 52vh;
+    border-radius: 16px;
+  }
+
+  .hud__keys {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .hud__status {
+    width: calc(100vw - 32px);
+  }
+}
