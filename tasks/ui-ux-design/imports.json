@@ -34,6 +34,18 @@
       "archiveTag": "candidate/ui-ux-design/swe-2",
       "destination": "tasks/ui-ux-design/solutions/swe-2",
       "resultReport": "tasks/ui-ux-design/solutions/swe-2/RESULTS.md"
+    },
+    {
+      "candidateId": "minimax-m3.1-flash",
+      "model": "magpie/minimax-code/MiniMax-M3.1-Flash",
+      "baselineMain": "63a46c3a79afa751a12eaa90f5c0f98b4b7212f1",
+      "sourceRef": "worktree:.worktrees/minimax-m3.1-flash/ui-ux-design (detached at 63a46c3a79afa751a12eaa90f5c0f98b4b7212f1)",
+      "sourceCommit": "49fee6c",
+      "sourceTree": "34c5fa67c88b9bdf0e833da0aeb765886a60e6d9",
+      "archiveTag": "candidate/ui-ux-design/minimax-m3.1-flash",
+      "destination": "tasks/ui-ux-design/solutions/minimax-m3.1-flash",
+      "resultReport": "tasks/ui-ux-design/solutions/minimax-m3.1-flash/RESULTS.md",
+      "note": "Produced from the pinned 63a46c3 baseline in an isolated worktree. Visual acceptance ran in headless Chromium at 1440x900 and 390x844, with and without reduced motion; evidence in the archived tree."
     }
   ]
 }

@@ -7,6 +7,7 @@
 - Candidate result report: `tasks/ui-ux-design/solution/RESULTS.md`
 - Prompt: [`task.md`](task.md)
 - Status: Seventeen candidates archived on `llm/ui-ux-design` at `tasks/ui-ux-design/solutions/<candidate-id>/`. Historical source commits and trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json); later imports (including `swe-2`) are recorded in [`imports.json`](imports.json).
+- Status: `minimax-m3.1-flash` (`magpie/minimax-code/MiniMax-M3.1-Flash`) was produced from the `63a46c3` baseline in an isolated worktree (`.worktrees/minimax-m3.1-flash/ui-ux-design`), tagged `candidate/ui-ux-design/minimax-m3.1-flash` at commit `49fee6c` (tree `34c5fa6`), and imported with a result report (RESULTS.md).
 
 ## Shared Inputs
 
