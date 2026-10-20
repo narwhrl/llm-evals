@@ -5,8 +5,9 @@
 - Task ID: `voxel-waterfall`
 - Original shared baseline: `5945154ab7bd4a9e080f50f4efa4bbef472f7f4d`
 - Canonical candidate path: `tasks/voxel-waterfall/solution/`
-- Archive: Sixteen candidates on `llm/voxel-waterfall` at `tasks/voxel-waterfall/solutions/<candidate-id>/`. Original commits and source trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json).
+- Archive: Sixteen candidates on `llm/voxel-waterfall` at `tasks/voxel-waterfall/solutions/<candidate-id>/`. Historical source commits and trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json); later imports are recorded in [`imports.json`](imports.json).
 - Status: `glm-5.3-flash` was produced from the `8409ab9` baseline in an isolated clone and imported with a result report (RESULTS.md). `swe-2` was produced from the `63a46c3` baseline in an isolated worktree (`.worktrees/swe2-voxel-waterfall`), tagged `candidate/voxel-waterfall/swe-2` at commit `175da47fd5205da25684a55bbb399f011402ccb3` (tree `fcefaf92a1184e19e07619da8976831f609fa99f`), and imported with a result report (RESULTS.md).
+- Status: `minimax-m3.1-flash` (`magpie/minimax-code/MiniMax-M3.1-Flash`) was produced from the `63a46c3` baseline in an isolated worktree (`.worktrees/minimax-m3.1-flash/voxel-waterfall`), tagged `candidate/voxel-waterfall/minimax-m3.1-flash` at commit `b174dfc` (tree `14e7dff`), and imported with a result report (RESULTS.md).
 
 | Retired branch | Model | Original candidate commit |
 | --- | --- | --- |
