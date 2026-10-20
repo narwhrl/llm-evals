@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "taskId": "voxel-waterfall",
+  "candidates": [
+    {
+      "candidateId": "minimax-m3.1-flash",
+      "model": "magpie/minimax-code/MiniMax-M3.1-Flash",
+      "baselineMain": "63a46c3a79afa751a12eaa90f5c0f98b4b7212f1",
+      "sourceRef": "worktree:.worktrees/minimax-m3.1-flash/voxel-waterfall (detached at 63a46c3a79afa751a12eaa90f5c0f98b4b7212f1)",
+      "sourceCommit": "b174dfcc69968415f6aedf4693e1ff40e38ad189",
+      "sourceTree": "14e7dff718e96d287803d1def6f496382efb1244",
+      "archiveTag": "candidate/voxel-waterfall/minimax-m3.1-flash",
+      "destination": "tasks/voxel-waterfall/solutions/minimax-m3.1-flash",
+      "resultReport": "tasks/voxel-waterfall/solutions/minimax-m3.1-flash/RESULTS.md",
+      "note": "Run without subagents or other models per the user's instruction. Single-model implementation and self visual review. The imported tree hash matches the source solution tree. Visual acceptance was done by the model itself in a local Chrome 153 at a verified 1440x900 viewport and a 390x844 mobile viewport, on both the dev server and the production build served at the root and under a --base sub-path."
+    }
+  ]
+}
