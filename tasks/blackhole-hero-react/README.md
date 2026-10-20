@@ -8,6 +8,7 @@
 - Prompt: [`task.md`](task.md)
 - Original prompt: [`starter/original-prompt.md`](starter/original-prompt.md)
 - Status: `gpt-6.1-sol` (`new-provider/gpt-6.1-sol`) completed from baseline `3b8d6817086aebaad6f7850226ab50f88f5ca01b` and archived on `llm/blackhole-hero-react`. Source commits and exact tree hashes are recorded in `migration/2026-10-01.json` on the task branch; `main` contains no candidate implementation.
+- Status: `minimax-m3.1-flash` (`magpie/minimax-code/MiniMax-M3.1-Flash`) was produced from the `63a46c3` baseline in an isolated worktree (`.worktrees/minimax-m3.1-flash/blackhole-hero-react`), tagged `candidate/blackhole-hero-react/minimax-m3.1-flash` at commit `d400566` (tree `86bdf48`), and imported with a result report (RESULTS.md).
 
 ## Shared Inputs
 
