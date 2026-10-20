@@ -23,6 +23,18 @@
       "archiveTag": "candidate/orbital-habitat-diorama/swe-2",
       "destination": "tasks/orbital-habitat-diorama/solutions/swe-2",
       "resultReport": "tasks/orbital-habitat-diorama/solutions/swe-2/RESULTS.md"
+    },
+    {
+      "candidateId": "minimax-m3.1-flash",
+      "model": "magpie/minimax-code/MiniMax-M3.1-Flash",
+      "baselineMain": "63a46c3a79afa751a12eaa90f5c0f98b4b7212f1",
+      "sourceRef": "worktree:.worktrees/minimax-m3.1-flash/orbital-habitat-diorama (detached at 63a46c3a79afa751a12eaa90f5c0f98b4b7212f1)",
+      "sourceCommit": "586d885",
+      "sourceTree": "7728291a9199475006b8fb8f17d3b24961732981",
+      "archiveTag": "candidate/orbital-habitat-diorama/minimax-m3.1-flash",
+      "destination": "tasks/orbital-habitat-diorama/solutions/minimax-m3.1-flash",
+      "resultReport": "tasks/orbital-habitat-diorama/solutions/minimax-m3.1-flash/RESULTS.md",
+      "note": "Orthographic cut-away of a capsule habitat module: a real porthole cut in a swept shell, a 3D Earth with day, night and cloud maps, a 90 second orbit with the sunlight through the window, five furnished zones and every interaction the task asks for."
     }
   ]
 }

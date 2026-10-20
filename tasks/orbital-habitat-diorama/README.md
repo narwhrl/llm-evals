@@ -6,7 +6,8 @@
 - Canonical candidate path: `tasks/orbital-habitat-diorama/solution/`
 - Candidate result report: `tasks/orbital-habitat-diorama/solution/RESULTS.md`
 - Prompt: [`task.md`](task.md)
-- Status: Two candidates archived on `llm/orbital-habitat-diorama` at `tasks/orbital-habitat-diorama/solutions/<candidate-id>/`: `zcode-harness` (ZCode multi-agent harness, `7b2f86c` baseline) and `swe-2` (`magpie/devin/swe-2`, `63a46c3` baseline). The `zcode-harness` source is recorded in `migration/2026-09-30.json`; the `swe-2` import is recorded in [`imports.json`](imports.json). The exact source trees are preserved under `solutions/<candidate-id>/` with tags `candidate/orbital-habitat-diorama/<candidate-id>`.
+- Status: Four candidates archived on `llm/orbital-habitat-diorama` at `tasks/orbital-habitat-diorama/solutions/<candidate-id>/`: `zcode-harness` (ZCode multi-agent harness, `7b2f86c` baseline) and `swe-2` (`magpie/devin/swe-2`, `63a46c3` baseline). The `zcode-harness` source is recorded in `migration/2026-09-30.json`; the `swe-2` import is recorded in [`imports.json`](imports.json). The exact source trees are preserved under `solutions/<candidate-id>/` with tags `candidate/orbital-habitat-diorama/<candidate-id>`.
+- Status: `minimax-m3.1-flash` (`magpie/minimax-code/MiniMax-M3.1-Flash`) was produced from the `63a46c3` baseline in an isolated worktree (`.worktrees/minimax-m3.1-flash/orbital-habitat-diorama`), tagged `candidate/orbital-habitat-diorama/minimax-m3.1-flash` at commit `586d885` (tree `7728291`), and imported with a result report (RESULTS.md).
 
 ## Shared Inputs
 
