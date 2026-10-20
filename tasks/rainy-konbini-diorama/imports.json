@@ -122,6 +122,18 @@
       "destination": "tasks/rainy-konbini-diorama/solutions/swe-2",
       "resultReport": "tasks/rainy-konbini-diorama/solutions/swe-2/RESULTS.md",
       "note": "Pinned to main 63a46c3. tasks/rainy-konbini-diorama/task.md is byte-identical to the earlier baselines; only unrelated task docs changed. Run without subagents or other models per the user's instruction. Visual acceptance was done by the model itself through kimi-webbridge at a verified 1440x900 device-metrics viewport; production build passed and the imported solution tree hash matches the source. The candidate found and fixed three issues itself during acceptance (fascia hidden behind the roof band; interior under-lit through the glass; initial camera framed the building's side rather than the storefront)."
+    },
+    {
+      "candidateId": "minimax-m3.1-flash",
+      "model": "magpie/minimax-code/MiniMax-M3.1-Flash",
+      "baselineMain": "63a46c3a79afa751a12eaa90f5c0f98b4b7212f1",
+      "sourceRef": "worktree:.worktrees/minimax-m3.1-flash/rainy-konbini-diorama (detached at 63a46c3a79afa751a12eaa90f5c0f98b4b7212f1)",
+      "sourceCommit": "268291fe084e399579bd089053b34eddc2a2f997",
+      "sourceTree": "1da342aa268d26511b3dbc33f34f75a2221ea279",
+      "archiveTag": "candidate/rainy-konbini-diorama/minimax-m3.1-flash",
+      "destination": "tasks/rainy-konbini-diorama/solutions/minimax-m3.1-flash",
+      "resultReport": "tasks/rainy-konbini-diorama/solutions/minimax-m3.1-flash/RESULTS.md",
+      "note": "Rainy night konbini corner: cel-shaded box diorama on a square plinth with a reflective wet road, a lit furnished interior, and continuous rain."
     }
   ]
 }
