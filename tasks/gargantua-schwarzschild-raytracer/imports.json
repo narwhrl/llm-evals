@@ -1,42 +1,60 @@
 {
   "schema": 1,
   "taskId": "gargantua-schwarzschild-raytracer",
-  "candidates": [{
-    "candidateId": "gpt-6.1-sol",
-    "model": "new-provider/gpt-6.1-sol",
-    "baselineMain": "a7bd9a780ded8c8a22c9186a045c834455835496",
-    "sourceRef": "isolated-clone-worktree:.runs/gargantua-schwarzschild-raytracer/gpt-6.1-sol",
-    "sourceCommit": "c5a2e949ef0d20f3d82a5bc0e20f1a94e2fe79ea",
-    "sourceTree": "03673fe899df964ac0a6800ef8e25bb94bef3e32",
-    "archiveTag": "candidate/gargantua-schwarzschild-raytracer/gpt-6.1-sol",
-    "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/gpt-6.1-sol",
-    "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/gpt-6.1-sol/RESULTS.md"
-  }, {
-    "candidateId": "deepseek-v4.1-flash",
-    "model": "deepseek/deepseek-flash",
-    "baselineMain": "63a46c3a79afa751a12eaa90f5c0f98b4b7212f1",
-    "sourceRef": "local-worktree:.worktrees/gargantua-deepseek-v4.1-flash (branch candidate/gargantua-deepseek-v4.1-flash-2026-10)",
-    "sourceCommit": "eff2788b7853ac43bad53354deebe00446a2bdba",
-    "sourceTree": "19df9b81fe157750f7070d1eb822aebd92e0f48d",
-    "archiveTag": "candidate/gargantua-schwarzschild-raytracer/deepseek-v4.1-flash-2026-10",
-    "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/deepseek-v4.1-flash",
-    "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/deepseek-v4.1-flash/RESULTS.md",
-    "note": "From-scratch implementation from the pinned baseline, produced and accepted in an independent local worktree without reading the earlier candidate. Published under the established candidate id.",
-    "supersedes": [{
-      "sourceCommit": "703a8da77a7e2c42912ac6c438605f36ef184ba8",
-      "sourceTree": "b739129757368139fa353ed11b963464c839855c",
-      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/deepseek-v4.1-flash",
-      "reason": "Earlier revision at the same gallery path. Its tag and commit remain intact for audit; the gallery now serves the rerun from baseline 63a46c3."
-    }]
-  }, {
-    "candidateId": "swe-2",
-    "model": "magpie/devin/swe-2",
-    "baselineMain": "63a46c3a79afa751a12eaa90f5c0f98b4b7212f1",
-    "sourceRef": "isolated-clone-worktree:.runs/gargantua-schwarzschild-raytracer/swe-2",
-    "sourceCommit": "d80ad9ef38ae057c5bf4ebc1881e8ca130c7048f",
-    "sourceTree": "9264fa55d1b3e382c60ea3ba26bf1eca5097692e",
-    "archiveTag": "candidate/gargantua-schwarzschild-raytracer/swe-2",
-    "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/swe-2",
-    "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/swe-2/RESULTS.md"
-  }]
+  "candidates": [
+    {
+      "candidateId": "gpt-6.1-sol",
+      "model": "new-provider/gpt-6.1-sol",
+      "baselineMain": "a7bd9a780ded8c8a22c9186a045c834455835496",
+      "sourceRef": "isolated-clone-worktree:.runs/gargantua-schwarzschild-raytracer/gpt-6.1-sol",
+      "sourceCommit": "c5a2e949ef0d20f3d82a5bc0e20f1a94e2fe79ea",
+      "sourceTree": "03673fe899df964ac0a6800ef8e25bb94bef3e32",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/gpt-6.1-sol",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/gpt-6.1-sol",
+      "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/gpt-6.1-sol/RESULTS.md"
+    },
+    {
+      "candidateId": "deepseek-v4.1-flash",
+      "model": "deepseek/deepseek-flash",
+      "baselineMain": "63a46c3a79afa751a12eaa90f5c0f98b4b7212f1",
+      "sourceRef": "local-worktree:.worktrees/gargantua-deepseek-v4.1-flash (branch candidate/gargantua-deepseek-v4.1-flash-2026-10)",
+      "sourceCommit": "eff2788b7853ac43bad53354deebe00446a2bdba",
+      "sourceTree": "19df9b81fe157750f7070d1eb822aebd92e0f48d",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/deepseek-v4.1-flash-2026-10",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/deepseek-v4.1-flash",
+      "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/deepseek-v4.1-flash/RESULTS.md",
+      "note": "From-scratch implementation from the pinned baseline, produced and accepted in an independent local worktree without reading the earlier candidate. Published under the established candidate id.",
+      "supersedes": [
+        {
+          "sourceCommit": "703a8da77a7e2c42912ac6c438605f36ef184ba8",
+          "sourceTree": "b739129757368139fa353ed11b963464c839855c",
+          "archiveTag": "candidate/gargantua-schwarzschild-raytracer/deepseek-v4.1-flash",
+          "reason": "Earlier revision at the same gallery path. Its tag and commit remain intact for audit; the gallery now serves the rerun from baseline 63a46c3."
+        }
+      ]
+    },
+    {
+      "candidateId": "swe-2",
+      "model": "magpie/devin/swe-2",
+      "baselineMain": "63a46c3a79afa751a12eaa90f5c0f98b4b7212f1",
+      "sourceRef": "isolated-clone-worktree:.runs/gargantua-schwarzschild-raytracer/swe-2",
+      "sourceCommit": "d80ad9ef38ae057c5bf4ebc1881e8ca130c7048f",
+      "sourceTree": "9264fa55d1b3e382c60ea3ba26bf1eca5097692e",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/swe-2",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/swe-2",
+      "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/swe-2/RESULTS.md"
+    },
+    {
+      "candidateId": "minimax-m3.1-flash",
+      "model": "magpie/minimax-code/MiniMax-M3.1-Flash",
+      "baselineMain": "63a46c3a79afa751a12eaa90f5c0f98b4b7212f1",
+      "sourceRef": "worktree:.worktrees/minimax-m3.1-flash/gargantua-schwarzschild-raytracer (detached at 63a46c3a79afa751a12eaa90f5c0f98b4b7212f1)",
+      "sourceCommit": "2cbeaddedf293175496fb23f65daab5e73ca9929",
+      "sourceTree": "cc157528e4dc9d2a07be2cfd84eb60d859e6bff4",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/minimax-m3.1-flash",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/minimax-m3.1-flash",
+      "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/minimax-m3.1-flash/RESULTS.md",
+      "note": "Schwarzschild null-geodesic raytracer with analytic capture test, path-ordered disc crossings, HDR bloom and ACES chain, 24 parameters, 4 presets, 10 diagnostic views."
+    }
+  ]
 }
