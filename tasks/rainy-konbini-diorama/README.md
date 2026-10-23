@@ -8,6 +8,7 @@
 - Prompt: [`task.md`](task.md)
 - Status: Ten candidates archived on `llm/rainy-konbini-diorama` at `tasks/rainy-konbini-diorama/solutions/<candidate-id>/`: `gpt-6-sol`, `minimax-m3.1-flash-preview`, `claude-opus-5.5`, `glm-5.3`, `mimo-v2.6-flash`, `kimi-k3`, `gpt-5.6-sol`, `gpt-6.1-sol`, and `swe-2`. Source commits and trees are recorded in [`imports.json`](imports.json) on the task branch. Candidates are pinned to `main` baselines `eac83c1`, `7f83cb6`, `087676f`, `7c210c2`, `7c210c2`, `ac801cf`, `ac801cf`, `a7bd9a7`, and `63a46c3` respectively. The task prompt is byte-identical across all nine, so only the recorded provenance differs.
 - Status: `minimax-m3.1-flash` (`magpie/minimax-code/MiniMax-M3.1-Flash`) was produced from the `63a46c3` baseline in an isolated worktree (`.worktrees/minimax-m3.1-flash/rainy-konbini-diorama`), tagged `candidate/rainy-konbini-diorama/minimax-m3.1-flash` at commit `268291f` (tree `1da342a`), and imported with a result report (RESULTS.md).
+- Status: `kimi-k3.1-pro` (`kimi-code-cn/k3.1-pro`) was produced from the `b4585b3` baseline in an isolated local clone (`.runs/rainy-konbini-diorama/kimi-k3.1-pro`), tagged `candidate/rainy-konbini-diorama/kimi-k3.1-pro` at commit `acf3521` (tree `1cfa5a6`), and imported with a result report (RESULTS.md).
 
 ## Shared Inputs
 

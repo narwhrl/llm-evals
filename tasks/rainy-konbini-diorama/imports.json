@@ -134,6 +134,18 @@
       "destination": "tasks/rainy-konbini-diorama/solutions/minimax-m3.1-flash",
       "resultReport": "tasks/rainy-konbini-diorama/solutions/minimax-m3.1-flash/RESULTS.md",
       "note": "Rainy night konbini corner: cel-shaded box diorama on a square plinth with a reflective wet road, a lit furnished interior, and continuous rain."
+    },
+    {
+      "candidateId": "kimi-k3.1-pro",
+      "model": "kimi-code-cn/k3.1-pro",
+      "baselineMain": "b4585b39677a63e502e3825fb4c5ee6d4f466c24",
+      "sourceRef": "local-clone:.runs/rainy-konbini-diorama/kimi-k3.1-pro (detached at b4585b39677a63e502e3825fb4c5ee6d4f466c24, remote removed)",
+      "sourceCommit": "acf35216dbf5291cee5f4713aa45b5dc73f276bf",
+      "sourceTree": "1cfa5a6e12346f9ad9a49064ea4f530aea40bf22",
+      "archiveTag": "candidate/rainy-konbini-diorama/kimi-k3.1-pro",
+      "destination": "tasks/rainy-konbini-diorama/solutions/kimi-k3.1-pro",
+      "resultReport": "tasks/rainy-konbini-diorama/solutions/kimi-k3.1-pro/RESULTS.md",
+      "note": "Run without subagents or other model implementations. Production build and 1440x900 Kimi WebBridge visual acceptance are documented in RESULTS.md. Imported the exact source Git tree; source and destination tree hashes match."
     }
   ]
 }
