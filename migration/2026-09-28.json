@@ -684,6 +684,17 @@
       "archiveTag": "candidate/gargantua-schwarzschild-raytracer/opus-5.5",
       "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/opus-5.5",
       "hasResults": true
+    },
+    {
+      "task": "gargantua-schwarzschild-raytracer",
+      "id": "kimi-k3.1-pro",
+      "modelIdKnown": true,
+      "sourceRef": "local-clone:.runs/gargantua-schwarzschild-raytracer/kimi-k3.1-pro (detached at b4585b39677a63e502e3825fb4c5ee6d4f466c24, remote removed)",
+      "sourceCommit": "6fb01eef2229239ead501c9031b80651426d6676",
+      "sourceTree": "7aec3693d6b15c41728aa477e2e609d1f86f958c",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/kimi-k3.1-pro",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/kimi-k3.1-pro",
+      "hasResults": true
     }
   ],
   "emptyRemoteBranches": [
