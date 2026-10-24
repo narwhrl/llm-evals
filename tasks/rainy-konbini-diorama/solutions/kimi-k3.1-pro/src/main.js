@@ -1,18 +1,22 @@
 import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import './style.css';
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color('#071422');
-scene.fog = new THREE.Fog('#071422', 48, 88);
+scene.background = new THREE.Color('#07111f');
+scene.fog = new THREE.Fog('#07111f', 38, 78);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.6));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.12;
+renderer.toneMappingExposure = 1.06;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.shadowMap.autoUpdate = false;
@@ -35,6 +39,13 @@ controls.maxPolarAngle = Math.PI * 0.47;
 controls.rotateSpeed = 0.55;
 controls.zoomSpeed = 0.8;
 controls.update();
+
+const sceneTarget = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, { type: THREE.HalfFloatType, samples: 4 });
+const composer = new EffectComposer(renderer, sceneTarget);
+composer.addPass(new RenderPass(scene, camera));
+const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.24, 0.42, 0.95);
+composer.addPass(bloomPass);
+composer.addPass(new OutputPass());
 
 const world = new THREE.Group();
 scene.add(world);
@@ -62,10 +73,10 @@ const m = {
   baseTrim: toon('#294758'),
   pavement: toon('#61727b'),
   alley: new THREE.MeshStandardMaterial({ color: '#263b48', roughness: 0.3, metalness: 0.25 }),
-  road: new THREE.MeshStandardMaterial({ color: '#172c3c', roughness: 0.32, metalness: 0.28 }),
+  road: new THREE.MeshStandardMaterial({ color: '#172c3c', roughness: 0.4, metalness: 0.26 }),
   curb: toon('#a7b6b5'),
   wall: toon('#d9ddcf'),
-  innerWall: toon('#f0dfbd', { emissive: '#b87535', emissiveIntensity: 0.18 }),
+  innerWall: toon('#f0dfbd', { emissive: '#8f6b3f', emissiveIntensity: 0.12 }),
   teal: toon('#237b78'),
   darkTeal: toon('#17474f'),
   cream: toon('#f3e9cc'),
@@ -393,13 +404,21 @@ label(world, 'お弁当  •  ホットスナック', 3.3, 0.48, [-2.5, 3.08, -4
 for (const x of [-3.9, -0.8, 1.8]) {
   box(world, [1.65, 0.07, 0.42], [x, 4.79, -2.4], m.warmLight);
 }
-const indoorLightA = new THREE.PointLight('#ffad62', 52, 10, 2);
+const indoorLightA = new THREE.PointLight('#ffd29a', 42, 10, 2);
 indoorLightA.position.set(-2.7, 3.7, -2.1);
 world.add(indoorLightA);
-const indoorLightB = new THREE.PointLight('#ffbd75', 42, 8, 2);
+const indoorLightB = new THREE.PointLight('#ffdfac', 32, 8, 2);
 indoorLightB.position.set(1.5, 3.4, -1.1);
 world.add(indoorLightB);
-glow(world, [-1.5, 4.32, 0.95], '#8de7d8', 8.5, 0.12);
+glow(world, [-1.5, 4.32, 0.95], '#8de7d8', 6.5, 0.07);
+for (const [x, intensity] of [[-3.1, 28], [1.1, 24]]) {
+  const spill = new THREE.SpotLight('#ffe4b8', intensity, 9, Math.PI * 0.32, 1, 2);
+  spill.position.set(x, 2.65, 1.0);
+  spill.target.position.set(x, 0.1, 4.2);
+  world.add(spill, spill.target);
+}
+const storefrontMist = glow(world, [0, 1.0, 3.4], '#7196aa', 1, 0.045);
+storefrontMist.scale.set(13, 2.4, 1);
 
 // Rooftop equipment and exterior air conditioners.
 box(world, [1.6, 0.72, 1.05], [-3.5, 5.82, -3.8], m.metal, true);
@@ -453,6 +472,8 @@ alleyLamp.position.set(-7.8, 3.15, -0.1);
 world.add(alleyLamp);
 box(world, [0.65, 0.16, 0.35], [-7.8, 3.25, 0.05], m.warmLight);
 glow(world, [-7.8, 3.1, 0.4], '#ffbd72', 2.0, 0.25);
+const alleyMist = glow(world, [-7.7, 1.5, -2.4], '#557c91', 1, 0.035);
+alleyMist.scale.set(3.5, 4.5, 1);
 
 // Drink vending machine on the side elevation.
 function vendingMachine() {
@@ -473,7 +494,7 @@ function vendingMachine() {
   box(group, [0.3, 0.38, 0.06], [0.34, 0.48, 0.42], m.darkMetal);
   box(group, [0.11, 0.06, 0.035], [0.34, 0.55, 0.46], m.coolLight);
   box(group, [0.52, 0.18, 0.06], [-0.2, 0.23, 0.42], m.darkMetal);
-  const light = new THREE.PointLight('#ffb89b', 12, 3.5, 2);
+  const light = new THREE.PointLight('#ffb89b', 4, 3.5, 2);
   light.position.set(0, 1.5, 0.8);
   group.add(light);
   glow(group, [0, 1.45, 0.65], '#ff9d85', 2.0, 0.16);
@@ -620,17 +641,38 @@ const trafficLights = trafficColors.map((color, i) => {
 });
 label(world, '歩行者優先', 1.3, 0.36, [8.1, 2.55, -6.96], { bg: '#416f70', fg: '#f0e8cb', fontSize: 42 });
 
-// Stylized wet reflections: soft additive color, broken up by puddle geometry.
+// Broken vertical highlights follow light sources; rain and roughness interrupt their reflection.
 const reflectionCanvas = document.createElement('canvas');
 reflectionCanvas.width = 128;
-reflectionCanvas.height = 256;
+reflectionCanvas.height = 512;
 const reflectionCtx = reflectionCanvas.getContext('2d');
-const reflectionGradient = reflectionCtx.createRadialGradient(64, 128, 0, 64, 128, 126);
-reflectionGradient.addColorStop(0, 'rgba(255,255,255,0.85)');
-reflectionGradient.addColorStop(0.25, 'rgba(255,255,255,0.42)');
-reflectionGradient.addColorStop(1, 'rgba(255,255,255,0)');
-reflectionCtx.fillStyle = reflectionGradient;
-reflectionCtx.fillRect(0, 0, 128, 256);
+reflectionCtx.globalCompositeOperation = 'lighter';
+for (let i = 0; i < 72; i++) {
+  const x = rand(18, 110);
+  const y = rand(12, 500);
+  const width = rand(1, 5);
+  const height = rand(12, 82);
+  const alpha = rand(0.22, 0.75);
+  const gradient = reflectionCtx.createLinearGradient(0, y - height / 2, 0, y + height / 2);
+  gradient.addColorStop(0, 'rgba(255,255,255,0)');
+  gradient.addColorStop(0.5, `rgba(255,255,255,${alpha})`);
+  gradient.addColorStop(1, 'rgba(255,255,255,0)');
+  reflectionCtx.fillStyle = gradient;
+  reflectionCtx.fillRect(x, y - height / 2, width, height);
+}
+reflectionCtx.globalCompositeOperation = 'destination-out';
+for (let i = 0; i < 26; i++) {
+  reflectionCtx.fillStyle = `rgba(0,0,0,${rand(0.25, 0.65)})`;
+  reflectionCtx.fillRect(rand(8, 38), rand(24, 488), rand(42, 92), rand(1, 3));
+}
+reflectionCtx.globalCompositeOperation = 'destination-in';
+const reflectionEdge = reflectionCtx.createLinearGradient(0, 0, 128, 0);
+reflectionEdge.addColorStop(0, 'rgba(255,255,255,0)');
+reflectionEdge.addColorStop(0.25, 'rgba(255,255,255,1)');
+reflectionEdge.addColorStop(0.75, 'rgba(255,255,255,1)');
+reflectionEdge.addColorStop(1, 'rgba(255,255,255,0)');
+reflectionCtx.fillStyle = reflectionEdge;
+reflectionCtx.fillRect(0, 0, 128, 512);
 const reflectionMap = new THREE.CanvasTexture(reflectionCanvas);
 const reflections = [];
 function reflection(x, z, width, length, color, opacity, angle = 0) {
@@ -669,8 +711,8 @@ for (const [x, z, sx, sz] of [[-5.8, 5.0, 1.7, 0.65], [-1.8, 7.7, 1.3, 0.55], [2
 }
 
 // Lighting keeps the exterior cool while the store remains warm and legible.
-scene.add(new THREE.HemisphereLight('#91b9dd', '#172331', 1.45));
-const moon = new THREE.DirectionalLight('#a7caff', 2.15);
+scene.add(new THREE.HemisphereLight('#809fc0', '#101c2a', 0.82));
+const moon = new THREE.DirectionalLight('#91b9e8', 1.25);
 moon.position.set(-11, 19, 12);
 moon.castShadow = true;
 moon.shadow.mapSize.set(2048, 2048);
@@ -683,7 +725,7 @@ moon.shadow.camera.far = 55;
 moon.shadow.bias = -0.00035;
 moon.shadow.normalBias = 0.025;
 scene.add(moon);
-const rim = new THREE.DirectionalLight('#42a6b3', 0.75);
+const rim = new THREE.DirectionalLight('#3b8f9d', 0.95);
 rim.position.set(12, 8, -14);
 scene.add(rim);
 
@@ -704,7 +746,7 @@ for (let i = 0; i < rainCount; i++) {
 }
 const rainGeometry = new THREE.BufferGeometry();
 rainGeometry.setAttribute('position', new THREE.BufferAttribute(rainPositions, 3));
-const rainMaterial = new THREE.LineBasicMaterial({ color: '#b5d9ee', transparent: true, opacity: 0.32, depthWrite: false });
+const rainMaterial = new THREE.LineBasicMaterial({ color: '#b5d9ee', transparent: true, opacity: 0.22, depthWrite: false });
 const rain = new THREE.LineSegments(rainGeometry, rainMaterial);
 rain.frustumCulled = false;
 world.add(rain);
@@ -814,7 +856,7 @@ renderer.setAnimationLoop(() => {
     ripple.mesh.scale.set(scale, scale, scale);
     ripple.material.opacity = (1 - p) * 0.28;
   }
-  for (const item of reflections) item.material.opacity = item.opacity * (0.88 + Math.sin(elapsed * 1.7 + item.phase) * 0.12);
+  for (const item of reflections) item.material.opacity = item.opacity * (0.96 + Math.sin(elapsed * 1.7 + item.phase) * 0.06);
 
   const doorPhase = elapsed % 18;
   let doorOpen = 0;
@@ -825,20 +867,23 @@ renderer.setAnimationLoop(() => {
   rightDoor.position.x = 1.85 + doorOpen * 0.95;
 
   const flicker = 0.96 + Math.sin(elapsed * 2.1) * 0.025 - Math.pow(Math.max(0, Math.sin(elapsed * 0.47)), 32) * 0.09;
-  storeSign.material.emissiveIntensity = 0.78 * flicker;
-  indoorLightA.intensity = 52 * (0.985 + Math.sin(elapsed * 0.7) * 0.015);
+  storeSign.material.emissiveIntensity = 1.05 * flicker;
+  indoorLightA.intensity = 42 * (0.985 + Math.sin(elapsed * 0.7) * 0.015);
 
   const trafficPhase = elapsed % 16;
   const active = trafficPhase < 7 ? 2 : trafficPhase < 9 ? 1 : 0;
   trafficLights.forEach((material, i) => { material.emissiveIntensity = i === active ? 2.1 : 0.1; });
 
   controls.update();
-  renderer.render(scene, camera);
+  composer.render();
 });
 
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.6));
+  const pixelRatio = Math.min(window.devicePixelRatio, 1.6);
+  renderer.setPixelRatio(pixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
+  composer.setPixelRatio(pixelRatio);
+  composer.setSize(window.innerWidth, window.innerHeight);
 });

@@ -140,12 +140,12 @@
       "model": "magpie/kimi-code-cn/k3.1-pro",
       "baselineMain": "091c801b98342f2e778bd356e0c55b7372398541",
       "sourceRef": "worktree:.worktrees/rainy-kimi-k3.1-pro (detached at 091c801b98342f2e778bd356e0c55b7372398541)",
-      "sourceCommit": "55d6d4e11d9af18ca4e805b6ec1ccf09f9b102fa",
-      "sourceTree": "699fb633acaaa72564132499be9940a80ec79043",
-      "archiveTag": "candidate/rainy-konbini-diorama/kimi-k3.1-pro-r20261024",
+      "sourceCommit": "89e192894e1a845a4f7b088be7bd5e484b6e72ff",
+      "sourceTree": "6af7de9f99051b34cf8a99277aefebde4bae1f1f",
+      "archiveTag": "candidate/rainy-konbini-diorama/kimi-k3.1-pro-r20261025-lighting",
       "destination": "tasks/rainy-konbini-diorama/solutions/kimi-k3.1-pro",
       "resultReport": "tasks/rainy-konbini-diorama/solutions/kimi-k3.1-pro/RESULTS.md",
-      "note": "Independent rerun without subagents or other model implementations. Production build and 1440x900 Kimi WebBridge visual acceptance are documented in RESULTS.md. Imported the exact source Git tree; source and destination tree hashes match. The pre-existing candidate/rainy-konbini-diorama/kimi-k3.1-pro tag remains preserved."
+      "note": "Independent atmosphere revision using cited visual research, without subagents or other model implementations. Production build, 1440x900 visual acceptance, and a 60-second foreground animation sample are documented in RESULTS.md. Imported the exact source Git tree; source and destination tree hashes match. All pre-existing candidate and revision tags remain preserved."
     }
   ]
 }
