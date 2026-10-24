@@ -6,8 +6,9 @@
 - Gallery candidate ID: `kimi-k3.1-pro`
 - Complete model identifier: `magpie/kimi-code-cn/k3.1-pro`
 - Starting `main` commit: `091c801b98342f2e778bd356e0c55b7372398541`
-- Source tag for this revision: `candidate/rainy-konbini-diorama/kimi-k3.1-pro-r20261024`
-- The pre-existing same-name candidate tag was left unchanged. This rerun uses a revisioned source tag so the original immutable tag remains preserved.
+- Source tag for this atmosphere revision: `candidate/rainy-konbini-diorama/kimi-k3.1-pro-r20261025-lighting`
+- All pre-existing candidate and revision tags were left unchanged. This revision has a new immutable source tag.
+- Visual research and applied references: [`REFERENCES.md`](REFERENCES.md)
 
 ## Run
 
@@ -28,13 +29,13 @@ Open the printed local URL. Initialization is synchronous with module evaluation
 ## Verification Actually Run
 
 - `npm install` — passed; 12 packages installed and lockfile generated.
-- `npm ci && npm run build` — passed with Node.js `v24.21.0` and npm `11.19.0`. Final Vite build transformed 8 modules and emitted a 572.68 kB JS bundle (148.96 kB gzip). Vite reported its non-fatal chunk-size warning.
+- `npm ci && npm run build` — passed with Node.js `v24.21.0` and npm `11.19.0`. The final atmosphere build transformed 18 modules and emitted a 593.22 kB JS bundle (153.43 kB gzip). Vite reported its non-fatal chunk-size warning.
 - `npm run preview -- --port 4173` — served the production build at `http://127.0.0.1:4173/`; the server was stopped after verification.
 - Browser review used a `1440 × 900` viewport at device scale factor 1. The initial view contained the complete square base, central store, street turn, and no visible UI or people.
 - Pointer drag, wide orbit, wheel zoom-in, and wheel zoom-out were exercised. Storefront, visible interior, side vending area, reverse street corner, alley entrance, roads, roof, and base were inspected at multiple angles and distances.
-- The foreground animation session was observed for more than 120 seconds. Timed captures verified the automatic-door open phase and traffic-signal color changes; rain, eave drips, puddle ripples, glass runoff, and wet-light reflections remained active during inspection. A final material-only adjustment was then reloaded and visually rechecked.
-- Foreground frame delivery measured 563 animation frames over 5001 ms on the review machine. Background-tab throttling was excluded from this measurement.
-- Final browser error capture: `[]`. The final local request capture contained 12 completed responses, all HTTP 200, including the final HTML, JS, and CSS assets. No external asset requests were required.
+- Atmosphere-specific inspection covered readable dark areas, neutral-warm interior lighting, broad storefront spill, fragmented cyan/amber wet reflections, selective bloom, and the corrected vending-machine exposure. Reference images are not shipped with the candidate.
+- A continuous foreground sample delivered 3922 animation frames over 60005 ms with no captured errors; the page remained visible and focused throughout. A separate controlled foreground sample delivered 520 frames over 5008 ms. Browser occlusion throttling was observed during the review and excluded from these foreground measurements.
+- Final browser error capture: `[]`. The final local request capture contained 12 completed responses, all HTTP 200, including the final HTML, JS, and CSS assets. No external asset requests were required by the scene.
 
 ## Limitations and Resolved Environment Issues
 
@@ -45,7 +46,7 @@ Open the printed local URL. Initialization is synchronous with module evaluation
 
 ## Human Intervention
 
-- Initial user prompts: 1.
-- Corrective user prompts: 0.
+- Initial and follow-up user prompts: 2.
+- Refinement requests: 1.
 - Required human interventions: 0.
 - No subagents or other models were used. Existing candidate implementations and other models' implementations were not inspected.
