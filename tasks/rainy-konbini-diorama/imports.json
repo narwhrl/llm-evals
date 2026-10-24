@@ -139,13 +139,13 @@
       "candidateId": "kimi-k3.1-pro",
       "model": "magpie/kimi-code-cn/k3.1-pro",
       "baselineMain": "091c801b98342f2e778bd356e0c55b7372398541",
-      "sourceRef": "worktree:.worktrees/rainy-kimi-k3.1-pro (detached at 091c801b98342f2e778bd356e0c55b7372398541)",
-      "sourceCommit": "89e192894e1a845a4f7b088be7bd5e484b6e72ff",
-      "sourceTree": "6af7de9f99051b34cf8a99277aefebde4bae1f1f",
-      "archiveTag": "candidate/rainy-konbini-diorama/kimi-k3.1-pro-r20261025-lighting",
+      "sourceRef": "worktree:.worktrees/rainy-kimi-k3.1-pro (detached; baseline 091c801b98342f2e778bd356e0c55b7372398541)",
+      "sourceCommit": "cd51432855a7a3caffd89da8b706e5a56eab570d",
+      "sourceTree": "13ac41e5c450da3465eb2f872c3346b3a242a12d",
+      "archiveTag": "candidate/rainy-konbini-diorama/kimi-k3.1-pro-r20261025-detail",
       "destination": "tasks/rainy-konbini-diorama/solutions/kimi-k3.1-pro",
       "resultReport": "tasks/rainy-konbini-diorama/solutions/kimi-k3.1-pro/RESULTS.md",
-      "note": "Independent atmosphere revision using cited visual research, without subagents or other model implementations. Production build, 1440x900 visual acceptance, and a 60-second foreground animation sample are documented in RESULTS.md. Imported the exact source Git tree; source and destination tree hashes match. All pre-existing candidate and revision tags remain preserved."
+      "note": "Independent detail revision using cited first-party and creator references, without subagents or other candidate implementations. Focused regression test, production build, multi-angle and responsive visual acceptance, dynamic-state checks, and final performance sampling are documented in RESULTS.md. Imported the exact source Git tree; source and destination tree hashes match. All pre-existing candidate and revision tags remain preserved."
     }
   ]
 }
