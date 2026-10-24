@@ -1,35 +1,4 @@
-:root {
-  color-scheme: dark;
-  background: #080e1b;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html,
-body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  overflow: hidden;
-}
-
-body {
-  background:
-    radial-gradient(ellipse at 50% 43%, #202a46 0%, #111a30 42%, #080e1b 78%),
-    #080e1b;
-}
-
-#scene {
-  display: block;
-  width: 100%;
-  height: 100%;
-  cursor: grab;
-  touch-action: none;
-  outline: none;
-}
-
-#scene:active {
-  cursor: grabbing;
-}
+* { box-sizing: border-box; }
+html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #071422; }
+body { overscroll-behavior: none; }
+canvas { display: block; width: 100%; height: 100%; touch-action: none; outline: none; }

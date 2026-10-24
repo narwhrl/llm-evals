@@ -4,14 +4,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 127.0.0.1",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview --host 127.0.0.1"
   },
   "dependencies": {
     "three": "0.180.0"
   },
   "devDependencies": {
-    "vite": "7.1.7"
+    "vite": "6.1.0"
   }
 }

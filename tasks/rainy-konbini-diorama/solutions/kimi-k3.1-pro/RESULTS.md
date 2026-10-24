@@ -1,64 +1,51 @@
-# Candidate Result Report
+# Rainy Konbini Diorama — Result Report
 
-## Identity and Baseline
+## Provenance
 
 - Task: `rainy-konbini-diorama`
-- Candidate ID: `kimi-k3.1-pro`
-- Complete model identifier: `kimi-code-cn/k3.1-pro` (`Kimi-K3.1-Pro`)
-- Starting `main` commit: `b4585b39677a63e502e3825fb4c5ee6d4f466c24`
-- Implementation path: `tasks/rainy-konbini-diorama/solution/`
-- Runtime: Node.js `v24.21.0`, npm `11.19.0`, Three.js `0.180.0`, Vite `7.1.7`
-- Human prompts or corrections after the initial task request: `0`
-- Required human intervention for the local implementation and acceptance run: none. The existing Kimi Browser Extension was used for browser inspection.
+- Gallery candidate ID: `kimi-k3.1-pro`
+- Complete model identifier: `magpie/kimi-code-cn/k3.1-pro`
+- Starting `main` commit: `091c801b98342f2e778bd356e0c55b7372398541`
+- Source tag for this revision: `candidate/rainy-konbini-diorama/kimi-k3.1-pro-r20261024`
+- The pre-existing same-name candidate tag was left unchanged. This rerun uses a revisioned source tag so the original immutable tag remains preserved.
 
-## Build and Static Verification
+## Run
 
-Commands were run from `tasks/rainy-konbini-diorama/solution/` unless noted otherwise.
+```bash
+npm ci
+npm run dev
+```
 
-| Command | Observed result |
-| --- | --- |
-| `npm install --no-audit --no-fund` | Passed; installed 15 packages. npm printed its install-script coverage warning for `esbuild@0.25.12`; the installed binary subsequently built successfully. |
-| `npm ls --depth=0` | Passed; reported exactly `three@0.180.0` and `vite@7.1.7`. |
-| `npm run build` | Passed on the initial, framing-refined, favicon-fixed, and final trees. Final build transformed 12 modules and emitted `dist/index.html`, one CSS asset, and one JS asset in approximately 0.87 seconds. |
-| `npm ci --no-audit --no-fund` | Passed; cleanly reinstalled 15 locked packages. The same non-fatal npm install-script coverage warning was printed. |
-| `git diff --check` | Passed with no output. |
-| Secret-pattern scan of candidate source and configuration | No credential, private-key, token, password, or API-key matches. No dedicated secret scanner was installed. |
-| Placeholder/debug scan (`TODO`, `FIXME`, `console.*`, `debugger`, `placeholder`) | No matches in candidate source or documentation. |
+For a production run:
 
-Vite reports a non-fatal chunk-size warning because the self-contained Three.js bundle is approximately 582 kB minified (151 kB gzip). No warning was suppressed and no check was disabled.
+```bash
+npm run build
+npm run preview -- --port 4173
+```
 
-The shared task provides no fixed executable tests or starter test suite.
+Open the printed local URL. Initialization is synchronous with module evaluation; all geometry and textures are generated locally, with no remote assets, credentials, or initialization UI. Drag to orbit and use the wheel or pinch gesture to zoom.
 
-## Local Runtime Verification
+## Verification Actually Run
 
-- Initial command: `npm run preview -- --host 127.0.0.1 --port 4173 --strictPort`
-  - Did not start: port `4173` was already occupied by another process. This was an environment port conflict, not an application build failure. The other process was not touched.
-- Acceptance command: `npm run preview -- --host 127.0.0.1 --port 53131 --strictPort`
-  - Passed; Vite served `http://127.0.0.1:53131/` from the production `dist/` output.
-  - After acceptance, the managed npm task was stopped. Its verified Vite child process (PID 576, candidate-local `vite.js preview --host 127.0.0.1 --port 53131 --strictPort`) was also stopped, and a subsequent socket check confirmed that port `53131` was closed.
+- `npm install` — passed; 12 packages installed and lockfile generated.
+- `npm ci && npm run build` — passed with Node.js `v24.21.0` and npm `11.19.0`. Final Vite build transformed 8 modules and emitted a 572.68 kB JS bundle (148.96 kB gzip). Vite reported its non-fatal chunk-size warning.
+- `npm run preview -- --port 4173` — served the production build at `http://127.0.0.1:4173/`; the server was stopped after verification.
+- Browser review used a `1440 × 900` viewport at device scale factor 1. The initial view contained the complete square base, central store, street turn, and no visible UI or people.
+- Pointer drag, wide orbit, wheel zoom-in, and wheel zoom-out were exercised. Storefront, visible interior, side vending area, reverse street corner, alley entrance, roads, roof, and base were inspected at multiple angles and distances.
+- The foreground animation session was observed for more than 120 seconds. Timed captures verified the automatic-door open phase and traffic-signal color changes; rain, eave drips, puddle ripples, glass runoff, and wet-light reflections remained active during inspection. A final material-only adjustment was then reloaded and visually rechecked.
+- Foreground frame delivery measured 563 animation frames over 5001 ms on the review machine. Background-tab throttling was excluded from this measurement.
+- Final browser error capture: `[]`. The final local request capture contained 12 completed responses, all HTTP 200, including the final HTML, JS, and CSS assets. No external asset requests were required.
 
-## Browser Visual Acceptance
+## Limitations and Resolved Environment Issues
 
-Acceptance used Kimi Browser Extension / Kimi WebBridge against the production preview, not a substitute renderer or a source-code-only review.
+- Wet-road reflections use art-directed translucent/additive geometry and conventional material specular highlights, not ray-traced reflections.
+- The production bundle retains Vite's advisory warning for a chunk larger than 500 kB; the build succeeds and the gallery path uses the same bundle.
+- An initial `npm ci` attempt hit Windows `EPERM` because the running preview held Rollup's native module. After stopping that preview, the same clean install and build command passed.
+- No known functional failures remain.
 
-- Browser viewport: exactly `1440 × 900`, device scale factor `1`.
-- Final clean observation started at `2026-10-24T01:54:13+08:00` and continued beyond 130 seconds.
-- At final inspection, page time was approximately `130.8s`; the captured startup/runtime error array was empty.
-- The page had no visible text UI (`document.body.innerText` was empty) and no people.
-- Pointer drag/orbit and wheel zoom were exercised through browser input events. Front, side, rear, close, and full-base views were captured and inspected.
-- The initial view contained the complete square base and a readable street corner. A small framing refinement increased the lower margin before the final acceptance run.
-- The store interior was inspected through the real transparent storefront: shelves and merchandise, refrigerated drinks, prepared food and onigiri, magazines, checkout, coffee and oden stations, floor arrows, and back-room details were visible.
-- Street props and layout inspected included vending, bicycle, umbrella stand, separated bins, two parking bays, reflective crosswalks, drainage grates, guardrails, road signs, traffic signal, streetlights, utility poles and sagging wires, outdoor AC, notice board, and the alley/service buildings.
-- Continuous rain, eave drips, glass runoff, puddle rings, wet-road light reflections, sign illumination, and traffic-signal states ran during the extended session. Rain/ripple/reflection differences were visible across time-separated captures. Automatic-door motion was specifically rechecked after an earlier capture missed its opening window; the verified open-door capture occurred at page time approximately `96.5s`.
-- Final clean network capture contained the candidate HTML, JS, and CSS, all with HTTP `200`; there were no candidate asset-load failures. The only additional request was the browser extension's own injected script.
-- An earlier capture reproduced a browser-default `/favicon.ico` `404`. An inline local favicon was added, and the final clean capture confirmed that the failure no longer occurred.
-- One early browser evaluation that waited on `requestAnimationFrame` did not return in the background tab and was cancelled. Subsequent acceptance used synchronous state reads and explicit in-page timer waits; this tooling issue did not produce an application error.
+## Human Intervention
 
-Screenshot evidence is preserved in the isolated run's `artifacts/` directory, outside the imported solution tree: `initial-final.png`, `inspection-close.png`, `inspection-front.png`, `door-open-verified.png`, and `rear-full.png`.
-
-## Known Limitations
-
-- Acceptance was performed in the available Chromium browser at a desktop viewport. Safari, Firefox, mobile devices, and reduced-motion behavior were not separately evaluated.
-- Visual evidence consists of live-browser observations and time-separated viewport screenshots, not a video or automated pixel-by-pixel motion test.
-- Wet reflections are stylized procedural geometry and additive textures, not a physically accurate planar or ray-traced reflection pass.
-- The non-fatal bundle-size and npm install-script coverage warnings remain as reported above.
+- Initial user prompts: 1.
+- Corrective user prompts: 0.
+- Required human interventions: 0.
+- No subagents or other models were used. Existing candidate implementations and other models' implementations were not inspected.

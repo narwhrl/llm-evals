@@ -137,15 +137,15 @@
     },
     {
       "candidateId": "kimi-k3.1-pro",
-      "model": "kimi-code-cn/k3.1-pro",
-      "baselineMain": "b4585b39677a63e502e3825fb4c5ee6d4f466c24",
-      "sourceRef": "local-clone:.runs/rainy-konbini-diorama/kimi-k3.1-pro (detached at b4585b39677a63e502e3825fb4c5ee6d4f466c24, remote removed)",
-      "sourceCommit": "acf35216dbf5291cee5f4713aa45b5dc73f276bf",
-      "sourceTree": "1cfa5a6e12346f9ad9a49064ea4f530aea40bf22",
-      "archiveTag": "candidate/rainy-konbini-diorama/kimi-k3.1-pro",
+      "model": "magpie/kimi-code-cn/k3.1-pro",
+      "baselineMain": "091c801b98342f2e778bd356e0c55b7372398541",
+      "sourceRef": "worktree:.worktrees/rainy-kimi-k3.1-pro (detached at 091c801b98342f2e778bd356e0c55b7372398541)",
+      "sourceCommit": "55d6d4e11d9af18ca4e805b6ec1ccf09f9b102fa",
+      "sourceTree": "699fb633acaaa72564132499be9940a80ec79043",
+      "archiveTag": "candidate/rainy-konbini-diorama/kimi-k3.1-pro-r20261024",
       "destination": "tasks/rainy-konbini-diorama/solutions/kimi-k3.1-pro",
       "resultReport": "tasks/rainy-konbini-diorama/solutions/kimi-k3.1-pro/RESULTS.md",
-      "note": "Run without subagents or other model implementations. Production build and 1440x900 Kimi WebBridge visual acceptance are documented in RESULTS.md. Imported the exact source Git tree; source and destination tree hashes match."
+      "note": "Independent rerun without subagents or other model implementations. Production build and 1440x900 Kimi WebBridge visual acceptance are documented in RESULTS.md. Imported the exact source Git tree; source and destination tree hashes match. The pre-existing candidate/rainy-konbini-diorama/kimi-k3.1-pro tag remains preserved."
     }
   ]
 }
