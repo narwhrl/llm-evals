@@ -24,29 +24,42 @@ Research date: 2026-10-25. No reference image is shipped as a texture or copied 
    Direct inspection shows fine rain streaks and the strongest warm reflections concentrated beneath their sources, with darker pavement outside those pools.
    **Applied as:** reduced uniform rain brightness and stronger source-to-ground reflection alignment.
 
+5. **DyDo — official vending machine guide and use illustrations**
+   <https://www.dydo.co.jp/vendingmachine-guide/en/>
+   The manufacturer’s guide and inspection of its product-display, selection-button, payment, and pickup illustrations show distinct product/price rows, selection controls, coin and cashless payment areas, and a low retrieval flap.
+   **Applied as:** individual product caps and bands, price strips, circular selection buttons, payment/change panels, a retrieval flap, side ventilation, door hardware, and grounded feet.
+
+6. **Panasonic Cycle — official basket and mudguard catalogs**
+   <https://cycle.panasonic.com/accessories/basket/archive/>
+   <https://cycle.panasonic.com/accessories/mudguard/>
+   Direct inspection of the manufacturer’s product images shows open metal basket grids and curved mudguards following the upper wheel arc.
+   **Applied as:** a rod-built open basket with bottom grid and supports, plus partial-torus mudguards and axle stays on the bicycle.
+
+7. **Tokyo Metropolitan Police Department — official Japanese traffic rules**
+   <https://www.keishicho.metro.tokyo.jp/kotsu/jikoboshi/torikumi/kotsu_joho/foreigner.files/japan_traffic_rules_japanese.pdf>
+   The official traffic-signal material presents the vehicle signal as a horizontal three-lens unit.
+   **Applied as:** a horizontal green/yellow/red housing at the side-road edge with lens visors, rather than a vertical three-light stack.
+
 ## Rendering references
 
-5. **Three.js — `UnrealBloomPass`**
+8. **Three.js — `UnrealBloomPass`**
    <https://threejs.org/docs/pages/UnrealBloomPass.html>
    The pass builds a mip chain for blurred highlight contributions; threshold controls which bright areas contribute.
    **Applied as:** restrained bloom (`strength 0.24`, `radius 0.42`, initial threshold `0.95`) so lamps glow without washing out toon outlines.
-
-6. **Three.js — `OutputPass` and `EffectComposer`**
+9. **Three.js — `OutputPass` and `EffectComposer`**
    <https://threejs.org/docs/pages/OutputPass.html>
    <https://threejs.org/docs/pages/EffectComposer.html>
    `OutputPass` applies the renderer's tone mapping and color-space conversion and belongs at the end of the chain.
    **Applied as:** `RenderPass → UnrealBloomPass → OutputPass`, with composer resize handling matching the renderer.
-
-7. **Three.js — `RenderTarget.samples`**
+10. **Three.js — `RenderTarget.samples`**
    <https://threejs.org/docs/pages/RenderTarget.html>
    The documented `samples` option controls MSAA on offscreen render targets.
    **Applied as:** four-sample half-float scene target so postprocessing does not throw away edge antialiasing.
-
-8. **Three.js — `SpotLight`**
+11. **Three.js — `SpotLight`**
    <https://threejs.org/docs/pages/SpotLight.html>
    `angle` and `penumbra` control cone spread and edge softness; intensity uses candela and physical decay defaults to 2.
    **Applied as:** broad, fully penumbral storefront lights with physical decay, approximating the large soft window source without a shadowed point hotspot.
 
 ## Scope
 
-No people, interface elements, external image dependencies, brand logos, or new scene props are introduced by this revision. The changes are limited to lighting, atmosphere, wet-reflection rendering, and the supporting render pipeline.
+No people, interface elements, external image dependencies, or copied brand logos are introduced. This revision reconstructs the construction, packaging, mounting, drainage, grounding, and wiring details of the task-listed street and store components; the third utility pole terminates the existing side-road cables.
