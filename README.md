@@ -20,7 +20,6 @@ This repository compares coding models under the same task, context, tools, and 
 | `voxel-chinese-architecture` | [`tasks/voxel-chinese-architecture/`](tasks/voxel-chinese-architecture/) | `llm/voxel-chinese-architecture` |
 | `gargantua-schwarzschild-raytracer` | [`tasks/gargantua-schwarzschild-raytracer/`](tasks/gargantua-schwarzschild-raytracer/) | `llm/gargantua-schwarzschild-raytracer` |
 | `orbital-habitat-diorama` | [`tasks/orbital-habitat-diorama/`](tasks/orbital-habitat-diorama/) | No archived candidates |
-| `blackhole-hero-react` | [`tasks/blackhole-hero-react/`](tasks/blackhole-hero-react/) | `llm/blackhole-hero-react` |
 
 ## Repository and Worktree Layout
 
