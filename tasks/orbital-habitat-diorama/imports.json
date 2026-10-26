@@ -62,6 +62,18 @@
       "destination": "tasks/orbital-habitat-diorama/solutions/deepseek-v4.1-flash",
       "resultReport": "tasks/orbital-habitat-diorama/solutions/deepseek-v4.1-flash/RESULTS.md",
       "note": "Orthographic cut-away capsule with a real porthole opening cut in an extruded shell, a 3D Earth per porthole behind a stencil mask, procedural textures for every surface, six furnished zones, and every interaction the task asks for. Screen-space porthole clearance keeps wall fittings out of the glass across the first view and every focus framing."
+    },
+    {
+      "candidateId": "gpt-6-astra",
+      "model": "gpt-6-astra",
+      "baselineMain": "091c801b98342f2e778bd356e0c55b7372398541",
+      "sourceRef": "isolated-clone-worktree:.worktree/orbital-gpt-6-astra",
+      "sourceCommit": "4debb0b88532b4aa5ff2dea8d98c956b037bcfaf",
+      "sourceTree": "fde8a5ac4486734a9995acd9f57b11fde39fdd81",
+      "archiveTag": "candidate/orbital-habitat-diorama/gpt-6-astra",
+      "destination": "tasks/orbital-habitat-diorama/solutions/gpt-6-astra",
+      "resultReport": "tasks/orbital-habitat-diorama/solutions/gpt-6-astra/RESULTS.md",
+      "note": "Model field records the user-supplied evaluation identifier; the exact backend build identifier is not exposed. Verification details and limitations are in RESULTS.md."
     }
   ]
 }

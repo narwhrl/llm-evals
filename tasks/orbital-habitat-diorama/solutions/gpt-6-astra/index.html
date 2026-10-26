@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b131e" />
+    <link rel="icon" href="data:," />
+    <title>Orbital Home / Habitat 04</title>
+    <style>
+      * { box-sizing: border-box; }
+      html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+      body { background: radial-gradient(ellipse at 50% 44%, #243642 0%, #111e2b 48%, #080f1a 100%); }
+      canvas { display: block; width: 100%; height: 100%; touch-action: none; outline: none; }
+      #error { display: none; color: #f4e7cc; padding: 3rem; font: 18px/1.6 monospace; }
+    </style>
+  </head>
+  <body>
+    <canvas aria-label="Interactive orbital habitat miniature. Drag to orbit, scroll to zoom. Click furnishings to focus, the window to accelerate time, the grow light or floor strip to toggle them. Escape returns home." tabindex="0"></canvas>
+    <div id="error" role="alert"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

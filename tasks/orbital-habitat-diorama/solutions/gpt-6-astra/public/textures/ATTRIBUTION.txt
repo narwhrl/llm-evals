@@ -1,0 +1,18 @@
+Earth textures by Solar System Scope / INOVE.
+License: Creative Commons Attribution 4.0 International (CC BY 4.0).
+https://creativecommons.org/licenses/by/4.0/
+
+Texture catalog and license statement:
+https://www.solarsystemscope.com/textures/
+https://ssi.solarsystemscope.com/textures/
+
+Original downloads, stored unchanged under shorter local filenames:
+earth-day.jpg:
+https://www.solarsystemscope.com/textures/download/2k_earth_daymap.jpg
+earth-night.jpg:
+https://www.solarsystemscope.com/textures/download/2k_earth_nightmap.jpg
+earth-clouds.jpg:
+https://www.solarsystemscope.com/textures/download/2k_earth_clouds.jpg
+
+The application combines these maps in a custom lighting shader. The source
+JPEG files are unmodified. All three are 2048 x 1024 equirectangular maps.
