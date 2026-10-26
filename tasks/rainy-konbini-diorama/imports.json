@@ -146,6 +146,18 @@
       "destination": "tasks/rainy-konbini-diorama/solutions/kimi-k3.1-pro",
       "resultReport": "tasks/rainy-konbini-diorama/solutions/kimi-k3.1-pro/RESULTS.md",
       "note": "Independent detail revision using cited first-party and creator references, without subagents or other candidate implementations. Focused regression test, production build, multi-angle and responsive visual acceptance, dynamic-state checks, and final performance sampling are documented in RESULTS.md. Imported the exact source Git tree; source and destination tree hashes match. All pre-existing candidate and revision tags remain preserved."
+    },
+    {
+      "candidateId": "deepseek-v4.1-flash",
+      "model": "deepseek-v4.1-flash (DeepSeek Harness, devin/deepseek-v4-1-flash-1017)",
+      "baselineMain": "091c801b98342f2e778bd356e0c55b7372398541",
+      "sourceRef": "worktree:.worktrees/rainy-deepseek-v4.1-flash (detached; baseline 091c801b98342f2e778bd356e0c55b7372398541)",
+      "sourceCommit": "c207635373b65be76abb89c1dd9aff93e2b9236d",
+      "sourceTree": "852f9d282533e01eed86590d7dac06f2b0f21faa",
+      "archiveTag": "candidate/rainy-konbini-diorama/deepseek-v4.1-flash",
+      "destination": "tasks/rainy-konbini-diorama/solutions/deepseek-v4.1-flash",
+      "resultReport": "tasks/rainy-konbini-diorama/solutions/deepseek-v4.1-flash/RESULTS.md",
+      "note": "Pinned to main 091c801 (same baseline as kimi-k3.1-pro). tasks/rainy-konbini-diorama/task.md is byte-identical to the earlier baselines; only unrelated task docs changed. Built from zero with no starter project; run without subagents or other models per the user's instruction. Imported the exact source Git tree with git read-tree; source and destination tree hashes match (852f9d2), and all 20 file blob hashes are identical. Visual acceptance was done by the model itself through a hand-written Chrome DevTools Protocol driver at a verified 1440x900 viewport, reading frames back from the WebGL canvas rather than via Page.captureScreenshot, which intermittently returns black frames in headless Chrome. RESULTS.md records the twelve captured views with per-view luminance statistics, real pointer drag and wheel zoom, and a 66-second motion soak covering all four traffic-signal phases and full door open/close cycles. The candidate found and fixed six defects itself during acceptance; the most significant was a whole-frame blackout at low camera heights, traced to reversed-edge smoothstep calls (undefined in GLSL) returning NaN in the glass-runoff shader, which UnrealBloomPass then smeared across the entire frame."
     }
   ]
 }
