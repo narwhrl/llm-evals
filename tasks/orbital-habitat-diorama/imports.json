@@ -35,6 +35,17 @@
       "destination": "tasks/orbital-habitat-diorama/solutions/minimax-m3.1-flash",
       "resultReport": "tasks/orbital-habitat-diorama/solutions/minimax-m3.1-flash/RESULTS.md",
       "note": "Orthographic cut-away of a capsule habitat module: a real porthole cut in a swept shell, a 3D Earth with day, night and cloud maps, a 90 second orbit with the sunlight through the window, five furnished zones and every interaction the task asks for."
+    },
+    {
+      "candidateId": "kimi-k3.1-pro",
+      "model": "magpie/kimi-code-cn/k3.1-pro",
+      "baselineMain": "091c801b98342f2e778bd356e0c55b7372398541",
+      "sourceRef": "worktree:.worktrees/orbital-kimi-k3.1-pro (detached at 091c801b98342f2e778bd356e0c55b7372398541)",
+      "sourceCommit": "3f7d317e797354bc27e7af5893dce386c0e4fc97",
+      "sourceTree": "a16f007bef5d76466c807d1689f4252742e9955a",
+      "archiveTag": "candidate/orbital-habitat-diorama/kimi-k3.1-pro",
+      "destination": "tasks/orbital-habitat-diorama/solutions/kimi-k3.1-pro",
+      "resultReport": "tasks/orbital-habitat-diorama/solutions/kimi-k3.1-pro/RESULTS.md"
     }
   ]
 }
