@@ -1,10 +1,7 @@
 import * as THREE from "three";
+import { portholeDefinitions, wallZ } from "./habitat.js";
 
-const portalDefinitions = [
-  { x: 1.35, y: 1.64, radius: 1.025, opening: 0.57, pitch: 0.025, scale: 2.5 },
-  { x: -3.12, y: 1.46, radius: 0.405, opening: 0.47, pitch: -0.18, scale: 2.3 },
-  { x: -1.35, y: 1.68, radius: 0.405, opening: 0.53, pitch: 0.10, scale: 2.2 },
-];
+const portalDefinitions = portholeDefinitions.map(({ x, y, r, angle }) => ({ x, y, radius: r, angle }));
 
 export function createEnvironment(scene, renderer) {
   const loader = new THREE.TextureLoader();
@@ -87,7 +84,8 @@ export function createEnvironment(scene, renderer) {
     const material = new THREE.MeshBasicMaterial({ map: renderTarget.texture, toneMapped: false });
     const object = new THREE.Mesh(new THREE.CircleGeometry(definition.radius * 0.97, 96), material);
     object.name = `Earth portal ${definition.x}`;
-    object.position.set(definition.x, definition.y, -2.045);
+    object.position.set(definition.x, definition.y, wallZ(definition.x) + 0.062);
+    object.rotation.y = definition.angle;
     object.renderOrder = 2;
     scene.add(object);
     return { object, definition, material, renderTarget, portalCamera };
@@ -112,7 +110,7 @@ export function createEnvironment(scene, renderer) {
   const stripLight = new THREE.PointLight("#ffd9a0", 1.6, 7.5, 1.2);
   stripLight.position.set(0.3, 0.42, 0.48); scene.add(stripLight);
   const earthRim = new THREE.PointLight("#609ee8", 2.5, 5, 1.3);
-  earthRim.position.set(1.35, 1.64, -1.89); scene.add(earthRim);
+  earthRim.position.set(portholeDefinitions[0].x, portholeDefinitions[0].y, -1.89); scene.add(earthRim);
   const floorBounce = new THREE.PointLight("#abc7c4", 0.7, 6, 1.2);
   floorBounce.position.set(0, 1.5, 2.7); scene.add(floorBounce);
 
