@@ -44,6 +44,10 @@
       "sourceCommit": "3f7d317e797354bc27e7af5893dce386c0e4fc97",
       "sourceTree": "a16f007bef5d76466c807d1689f4252742e9955a",
       "archiveTag": "candidate/orbital-habitat-diorama/kimi-k3.1-pro",
+      "revisionCommit": "ceed7c03c2727ea681636c3dabb1b0bb3d2cd1ed",
+      "revisionTree": "f68a5af03594ad123d00cd053358fea0409d1af9",
+      "revisionTag": "candidate/orbital-habitat-diorama/kimi-k3.1-pro-r2",
+      "revisionSource": "worktree:.worktrees/orbital-kimi-k3.1-pro-revision (detached at original candidate 3f7d317e797354bc27e7af5893dce386c0e4fc97)",
       "destination": "tasks/orbital-habitat-diorama/solutions/kimi-k3.1-pro",
       "resultReport": "tasks/orbital-habitat-diorama/solutions/kimi-k3.1-pro/RESULTS.md"
     }
