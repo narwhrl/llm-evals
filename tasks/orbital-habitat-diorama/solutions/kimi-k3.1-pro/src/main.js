@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { makeTextures } from "./materials.js";
-import { createHabitat, makeMaterials } from "./habitat.js";
+import { createHabitat, makeMaterials, portholeDefinitions, wallZ } from "./habitat.js";
 import { createFurniture } from "./furniture.js";
 import { createEnvironment } from "./environment.js";
 import { batchStaticMeshes } from "./geometry.js";
@@ -301,7 +301,7 @@ Object.defineProperty(window, "__habitat", {
       };
       return {
         fixtures: Object.fromEntries([...targets].map(([id, target]) => [id, project(target.point)])),
-        porthole: project(new THREE.Vector3(1.35, 1.64, -1.95)),
+        porthole: project(new THREE.Vector3(portholeDefinitions[0].x, portholeDefinitions[0].y, wallZ(portholeDefinitions[0].x) + 0.1)),
         plantLight: project(fixtures.plants.group.localToWorld(new THREE.Vector3(0, 1.56, 0))),
         floorStrip: project(new THREE.Vector3(-0.2, 0.09, 0.63)),
       };

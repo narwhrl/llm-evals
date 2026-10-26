@@ -95,37 +95,132 @@ export function makeMaterials(textures) {
   };
 }
 
-function makeWall(materials) {
+const wallHeight = (x) => 2.55 * Math.sqrt(1 - (x / 4) ** 4);
+const wallAngle = (x) => -Math.atan(0.275 * x / 4);
+
+export const portholeDefinitions = [
+  { x: 1.35, y: 1.40, r: 0.82 },
+  { x: -3.12, y: 1.36, r: 0.405 },
+  { x: -1.35, y: 1.68, r: 0.405 },
+].map((hole) => ({ ...hole, angle: wallAngle(hole.x) }));
+
+function annulus(parent, material, innerRadius, outerRadius, depth, position, segments = 96) {
   const shape = new THREE.Shape();
-  shape.moveTo(4, 0);
-  for (let i = 1; i <= 64; i++) {
-    const angle = (i / 64) * Math.PI;
-    shape.lineTo(Math.cos(angle) * 4, Math.sin(angle) * 2.55);
+  shape.absarc(0, 0, outerRadius, 0, Math.PI * 2, false);
+  const hole = new THREE.Path();
+  hole.absarc(0, 0, innerRadius, 0, Math.PI * 2, true);
+  shape.holes.push(hole);
+  const geometry = new THREE.ExtrudeGeometry(shape, {
+    depth,
+    bevelEnabled: false,
+    curveSegments: segments,
+  });
+  geometry.translate(0, 0, -depth / 2);
+  return mesh(parent, geometry, material, ...position);
+}
+
+function makeWall(materials) {
+  const group = new THREE.Group();
+  const holes = portholeDefinitions;
+  const shape = new THREE.Shape();
+  shape.moveTo(-4, 0);
+  for (let i = 0; i <= 128; i++) {
+    const x = -4 + i / 128 * 8;
+    shape.lineTo(x, wallHeight(x));
   }
   shape.lineTo(4, 0);
-  const holes = [
-    { x: 1.35, y: 1.64, r: 1.025 },
-    { x: -3.12, y: 1.46, r: 0.405 },
-    { x: -1.35, y: 1.68, r: 0.405 },
-  ];
+  shape.closePath();
   for (const hole of holes) {
     const path = new THREE.Path();
-    path.absarc(hole.x, hole.y, hole.r, 0, Math.PI * 2, true);
+    path.absellipse(hole.x, hole.y, hole.r * Math.cos(hole.angle), hole.r, 0, Math.PI * 2, true);
     shape.holes.push(path);
   }
-  const geometry = new THREE.ExtrudeGeometry(shape, { depth: 0.14, bevelEnabled: true, bevelSegments: 1, steps: 1, bevelSize: 0.025, bevelThickness: 0.018, curveSegments: 64 });
+  const geometry = new THREE.ExtrudeGeometry(shape, {
+    depth: 0.14,
+    bevelEnabled: true,
+    bevelSegments: 1,
+    steps: 1,
+    bevelSize: 0.005,
+    bevelThickness: 0.005,
+    curveSegments: 64,
+  });
   geometry.translate(0, 0, -0.14);
-  const group = new THREE.Group();
-  mesh(group, geometry, materials.wall, 0, 0, -2.1);
+  const positions = geometry.attributes.position;
+  for (let i = 0; i < positions.count; i++) {
+    const x = positions.getX(i);
+    positions.setZ(i, positions.getZ(i) + wallZ(x) + 0.14);
+  }
+  geometry.computeVertexNormals();
+  mesh(group, geometry, materials.wall);
+
+  for (const x of [-3.57, -2.45, -1.95, -0.73, 0, 2.65, 3.46]) {
+    const points = [];
+    for (let i = 0; i <= 16; i++) {
+      const y = 0.08 + i / 16 * (wallHeight(x) - 0.15);
+      points.push([x, y, wallZ(x) + 0.006]);
+    }
+    tube(group, materials.trim, points, 0.006, false);
+    for (const y of [0.17, wallHeight(x) - 0.13]) {
+      box(group, materials.ivory, [0.07, 0.105, 0.023], [x, y, wallZ(x) + 0.013], 0.005);
+      cylinder(group, materials.dark, 0.012, 0.012, [x, y, wallZ(x) + 0.03], [Math.PI / 2, 0, 0], 6);
+    }
+  }
+
+  const liningMaterial = materials.trim.clone();
+  liningMaterial.side = THREE.DoubleSide;
   for (const hole of holes) {
-    torus(group, materials.trim, hole.r + 0.06, hole.r > 0.8 ? 0.105 : 0.05, [hole.x, hole.y, -2.072]);
-    torus(group, materials.rubber, hole.r + 0.004, 0.026, [hole.x, hole.y, -2.053]);
-    torus(group, materials.ivory, hole.r + (hole.r > 0.8 ? 0.175 : 0.09), hole.r > 0.8 ? 0.065 : 0.036, [hole.x, hole.y, -2.03]);
-    const count = hole.r > 0.8 ? 24 : 12;
+    const large = hole.r > 0.8;
+    const mount = new THREE.Group();
+    mount.position.set(hole.x, hole.y, wallZ(hole.x) + 0.065);
+    mount.rotation.y = hole.angle;
+    group.add(mount);
+    const liner = new THREE.CylinderGeometry(hole.r, hole.r, 0.3, 96, 1, true);
+    liner.rotateX(Math.PI / 2);
+    mesh(mount, liner, liningMaterial, 0, 0, -0.08);
+    annulus(mount, materials.shell, hole.r - 0.035, hole.r + 0.095, 0.25, [0, 0, -0.095]);
+    annulus(mount, materials.dark, hole.r + 0.045, hole.r + (large ? 0.255 : 0.15), 0.042, [0, 0, 0.048]);
+    annulus(mount, materials.trim, hole.r + 0.065, hole.r + (large ? 0.226 : 0.127), 0.022, [0, 0, 0.075]);
+    torus(mount, materials.rubber, hole.r + 0.008, large ? 0.022 : 0.014, [0, 0, 0.054]);
+    torus(mount, materials.trim, hole.r - 0.018, large ? 0.025 : 0.017, [0, 0, 0.062]);
+    annulus(mount, materials.ivory, hole.r + 0.094, hole.r + (large ? 0.205 : 0.110), 0.018, [0, 0, 0.09]);
+    torus(mount, materials.rubber, hole.r + 0.091, large ? 0.009 : 0.006, [0, 0, 0.103]);
+    const count = large ? 32 : 16;
+    const radius = hole.r + (large ? 0.154 : 0.085);
     for (let i = 0; i < count; i++) {
-      const angle = i / count * Math.PI * 2;
-      const radius = hole.r + (hole.r > 0.8 ? 0.174 : 0.09);
-      cylinder(group, materials.dark, 0.018, 0.025, [hole.x + Math.cos(angle) * radius, hole.y + Math.sin(angle) * radius, -1.969], [Math.PI / 2, 0, 0], 6);
+      const angle = (i + 0.5) / count * Math.PI * 2;
+      const x = Math.cos(angle) * radius;
+      const y = Math.sin(angle) * radius;
+      cylinder(mount, materials.shell, large ? 0.026 : 0.016, 0.014, [x, y, 0.111], [Math.PI / 2, 0, 0], 12);
+      cylinder(mount, materials.trim, large ? 0.017 : 0.010, 0.017, [x, y, 0.121], [Math.PI / 2, 0, 0], 6);
+      box(mount, materials.dark, [large ? 0.013 : 0.008, 0.003, 0.002], [x, y, 0.131]);
+    }
+    if (large) {
+      for (let i = 0; i < 8; i++) {
+        const angle = (i + 0.5) / 8 * Math.PI * 2;
+        const latch = new THREE.Group();
+        latch.position.set(Math.cos(angle) * (hole.r + 0.265), Math.sin(angle) * (hole.r + 0.265), 0.061);
+        latch.rotation.z = angle;
+        mount.add(latch);
+        box(latch, materials.shell, [0.105, 0.11, 0.045], [0, 0, 0], 0.012);
+        box(latch, materials.ivory, [0.10, 0.036, 0.055], [-0.021, 0, 0.025], 0.006);
+        cylinder(latch, materials.trim, 0.018, 0.082, [-0.061, 0, 0.046], [Math.PI / 2, 0, 0], 12);
+        for (const y of [-0.036, 0.036]) cylinder(latch, materials.dark, 0.009, 0.009, [0.03, y, 0.027], [Math.PI / 2, 0, 0], 6);
+      }
+      box(mount, materials.dark, [0.31, 0.095, 0.027], [0, hole.r + 0.255, 0.087], 0.01);
+      label(mount, "W01", "SHUTTER / OPEN", 0.265, [0, hole.r + 0.255, 0.103], "#c9d4c4");
+      for (const side of [-1, 1]) {
+        const shutter = new THREE.Group();
+        shutter.position.set(side * (hole.r + 0.375), 0, 0.015);
+        mount.add(shutter);
+        box(shutter, materials.shell, [0.12, 0.77, 0.055], [0, 0, 0], 0.035);
+        box(shutter, materials.trim, [0.045, 0.63, 0.026], [-side * 0.04, 0, 0.04], 0.01);
+        for (const y of [-0.27, 0.27]) {
+          box(shutter, materials.dark, [0.15, 0.072, 0.067], [0, y, 0.012], 0.01);
+          cylinder(shutter, materials.trim, 0.014, 0.019, [-side * 0.062, y, 0.054], [Math.PI / 2, 0, 0], 8);
+        }
+      }
+    } else {
+      label(mount, hole.x < -2 ? "W02" : "W03", "OBSERVATION", 0.225, [0, 0.575, 0.098], "#c8d0bb");
     }
   }
   return group;
@@ -140,6 +235,24 @@ function makeEndHatch(parent, materials, side) {
   parent.add(group);
   const cap = cylinder(group, materials.shell, 2.03, 0.2, [side * -0.12, 1.32, 0], [0, 0, Math.PI / 2], 64);
   cap.scale.z = 0.83;
+  const perimeter = [];
+  const perimeterInner = [];
+  for (let i = 0; i < 8; i++) {
+    const angle = (i + 0.5) / 8 * Math.PI * 2;
+    perimeter.push([side * 0.012, 1.32 + Math.sin(angle) * 1.94, Math.cos(angle) * 1.62]);
+    perimeterInner.push([side * 0.018, 1.32 + Math.sin(angle) * 1.78, Math.cos(angle) * 1.49]);
+  }
+  perimeter.push(perimeter[0]);
+  perimeterInner.push(perimeterInner[0]);
+  tube(group, materials.trim, perimeter, 0.058, false);
+  tube(group, materials.ivory, perimeterInner, 0.045, false);
+  for (let i = 0; i < 8; i++) {
+    const angle = (i + 0.5) / 8 * Math.PI * 2;
+    const y = 1.32 + Math.sin(angle) * 1.86;
+    const z = Math.cos(angle) * 1.56;
+    box(group, materials.dark, [0.075, 0.12, 0.17], [side * 0.035, y, z], 0.01);
+    cylinder(group, materials.trim, 0.025, 0.09, [side * 0.083, y, z], [0, 0, Math.PI / 2], 8);
+  }
   const disc = cylinder(group, materials.dark, 1.46, 0.11, [0, 1.43, 0], [0, 0, Math.PI / 2], 64);
   disc.scale.z = 1.08;
   const hatch = cylinder(group, materials.ivory, 1.32, 0.16, [side * 0.08, 1.43, 0], [0, 0, Math.PI / 2], 64);
@@ -166,7 +279,24 @@ function makeEndHatch(parent, materials, side) {
 }
 
 function wallLabel(parent, title, sub, x, y, width = 0.5, color) {
-  return label(parent, title, sub, width, [x, y, wallZ(x) + 0.037], color, [0, -Math.atan(0.275 * x / 4), 0]);
+  return label(parent, title, sub, width, [x, y, wallZ(x) + 0.037], color, [0, wallAngle(x), 0]);
+}
+
+function servicePanel(parent, materials, x, y, width, height) {
+  const group = new THREE.Group();
+  group.position.set(x, y, wallZ(x) + 0.026);
+  group.rotation.y = wallAngle(x);
+  parent.add(group);
+  box(group, materials.dark, [width, height, 0.035], [0, 0, 0], 0.014);
+  box(group, materials.ivory, [width - 0.035, height - 0.035, 0.028], [0, 0, 0.025], 0.012);
+  box(group, materials.trim, [width * 0.66, 0.028, 0.02], [0, height * 0.22, 0.045], 0.004);
+  for (let i = 0; i < 5; i++) {
+    box(group, materials.dark, [width * 0.63, 0.012, 0.012], [0, -height * 0.23 + i * height * 0.065, 0.043]);
+  }
+  for (const side of [-1, 1]) {
+    cylinder(group, materials.trim, 0.012, 0.012, [side * (width / 2 - 0.04), height / 2 - 0.04, 0.049], [Math.PI / 2, 0, 0], 6);
+    box(group, materials.shell, [0.026, 0.065, 0.025], [side * (width / 2 - 0.04), -height / 2 + 0.055, 0.047], 0.004);
+  }
 }
 
 export function createHabitat(materials) {
@@ -193,32 +323,62 @@ export function createHabitat(materials) {
   label(structural, "400 KM", "27 580 KM/H", 0.64, [2.84, -0.145, 1.616], "#bac3b7");
   structural.add(makeWall(materials));
 
-  for (const x of [-3.94, -2.38, 0.0, 2.69, 3.94]) {
-    const r = Math.sqrt(1 - (x / 4) ** 2) * 2.55;
-    const points = [];
-    for (let i = 0; i <= 24; i++) {
-      const angle = i / 24 * Math.PI;
-      points.push([Math.cos(angle) * 0.075 + x, Math.sin(angle) * (r - 0.03), wallZ(x) + 0.09]);
-    }
-    tube(structural, materials.trim, points, 0.044, false);
-  }
   const rimPoints = [];
   for (let i = 0; i <= 64; i++) {
-    const angle = i / 64 * Math.PI;
-    const x = Math.cos(angle) * 3.99;
-    rimPoints.push([x, Math.sin(angle) * 2.55, wallZ(x) + 0.01]);
+    const x = -4 + i / 64 * 8;
+    rimPoints.push([x, wallHeight(x), wallZ(x)]);
   }
-  tube(structural, materials.ivory, rimPoints, 0.092, false);
-  tube(structural, materials.dark, rimPoints.map(([x, y, z]) => [x, y + 0.07, z - 0.08]), 0.036, false);
-  tube(structural, materials.shell, rimPoints.map(([x, y, z]) => [x, y - 0.065, z - 0.11]), 0.052, false);
-  for (let i = 0; i < 58; i++) {
-    const angle = (i + 0.5) / 58 * Math.PI;
-    const x = Math.cos(angle) * 3.84, y = Math.sin(angle) * 2.40;
-    cylinder(structural, materials.trim, 0.023, 0.036, [x, y, wallZ(x) + 0.025], [Math.PI / 2, 0, 0], 6);
+  tube(structural, materials.shell, rimPoints.map(([x, y, z]) => [x, y + 0.038, z - 0.10]), 0.072, false);
+  tube(structural, materials.trim, rimPoints, 0.035, false);
+  tube(structural, materials.ivory, rimPoints.map(([x, y, z]) => [x, y - 0.055, z + 0.024]), 0.027, false);
+  for (let i = 0; i <= 11; i++) {
+    const x = -4 + i / 11 * 8;
+    const y = wallHeight(x);
+    const z = wallZ(x);
+    box(structural, materials.shell, [0.045, 0.19, 0.22], [x, y + 0.018, z - 0.07], 0.006);
+    for (const dy of [-0.05, 0.074]) {
+      cylinder(structural, materials.trim, 0.016, 0.016, [x, y + dy, z + 0.047], [Math.PI / 2, 0, 0], 6);
+    }
+  }
+
+  for (const side of [-1, 1]) {
+    const x = side * 3.91;
+    for (const z of [-1.79, -1.25]) {
+      box(structural, materials.dark, [0.14, 0.28, 0.12], [x - side * 0.06, 0.20, z], 0.012);
+      box(structural, materials.trim, [0.17, 0.04, 0.15], [x - side * 0.06, 0.10, z], 0.006);
+    }
   }
 
   makeEndHatch(structural, materials, -1);
   makeEndHatch(structural, materials, 1);
+
+  for (const [x, y, width, height] of [
+    [-1.35, 2.26, 0.54, 0.20],
+    [-0.55, 2.34, 0.45, 0.22],
+    [-0.36, 1.17, 0.32, 0.34],
+    [3.62, 0.69, 0.42, 0.34],
+  ]) servicePanel(structural, materials, x, y, width, height);
+
+  for (const [x, y, width] of [
+    [-3.60, 0.95, 0.37],
+    [-2.35, 1.32, 0.48],
+    [-0.35, 1.72, 0.55],
+    [3.28, 1.30, 0.45],
+  ]) {
+    const handhold = new THREE.Group();
+    handhold.position.set(x, y, wallZ(x) + 0.034);
+    handhold.rotation.y = wallAngle(x);
+    structural.add(handhold);
+    tube(handhold, materials.trim, [
+      [-width / 2, 0, 0], [-width / 2, 0, 0.105],
+      [-width / 2 + 0.04, 0, 0.145], [width / 2 - 0.04, 0, 0.145],
+      [width / 2, 0, 0.105], [width / 2, 0, 0],
+    ], 0.023, false);
+    for (const side of [-1, 1]) {
+      box(handhold, materials.dark, [0.074, 0.074, 0.031], [side * width / 2, 0, 0.013], 0.007);
+      cylinder(handhold, materials.trim, 0.012, 0.012, [side * width / 2, 0, 0.033], [Math.PI / 2, 0, 0], 6);
+    }
+  }
 
   for (let row = 0; row < 3; row++) {
     const y = 0.28 + row * 0.15;
@@ -231,8 +391,7 @@ export function createHabitat(materials) {
   tube(structural, materials.rubber, [[-3.65, 0.18, -1.42], [-3.4, 0.1, -0.95], [-2.2, 0.09, -0.83], [-1.1, 0.09, -1.35]], 0.04);
   tube(structural, materials.copper, [[3.7, 0.15, -1.44], [3.25, 0.10, -0.9], [2.55, 0.10, -0.6]], 0.032);
 
-  for (const x of [-3.5, -2.1, 2.55, 3.55]) {
-    const y = x < 0 ? 0.87 : 2.18;
+  for (const [x, y] of [[-3.5, 0.59], [-2.1, 1.82], [2.9, 1.90], [3.55, 1.82]]) {
     const z = wallZ(x) + 0.025;
     box(structural, materials.dark, [0.56, 0.35, 0.025], [x, y, z], 0.015);
     box(structural, materials.trim, [0.48, 0.27, 0.025], [x, y, z + 0.02], 0.008);
@@ -240,10 +399,10 @@ export function createHabitat(materials) {
     cylinder(structural, materials.yellow, 0.025, 0.03, [x + 0.2, y + 0.11, z + 0.04], [Math.PI / 2, 0, 0], 8);
   }
   wallLabel(structural, "O₂", "LIFE SUPPORT", -2.23, 2.24, 0.4, "#bccdbd");
-  wallLabel(structural, "CAUTION", "MOVING PARTS", 3.14, 1.3, 0.43, "#d3b473");
+  wallLabel(structural, "CAUTION", "MOVING PARTS", 3.14, 0.95, 0.43, "#d3b473");
   wallLabel(structural, "04", "HABITAT", -0.38, 2.24, 0.45, "#cbd2bd");
-  wallLabel(structural, "ECLSS", "RETURN AIR", 3.12, 0.93, 0.4, "#c4cbbb");
-  wallLabel(structural, "28V", "DC BUS", -3.6, 2.0, 0.31, "#d4be85");
+  wallLabel(structural, "ECLSS", "RETURN AIR", 3.12, 0.74, 0.4, "#c4cbbb");
+  wallLabel(structural, "28V", "DC BUS", -3.6, 1.43, 0.31, "#d4be85");
 
   const strip = new THREE.Group();
   root.add(strip);

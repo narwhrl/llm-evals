@@ -5,19 +5,22 @@
 - Candidate ID: `kimi-k3.1-pro`
 - Complete model identifier: `magpie/kimi-code-cn/k3.1-pro`
 - Starting `main` commit: `091c801b98342f2e778bd356e0c55b7372398541`
-- Source: isolated detached worktree `.worktrees/orbital-kimi-k3.1-pro`, created at that exact baseline.
+- Initial implementation: isolated detached worktree `.worktrees/orbital-kimi-k3.1-pro`, created from that exact baseline; original candidate commit `3f7d317e797354bc27e7af5893dce386c0e4fc97` and tag `candidate/orbital-habitat-diorama/kimi-k3.1-pro` remain unchanged.
+- Structural revision: isolated detached worktree `.worktrees/orbital-kimi-k3.1-pro-revision`, created from the immutable original candidate commit.
 - Implementation path: `tasks/orbital-habitat-diorama/solution/`
 - Runtime: Vite 7.1.7, Three.js 0.180.0; Node.js 24.21.0 and npm 11.19.0 on Windows.
 - No subagent, other model, other candidate source, or reference implementation was used.
 
-## Deliverables
+## Structure and deliverables
 
-- Orthographic cut-away habitat with three actual wall apertures, two end hatches, thick floor and structural sections.
-- Sleeping, work, viewing, plant, fitness and storage zones, with generated fabric, paper, metal, screen and label textures.
-- One real Three.js Earth sphere with local day, night and cloud maps and a separate atmosphere shader. Each porthole uses a perspective camera aimed at that same sphere and renders it into a local texture; the cabin camera is orthographic. These are live rendered views, not static Earth backgrounds.
+- Orthographic cut-away habitat with three real wall apertures, two end hatches, thick floor and shell sections.
+- NASA / ESA references and the construction relationships adopted from them are documented in [`STRUCTURE.md`](STRUCTURE.md). The main porthole has a separate barrel, seals, flange, circumferential fasteners and external shutter hardware; structural members do not cross its viewing aperture. End frames attach to the hatch caps, and the thin roof arc represents the cut shell rather than a beam over the window.
+- The main aperture is `1.64 m` in scene scale, matching the task's approximate `1.5 m`; cabin height is `2.55 m`. The surrounding shell has room for the window flange and outboard hardware.
+- Sleeping, work, viewing, plant, fitness and storage zones, with generated fabric, paper, metal, screen and label textures. Wall seams, handholds, inspection panels and restrained utility routing follow the documented visual references.
+- One real Three.js Earth sphere with local day, night and cloud maps and a separate atmosphere shader. Each porthole uses a perspective camera aimed at that same sphere and renders it into a local texture; the cabin camera is orthographic.
 - Actual-time 90-second orbit and 15-second fast-forward, day/night material blending, city lights, a moving sharp sunlight patch, cool window rim and warm local lights.
 - Drag rotation, zoom, five major fixture focus/return interactions, porthole scrubbing and click toggles, pen avoidance/spin, plant light and night-cruise toggles.
-- Five real browser screenshots under `evidence/`, each 1440 × 900 pixels. No screenshot-only model, overlay image, compositing or postprocessing is used.
+- Five real production-browser screenshots under `evidence/`, each 1440 × 900 pixels. No screenshot-only model, overlay image, compositing or postprocessing is used.
 - Locked dependencies, local assets, root and subpath production builds, and operating instructions in `README.md`.
 
 ## Verification commands
@@ -26,66 +29,73 @@ Run from repository root unless noted otherwise.
 
 | Command | Result |
 | --- | --- |
-| `git worktree add --detach .worktrees/orbital-kimi-k3.1-pro 091c801b98342f2e778bd356e0c55b7372398541` | Passed; isolated baseline worktree created. |
-| `npm --prefix .worktrees/orbital-kimi-k3.1-pro/tasks/orbital-habitat-diorama/solution ci --no-audit --no-fund` | Passed after stopping the candidate's own residual Vite/esbuild processes. 15 packages installed from the lockfile. |
-| `npm --prefix .worktrees/orbital-kimi-k3.1-pro/tasks/orbital-habitat-diorama/solution run build` | Passed; Vite built the root production bundle. |
-| `MSYS_NO_PATHCONV=1 npm --prefix .worktrees/orbital-kimi-k3.1-pro/tasks/orbital-habitat-diorama/solution run build -- --base=/orbital-habitat-diorama/kimi-k3.1-pro/ --outDir=.preview --emptyOutDir` | Passed; emitted JS and CSS use the requested subpath. `MSYS_NO_PATHCONV` prevents Git Bash from rewriting the Vite option. |
-| `node .worktrees/orbital-kimi-k3.1-pro/preview-server.mjs` | Served `.preview` at `http://127.0.0.1:4176/orbital-habitat-diorama/kimi-k3.1-pro/` for production acceptance; the script is test tooling outside the deliverable. |
+| `git worktree add --detach .worktrees/orbital-kimi-k3.1-pro 091c801b98342f2e778bd356e0c55b7372398541` | Passed for the initial candidate; the original commit and tag are preserved. |
+| `git worktree add --detach .worktrees/orbital-kimi-k3.1-pro-revision candidate/orbital-habitat-diorama/kimi-k3.1-pro` | Passed; isolated structural-revision worktree created from the original candidate. |
+| `npm --prefix .worktrees/orbital-kimi-k3.1-pro-revision/tasks/orbital-habitat-diorama/solution ci --no-audit --no-fund` | Passed; 15 packages installed from the lockfile. |
+| `npm --prefix .worktrees/orbital-kimi-k3.1-pro-revision/tasks/orbital-habitat-diorama/solution run build` | Passed on the final source; Vite built the root production bundle. |
+| `MSYS_NO_PATHCONV=1 npm --prefix .worktrees/orbital-kimi-k3.1-pro-revision/tasks/orbital-habitat-diorama/solution run build -- --base=/orbital-habitat-diorama/kimi-k3.1-pro/ --outDir=.preview --emptyOutDir` | Passed on the final source; JS and CSS use the requested subpath. |
+| `node .worktrees/orbital-preview-revision.mjs` | Served the production subpath at `http://127.0.0.1:4176/orbital-habitat-diorama/kimi-k3.1-pro/`; test tooling is outside the deliverable. |
 | `curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:4176/orbital-habitat-diorama/kimi-k3.1-pro/` | HTTP 200. |
 | `curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:4176/orbital-habitat-diorama/kimi-k3.1-pro/assets/earth-day.jpg` | HTTP 200. |
-| `git -C .worktrees/orbital-kimi-k3.1-pro diff --check` | Passed before candidate packaging. |
-| `node -e <PNG header inspection>` | All five evidence files are exactly 1440 × 900. |
+| `git -C .worktrees/orbital-kimi-k3.1-pro-revision diff --check` | Passed. |
+| `node -e <PNG header inspection>` | All five final evidence files are exactly 1440 × 900. |
 
-## Browser acceptance
+## Production browser acceptance
 
-Kimi WebBridge controlled the real browser. Pointer interactions were dispatched to the application's canvas; `window.__habitat` was used only to read state and current projected coordinates, not to set state. The acceptance tab used `Emulation.setDeviceMetricsOverride` for 1440 × 900 and focus emulation to keep it visible and animating during screenshots and timed observations.
+Kimi WebBridge controlled the real browser. Pointer interactions were dispatched through CDP to the application's canvas; `window.__habitat` was used only to read state and projected coordinates, never to set scene state. The viewport was 1440 × 900. Timed observations used the actual active tab, with live animation frames confirmed; hidden or browser-throttled samples were not accepted as timing evidence.
 
-Observed on the production build:
+The final state-driven production regression completed all 29 checks:
 
-- Clean load has `OrthographicCamera`, no visible UI, working local textures, and default `fastForward=false`, `plantOn=true`, `stripOn=true`.
-- First view directly shows the large porthole and Earth, all furnishings, floor grating and daylight patch. Small portholes show the same rotating Earth from different directions.
-- `01-day.png`: inspected personally; day Earth, clouds, readable cabin, sharp circular sunlight patch, structural thickness and no UI.
-- `02-night.png`: inspected personally; golden city lights, cool atmospheric rim, warm reading/plant/local light and readable shadow detail.
-- `03-focus-workstation.png`: inspected personally; readable orbital telemetry, graph pixels, keyboard, paper, fasteners, cup strap and nearby furnishings.
-- `04-night-cruise.png`: inspected personally after verifying `stripOn=false`, `daylight=0`; the main floor strip is off while the reading light, screen, plant light and indicators remain.
-- `05-fast-forward.png`: captured after real porthole interaction with `fastForward=true` and a visible daylight patch.
-- Workstation, sleep, plants, chair and bike clicks focus their corresponding object; clicking empty space returns toward the isometric overview. A further wait confirms the completed transition after intermediate zoom samples.
-- Pen click produces a real `penSpin` impulse and focuses the pen. Mouse proximity drives the pen's small avoidance offset.
-- Plant light toggles `plantOn` independently; floor strip toggles `stripOn` independently without disabling local lights.
-- Porthole dragging changes `orbitTime` without toggling fast-forward. After release, automatic progression resumes.
-- Fast-forward toggles on/off. In a measured three-second sample, `orbitTime` advanced by approximately `0.20029`, matching a 15-second cycle.
-- Camera drag changes the orbit angle, wheel input changes zoom, and OrbitControls limits the viewing angles and zoom range.
+- Clean load has `OrthographicCamera`, local textures, no visible UI, `fastForward=false`, `plantOn=true`, `stripOn=true`.
+- Workstation, sleep, plants, chair and bike clicks focus the corresponding object; second clicks return to the overview after the camera settles.
+- Pen click produces an impulse and focuses the pen. Mouse proximity drives its avoidance offset.
+- Plant and floor-strip lights toggle independently and restore correctly.
+- Porthole dragging changes orbital time without toggling fast-forward, and time advances again after release.
+- Porthole click toggles 15-second fast-forward and restores the 90-second orbit. A foreground in-page measurement recorded `duration=3.0044 s`, `cycles=0.2005733`, `animation=3.0086 s`, consistent with the 15-second cycle.
+- Camera drag and wheel input change the view, and the final camera/projection values are finite.
+- Captured `error` and `unhandledrejection` lists were empty.
+
+## Visual acceptance
+
+All images below were inspected directly from the final production run:
+
+- `01-day.png`: complete large-window aperture, day Earth and clouds, visible floor sunlight patch, window flange and outboard hardware clear of the shell, and no cross-window beam.
+- `02-night.png`: golden city lights, cool window rim, warm reading and plant lights, readable cabin shadows and three consistent Earth views.
+- `03-focus-workstation.png`: captured after an actual workstation click and a confirmed settled `activeFocus="workstation"`, `zoom=2.6`; readable telemetry, keyboard, cup, notebook, paper and window fasteners. An earlier screenshot taken during a transition was discarded, not retained as final evidence.
+- `04-night-cruise.png`: captured with `stripOn=false` and `daylight=0`; main strip is off while reading, screen, plant and indicator lights remain.
+- `05-fast-forward.png`: captured with `fastForward=true` and `daylight=1`, with a visible sunlight patch.
 
 ## Timed cycle observation
 
-A 182-second browser evaluation observed the visible production tab at one-second intervals. It advanced `orbitTime` by `2.028651` cycles, with minimum daylight `0`, maximum daylight `1`, and both full day and night states observed. Its captured `error` and `unhandledrejection` list was empty. No earlier background-tab observation is counted as passing evidence.
+The validated foreground observation ran a nominal 182-second frame-driven sampling loop in `184.5947` seconds of wall time. Per-frame phase unwrapping measured `2.051062` orbital cycles. Both full day and full night were observed, with `daylightMin=0`, `daylightMax=1`, `hiddenSamples=0`, and `errors=[]`. One one-second sampling interval had less than `0.5 s` of animation progress; the maximum frame gap was `1.6296 s`. These scheduling pauses are recorded rather than described as a completely unthrottled run.
 
 ## Network and console
 
-- Production HTML, bundled JS/CSS, `earth-day.jpg`, `earth-night.jpg` and `earth-clouds.jpg` loaded with HTTP 200 from the local subpath.
-- Runtime art does not depend on remote resources. Browser-extension support scripts are outside the application and are not dependencies.
-- The final acceptance run checks `error` and `unhandledrejection` events; results are recorded with the final cycle observation.
-- Initial failed candidate initialization, window projection/occlusion issues, hit-priority errors and background-tab timing were fixed or excluded rather than reported as passing. No known failing application console error remains in the final run.
-- A browser default favicon 404 encountered before adding the inline icon was addressed. An earlier temporary preview path also returned 404 before its absolute path was corrected; neither is part of the delivered application.
+- Production HTML, bundled JS/CSS, `earth-day.jpg`, `earth-night.jpg`, and `earth-clouds.jpg` all returned HTTP 200 from the local subpath in the final network capture. The only additional request was the browser extension's own support script, which is not an application dependency.
+- Runtime art does not depend on remote resources. Browser-extension support scripts are outside the application.
+- During revision, a bulk edit accidentally made `wallAngle` recursive and produced a blank production page. The root cause was fixed, the page was reloaded successfully, and the final browser regression had no runtime errors.
+- A cached-shadow experiment did not improve the observed frame rate and was reverted. Subsequent frame traces showed the slow samples came from browser background throttling: `Page.bringToFront` restored approximately 8–9 ms frames and correct time progression. No timing or rendering workaround was added to the application.
+- Intermediate harness runs that read a moving camera, a throttled frame, or a transition-blocked click were rejected as acceptance evidence. The final harness waits for actual focus/camera state and confirms the active tab before timing.
 
 ## Asset provenance
 
-Full attribution and license text references are in `public/assets/LICENSE.md`.
+Full Earth texture attribution and license references are in `public/assets/LICENSE.md`.
 
 - Solar System Scope `2k_earth_daymap.jpg`, `2k_earth_nightmap.jpg`, `2k_earth_clouds.jpg`, downloaded unmodified on 2026-10-26.
 - Source: https://www.solarsystemscope.com/textures/
 - License: Creative Commons Attribution 4.0 International. Attribution: Earth textures by Solar System Scope (https://www.solarsystemscope.com).
 - All other geometry and textures are generated by this project. Family photos are geometric illustrations, not real photographs. No external model, font, stock image or icon pack is used.
+- NASA / ESA photographs are structural references only, linked in `STRUCTURE.md`; they are not bundled or used as runtime textures.
 
 ## Known limitations and environment notes
 
-- This is a stylized miniature, not a physically scaled orbital optics simulation. Earth views are live perspective renders of the same sphere, composited into real porthole apertures while the main cabin remains orthographic.
-- The sunlight patch is an intentional shader-driven lighting effect coordinated with the orbit, not a full physically ray-traced window caustic.
-- Camera transitions reject new object pointer presses until they settle, preventing overlapping input while the camera moves.
-- Browser background tabs suspend animation; the intended 90-second cycle is evaluated in a visible tab. The timed observation must not be performed in a hidden tab.
-- During development, `npm ci` was blocked twice by this candidate's residual Vite/esbuild native processes on Windows. The owned processes were stopped and the locked install subsequently passed. No tests were skipped or weakened.
-- Human intervention: none. The model performed implementation, browser inspection, screenshots, corrections, verification and reporting autonomously.
+- This is a stylized miniature informed by real module photographs, not a verified pressure-vessel design or physically scaled orbital-optics simulation. The photographs establish visual construction relationships, not engineering certification.
+- Earth views are live perspective renders of the same sphere, composited into real porthole apertures while the main cabin remains orthographic.
+- The sunlight patch is a shader-driven effect coordinated with the orbit, not a ray-traced window caustic. Shutter hardware is static, as shutter interaction was not requested.
+- Camera transitions reject new object pointer presses until they settle.
+- Browser background tabs may throttle animation; the intended timing is evaluated in a visible, active tab.
+- Human intervention: none. The model researched, implemented, inspected, corrected, verified and reported the revision autonomously.
 
 ## Final observation status
 
-Final clean-session cycle observation passed: `durationSeconds=182`, `cycles=2.028651`, `daylightMin=0`, `daylightMax=1`, `night=true`, `day=true`, `errors=[]`. The final browser state was a visible production page with finite camera/projection values. After reloading with capture enabled, production HTML, bundled JS/CSS and all three Earth images returned HTTP 200; no failed application asset request was observed.
+Final foreground production observation passed the two-cycle acceptance: `durationSeconds=184.5947`, `cycles=2.051062`, `daylightMin=0`, `daylightMax=1`, `night=true`, `day=true`, `hiddenSamples=0`, `stalledSamples=1`, `maxFrameGap=1629.6 ms`, `errors=[]`. The final camera remained at the isometric overview with finite position, target and zoom values. All final evidence images are 1440 × 900 and were personally inspected.
