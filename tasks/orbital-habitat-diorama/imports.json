@@ -50,6 +50,18 @@
       "revisionSource": "worktree:.worktrees/orbital-kimi-k3.1-pro-revision (detached at original candidate 3f7d317e797354bc27e7af5893dce386c0e4fc97)",
       "destination": "tasks/orbital-habitat-diorama/solutions/kimi-k3.1-pro",
       "resultReport": "tasks/orbital-habitat-diorama/solutions/kimi-k3.1-pro/RESULTS.md"
+    },
+    {
+      "candidateId": "deepseek-v4.1-flash",
+      "model": "magpie/devin/deepseek-v4.1-flash",
+      "baselineMain": "091c801b98342f2e778bd356e0c55b7372398541",
+      "sourceRef": "worktree:.worktrees/orbital-deepseek-v4.1-flash (detached at 091c801b98342f2e778bd356e0c55b7372398541)",
+      "sourceCommit": "e332c46750cdf8cf82340c9ad3428bd211c25d9d",
+      "sourceTree": "e96a704f99adc0cb249180e122967c1d6f5e48b4",
+      "archiveTag": "candidate/orbital-habitat-diorama/deepseek-v4.1-flash",
+      "destination": "tasks/orbital-habitat-diorama/solutions/deepseek-v4.1-flash",
+      "resultReport": "tasks/orbital-habitat-diorama/solutions/deepseek-v4.1-flash/RESULTS.md",
+      "note": "Orthographic cut-away capsule with a real porthole opening cut in an extruded shell, a 3D Earth per porthole behind a stencil mask, procedural textures for every surface, six furnished zones, and every interaction the task asks for. Screen-space porthole clearance keeps wall fittings out of the glass across the first view and every focus framing."
     }
   ]
 }
