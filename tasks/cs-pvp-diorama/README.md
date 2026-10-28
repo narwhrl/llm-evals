@@ -8,6 +8,7 @@
 - Prompt: [`task.md`](task.md)
 - Status: Sixteen candidates archived on `llm/cs-pvp-diorama` at `tasks/cs-pvp-diorama/solutions/<candidate-id>/`. Historical source commits and trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json); later imports are recorded in [`imports.json`](imports.json).
 - Status: `minimax-m3.1-flash` (`magpie/minimax-code/MiniMax-M3.1-Flash`) was produced from the `63a46c3` baseline in an isolated worktree (`.worktrees/minimax-m3.1-flash/cs-pvp-diorama`), tagged `candidate/cs-pvp-diorama/minimax-m3.1-flash` at commit `e08f8c5` (tree `f9653f4`), and imported with a result report (RESULTS.md).
+- Status: `deepseek-v4.1-flash` (`deepseek-v4.1-flash (DeepSeek Harness, qoder-cn/dfmodel)`) was produced from the `091c801` baseline in an isolated worktree (`.worktrees/run-cs-pvp-deepseek`), tagged `candidate/cs-pvp-diorama/deepseek-v4.1-flash-2026-10` at commit `0bfd404` (tree `d848485`), and imported with a result report (RESULTS.md).
 
 ## Shared Inputs
 

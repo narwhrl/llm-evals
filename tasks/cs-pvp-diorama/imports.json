@@ -58,6 +58,18 @@
       "destination": "tasks/cs-pvp-diorama/solutions/minimax-m3.1-flash",
       "resultReport": "tasks/cs-pvp-diorama/solutions/minimax-m3.1-flash/RESULTS.md",
       "note": "Produced from the pinned 63a46c3 baseline in an isolated worktree. Visual acceptance ran in headless Chromium at 1440x900; evidence in the archived tree."
+    },
+    {
+      "candidateId": "deepseek-v4.1-flash",
+      "model": "deepseek-v4.1-flash (DeepSeek Harness, qoder-cn/dfmodel)",
+      "baselineMain": "091c801b98342f2e778bd356e0c55b7372398541",
+      "sourceRef": "worktree:.worktrees/run-cs-pvp-deepseek (detached; baseline 091c801b98342f2e778bd356e0c55b7372398541)",
+      "sourceCommit": "0bfd40454066258c885b7681b8aafd20d40ae540",
+      "sourceTree": "d848485b9248d57d0073a898dcb4c6de9048a9bb",
+      "archiveTag": "candidate/cs-pvp-diorama/deepseek-v4.1-flash-2026-10",
+      "destination": "tasks/cs-pvp-diorama/solutions/deepseek-v4.1-flash",
+      "resultReport": "tasks/cs-pvp-diorama/solutions/deepseek-v4.1-flash/RESULTS.md",
+      "note": "From-zero re-run replacing the 2026-09-22 migrated candidate: built from the task prompt alone, with no reference to the previous deepseek-v4.1-flash candidate or to any other model archive. Verification used a real Chrome tab at the documented 1440x900 viewport (CDP device metrics) on both the dev server and the production build: DOM probe proves zero UI, a world-space bounding audit over every mesh reports zero geometry outside the square base, the four base corners project inside the opening frame, real pointer drag rotated the camera 30.9 degrees and wheel zoom changed the orbit radius 74.4 to 63.8, ink coverage measured at 5.82 percent of pixels, the mirror target reads back mean 64.7, and 150 driven frames of lighting, lightning, rain, drips and steam recorded zero console errors. Seven defects were found and fixed on the reproduction path, including a frustum-culled composite quad, a missing sRGB output encode, legacy light magnitudes under Three r155 physical units, three builders rotating by atan2(dx,dz) instead of atan2(-dz,dx), booth children placed in world coordinates inside a translated group, whole wall faces deleted instead of punched openings, and a six-FPS frame time fixed by sharing material instances, merging 1249 static meshes into 122 and dropping transmission glass. Imported subtree hash equals the source solution tree."
     }
   ]
 }
