@@ -13,6 +13,18 @@
       "destination": "tasks/voxel-waterfall/solutions/minimax-m3.1-flash",
       "resultReport": "tasks/voxel-waterfall/solutions/minimax-m3.1-flash/RESULTS.md",
       "note": "Run without subagents or other models per the user's instruction. Single-model implementation and self visual review. The imported tree hash matches the source solution tree. Visual acceptance was done by the model itself in a local Chrome 153 at a verified 1440x900 viewport and a 390x844 mobile viewport, on both the dev server and the production build served at the root and under a --base sub-path."
+    },
+    {
+      "candidateId": "deepseek-v4.1-flash",
+      "model": "deepseek-v4.1-flash (DeepSeek Harness, qoder-cn/dfmodel)",
+      "baselineMain": "091c801b98342f2e778bd356e0c55b7372398541",
+      "sourceRef": "worktree:.worktrees/run-voxel-waterfall-deepseek (detached; baseline 091c801b98342f2e778bd356e0c55b7372398541)",
+      "sourceCommit": "39ba51eb2776e929a07fdbca9d48db44a4c94c33",
+      "sourceTree": "67f4bae9d7ddc7e4dad26ffd13b558e07baaeb8d",
+      "archiveTag": "candidate/voxel-waterfall/deepseek-v4.1-flash-2026-10",
+      "destination": "tasks/voxel-waterfall/solutions/deepseek-v4.1-flash",
+      "resultReport": "tasks/voxel-waterfall/solutions/deepseek-v4.1-flash/RESULTS.md",
+      "note": "From-zero re-run replacing the 2026-09-22 migrated candidate: built from the task prompt alone, with no reference to the previous deepseek-v4.1-flash candidate or to any other model archive. npm install, vite build, vite dev and vite preview all ran in the run worktree. Visual acceptance was performed by this model itself through the Kimi Browser Extension against a real Chrome tab, on both the dev server and the production build: opening view, waterfall close-up, cloud occlusion, a full 17-slider parameter sweep with zero console errors, and renderer instrumentation (71,046 terrain voxels at the required 200x200 grid, 6-7 draw calls per frame, 0.74 ms measured per-frame CPU cost). Imported subtree hash equals the source solution tree."
     }
   ]
 }
