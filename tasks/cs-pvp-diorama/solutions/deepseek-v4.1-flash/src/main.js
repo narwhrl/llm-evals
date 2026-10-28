@@ -1,249 +1,151 @@
-// 入口：装配舞台、世界、后处理管线与动态效果，驱动渲染循环。
-import * as THREE from 'three';
-import { createStage, LAYER, VIEWS } from './core/stage.js';
-import { createControls } from './core/controls.js';
-import { createMaterials } from './gfx/materials.js';
-import { setRunoffTime } from './gfx/toon.js';
-import { createPostPipeline } from './core/composer.js';
-import { PlanarReflection } from './core/planarReflection.js';
-import { createLightRig } from './core/lightRig.js';
-import { buildWorld } from './scene/index.js';
-import { LAYOUT } from './scene/layout.js';
-import { installDebugApi } from './core/debug.js';
-import { createRain } from './fx/rain.js';
-import { createDrips } from './fx/drips.js';
-import { createSteam } from './fx/steam.js';
-import { createLightning } from './fx/lightning.js';
-import { makeRng } from './gfx/rng.js';
+import "./styles.css";
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { wetStreetMaterial } from "./materials.js";
+import { buildDiorama, BASE } from "./layout.js";
+import { ToonRenderer } from "./postfx.js";
+import { batchStaticMeshes } from "./batch.js";
+import { makeRain, makeDrips, makeSteam, updateSteam, lampGlow, makeLighting, makeLightning } from "./weather.js";
 
-const SEED = 20260922;
+const canvas = document.getElementById("scene");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.shadowMap.autoUpdate = true;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.62;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
 
-const canvas = document.createElement('canvas');
-document.body.appendChild(canvas);
+const scene = new THREE.Scene();
+const SKY_TOP = new THREE.Color(0x14202f);
+const SKY_LOW = new THREE.Color(0x38455a);
+scene.background = skyTexture();
+scene.fog = new THREE.Fog(0x1e2836, 90, 240);
 
-const { renderer, scene, camera } = createStage(canvas);
-const materials = createMaterials();
-const timeUniform = { value: 0 };
+// Opening framing solved against the base corners: at this distance the whole
+// 60x60 diorama fits a 1440x900 frame with ~6% margin.
+const camera = new THREE.PerspectiveCamera(42, 1, 0.5, 400);
+camera.position.set(47, 36, 56);
+camera.layers.enable(1); // wet street lives on its own layer
 
-const AMBIENT = { hemisphere: 2.2, moon: 2.6 };
-const FLASH_BOOST = { hemisphere: 1.8, moon: 1.4 };
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 4.5, 0);
+controls.enableDamping = true;
+controls.dampingFactor = 0.07;
+controls.minDistance = 14;
+controls.maxDistance = 130;
+controls.minPolarAngle = 0.14;
+controls.maxPolarAngle = Math.PI * 0.487;
+controls.autoRotate = false;
+controls.update();
 
-// ---- 环境光：冷蓝雨夜基调 -------------------------------------------------
-const hemisphere = new THREE.HemisphereLight(0x4e6f9a, 0x1a212b, AMBIENT.hemisphere);
-scene.add(hemisphere);
+// Planar mirror feeding the wet street. The pipeline owns the mirror target, so
+// the street material must sample that same texture rather than a second one.
+const toon = new ToonRenderer(renderer, scene, camera);
 
-const moon = new THREE.DirectionalLight(0x9fc0e8, AMBIENT.moon);
-moon.position.set(-42, 54, 30);
-moon.target.position.set(0, 0, 0);
-moon.castShadow = true;
-moon.shadow.mapSize.set(2048, 2048);
-moon.shadow.camera.left = -38;
-moon.shadow.camera.right = 38;
-moon.shadow.camera.top = 38;
-moon.shadow.camera.bottom = -38;
-moon.shadow.camera.near = 8;
-moon.shadow.camera.far = 150;
-moon.shadow.bias = -0.0007;
-moon.shadow.normalBias = 0.035;
-scene.add(moon);
-scene.add(moon.target);
-
-const fill = new THREE.DirectionalLight(0x3d5c86, 0.6);
-fill.position.set(36, 26, -32);
-scene.add(fill);
-
-const reflection = new PlanarReflection({ renderer, scene, planeY: 0, scale: 0.5 });
-const lightRig = createLightRig({ scene, rng: makeRng(SEED + 7) });
-
-const world = buildWorld({
-  scene,
-  materials,
-  reflection,
-  timeUniform,
-  lightRig,
-  keyLight: moon,
-  rng: makeRng(SEED + 3),
-});
-
-const pipeline = createPostPipeline({ renderer, scene, camera });
-const reflectionUniforms = reflection.uniforms;
-const controlsApi = createControls(camera, canvas);
-
-// ---- 动态效果 -------------------------------------------------------------
-// 屋顶遮挡区：这两个仓库 / 后街住宅是有内部的体量，雨丝落在顶面以下必须消隐。
-const rainShadows = [
-  { ...LAYOUT.aSite.rect, top: LAYOUT.aSite.roofY + 0.3 },
-  {
-    minX: LAYOUT.bSite.house.minX,
-    maxX: LAYOUT.bSite.house.maxX,
-    minZ: LAYOUT.bSite.house.minZ,
-    maxZ: LAYOUT.bSite.house.maxZ,
-    top: LAYOUT.bSite.house.roofY + 0.3,
-  },
-  {
-    minX: LAYOUT.routes.culvert.minX,
-    maxX: LAYOUT.routes.culvert.maxX,
-    minZ: LAYOUT.routes.culvert.fromZ,
-    maxZ: LAYOUT.routes.culvert.toZ,
-    top: LAYOUT.routes.culvert.height + 0.1,
-  },
-];
-
-const rain = createRain({
-  rng: makeRng(SEED + 11),
-  layer: LAYER.FX,
-  count: 3600,
-  area: { size: 56, height: 26 },
-  roofs: rainShadows,
-});
-scene.add(rain.object3D);
-
-const dripSources = world.fxSources.drips.slice(0, 30).map((source) => ({
-  groundY: 0,
-  rate: 1.1,
-  length: 0.3,
-  width: 0.05,
-  loop: undefined,
-  splash: true,
-  ...source,
-  loop: source.loop ?? Math.max(0.6, source.y - (source.groundY ?? 0)),
-}));
-
-const steamSources = world.fxSources.steam.slice(0, 8).map((source) => ({
-  size: 1.3,
-  rate: 0.42,
-  rise: 0.42,
-  drift: [0.12, 0.05],
-  life: 5.2,
-  ...source,
-}));
-
-const drips = createDrips({ rng: makeRng(SEED + 13), layer: LAYER.FX, sources: dripSources });
-const steam = createSteam({ rng: makeRng(SEED + 17), layer: LAYER.FX, sources: steamSources });
-scene.add(drips.object3D);
-scene.add(steam.object3D);
-
-const lightning = createLightning({ rng: makeRng(SEED + 19) });
-
-const fxApi = {
-  update(dt, elapsed) {
-    rain.update(dt, elapsed, camera);
-    drips.update(dt, elapsed, camera);
-    steam.update(dt, elapsed, camera);
-  },
-  audit() {
-    return {
-      rain: rain.stats,
-      drips: { sources: dripSources.length, drops: drips.stats.drops, drawCalls: drips.stats.drawCalls },
-      steam: { sources: steamSources.length, puffs: steam.stats.puffs, drawCalls: steam.stats.drawCalls },
-    };
-  },
-  setRain(value) {
-    rain.setIntensity(value);
-  },
-  setSteam(value) {
-    steam.setIntensity(value);
-  },
+const mirrorUniforms = {
+  matrix: { value: new THREE.Matrix4() },
+  strength: { value: 0.92 },
+  time: { value: 0 },
 };
 
-// ---- 渲染循环 -------------------------------------------------------------
-const frames = {
-  elapsed: 0,
-  paused: false,
-  fps: 0,
-  frameMs: 0,
-  setTime(seconds) {
-    frames.elapsed = seconds;
-  },
-};
+const wet = wetStreetMaterial({
+  mirrorTexture: { value: toon.mirrorRT.texture },
+  reflectorUniforms: mirrorUniforms,
+});
+const { root, ground, anim } = buildDiorama(scene, wet);
+// Merge every immobile prop before the weather rigs attach, so the three
+// per-frame scene passes stay cheap.
+const batching = batchStaticMeshes(root);
 
-let lastTime = performance.now();
-let fpsAccumulator = 0;
-let fpsFrames = 0;
-const REFLECTION_INTERVAL = 2;
-let reflectionFrame = 0;
+// Rain, drips and steam.
+const rain = makeRain(1150, BASE, 28);
+const drips = makeDrips(anim.dripLines, 300);
+scene.add(rain, drips);
+const steam = anim.vents.map((v) => {
+  const s = makeSteam(v, 20);
+  scene.add(s);
+  return s;
+});
 
-// 单帧推进：requestAnimationFrame 与调试用 step() 共用，保证离线取证与实际渲染一致。
-function tick(delta, wallDelta = delta) {
-  if (!frames.paused) frames.elapsed += delta;
-
-  const elapsed = frames.elapsed;
-  timeUniform.value = elapsed;
-  setRunoffTime(elapsed);
-
-  controlsApi.update();
-  lightRig.update(elapsed);
-  fxApi.update(delta, elapsed);
-
-  const flash = lightning.update(elapsed);
-  if (flash > 0) {
-    hemisphere.intensity = AMBIENT.hemisphere + flash * FLASH_BOOST.hemisphere;
-    moon.intensity = AMBIENT.moon + flash * FLASH_BOOST.moon;
-    pipeline.compositePass.uniforms.uFlash.value = flash;
-  } else {
-    hemisphere.intensity = AMBIENT.hemisphere;
-    moon.intensity = AMBIENT.moon;
-    pipeline.compositePass.uniforms.uFlash.value = 0;
-  }
-
-  renderer.info.reset();
-  // 平面反射与实时效果无关的部分隔帧更新：相机缓慢环绕时几乎不可察觉，却省下一整趟场景渲染。
-  reflectionFrame = (reflectionFrame + 1) % REFLECTION_INTERVAL;
-  if (reflectionFrame === 0) reflection.update(camera);
-  pipeline.render(delta);
-
-  fpsAccumulator += wallDelta;
-  fpsFrames += 1;
-  if (fpsFrames >= 20) {
-    frames.fps = Math.round(fpsFrames / Math.max(fpsAccumulator, 1e-4));
-    frames.frameMs = Math.round((fpsAccumulator / fpsFrames) * 1000 * 100) / 100;
-    fpsAccumulator = 0;
-    fpsFrames = 0;
-  }
-
-  if (!canvas.classList.contains('ready')) {
-    canvas.classList.add('ready');
-    renderer.shadowMap.needsUpdate = true;
-  }
+// Additive halos around every practical light source: these are what read as
+// the misty bloom in the rain, and they are mirrored into the wet street too.
+const halos = [];
+for (const l of anim.lamps) {
+  const s = lampGlow(l.lampPos, "rgba(255,190,110,0.95)", 4.4);
+  scene.add(s);
+  halos.push(s);
 }
+if (anim.searchlight) {
+  const s = lampGlow(new THREE.Vector3(16.4, 3.6, 22.0), "rgba(255,240,205,0.9)", 3.0);
+  scene.add(s);
+  halos.push(s);
+}
+scene.add(lampGlow(new THREE.Vector3(-19, 5.2, -8), "rgba(205,228,255,0.75)", 3.6));
+scene.add(lampGlow(new THREE.Vector3(18.4, 2.9, -11.4), "rgba(255,208,150,0.8)", 3.0));
+scene.add(lampGlow(new THREE.Vector3(-21.6, 1.7, -13.4), "rgba(255,80,60,0.8)", 2.2));
+scene.add(lampGlow(new THREE.Vector3(-14.6, 3.4, 24.8), "rgba(150,170,255,0.75)", 2.6));
 
-function frame(now) {
-  requestAnimationFrame(frame);
-  const rawDelta = (now - lastTime) / 1000;
-  lastTime = now;
-  tick(Math.min(rawDelta, 0.05), rawDelta);
+const lighting = makeLighting(scene, anim);
+const lightning = makeLightning(scene, anim);
+
+function skyTexture() {
+  const c = document.createElement("canvas");
+  c.width = 8; c.height = 256;
+  const ctx = c.getContext("2d");
+  const g = ctx.createLinearGradient(0, 0, 0, 256);
+  g.addColorStop(0, "#" + SKY_TOP.getHexString());
+  g.addColorStop(0.55, "#1b2530");
+  g.addColorStop(1, "#" + SKY_LOW.getHexString());
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, 8, 256);
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.mapping = THREE.EquirectangularReflectionMapping;
+  return tex;
 }
 
 function resize() {
-  const width = window.innerWidth;
-  const height = window.innerHeight;
-  camera.aspect = width / height;
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
   camera.updateProjectionMatrix();
-  renderer.setSize(width, height, false);
-  const buffer = renderer.getDrawingBufferSize(new THREE.Vector2());
-  pipeline.setSize(width, height);
-  reflection.setSize(buffer.x, buffer.y);
-  renderer.shadowMap.needsUpdate = true;
+  toon.setSize(w, h, camera.near, camera.far);
 }
-
-window.addEventListener('resize', resize, { passive: true });
+window.addEventListener("resize", resize);
 resize();
 
-installDebugApi({
-  renderer,
-  scene,
-  camera,
-  controlsApi,
-  pipeline,
-  reflection,
-  lightRig,
-  world,
-  fx: fxApi,
-  frames,
-  tick,
+const clock = new THREE.Clock();
+let mirrorFrame = 0;
+
+renderer.setAnimationLoop(() => {
+  const dt = Math.min(0.05, clock.getDelta());
+  const t = clock.elapsedTime;
+
+  lighting.update(dt, t);
+  lightning.update(dt, t);
+  rain.material.uniforms.uTime.value = t;
+  drips.material.uniforms.uTime.value = t;
+  mirrorUniforms.time.value = t;
+  for (const s of steam) updateSteam(s, t);
+  for (const h of halos) h.material.opacity = 0.55 + Math.sin(t * 6.1 + h.position.x) * 0.08 + lightning.uniforms.value * 0.2;
+
+  controls.update();
+
+  // The mirror is a full extra scene render, so it refreshes on alternating
+  // frames; nothing in the diorama moves fast enough for the lag to show.
+  if (mirrorFrame % 2 === 0) {
+    toon.renderMirror(scene, ground, [rain, drips, ...steam], 0.02, mirrorUniforms.matrix.value);
+  }
+  mirrorFrame++;
+
+  toon.render({ flash: lightning.uniforms.value });
 });
 
-renderer.shadowMap.needsUpdate = true;
-requestAnimationFrame(frame);
-
-export { VIEWS, reflectionUniforms };
+// Dev-only hook for the acceptance harness: the page exposes no UI at all, so
+// camera state is read through this handle instead.
+if (import.meta.env.DEV) {
+  window.__diorama = { scene, camera, controls, renderer, toon, anim, rain, drips, steam, ground, lighting, lightning, batching };
+}
