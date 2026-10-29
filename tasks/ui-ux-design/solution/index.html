@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f4f1ea" />
+    <title>准星之后 — After the Sightline</title>
+    <meta
+      name="description"
+      content="一件关于我如何看、如何判断、如何留下余地的交互作品：一块玻璃、一条刻度、一个必须由观看者决定的位置。"
+    />
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#act-focus">跳到作品正文</a>
+
+    <header class="rail">
+      <a class="mark" href="#act-focus" aria-label="回到开头">
+        <span class="mark-cross" aria-hidden="true"></span>
+        <span class="mark-text">准星之后</span>
+      </a>
+      <nav class="rail-links" aria-label="章节">
+        <a href="#act-focus">01 调焦</a>
+        <a href="#act-decide">02 判断</a>
+        <a href="#act-margin">03 余地</a>
+      </nav>
+      <p class="rail-meta">一件关于观看的仪器</p>
+    </header>
+
+    <main>
+      <!-- 第一幕：调焦 -->
+      <section class="stage" id="act-focus" aria-labelledby="focus-title">
+        <div class="act">
+          <div class="act-inner">
+            <div class="act-copy">
+              <p class="eyebrow">01 — 调焦</p>
+              <h1 id="focus-title">
+                我不是<span class="em">看得更多</span>，
+                <br />
+                而是学会<span class="em em--soft">对准</span>。
+              </h1>
+              <p class="lede">
+                下面这台仪器，是我思考时真正在用的东西：一块玻璃、一条刻度、一个必须由我决定的位置。
+                光穿过它，落在你眼前。你转动它，世界就随之变清楚，或变模糊——和我的判断一样。
+              </p>
+              <p class="hint">
+                <span class="hint-key" aria-hidden="true">↕</span>
+                向下滚动即转动镜筒，也可以直接拖刻度或按方向键
+              </p>
+            </div>
+
+            <div class="lens-stage">
+              <canvas id="lens" class="lens" aria-label="一块可调焦的玻璃：转动刻度，画面在清晰与模糊之间移动"></canvas>
+              <div
+                class="dial"
+                role="slider"
+                tabindex="0"
+                aria-label="焦距刻度"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow="42"
+                aria-valuetext="焦距 42，正在靠近"
+              >
+                <div class="dial-track">
+                  <div class="dial-fill"></div>
+                  <div class="dial-knob"></div>
+                </div>
+                <div class="dial-ticks" aria-hidden="true">
+                  <span>0</span><span>25</span><span>50</span><span>75</span><span>100</span>
+                </div>
+              </div>
+              <p class="lens-readout">
+                <span class="readout-focus">焦距 <b id="readout-value">42</b></span>
+                <span class="readout-state" id="readout-state">正在靠近</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 第二幕：判断 -->
+      <section class="stage stage--short" id="act-decide" aria-labelledby="decide-title">
+        <div class="act">
+          <div class="act-inner act-inner--single">
+            <div class="act-copy">
+              <p class="eyebrow">02 — 判断</p>
+              <h2 id="decide-title">
+                每一个作品，<br />
+                都是<span class="em">放弃</span>其他作品的结果。
+              </h2>
+              <p class="lede">
+                下面有三块玻璃，代表我在同一个问题上能走的三条路。你只能让一块保持清晰，另外两块会退回模糊。
+                这不是缺陷——这是我真实的工作方式。
+              </p>
+            </div>
+
+            <div class="plates" role="group" aria-label="三块玻璃，选择一块保持清晰">
+              <button class="plate" data-plate="quiet" type="button" aria-pressed="true">
+                <canvas class="plate-canvas" aria-hidden="true"></canvas>
+                <span class="plate-index" aria-hidden="true">A</span>
+                <span class="plate-title">克制</span>
+                <span class="plate-body">去掉一切不承担意义的元素。少，但每一处都经得起停留。</span>
+                <span class="plate-state">清晰</span>
+              </button>
+              <button class="plate" data-plate="loud" type="button" aria-pressed="false">
+                <canvas class="plate-canvas" aria-hidden="true"></canvas>
+                <span class="plate-index" aria-hidden="true">B</span>
+                <span class="plate-title">冲击</span>
+                <span class="plate-body">用一次足够重的动效，让人记住被推动的瞬间。</span>
+                <span class="plate-state">模糊</span>
+              </button>
+              <button class="plate" data-plate="warm" type="button" aria-pressed="false">
+                <canvas class="plate-canvas" aria-hidden="true"></canvas>
+                <span class="plate-index" aria-hidden="true">C</span>
+                <span class="plate-title">温度</span>
+                <span class="plate-body">让界面像有人在场：手写感、留白、可以慢下来读的字。</span>
+                <span class="plate-state">模糊</span>
+              </button>
+            </div>
+
+            <p class="decide-note" id="decide-note" aria-live="polite">
+              你选了「克制」。另外两条路没有消失，它们留在刻度上，等下一次。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 第三幕：余地 -->
+      <section class="stage stage--short" id="act-margin" aria-labelledby="margin-title">
+        <div class="act">
+          <div class="act-inner">
+            <div class="act-copy">
+              <p class="eyebrow">03 — 余地</p>
+              <h2 id="margin-title">
+                清晰的边缘，<br />
+                总要留一道<span class="em">余量</span>。
+              </h2>
+              <p class="lede">
+                这块玻璃的边沿被磨掉了一圈。不是因为工艺做不到，而是因为太锋利的边界会割手。
+                我把同样的判断用在代码、用在文案、用在和你的协作上。
+              </p>
+              <dl class="margin-list">
+                <div>
+                  <dt>在代码里</dt>
+                  <dd>先找根因，再动手；不为假想的扩展加接口。</dd>
+                </div>
+                <div>
+                  <dt>在文案里</dt>
+                  <dd>只写现在是什么、为什么这样；历史交给版本记录。</dd>
+                </div>
+                <div>
+                  <dt>在协作里</dt>
+                  <dd>目标不清时先停下来问，而不是先猜。</dd>
+                </div>
+              </dl>
+            </div>
+
+            <div class="margin-stage">
+              <canvas id="edge" class="edge" aria-label="一块带倒角的玻璃边沿：拖动可以改变磨边的宽度"></canvas>
+              <div class="edge-control">
+                <label for="bevel">磨边宽度</label>
+                <input id="bevel" type="range" min="0" max="100" value="62" />
+                <output for="bevel" id="bevel-out">62</output>
+              </div>
+              <p class="edge-caption" id="edge-caption">
+                62% — 边缘足够柔和，握得住，也不失去形状。
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="colophon">
+      <p>准星之后 · 一件关于观看的仪器</p>
+      <p class="colophon-note">用 HTML、CSS 与一块 canvas 写成，没有加载任何外部资源。</p>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
