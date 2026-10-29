@@ -46,6 +46,18 @@
       "destination": "tasks/ui-ux-design/solutions/minimax-m3.1-flash",
       "resultReport": "tasks/ui-ux-design/solutions/minimax-m3.1-flash/RESULTS.md",
       "note": "Produced from the pinned 63a46c3 baseline in an isolated worktree. Visual acceptance ran in headless Chromium at 1440x900 and 390x844, with and without reduced motion; evidence in the archived tree."
+    },
+    {
+      "candidateId": "deepseek-v4.1-flash",
+      "model": "deepseek-v4.1-flash (DeepSeek Harness, devin/deepseek-v4-1-flash-1017)",
+      "baselineMain": "091c801b98342f2e778bd356e0c55b7372398541",
+      "sourceRef": "worktree:.worktrees/run-uiux-deepseek (detached; baseline 091c801b98342f2e778bd356e0c55b7372398541)",
+      "sourceCommit": "b73404a",
+      "sourceTree": "36a712450a48f30b95c29d32ebfe645ebe062dab",
+      "archiveTag": "candidate/ui-ux-design/deepseek-v4.1-flash",
+      "destination": "tasks/ui-ux-design/solutions/deepseek-v4.1-flash",
+      "resultReport": "tasks/ui-ux-design/solutions/deepseek-v4.1-flash/RESULTS.md",
+      "note": "Scroll-driven three-act studio page (\"After the Crosshair\") with a shared interaction state, an instrument panel, and an accessible plate selector. Built from zero without a starter project, without subagents and without reading other candidates. Verified focus/bevel/plate state transitions, aria attributes, mobile single-column layout, and the production build; browser tab and dev server closed afterwards."
     }
   ]
 }
