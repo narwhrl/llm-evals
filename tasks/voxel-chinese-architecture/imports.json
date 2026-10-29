@@ -59,6 +59,18 @@
       "destination": "tasks/voxel-chinese-architecture/solutions/minimax-m3.1-flash",
       "resultReport": "tasks/voxel-chinese-architecture/solutions/minimax-m3.1-flash/RESULTS.md",
       "note": "Run without subagents or other models per the user's instruction. Single-model implementation and self visual review. The imported tree hash matches the source solution tree. Visual acceptance was done by the model itself in a local Chrome 153 at a verified 1440x900 viewport and a 390x844 mobile viewport, on both the dev server and the production build served at the root and under a --base sub-path."
+    },
+    {
+      "candidateId": "deepseek-v4.1-flash",
+      "model": "deepseek-v4.1-flash (DeepSeek Harness, devin/deepseek-v4-1-flash-1017)",
+      "baselineMain": "091c801b98342f2e778bd356e0c55b7372398541",
+      "sourceRef": "worktree:.worktrees/run-voxel-deepseek (detached; baseline 091c801b98342f2e778bd356e0c55b7372398541)",
+      "sourceCommit": "9fbe3c0",
+      "sourceTree": "ee5b0be3077eb7af28351749e53005c426a0ecb9",
+      "archiveTag": "candidate/voxel-chinese-architecture/deepseek-v4.1-flash",
+      "destination": "tasks/voxel-chinese-architecture/solutions/deepseek-v4.1-flash",
+      "resultReport": "tasks/voxel-chinese-architecture/solutions/deepseek-v4.1-flash/RESULTS.md",
+      "note": "Voxel Chinese courtyard complex: about 47k instanced voxels across site, walls, main hall, side halls, gate, bell and drum towers, and a pagoda, rendered in 104 draw calls. Built from zero without a starter project, without subagents and without reading other candidates. Verified counts, draw calls, production build, and multi-angle visual acceptance; browser tab and dev server closed afterwards."
     }
   ]
 }

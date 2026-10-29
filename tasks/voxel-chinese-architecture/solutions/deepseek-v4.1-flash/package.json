@@ -2,7 +2,6 @@
   "name": "voxel-chinese-architecture",
   "private": true,
   "version": "1.0.0",
-  "description": "体素（Voxel）风格中式古典建筑群场景 · Three.js",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,9 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "three": "^0.186.0"
+    "three": "^0.180.0"
   },
   "devDependencies": {
-    "vite": "^7.3.6"
+    "vite": "^7.0.0"
   }
 }

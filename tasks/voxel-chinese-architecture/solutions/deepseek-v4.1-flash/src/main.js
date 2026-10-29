@@ -1,194 +1,126 @@
-import { ACESFilmicToneMapping, PCFShadowMap, Scene, SRGBColorSpace, Timer, WebGLRenderer } from "three";
-import { ANCHORS, buildStages, createWorld, WORLD_BOUNDS } from "./build/layout.js";
-import { compileVoxels } from "./core/voxels.js";
-import { CameraRig, readUrlOptions, VIEWS } from "./render/controls.js";
-import { Environment, TIME_OF_DAY } from "./render/environment.js";
-import { Hud } from "./render/hud.js";
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { mainHall, sideHall, mountainGate, bellTower, pagoda } from './buildings.js';
+import { buildGround, buildWall, buildProps } from './site.js';
 
-const canvas = document.getElementById("scene");
-const urlOptions = readUrlOptions();
+// 场景：黄昏时分的体素寺院。所有建筑一次性构建，页面打开即是全景。
 
-const state = {
-  renderer: null,
-  scene: null,
-  world: null,
-  compiled: null,
-  environment: null,
-  rig: null,
-  frames: 0,
-  elapsed: 0,
-  fps: 0,
-  stage: "初始化",
+const canvas = document.getElementById('scene');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x8fa2b6);
+scene.fog = new THREE.Fog(0x9aabbe, 190, 330);
+
+const camera = new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.5, 600);
+// 首屏视角：略偏东的鸟瞰，正脊、配殿与山门同框，全貌一次看清。
+camera.position.set(74, 78, 132);
+
+const controls = new OrbitControls(camera, canvas);
+controls.target.set(0, 12, 8);
+controls.enableDamping = true;
+controls.dampingFactor = 0.06;
+controls.minDistance = 45;
+controls.maxDistance = 240;
+controls.maxPolarAngle = Math.PI * 0.49;
+controls.update();
+
+// ---- 光照 ----------------------------------------------------------------
+const hemi = new THREE.HemisphereLight(0xbcd0e8, 0x5c5340, 1.15);
+scene.add(hemi);
+
+const sun = new THREE.DirectionalLight(0xffe2b8, 2.4);
+sun.position.set(-78, 104, 74);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.camera.left = -80;
+sun.shadow.camera.right = 80;
+sun.shadow.camera.top = 80;
+sun.shadow.camera.bottom = -80;
+sun.shadow.camera.near = 10;
+sun.shadow.camera.far = 260;
+sun.shadow.bias = -0.0006;
+scene.add(sun);
+
+const fill = new THREE.DirectionalLight(0x93a8c8, 0.6);
+fill.position.set(60, 40, -80);
+scene.add(fill);
+
+// ---- 场景装配 ------------------------------------------------------------
+const world = new THREE.Group();
+scene.add(world);
+
+const parts = [
+  buildGround(),
+  buildWall(),
+  buildProps(),
+  mainHall(),
+  sideHall(1),
+  sideHall(-1),
+  mountainGate(),
+  bellTower(1),
+  bellTower(-1),
+  pagoda(),
+];
+
+const lampSpecs = [];
+const sizes = [];
+for (const part of parts) {
+  sizes.push(`${part.name ?? "场地"}: ${part.batch.count} 体素`);
+  world.add(part.batch.build());
+  if (part.lamps) lampSpecs.push(...part.lamps);
+}
+console.info(sizes.join(" | "));
+
+// 灯笼：少量实例化的发光体，配两盏暖光点光源照亮檐下
+const lanternGeo = new THREE.BoxGeometry(0.5, 0.7, 0.5);
+const lanternMat = new THREE.MeshBasicMaterial({ color: 0xffc46b });
+const lanterns = new THREE.InstancedMesh(lanternGeo, lanternMat, lampSpecs.length);
+const lampMatrix = new THREE.Matrix4();
+lampSpecs.forEach((spec, i) => {
+  lampMatrix.makeScale(spec.scale, spec.scale, spec.scale);
+  lampMatrix.setPosition(spec.x, spec.y, spec.z);
+  lanterns.setMatrixAt(i, lampMatrix);
+});
+lanterns.instanceMatrix.needsUpdate = true;
+world.add(lanterns);
+
+const warmA = new THREE.PointLight(0xffb066, 55, 44, 2);
+warmA.position.set(0, 16, 14);
+scene.add(warmA);
+
+const warmB = new THREE.PointLight(0xffb066, 30, 36, 2);
+warmB.position.set(0, 12, 36);
+scene.add(warmB);
+
+// ---- 交互与循环 ----------------------------------------------------------
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+function tick() {
+  controls.update();
+  renderer.render(scene, camera);
+  requestAnimationFrame(tick);
+}
+tick();
+
+window.__voxel = {
+  sizes,
+  scene,
+  camera,
+  controls,
+  renderer,
+  stats: () => ({
+    calls: renderer.info.render.calls,
+    triangles: renderer.info.render.triangles,
+    geometries: renderer.info.memory.geometries,
+  }),
 };
-
-let hud = null;
-
-function fail(error) {
-  const message = error instanceof Error ? `${error.message}\n${(error.stack ?? "").split("\n").slice(0, 4).join("\n")}` : String(error);
-  console.error("[voxel-scene]", error);
-  if (hud) hud.error(message);
-}
-
-function nextFrame() {
-  return new Promise((resolve) => requestAnimationFrame(() => resolve()));
-}
-
-function createRenderer() {
-  const renderer = new WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-  renderer.setSize(window.innerWidth, window.innerHeight, false);
-  renderer.outputColorSpace = SRGBColorSpace;
-  renderer.toneMapping = ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.02;
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = PCFShadowMap;
-  return renderer;
-}
-
-function formatCount(value) {
-  if (value >= 10000) return `${(value / 10000).toFixed(1)} 万`;
-  return value.toLocaleString("zh-CN");
-}
-
-function updateStats() {
-  const { renderer, compiled } = state;
-  if (!renderer || !compiled) return;
-  const info = renderer.info.render;
-  hud.setStats([
-    `体素 <b>${formatCount(compiled.stats.voxels)}</b> · 合并盒 <b>${formatCount(compiled.stats.boxes)}</b>`,
-    `draw call <b>${info.calls}</b> · 三角面 <b>${formatCount(info.triangles)}</b>`,
-    `实例 <b>${formatCount(compiled.stats.instances)}</b> · 材质族 <b>${compiled.stats.families}</b>`,
-    `FPS <b>${state.fps.toFixed(0)}</b>`,
-  ]);
-}
-
-function applyTimeOfDay(key) {
-  const environment = state.environment;
-  if (!environment) return;
-  const applied = environment.setTimeOfDay(key);
-  state.renderer.toneMappingExposure = applied.exposure;
-  hud.setActiveTime(environment.key);
-}
-
-function applyView(key) {
-  if (!state.rig) return;
-  if (state.rig.applyView(key)) hud.setActiveView(key);
-}
-
-async function boot() {
-  hud = new Hud({ onView: applyView, onTimeOfDay: applyTimeOfDay });
-
-  if (!canvas) throw new Error("页面里找不到 #scene 画布");
-  const probe = document.createElement("canvas");
-  if (!probe.getContext("webgl2") && !probe.getContext("webgl")) {
-    throw new Error("当前浏览器没有可用的 WebGL 上下文");
-  }
-
-  state.renderer = createRenderer();
-  canvas.addEventListener("webglcontextlost", (event) => {
-    event.preventDefault();
-    fail(new Error("WebGL 上下文丢失，可能是显存不足"));
-  });
-
-  const scene = new Scene();
-  state.scene = scene;
-
-  state.environment = new Environment(scene, { bounds: ANCHORS.ensemble ?? WORLD_BOUNDS });
-  state.rig = new CameraRig({ canvas, anchors: ANCHORS, aspect: window.innerWidth / window.innerHeight });
-
-  const initialView = VIEWS.some((view) => view.key === urlOptions.view) ? urlOptions.view : "bird";
-  const initialTime = urlOptions.tod && TIME_OF_DAY[urlOptions.tod] ? urlOptions.tod : "noon";
-
-  hud.buildViewButtons(VIEWS, initialView);
-  hud.buildTimeButtons(TIME_OF_DAY, initialTime);
-
-  const world = createWorld();
-  state.world = world;
-  const stages = buildStages();
-  await nextFrame();
-  for (let i = 0; i < stages.length; i++) {
-    state.stage = stages[i].label;
-    hud.progress(stages[i].label, (i / (stages.length + 1)) * 0.92);
-    await nextFrame();
-    stages[i].run(world);
-  }
-
-  hud.progress("合并体素 · 生成实例化网格", 0.94);
-  await nextFrame();
-  const compiled = compileVoxels(world);
-  state.compiled = compiled;
-  scene.add(compiled.group);
-
-  const glowing = [];
-  for (const [family, material] of compiled.materials) {
-    if (family === "glowing") glowing.push(material);
-  }
-  state.environment.setLanternMaterials(glowing);
-  applyTimeOfDay(initialTime);
-
-  hud.progress("就绪", 1);
-  state.rig.applyView(initialView, { immediate: true });
-  hud.setActiveView(initialView);
-  state.renderer.render(scene, state.rig.camera);
-  updateStats();
-  await nextFrame();
-  hud.ready();
-
-  window.addEventListener("resize", onResize);
-  const timer = new Timer();
-  // 接上 Page Visibility，标签页被隐藏时 delta 归零，避免切回来时跳一大步。
-  timer.connect(document);
-  let statsTimer = 0;
-  state.renderer.setAnimationLoop((time) => {
-    timer.update(time);
-    const delta = Math.min(0.1, timer.getDelta());
-    state.elapsed += delta;
-    state.frames += 1;
-    statsTimer += delta;
-    state.rig.update(delta);
-    state.renderer.render(scene, state.rig.camera);
-    if (statsTimer >= 0.5) {
-      state.fps = state.frames / state.elapsed;
-      state.frames = 0;
-      state.elapsed = 0;
-      statsTimer = 0;
-      updateStats();
-    }
-  });
-}
-
-function onResize() {
-  const width = window.innerWidth;
-  const height = window.innerHeight;
-  state.renderer.setSize(width, height, false);
-  state.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-  state.rig?.setAspect(width / height);
-}
-
-/** 供人工与自动化检查使用的最小调试面。 */
-window.__voxelScene = {
-  get stats() {
-    return state.compiled?.stats ?? null;
-  },
-  get renderInfo() {
-    return state.renderer ? { ...state.renderer.info.render } : null;
-  },
-  get view() {
-    return state.rig?.view ?? null;
-  },
-  get timeOfDay() {
-    return state.environment?.key ?? null;
-  },
-  get camera() {
-    const camera = state.rig?.camera;
-    return camera ? { position: camera.position.toArray(), aspect: camera.aspect, fov: camera.fov } : null;
-  },
-  setView: applyView,
-  setTimeOfDay: applyTimeOfDay,
-  views: VIEWS.map((view) => view.key),
-  world: () => state.world,
-  scene: () => state.scene,
-  renderer: () => state.renderer,
-};
-
-boot().catch(fail);
