@@ -14,26 +14,6 @@
       "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/gpt-6.1-sol/RESULTS.md"
     },
     {
-      "candidateId": "deepseek-v4.1-flash",
-      "model": "deepseek/deepseek-flash",
-      "baselineMain": "63a46c3a79afa751a12eaa90f5c0f98b4b7212f1",
-      "sourceRef": "local-worktree:.worktrees/gargantua-deepseek-v4.1-flash (branch candidate/gargantua-deepseek-v4.1-flash-2026-10)",
-      "sourceCommit": "eff2788b7853ac43bad53354deebe00446a2bdba",
-      "sourceTree": "19df9b81fe157750f7070d1eb822aebd92e0f48d",
-      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/deepseek-v4.1-flash-2026-10",
-      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/deepseek-v4.1-flash",
-      "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/deepseek-v4.1-flash/RESULTS.md",
-      "note": "From-scratch implementation from the pinned baseline, produced and accepted in an independent local worktree without reading the earlier candidate. Published under the established candidate id.",
-      "supersedes": [
-        {
-          "sourceCommit": "703a8da77a7e2c42912ac6c438605f36ef184ba8",
-          "sourceTree": "b739129757368139fa353ed11b963464c839855c",
-          "archiveTag": "candidate/gargantua-schwarzschild-raytracer/deepseek-v4.1-flash",
-          "reason": "Earlier revision at the same gallery path. Its tag and commit remain intact for audit; the gallery now serves the rerun from baseline 63a46c3."
-        }
-      ]
-    },
-    {
       "candidateId": "swe-2",
       "model": "magpie/devin/swe-2",
       "baselineMain": "63a46c3a79afa751a12eaa90f5c0f98b4b7212f1",
@@ -55,6 +35,26 @@
       "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/minimax-m3.1-flash",
       "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/minimax-m3.1-flash/RESULTS.md",
       "note": "Schwarzschild null-geodesic raytracer with analytic capture test, path-ordered disc crossings, HDR bloom and ACES chain, 24 parameters, 4 presets, 10 diagnostic views."
+    },
+    {
+      "candidateId": "deepseek-v4.1-flash",
+      "model": "deepseek-v4.1-flash (DeepSeek Harness, devin/deepseek-v4-1-flash-1017)",
+      "baselineMain": "091c801b98342f2e778bd356e0c55b7372398541",
+      "sourceRef": "worktree:.worktrees/run-gargantua-deepseek (detached; baseline 091c801b98342f2e778bd356e0c55b7372398541)",
+      "sourceCommit": "bc68239",
+      "sourceTree": "b1c48493a673611749779ff466a66afb66258e15",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/deepseek-v4.1-flash",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/deepseek-v4.1-flash",
+      "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/deepseek-v4.1-flash/RESULTS.md",
+      "note": "React + Vite Schwarzschild black hole raytracer. All visible geometry comes from a per-pixel fragment shader that integrates null geodesics in 3D (dp/ds = v, dv/ds = -3M h^2 p / r^5 with conserved h), intersects the accretion disk as a real plane, and feeds an HDR bloom + ACES pipeline. Built from zero without a starter project, without subagents and without reading other candidates. Verified all four presets, ten debug views, the window.__GARGANTUA__ contract including invalid-input rejection, mobile layout, and the production build; browser tab and dev server closed afterwards.",
+      "supersedes": [
+        {
+          "sourceCommit": "eff2788b7853ac43bad53354deebe00446a2bdba",
+          "sourceTree": "19df9b81fe157750f7070d1eb822aebd92e0f48d",
+          "archiveTag": "candidate/gargantua-schwarzschild-raytracer/deepseek-v4.1-flash-2026-10",
+          "reason": "Earlier revision at the same gallery path, built from baseline 63a46c3. Its tag and commit remain intact for audit; the gallery now serves this rerun from baseline 091c801."
+        }
+      ]
     }
   ]
 }
