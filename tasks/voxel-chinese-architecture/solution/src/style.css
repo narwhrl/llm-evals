@@ -1,0 +1,58 @@
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: #10141c;
+  overflow: hidden;
+}
+
+#scene {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  cursor: grab;
+}
+
+#scene:active {
+  cursor: grabbing;
+}
+
+.caption {
+  position: fixed;
+  left: 24px;
+  bottom: 20px;
+  margin: 0;
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  font-family: "Songti SC", "Noto Serif CJK SC", Georgia, serif;
+  color: #e8dfc8;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+  user-select: none;
+}
+
+.caption-title {
+  font-size: 18px;
+  letter-spacing: 0.12em;
+}
+
+.caption-hint {
+  font-family: "PingFang SC", "Noto Sans CJK SC", Arial, sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: #b9ad92;
+}
+
+@media (max-width: 640px) {
+  .caption {
+    left: 14px;
+    bottom: 14px;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .caption-title {
+    font-size: 15px;
+  }
+}
