@@ -314,7 +314,8 @@ function escapeHtml(value) {
 const byVersionDesc = (a, b) => b.localeCompare(a, "en", { numeric: true });
 const effortRank = (effort) => (effort ? EFFORTS.indexOf(effort) + 1 : 0);
 const effortLabel = (effort) => effort || "默认";
-const effortTag = (effort) => (effort ? `${effort} 思考` : "默认思考");
+// 思考程度统一写成 模型名:思考程度；candidate id 里仍用连字符，因为 Git 引用名和 Windows 路径不允许冒号。
+const modelEffort = (item) => `${item.modelId}:${effortLabel(item.effort)}`;
 
 const DAY_FORMAT = new Intl.DateTimeFormat("en-CA", { timeZone: TIME_ZONE, year: "numeric", month: "2-digit", day: "2-digit" });
 const CLOCK_FORMAT = new Intl.DateTimeFormat("en-GB", { timeZone: TIME_ZONE, hour: "2-digit", minute: "2-digit" });
@@ -480,6 +481,7 @@ const STYLE = `
       .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
       .tag { display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 10px; border-radius: 999px; background: var(--soft); color: var(--ink-3); font-size: 12.5px; font-weight: 600; }
       a.tag:hover { background: #e8e8ed; }
+      .tag.id { font: 500 12px var(--mono); }
       .tag.ok { background: var(--green-soft); color: var(--green); }
       .tag.ok::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
       .post-title { font-size: 22px; font-weight: 700; line-height: 1.35; text-wrap: balance; word-break: keep-all; }
@@ -868,7 +870,7 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
   const searchText = (...parts) => escapeHtml(parts.filter(Boolean).join(" ").toLocaleLowerCase());
   const entrySearch = (entry) => searchText(entry.name, entry.modelId, entry.model, entry.vendor, entry.variant, taskById.get(entry.task).title);
   const runLabel = (entry) =>
-    `${entry.name}${entry.effort ? `（${entry.effort}）` : ""}${entry.variant ? `（${entry.variant}）` : ""}：${taskById.get(entry.task).title}`;
+    `${modelEffort(entry)}${entry.variant ? `（${entry.variant}）` : ""}：${taskById.get(entry.task).title}`;
   const reportLink = (entry) =>
     entry.hasReport ? `<a class="sub-link" href="${escapeHtml(reportUrl(entry))}">报告</a>` : `<span class="sub-link off">无报告</span>`;
   const empty = `<p class="empty" data-empty hidden>没有匹配的作业。<button class="pill sm" type="button" data-clear>清除搜索</button></p>`;
@@ -879,7 +881,7 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
 
   const tags = (entry) => `<div class="tags">
               <a class="tag" href="#${escapeHtml(entry.task)}">${escapeHtml(taskById.get(entry.task).short)}</a>
-              <span class="tag">${escapeHtml(effortTag(entry.effort))}</span>
+              <span class="tag id">${escapeHtml(modelEffort(entry))}</span>
               ${entry.variant ? `<span class="tag">${escapeHtml(entry.variant)}</span>` : ""}
               ${entry.hasReport ? `<span class="tag ok">有报告</span>` : `<span class="tag">无报告</span>`}
             </div>`;
@@ -1015,7 +1017,7 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
       </section>`;
 
   const entryRow = (task, entry) => `<li class="entry" data-item data-search="${entrySearch(entry)}">
-              ${avatar(entry, "sm")}<div class="entry-main"><b>${escapeHtml(entry.name)}</b><span>${escapeHtml(effortTag(entry.effort))}${entry.variant ? ` · ${escapeHtml(entry.variant)}` : ""} · ${dayText(entry.day)}</span></div>
+              ${avatar(entry, "sm")}<div class="entry-main"><b>${escapeHtml(entry.name)}</b><span>${escapeHtml(modelEffort(entry))}${entry.variant ? ` · ${escapeHtml(entry.variant)}` : ""} · ${dayText(entry.day)}</span></div>
               <button class="pill sm run" type="button" data-run="${escapeHtml(workUrl(entry))}" data-title="${escapeHtml(runLabel(entry))}" data-target="stage-${escapeHtml(task.task)}" aria-pressed="false">${icon("play")}运行</button>
               <a class="sub-link" href="${escapeHtml(workUrl(entry))}" target="_blank" rel="noopener">新窗口</a>
               <a class="sub-link" href="${escapeHtml(sourceUrl(entry))}">源码</a>
@@ -1129,7 +1131,7 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
         ${viewHead(emoji("clipboard", 40, "h-art"), "运行指南", "每个模型一个独立文件夹 · 同一轮的模型发同一段提示词，只换尖括号里的值")}
         <section class="step">
           <h2 class="group-head">1. 开跑前</h2>
-          <p>在仓库根目录执行。每个模型会得到一个独立文件夹 <code>../llm-runs/&lt;task-id&gt;/&lt;candidate-id&gt;/</code>，在里面启动模型，可以同时跑多个。candidate-id 写成“模型名”或“模型名-思考程度”，比如 <code>gpt-6.1-sol</code>、<code>grok-4.6-high</code>。</p>
+          <p>在仓库根目录执行。每个模型会得到一个独立文件夹 <code>../llm-runs/&lt;task-id&gt;/&lt;candidate-id&gt;/</code>，在里面启动模型，可以同时跑多个。candidate-id 写成“模型名”或“模型名-思考程度”，比如 <code>gpt-6.1-sol</code>、<code>grok-4.6-high</code>。文件夹名和 Git 标签不能带冒号，所以这里用连字符；画廊里显示成 <code>grok-4.6:high</code>。</p>
           ${codeBlock(before)}
         </section>
         <section class="step">

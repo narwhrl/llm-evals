@@ -45,7 +45,7 @@ llm-evals/                              # repository root; always main
 
 ## Candidate IDs
 
-A candidate ID is the model ID, optionally followed by the reasoning effort used for the run: `<model-id>[-<effort>]`, where `<effort>` is one of `minimal`, `low`, `medium`, `high`, `xhigh`, or `max`. Omit the suffix for the model's default effort, for example `gpt-6.1-sol` or `grok-4.6-high`. The gallery groups candidates by this convention.
+A candidate ID is the model ID, optionally followed by the reasoning effort used for the run: `<model-id>[-<effort>]`, where `<effort>` is one of `minimal`, `low`, `medium`, `high`, `xhigh`, or `max`. Omit the suffix for the model's default effort, for example `gpt-6.1-sol` or `grok-4.6-high`. The gallery groups candidates by this convention. Reports and the gallery write the effort as `<model-id>:<effort>`, for example `grok-4.6:high`; candidate IDs use a hyphen instead because Git ref names and Windows paths cannot contain `:`.
 
 ## Standard Evaluation Workflow
 
@@ -95,7 +95,7 @@ Prompt for the model, started inside `../llm-runs/<task-id>/<candidate-id>/`:
 ```text
 当前目录是评测仓库的根目录。请完成 tasks/<task-id>/task.md 里的任务。
 
-模型标识：<完整模型标识，例如 provider/model-name，思考程度 high>
+模型标识：<模型名>:<思考程度>，例如 kimi-k3.1-pro:high、gpt-6.1-sol:max
 
 规则：
 1. 只读写当前目录，不要访问这个目录以外的文件，也不要上网找别人的实现。
