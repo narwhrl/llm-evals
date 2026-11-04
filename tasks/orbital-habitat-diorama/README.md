@@ -1,50 +1,16 @@
-# Orbital Habitat Diorama Evaluation
+# Orbital Habitat Diorama Archive
 
-## Task Record
+Candidates for `orbital-habitat-diorama`. Task inputs and the evaluation procedure are on `main` at [`tasks/orbital-habitat-diorama/`](https://github.com/narwhrl/llm-evals/tree/main/tasks/orbital-habitat-diorama).
 
-- Task ID: `orbital-habitat-diorama`
-- Canonical candidate path: `tasks/orbital-habitat-diorama/solution/`
-- Candidate result report: `tasks/orbital-habitat-diorama/solution/RESULTS.md`
-- Prompt: [`task.md`](task.md)
-- Status: Four candidates archived on `llm/orbital-habitat-diorama` at `tasks/orbital-habitat-diorama/solutions/<candidate-id>/`: `zcode-harness` (ZCode multi-agent harness, `7b2f86c` baseline) and `swe-2` (`magpie/devin/swe-2`, `63a46c3` baseline). The `zcode-harness` source is recorded in `migration/2026-09-30.json`; the `swe-2` import is recorded in [`imports.json`](imports.json). The exact source trees are preserved under `solutions/<candidate-id>/` with tags `candidate/orbital-habitat-diorama/<candidate-id>`.
-- Status: `minimax-m3.1-flash` (`magpie/minimax-code/MiniMax-M3.1-Flash`) was produced from the `63a46c3` baseline in an isolated worktree (`.worktrees/minimax-m3.1-flash/orbital-habitat-diorama`), tagged `candidate/orbital-habitat-diorama/minimax-m3.1-flash` at commit `586d885` (tree `7728291`), and imported with a result report (RESULTS.md).
-- Status: `kimi-k3.1-pro` (`magpie/kimi-code-cn/k3.1-pro`) was produced from the `091c801b98342f2e778bd356e0c55b7372398541` baseline in an isolated worktree. Its original commit `3f7d317e797354bc27e7af5893dce386c0e4fc97` and tree `a16f007bef5d76466c807d1689f4252742e9955a` remain preserved by `candidate/orbital-habitat-diorama/kimi-k3.1-pro`. The displayed candidate is the structural revision recorded in `imports.json`, preserved by `candidate/orbital-habitat-diorama/kimi-k3.1-pro-r2`. Reference-informed window assemblies and hatch-edge frames replace the unsupported cross-window arcs; `STRUCTURE.md` records the public NASA/ESA sources.
-- Status: `deepseek-v4.1-flash` (`magpie/devin/deepseek-v4.1-flash`) was produced from the `091c801b98342f2e778bd356e0c55b7372398541` baseline in the isolated worktree `.worktrees/orbital-deepseek-v4.1-flash` (detached at that SHA). Its commit `e332c46750cdf8cf82340c9ad3428bd211c25d9d` is preserved by `candidate/orbital-habitat-diorama/deepseek-v4.1-flash`; the imported `solution/` tree `e96a704f99adc0cb249180e122967c1d6f5e48b4` matches the source tree byte for byte. The run used no sub-agents and no other model's code; the only agent call was a read-only visual review of this candidate's own evidence images.
+- `solutions/<candidate-id>/` is the exact `tasks/orbital-habitat-diorama/solution/` tree of the candidate tag named in its record.
+- [`imports.json`](imports.json) records every import.
+- `inputTree` in a record is the `tasks/orbital-habitat-diorama` tree at its baseline; candidates with the same `inputTree` received identical task inputs.
+- Candidates imported before `scripts/runs.mjs` ran in clones or worktrees inside the repository; their isolation from other candidates is not verified.
 
-## Shared Inputs
+## Provenance
 
-This task intentionally provides no starter project, fixed executable tests, or reference images. Rendering engine, scene construction, texture and asset strategy, and interaction implementation are part of the evaluated response. Every candidate must receive the same repository baseline, task prompt, tool permissions, runtime conditions, browser viewport, and review procedure.
-
-The original prompt referred to a `style_ref.png` style reference and pre-generated `earth_day.png` / `earth_night.png` textures. Those files are not part of the baseline, so the prompt was rewritten to state the composition and density requirements directly and to require candidates to supply their own locally stored Earth textures with recorded provenance. The original's staged user sign-off and mandatory sub-agent split were removed because an isolated, unattended run cannot wait for confirmation and not every model has sub-agents; candidates may still organize their own work that way. The original `/output` folder was replaced by `solution/evidence/` so all deliverables stay under the canonical candidate path.
-
-The deliverable must run locally in a browser and support a production build without services that require credentials. Runtime must not depend on remote art. Each model writes its code and result report under the canonical candidate path in its isolated clone; the curator archives the completed tree under that model's candidate ID.
-
-## Evaluation Procedure
-
-Before starting a round:
-
-1. Designate the current `main` commit as the shared baseline and record its full SHA in every candidate result report.
-2. Create each isolated model clone from that exact SHA according to the repository workflow.
-3. Evaluate every candidate in the same browser at a `1440 × 900` desktop viewport.
-4. Load the scene from a clean browser session. Confirm an orthographic isometric first view with no visible UI, in which the large porthole on the rear wall and the Earth behind it are directly visible and form the visual focus.
-5. Exercise drag rotation and zoom. Confirm rotation is limited to angles that keep the interior readable.
-6. Observe at least two full 90-second day/night cycles. Check the sharp sunlight patch and bright day state, the night-side city lights, the cool rim light on the porthole frame, and that warm interior light keeps the night state readable without crushing to black.
-7. Exercise every interaction: click-to-focus on each major fixture and return, dragging the Earth to scrub orbital time and releasing it, clicking the porthole to toggle the 15-second fast-forward cycle, pen avoidance and spin, plant-light toggle, and floor-strip night-cruise toggle. Confirm that click and drag on the porthole are distinguished reliably.
-8. Compare the five images in `solution/evidence/` against the running build; they must be reproducible from it.
-9. Run the candidate's documented production build, including a non-root `--base` and `--outDir` build. Serve the production output and confirm that all assets load locally. Record the exact commands, results, browser observations, console failures, and asset failures. Recycle any development server afterward.
-
-Each candidate result report must also include the complete model identifier, asset provenance, known limitations or failures, and any required human intervention, as required by the repository rules.
-
-## Review Axes
-
-Apply the prompt consistently and record observable evidence for:
-
-- **Composition:** a true orthographic isometric view of a cut-away capsule module with thick wall and floor sections; the large porthole and Earth dominate the first view against the small cabin.
-- **Structure and detail density:** curved riveted wall panels, reinforcing rings, two small portholes, grating floor with a warm light strip, two closed end hatches, and no large blank wall areas; labels, cable bundles, vents, wear, and lived-in clutter at overview distance, with finer texture detail on focus.
-- **Furnishing:** the sleeping, work, viewing, plant, fitness, and storage areas described in the prompt, placed coherently for one resident.
-- **Lighting and Earth:** a textured 3D Earth with day/night blending, clouds, atmospheric glow, and consistent views through all portholes; a legible 90-second cycle with a sharp sunlight patch and a readable warm-versus-cool night state.
-- **Materials and style:** low-poly miniature forms with detailed textures and legible text; no toon outlines, glossy realistic PBR, or plastic look.
-- **Motion:** continuous non-colliding floating objects, scrolling screen data, breathing plant light, blinking indicators, swaying zipper pull, and Earth motion through the porthole.
-- **Interaction and packaging:** smooth focus transitions, reliable time scrubbing and fast-forward, pen, plant-light, and night-cruise toggles; locked dependencies, a production build that honors `--base` and `--outDir`, local assets, and stable runtime.
-
-Do not infer quality from dependency count, mesh count, source size, or nominal feature claims. Comparison conclusions require observed browser behavior, build evidence, and path-aligned candidate diffs from the same baseline.
+- `zcode-harness` (ZCode multi-agent harness, `7b2f86c` baseline) is recorded in [`migration/2026-09-30.json`](../../migration/2026-09-30.json).
+- `swe-2` (`magpie/devin/swe-2`) was produced from the `63a46c3` baseline.
+- `minimax-m3.1-flash` (`magpie/minimax-code/MiniMax-M3.1-Flash`) was produced from the `63a46c3` baseline in an isolated worktree (`.worktrees/minimax-m3.1-flash/orbital-habitat-diorama`), tagged `candidate/orbital-habitat-diorama/minimax-m3.1-flash` at commit `586d885` (tree `7728291`), and imported with a result report (RESULTS.md).
+- `kimi-k3.1-pro` (`magpie/kimi-code-cn/k3.1-pro`) was produced from the `091c801b98342f2e778bd356e0c55b7372398541` baseline in an isolated worktree. Its original commit `3f7d317e797354bc27e7af5893dce386c0e4fc97` and tree `a16f007bef5d76466c807d1689f4252742e9955a` remain preserved by `candidate/orbital-habitat-diorama/kimi-k3.1-pro`. The displayed candidate is the structural revision recorded in `imports.json`, preserved by `candidate/orbital-habitat-diorama/kimi-k3.1-pro-r2`. Reference-informed window assemblies and hatch-edge frames replace the unsupported cross-window arcs; `STRUCTURE.md` records the public NASA/ESA sources.
+- `deepseek-v4.1-flash` (`magpie/devin/deepseek-v4.1-flash`) was produced from the `091c801b98342f2e778bd356e0c55b7372398541` baseline in the isolated worktree `.worktrees/orbital-deepseek-v4.1-flash` (detached at that SHA). Its commit `e332c46750cdf8cf82340c9ad3428bd211c25d9d` is preserved by `candidate/orbital-habitat-diorama/deepseek-v4.1-flash`; the imported `solution/` tree `e96a704f99adc0cb249180e122967c1d6f5e48b4` matches the source tree byte for byte. The run used no sub-agents and no other model's code; the only agent call was a read-only visual review of this candidate's own evidence images.
