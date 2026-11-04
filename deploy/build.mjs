@@ -169,7 +169,7 @@ function loadRunGuide() {
   const readme = readFileSync(join(REPO_ROOT, "README.md"), "utf8").replace(/\r\n/g, "\n");
   const section = readme.match(/<!-- run-guide -->([\s\S]*?)<!-- \/run-guide -->/)?.[1] ?? "";
   const blocks = [...section.matchAll(/```\w*\n([\s\S]*?)\n```/g)].map((match) => match[1]);
-  if (blocks.length !== 3) throw new Error("README.md 的 run-guide 一节应有 3 个代码块：开跑前命令、提示词、跑完后命令");
+  if (blocks.length !== 4) throw new Error("README.md 的 run-guide 一节应有 4 个代码块：目录结构、开跑前命令、提示词、跑完后命令");
   return blocks;
 }
 
@@ -624,6 +624,7 @@ const STYLE = `
       .code pre { margin: 0; padding: 16px 92px 16px 18px; overflow-x: auto; color: var(--ink-2); font: 13px/1.7 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; }
       .code pre code { padding: 0; background: none; font: inherit; }
       .code.prose pre { font: 14.5px/1.8 var(--sans); }
+      .code.tree pre { padding-right: 18px; white-space: pre; }
       .copy { position: absolute; top: 10px; right: 10px; }
       .guide-source { margin-top: 28px; color: var(--muted); font-size: 13px; }
       .guide-source a { color: var(--ink-3); text-decoration: underline; text-underline-offset: 3px; }
@@ -1127,24 +1128,28 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
     : "";
   const updated = `${dayLabel(today)} ${CLOCK_FORMAT.format(new Date(generated * 1000))}`;
 
-  const [before, prompt, after] = guide;
+  const [layout, before, prompt, after] = guide;
   const codeBlock = (text, className = "") =>
     `<div class="code${className}"><pre><code>${escapeHtml(text)}</code></pre><button class="pill sm copy" type="button" data-copy>复制</button></div>`;
   const guideView = `<section class="view" data-view="guide" aria-label="运行指南" hidden>
         ${viewHead(emoji("clipboard", 40, "h-art"), "运行指南", "每个模型一个独立文件夹 · 同一轮的模型发同一段提示词，只换尖括号里的值")}
         <section class="step">
+          <p>两个文件夹并排放：第 1、3 步在 <code>llm-evals/</code> 里执行，第 2 步在模型自己的运行文件夹里。</p>
+          <div class="code tree"><pre><code>${escapeHtml(layout)}</code></pre></div>
+        </section>
+        <section class="step">
           <h2 class="group-head">1. 开跑前</h2>
-          <p>在仓库根目录执行。每个模型会得到一个独立文件夹 <code>../llm-runs/&lt;task-id&gt;/&lt;candidate-id&gt;/</code>，在里面启动模型，可以同时跑多个。candidate-id 写成“模型名”或“模型名-思考程度”，比如 <code>gpt-6.1-sol</code>、<code>grok-4.6-high</code>。文件夹名和 Git 标签不能带冒号，所以这里用连字符；画廊里显示成 <code>grok-4.6:high</code>。不带思考程度时按该模型的默认档位显示，多数是 max。</p>
+          <p>在 <code>llm-evals/</code> 里执行。命令会给每个 candidate-id 建一个运行文件夹 <code>llm-runs/&lt;task-id&gt;/&lt;candidate-id&gt;/</code>，并打印它的完整路径；可以一次建多个、同时跑。candidate-id 写成“模型名”或“模型名-思考程度”，比如 <code>gpt-6.1-sol</code>、<code>grok-4.6-high</code>。文件夹名和 Git 标签不能带冒号，所以这里用连字符；画廊里显示成 <code>grok-4.6:high</code>。不带思考程度时按该模型的默认档位显示，多数是 max。</p>
           ${codeBlock(before)}
         </section>
         <section class="step">
           <h2 class="group-head">2. 发给模型的提示词</h2>
-          <p>第 2 条把实现位置统一到 <code>solution/</code>，题面里写的位置以它为准。</p>
+          <p>进入第 1 步打印的那个文件夹，在里面启动模型，让它的工作目录就是 <code>llm-runs/&lt;task-id&gt;/&lt;candidate-id&gt;/</code>，然后发下面这段。第 2 条把实现位置统一到 <code>solution/</code>，题面里写的位置以它为准。</p>
           ${codeBlock(prompt, " prose")}
         </section>
         <section class="step">
           <h2 class="group-head">3. 跑完后</h2>
-          <p>收回作品并推送，然后只构建这一份、重新部署，首页会按全部作品重新生成。</p>
+          <p>等模型提交以后，回到 <code>llm-evals/</code> 里执行：收回作品并推送，然后只构建这一份、重新部署，首页会按全部作品重新生成。</p>
           ${codeBlock(after)}
         </section>
         <p class="guide-source">命令和提示词取自仓库 <a href="${escapeHtml(archive.repoUrl)}#running-a-model">README 的 Running a Model 一节</a>，改那里即可。</p>

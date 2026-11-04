@@ -84,13 +84,21 @@ Candidates imported before `scripts/runs.mjs` ran in clones or worktrees inside 
 The blocks below are the copyable form of the workflow above. The gallery reads them from this section at build time and shows them at `/#guide`. Send every model in a round the same prompt, changing only the bracketed values.
 
 <!-- run-guide -->
-Before the run, from the repository root (one folder per model; runs may proceed in parallel):
+Two folders sit side by side. Steps 1 and 3 run in `llm-evals/`; step 2 runs in the model's own folder:
+
+```text
+llm-evals/                       本仓库，第 1、3 步在这里执行
+llm-runs/                        和 llm-evals/ 同级，第 1 步自动创建
+└── <task-id>/<candidate-id>/    每个模型一个；第 2 步在这里启动模型
+```
+
+1. Before the run, in `llm-evals/`. The command creates `llm-runs/<task-id>/<candidate-id>/` for each candidate ID and prints its full path; runs may proceed in parallel:
 
 ```bash
 node scripts/runs.mjs new <task-id> <candidate-id> [<candidate-id> ...]
 ```
 
-Prompt for the model, started inside `../llm-runs/<task-id>/<candidate-id>/`:
+2. Start the model inside `llm-runs/<task-id>/<candidate-id>/`, so that folder is its working directory, and send it this prompt:
 
 ```text
 当前目录是评测仓库的根目录。请完成 tasks/<task-id>/task.md 里的任务。
@@ -106,13 +114,13 @@ Prompt for the model, started inside `../llm-runs/<task-id>/<candidate-id>/`:
 6. 完成后提交一次：git add tasks/<task-id>/solution，提交信息用 "feat: <一句话描述>"。
 ```
 
-After the run, from the repository root:
+3. After the model has committed, back in `llm-evals/`:
 
 ```bash
 node scripts/runs.mjs collect <task-id> <candidate-id>
 git push origin llm/<task-id> candidate/<task-id>/<candidate-id>
 node deploy/build.mjs <task-id>/<candidate-id>
-cd deploy && npx wrangler deploy
+npx wrangler deploy --cwd deploy
 ```
 <!-- /run-guide -->
 
@@ -138,7 +146,7 @@ Prerequisites: Node.js with npm, and an authenticated Wrangler session (`npx wra
 
 ```bash
 node deploy/build.mjs              # build every candidate branch into deploy/public/
-cd deploy && npx wrangler deploy   # upload and publish
+npx wrangler deploy --cwd deploy   # upload and publish
 ```
 
 Rebuild a subset while iterating; `BUILD_CONCURRENCY` (default `4`) controls how many candidates build at once:
