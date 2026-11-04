@@ -5,14 +5,6 @@
 - Task ID: `voxel-waterfall`
 - Original shared baseline: `5945154ab7bd4a9e080f50f4efa4bbef472f7f4d`
 - Canonical candidate path: `tasks/voxel-waterfall/solution/`
-- Archive: Sixteen candidates on `llm/voxel-waterfall` at `tasks/voxel-waterfall/solutions/<candidate-id>/`. Historical source commits and trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json); later imports are recorded in [`imports.json`](imports.json).
-
-| Retired branch | Model | Original candidate commit |
-| --- | --- | --- |
-| `llm/voxel-waterfall/gpt-5.6-sol` | GPT-5.6-SOL | `d20eeecec9f67dfe12464e7598aaa1e3494a0a55` |
-| `llm/voxel-waterfall/grok-4.6` | Grok 4.6 | `ca10235699c41814f71ee4d44198eb0f08b0c7fa` |
-
-The original candidate histories remain available through `candidate/voxel-waterfall/<candidate-id>` tags.
 
 ## Reproducibility Status
 

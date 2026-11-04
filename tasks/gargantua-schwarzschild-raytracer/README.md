@@ -6,7 +6,6 @@
 - Canonical candidate path: `tasks/gargantua-schwarzschild-raytracer/solution/`
 - Candidate result report: `tasks/gargantua-schwarzschild-raytracer/solution/RESULTS.md`
 - Prompt: [`task.md`](task.md)
-- Status: Sixteen candidates archived on `llm/gargantua-schwarzschild-raytracer` at `tasks/gargantua-schwarzschild-raytracer/solutions/<candidate-id>/`. Original commits and source trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json); `cursor-c343` has no confirmed model ID or result report.
 
 ## Shared Inputs
 

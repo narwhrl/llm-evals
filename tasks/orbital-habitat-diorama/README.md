@@ -6,7 +6,6 @@
 - Canonical candidate path: `tasks/orbital-habitat-diorama/solution/`
 - Candidate result report: `tasks/orbital-habitat-diorama/solution/RESULTS.md`
 - Prompt: [`task.md`](task.md)
-- Status: Four candidates archived on `llm/orbital-habitat-diorama` at `tasks/orbital-habitat-diorama/solutions/<candidate-id>/`. The `zcode-harness` source is recorded in `migration/2026-09-30.json`; the later imports are recorded in [`imports.json`](imports.json). The exact source trees are preserved under `solutions/<candidate-id>/` with tags `candidate/orbital-habitat-diorama/<candidate-id>`.
 
 ## Shared Inputs
 
