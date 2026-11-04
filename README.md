@@ -85,7 +85,13 @@ Every pushed task branch is built and published to one Cloudflare Worker, so all
 
 - Live site: <https://llm-evals-result.narwh.dev/>
 - URL layout: `https://llm-evals-result.narwh.dev/<task-id>/<candidate-id>/`
-- `/` is a matrix of models, grouped by vendor, against tasks. Each filled cell opens a candidate, each column header opens the task prompt, and expanding a model lists the source, result report, and recorded model identifier of every candidate. A model with candidates at several reasoning efforts gets a switch between them.
+- `/` is the gallery index. It has four views:
+  - Recent (default): candidates newest first, each with its report excerpt, model identifier, and source and report links. A candidate runs in place when you click it.
+  - Coverage (`#coverage`): a vendor → model × task matrix.
+  - All models (`#models`): every model's candidates.
+  - Per task (`#<task-id>`): all of that task's candidates share one stage, so you can compare them.
+
+  A model with candidates at several reasoning efforts gets a switch between them. Completion dates come from the candidate tags' commit dates. Task icons are Fluent UI Emoji (MIT, `deploy/assets/emoji/`). Fonts are self-hosted OFL faces in `deploy/assets/fonts/`. The Chinese heading face is a subset covering only the characters in `deploy/build.mjs`, so new heading text needs a regenerated subset.
 
 ### Publish or Update
 

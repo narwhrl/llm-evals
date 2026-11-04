@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-04T00:00:00+07:00",
+  "title": "Design System: LLM Evals Gallery",
+  "extensions": {
+    "colorMeta": {
+      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#16161a", "tonalRamp": ["#16161a", "#2b2b31", "#3f3f46", "#6b6b74", "#b9b9c4", "#dcdce2", "#ececef", "#f4f4f6"] },
+      "ink-2": { "role": "neutral", "displayName": "Graphite", "canonical": "#2b2b31", "tonalRamp": ["#16161a", "#2b2b31", "#3f3f46", "#6b6b74", "#b9b9c4", "#dcdce2", "#ececef", "#f4f4f6"] },
+      "ink-3": { "role": "neutral", "displayName": "Slate", "canonical": "#3f3f46", "tonalRamp": ["#16161a", "#2b2b31", "#3f3f46", "#6b6b74", "#b9b9c4", "#dcdce2", "#ececef", "#f4f4f6"] },
+      "muted": { "role": "neutral", "displayName": "Muted", "canonical": "#6b6b74", "tonalRamp": ["#16161a", "#2b2b31", "#3f3f46", "#6b6b74", "#b9b9c4", "#dcdce2", "#ececef", "#f4f4f6"] },
+      "paper": { "role": "neutral", "displayName": "Paper", "canonical": "#ffffff", "tonalRamp": ["#ececef", "#f1f1f3", "#f4f4f6", "#f7f7f9", "#fafafb", "#fcfcfd", "#fefeff", "#ffffff"] },
+      "soft": { "role": "neutral", "displayName": "Soft Gray", "canonical": "#f4f4f6", "tonalRamp": ["#d9d9e0", "#dcdce2", "#e8e8ed", "#ebebef", "#efeff2", "#f4f4f6", "#f7f7f9", "#fafafb"] },
+      "soft-2": { "role": "neutral", "displayName": "Whisper", "canonical": "#fafafb", "tonalRamp": ["#d9d9e0", "#dcdce2", "#e8e8ed", "#ebebef", "#efeff2", "#f4f4f6", "#f7f7f9", "#fafafb"] },
+      "tile": { "role": "neutral", "displayName": "Tile", "canonical": "#f7f7f9", "tonalRamp": ["#d9d9e0", "#dcdce2", "#e8e8ed", "#ebebef", "#efeff2", "#f4f4f6", "#f7f7f9", "#fafafb"] },
+      "line": { "role": "neutral", "displayName": "Hairline", "canonical": "#ececef", "tonalRamp": ["#b9b9c4", "#cfcfd6", "#d4d4da", "#d9d9e0", "#dcdce2", "#e8e8ed", "#ececef", "#f4f4f6"] },
+      "line-2": { "role": "neutral", "displayName": "Hairline Strong", "canonical": "#dcdce2", "tonalRamp": ["#b9b9c4", "#cfcfd6", "#d4d4da", "#d9d9e0", "#dcdce2", "#e8e8ed", "#ececef", "#f4f4f6"] },
+      "bar": { "role": "neutral", "displayName": "Bar Gray", "canonical": "#d9d9e0", "tonalRamp": ["#b9b9c4", "#cfcfd6", "#d4d4da", "#d9d9e0", "#dcdce2", "#e8e8ed", "#ececef", "#f4f4f6"] },
+      "blue": { "role": "primary", "displayName": "Mark Blue", "canonical": "#2a5ff0", "tonalRamp": ["#0f2466", "#16349a", "#1d4ed8", "#2a5ff0", "#6b8ff5", "#a9bff9", "#dbe5ff", "#eaf0ff"] },
+      "blue-ink": { "role": "primary", "displayName": "Mark Blue Deep", "canonical": "#1d4ed8", "tonalRamp": ["#0f2466", "#16349a", "#1d4ed8", "#2a5ff0", "#6b8ff5", "#a9bff9", "#dbe5ff", "#eaf0ff"] },
+      "blue-soft": { "role": "primary", "displayName": "Mark Blue Wash", "canonical": "#eaf0ff", "tonalRamp": ["#0f2466", "#16349a", "#1d4ed8", "#2a5ff0", "#6b8ff5", "#a9bff9", "#dbe5ff", "#eaf0ff"] },
+      "navy": { "role": "secondary", "displayName": "Stage Navy", "canonical": "#121527", "tonalRamp": ["#0a0c17", "#121527", "#20253f", "#353b5c", "#5c6386", "#8c93b3", "#d5d8e6", "#e9ecf8"] },
+      "navy-ink": { "role": "secondary", "displayName": "Stage Lavender", "canonical": "#8c93b3", "tonalRamp": ["#0a0c17", "#121527", "#20253f", "#353b5c", "#5c6386", "#8c93b3", "#d5d8e6", "#e9ecf8"] },
+      "red": { "role": "tertiary", "displayName": "New Red", "canonical": "#dc2f24", "tonalRamp": ["#4a0f0b", "#7a1a13", "#ab231a", "#dc2f24", "#e8695f", "#f2a39d", "#f9d3d0", "#fdeceb"] },
+      "green": { "role": "tertiary", "displayName": "Report Green", "canonical": "#157a41", "tonalRamp": ["#06281a", "#0c4a28", "#157a41", "#2a9a5a", "#5fbb85", "#9fd8b4", "#cdeedb", "#e7f6ed"] },
+      "green-soft": { "role": "tertiary", "displayName": "Report Green Wash", "canonical": "#e7f6ed", "tonalRamp": ["#06281a", "#0c4a28", "#157a41", "#2a9a5a", "#5fbb85", "#9fd8b4", "#cdeedb", "#e7f6ed"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "View title, one per view, beside a 40px task emoji. 32px below 820px." },
+      "headline": { "displayName": "Headline", "purpose": "Post titles (700) and rail section heads (800). 20px on mobile." },
+      "title": { "displayName": "Title", "purpose": "Rail card heads and model card heads; group heads at 18px/800." },
+      "body": { "displayName": "Body", "purpose": "Base UI text." },
+      "body-reading": { "displayName": "Reading", "purpose": "Report excerpts in ink-2." },
+      "label": { "displayName": "Label", "purpose": "Tags, task meta, small captions." },
+      "mono": { "displayName": "Mono", "purpose": "Paths, candidate IDs, dates, chart axis, model identifier quote. Machine facts only." },
+      "stat": { "displayName": "Stat", "purpose": "Fact tile numbers, tabular figures." }
+    },
+    "shadows": [
+      { "name": "rail", "value": "0 1px 2px rgb(22 22 26 / 0.04), 0 10px 28px rgb(22 22 26 / 0.06)", "purpose": "The rail chart card at rest. The only resting shadow." },
+      { "name": "lift", "value": "0 1px 2px rgb(22 22 26 / 0.06), 0 6px 16px rgb(22 22 26 / 0.08)", "purpose": "Link cards on hover." },
+      { "name": "nudge", "value": "0 1px 2px rgb(22 22 26 / 0.06)", "purpose": "Small pills on hover." },
+      { "name": "thumb", "value": "0 1px 3px rgb(22 22 26 / 0.12)", "purpose": "Pressed segment of the segmented control." },
+      { "name": "stage-glow", "value": "0 6px 18px rgb(0 0 0 / 0.35)", "purpose": "Play pill on hover, inside the navy stage only." },
+      { "name": "focus-halo", "value": "0 0 0 4px #eaf0ff", "purpose": "Search field focus." }
+    ],
+    "motion": [
+      { "name": "ease", "value": "cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "All state transitions, view entry, and stage growth." },
+      { "name": "state", "value": "0.2s", "purpose": "Hover and press transitions on pills, tags, cards, nav, marks, bars." },
+      { "name": "tooltip", "value": "0.15s", "purpose": "Tooltip and chart annotation fade." },
+      { "name": "view-in", "value": "0.4s, opacity 0 and translateY(6px) to rest", "purpose": "Entry of a routed view." },
+      { "name": "frame-in", "value": "0.4s opacity", "purpose": "Iframe fade-in once the running work loads." },
+      { "name": "stage-grow", "value": "0.5s height", "purpose": "Stage growing from idle to the running work." },
+      { "name": "reduced-motion", "value": "animation and transition none", "purpose": "Honored globally under prefers-reduced-motion." }
+    ],
+    "breakpoints": [
+      { "name": "three-column", "value": "min-width: 1200px" },
+      { "name": "two-column", "value": "max-width: 1199px" },
+      { "name": "stacked", "value": "max-width: 820px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Pill Button",
+      "kind": "button",
+      "refersTo": "pill",
+      "description": "Default action pill on a soft gray ground.",
+      "html": "<button class=\"ds-pill\">全部作品</button>",
+      "css": ".ds-pill { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 16px; border: 1px solid transparent; border-radius: 999px; background: #f4f4f6; color: #16161a; font: 600 14px Figtree, sans-serif; cursor: pointer; transition: background-color 0.2s cubic-bezier(0.22, 1, 0.36, 1); } .ds-pill:hover { background: #ebebef; } .ds-pill:focus-visible { outline: 2px solid #2a5ff0; outline-offset: 2px; }"
+    },
+    {
+      "name": "Small Pill",
+      "kind": "button",
+      "refersTo": "pill-sm",
+      "description": "Outlined secondary pill in post footers and task entries; fills blue when it is the running work.",
+      "html": "<button class=\"ds-pill-sm\">新窗口打开</button> <button class=\"ds-pill-sm\" aria-pressed=\"true\">运行中</button>",
+      "css": ".ds-pill-sm { display: inline-flex; align-items: center; height: 32px; padding: 0 14px; border: 1px solid #ececef; border-radius: 999px; background: #fff; color: #16161a; font: 600 13px Figtree, sans-serif; cursor: pointer; transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; } .ds-pill-sm:hover { border-color: #dcdce2; background: #fafafb; box-shadow: 0 1px 2px rgb(22 22 26 / 0.06); } .ds-pill-sm:focus-visible { outline: 2px solid #2a5ff0; outline-offset: 2px; } .ds-pill-sm[aria-pressed=\"true\"] { border-color: #2a5ff0; background: #2a5ff0; color: #fff; }"
+    },
+    {
+      "name": "Run-in-Place Stage",
+      "kind": "custom",
+      "refersTo": "stage",
+      "description": "Signature navy stage with the play pill; grows into the live work when run.",
+      "html": "<div class=\"ds-stage\"><button class=\"ds-play\"><svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\"><path d=\"M8 5.5v13l10.5-6.5z\" fill=\"currentColor\"/></svg>在这里运行</button><code class=\"ds-path\">/voxel-waterfall/gpt-5-high/</code></div>",
+      "css": ".ds-stage { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; height: 220px; padding: 24px; border-radius: 20px; background: #121527; } .ds-play { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 18px; border: 0; border-radius: 999px; background: #fff; color: #16161a; font: 700 15px Figtree, sans-serif; cursor: pointer; transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s cubic-bezier(0.22, 1, 0.36, 1); } .ds-play:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgb(0 0 0 / 0.35); } .ds-play:focus-visible { outline: 2px solid #2a5ff0; outline-offset: 2px; } .ds-path { color: #8c93b3; font: 12px 'JetBrains Mono', ui-monospace, monospace; }"
+    },
+    {
+      "name": "Search Field",
+      "kind": "input",
+      "refersTo": "search",
+      "description": "Soft gray pill search with a slash keycap; turns white with a blue halo on focus.",
+      "html": "<label class=\"ds-search\"><svg viewBox=\"0 0 24 24\" width=\"18\" height=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\"><circle cx=\"11\" cy=\"11\" r=\"6.5\"/><path d=\"m16 16 5 5\"/></svg><input placeholder=\"搜索模型或题目\" /><kbd>/</kbd></label>",
+      "css": ".ds-search { display: flex; align-items: center; gap: 8px; width: 280px; height: 40px; padding: 0 8px 0 14px; border: 1px solid transparent; border-radius: 999px; background: #f4f4f6; color: #6b6b74; transition: background-color 0.2s, box-shadow 0.2s, border-color 0.2s; } .ds-search:hover { background: #efeff2; } .ds-search:focus-within { border-color: #dcdce2; background: #fff; box-shadow: 0 0 0 4px #eaf0ff; } .ds-search input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; color: #16161a; font: 500 15px Figtree, sans-serif; } .ds-search kbd { display: grid; place-items: center; min-width: 24px; height: 24px; border: 1px solid #dcdce2; border-radius: 8px; background: #fff; font: 500 12px 'JetBrains Mono', monospace; } .ds-search:focus-within kbd { visibility: hidden; }"
+    },
+    {
+      "name": "Sidebar Navigation",
+      "kind": "nav",
+      "refersTo": "nav-item",
+      "description": "Rounded rows with line icons; the current view sits on soft gray at 700.",
+      "html": "<nav class=\"ds-nav\"><a aria-current=\"page\"><svg viewBox=\"0 0 24 24\"><path d=\"M4 5h16M4 12h16M4 19h10\"/></svg>最近完成</a><a><svg viewBox=\"0 0 24 24\"><rect x=\"3.5\" y=\"3.5\" width=\"7\" height=\"7\" rx=\"2\"/><rect x=\"13.5\" y=\"3.5\" width=\"7\" height=\"7\" rx=\"2\"/><rect x=\"3.5\" y=\"13.5\" width=\"7\" height=\"7\" rx=\"2\"/><rect x=\"13.5\" y=\"13.5\" width=\"7\" height=\"7\" rx=\"2\"/></svg>覆盖</a></nav>",
+      "css": ".ds-nav { display: grid; gap: 2px; width: 260px; } .ds-nav a { display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 14px; color: #16161a; font: 500 15px Figtree, sans-serif; cursor: pointer; transition: background-color 0.2s; } .ds-nav svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; } .ds-nav a:hover { background: #f7f7f9; } .ds-nav a[aria-current] { background: #f4f4f6; font-weight: 700; } .ds-nav a:focus-visible { outline: 2px solid #2a5ff0; outline-offset: 2px; }"
+    },
+    {
+      "name": "Tags and Badge",
+      "kind": "chip",
+      "refersTo": "tag",
+      "description": "Gray fact tags, the green report tag, and the red new-count badge.",
+      "html": "<span class=\"ds-tag\">high 思考</span> <span class=\"ds-tag ds-ok\">有报告</span> <span class=\"ds-badge\">3</span>",
+      "css": ".ds-tag { display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 10px; border-radius: 999px; background: #f4f4f6; color: #3f3f46; font: 600 12.5px Figtree, sans-serif; } .ds-ok { background: #e7f6ed; color: #157a41; } .ds-ok::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; } .ds-badge { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: #dc2f24; color: #fff; font: 700 11.5px Figtree, sans-serif; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Segmented Control",
+      "kind": "chip",
+      "refersTo": "segmented",
+      "description": "Reasoning-effort switch; the pressed segment becomes a white pill.",
+      "html": "<span class=\"ds-seg\"><button aria-pressed=\"true\">low</button><button aria-pressed=\"false\">high</button></span>",
+      "css": ".ds-seg { display: inline-flex; padding: 3px; border-radius: 999px; background: #f4f4f6; } .ds-seg button { padding: 0 10px; border: 0; border-radius: 999px; background: none; color: #6b6b74; font: 600 12px/22px Figtree, sans-serif; cursor: pointer; transition: color 0.2s, background-color 0.2s; } .ds-seg button:hover { color: #16161a; } .ds-seg button[aria-pressed=\"true\"] { background: #fff; color: #16161a; box-shadow: 0 1px 3px rgb(22 22 26 / 0.12); } .ds-seg button:focus-visible { outline: 2px solid #2a5ff0; outline-offset: 2px; }"
+    },
+    {
+      "name": "Link Card",
+      "kind": "card",
+      "refersTo": "link-card",
+      "description": "Source and report links under a post; lifts on hover.",
+      "html": "<a class=\"ds-lcard\"><b>查看源码</b><span>github.com</span></a>",
+      "css": ".ds-lcard { display: block; width: 240px; padding: 12px 16px; border: 1px solid #ececef; border-radius: 16px; background: #fafafb; color: #16161a; cursor: pointer; transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; } .ds-lcard:hover { border-color: #dcdce2; background: #fff; box-shadow: 0 1px 2px rgb(22 22 26 / 0.06), 0 6px 16px rgb(22 22 26 / 0.08); } .ds-lcard b { display: block; font: 600 15px Figtree, sans-serif; } .ds-lcard span { display: block; color: #6b6b74; font: 12px/1.6 'JetBrains Mono', monospace; }"
+    },
+    {
+      "name": "Rail Card with Fact Tiles",
+      "kind": "card",
+      "refersTo": "rail-card",
+      "description": "The one shadowed card, beside the tile grid of rail stats.",
+      "html": "<div class=\"ds-card\"><h2>每周完成</h2><div class=\"ds-tiles\"><p><b>97</b>候选</p><p><b>26</b>模型</p></div></div>",
+      "css": ".ds-card { width: 320px; padding: 18px 20px 14px; border: 1px solid #ececef; border-radius: 22px; background: #fff; box-shadow: 0 1px 2px rgb(22 22 26 / 0.04), 0 10px 28px rgb(22 22 26 / 0.06); } .ds-card h2 { margin: 0 0 10px; font: 700 16px Figtree, sans-serif; } .ds-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; } .ds-tiles p { margin: 0; padding: 14px 18px; border: 1px solid #ececef; border-radius: 18px; background: #f7f7f9; color: #6b6b74; font: 13px Figtree, sans-serif; } .ds-tiles b { display: block; color: #16161a; font: 800 30px/1.2 Figtree, sans-serif; font-variant-numeric: tabular-nums; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Running Feed",
+    "overview": "The gallery is a cozy workspace feed: a white page, a fixed sidebar, a single reading column, and a right rail of facts. Each finished candidate arrives as a post, and its work runs in place inside a dark navy stage. The system is the owner's pinned direction, a soft minimalist SaaS dashboard, made concrete: light gray containers, hairline borders, medium-to-large radii, pill buttons, and color emoji as task illustrations.\n\nDensity is comfortable rather than packed. Hierarchy comes from Figtree at heavy weights and from gray tonal steps, not from color. Color is reserved for jobs: blue marks presence and selection, red counts what is new, green confirms a report exists. The navy stage is the only dark surface, so the eye always finds the thing that runs.\n\nThe system shows facts only. Nothing in it is shaped like a score, a rank, a podium, or a thumbnail grid.",
+    "keyCharacteristics": [
+      "Pure white ground with gray containers (#f4f4f6 family) and #ececef hairlines.",
+      "Radii from 14px to 22px on surfaces; every button and tag is a full pill.",
+      "Figtree 700 to 800 for headings; JetBrains Mono only for paths, IDs, and dates.",
+      "Fluent 3D emoji illustrate tasks; 1.7px-stroke line icons do navigation.",
+      "One dark surface: the navy stage where a work runs."
+    ],
+    "rules": [
+      { "name": "The Accents Do Jobs Rule", "body": "Blue, red, and green each carry one meaning (present or selected, new, has a report). Never use them as decoration, section color, or brand wash.", "section": "colors" },
+      { "name": "The One Dark Surface Rule", "body": "Navy belongs to the stage. No other card, header, or panel goes dark.", "section": "colors" },
+      { "name": "The Machine Facts Rule", "body": "JetBrains Mono appears only on strings a machine produced: paths, IDs, dates, identifiers. Never on headings, labels, or prose.", "section": "typography" },
+      { "name": "The Tabular Count Rule", "body": "Every count, date, and stat uses `font-variant-numeric: tabular-nums`.", "section": "typography" },
+      { "name": "The Resting Shadow Rule", "body": "One surface wears a shadow at rest: the rail chart card. Everything else is flat until hovered.", "section": "elevation" }
+    ],
+    "dos": [
+      "**Do** keep the page white and build depth from the gray ladder (`soft`, `soft-2`, `tile`) and 1px `line` hairlines.",
+      "**Do** make every button, tag, segmented control, and search field a full pill.",
+      "**Do** illustrate a task with its Fluent 3D emoji and navigate with 1.7px-stroke line icons; keep the two roles separate.",
+      "**Do** run a work inside the navy stage, one at a time, with the Play pill as the post's primary action.",
+      "**Do** set paths, IDs, and dates in JetBrains Mono and every count in tabular figures.",
+      "**Do** show a missing candidate as a visible gap (a gray dot), never as an empty space."
+    ],
+    "donts": [
+      "**Don't** add scores, ranks, medals, or any visual that implies one candidate beats another.",
+      "**Don't** present candidates as a thumbnail grid or a scoreboard table.",
+      "**Don't** use blue, red, or green outside their single meanings, or introduce a fourth accent.",
+      "**Don't** add a resting shadow to anything but the rail chart card, or use hard offset shadows.",
+      "**Don't** put a dark surface anywhere but the stage.",
+      "**Don't** set headings or labels in monospace."
+    ]
+  }
+}
