@@ -7,6 +7,7 @@ This repository compares coding models under the same task, context, tools, and 
 - `main`: The shared baseline, including task descriptions, starter code, fixed tests, test data, evaluation configuration, repository rules, and tooling. It contains no candidate solution and no archive status, so importing a candidate never moves it.
 - `llm/<task-id>`: The candidate archive for one task. It holds only `tasks/<task-id>/solutions/<candidate-id>/`, the import records in `tasks/<task-id>/imports.json`, and an archive README; it carries no copy of `main`.
 - `candidate/<task-id>/<candidate-id>` tag: The original, unmodified candidate commit, with its implementation at `tasks/<task-id>/solution/`. Later revisions use `-r2`, `-r3`, and so on. The tag supports exact historical diffs against that candidate's recorded baseline.
+- `gh-pages`: The built gallery for GitHub Pages, one snapshot commit per publish, written only by `node deploy/pages.mjs`. It holds generated files and is never edited by hand.
 - Models never run inside this repository. Each run gets its own folder outside it that contains only the pinned baseline commit.
 
 ## Tasks
@@ -33,9 +34,11 @@ llm-evals/                              # repository root; always main
 │       └── tests/                      # optional fixed acceptance tests
 ├── scripts/runs.mjs                    # creates isolated run folders and collects candidates
 ├── deploy/                             # candidate gallery build and deployment
-│   ├── build.mjs                       # builds candidates from task branches into public/
+│   ├── build.mjs                       # builds candidates from task branches into public/ and pages/
+│   ├── pages.mjs                       # publishes pages/ to the gh-pages branch
 │   ├── wrangler.jsonc                  # Worker, static assets, custom domain
-│   └── public/                         # generated gallery output (ignored)
+│   ├── public/                         # generated output for the Worker (ignored)
+│   └── pages/                          # generated output for GitHub Pages (ignored)
 └── migration/2026-09-28.json           # frozen provenance of the migrated candidates
 
 ../llm-runs/<task-id>/<candidate-id>/   # one isolated run folder per model, outside the repository
@@ -121,6 +124,7 @@ node scripts/runs.mjs collect <task-id> <candidate-id>
 git push origin llm/<task-id> candidate/<task-id>/<candidate-id>
 node deploy/build.mjs <task-id>/<candidate-id>
 npx wrangler deploy --cwd deploy
+node deploy/pages.mjs
 ```
 <!-- /run-guide -->
 
@@ -128,11 +132,11 @@ Rule 2 places the implementation at `solution/` even where a task's own `task.md
 
 ## Candidate Gallery
 
-Every pushed task branch is built and published to one Cloudflare Worker, so all implementations can be viewed side by side at predictable paths.
+Every pushed task branch is built once and published to two hosts with the same content, so all implementations can be viewed side by side at predictable paths.
 
-- Live site: <https://llm-evals-result.narwh.dev/>
-- URL layout: `https://llm-evals-result.narwh.dev/<task-id>/<candidate-id>/`
-- `/` is the gallery index. It has four views:
+- Cloudflare Worker: <https://llm-evals-result.narwh.dev/>, with each candidate at `/<task-id>/<candidate-id>/`.
+- GitHub Pages: <https://narwhrl.github.io/llm-evals/>, with each candidate at `/llm-evals/<task-id>/<candidate-id>/`.
+- The site root is the gallery index. It has four views:
   - Recent (default): candidates newest first, each with its report excerpt, model identifier, and source and report links. A candidate runs in place when you click it.
   - Coverage (`#coverage`): a vendor → model × task matrix.
   - All models (`#models`): every model's candidates.
@@ -142,11 +146,12 @@ Every pushed task branch is built and published to one Cloudflare Worker, so all
 
 ### Publish or Update
 
-Prerequisites: Node.js with npm, and an authenticated Wrangler session (`npx wrangler login`) on an account that owns the `narwh.dev` zone. Run both commands from the repository root:
+Prerequisites: Node.js with npm, and an authenticated Wrangler session (`npx wrangler login`) on an account that owns the `narwh.dev` zone, plus push access to `origin` for GitHub Pages. Run the commands from the repository root:
 
 ```bash
-node deploy/build.mjs              # build every candidate branch into deploy/public/
-npx wrangler deploy --cwd deploy   # upload and publish
+node deploy/build.mjs              # build every candidate branch into deploy/public/ and deploy/pages/
+npx wrangler deploy --cwd deploy   # publish deploy/public/ to the Worker
+node deploy/pages.mjs              # publish deploy/pages/ to GitHub Pages
 ```
 
 Rebuild a subset while iterating; `BUILD_CONCURRENCY` (default `4`) controls how many candidates build at once:
@@ -155,20 +160,20 @@ Rebuild a subset while iterating; `BUILD_CONCURRENCY` (default `4`) controls how
 node deploy/build.mjs ui-ux-design/kimi-k3 voxel-waterfall/grok-4.6
 ```
 
-To publish a new candidate, import it into and push `llm/<task-id>`, then run both commands again. The gallery discovers candidate directories with a `package.json` from the remote task branches.
+To publish a new candidate, import it into and push `llm/<task-id>`, then run the three commands again. The gallery discovers candidate directories with a `package.json` from the remote task branches.
 
 ### How the Build Works
 
 `deploy/build.mjs`:
 
 1. Fetches `origin` and reads each `llm/<task-id>` branch once: its candidate directories, which of them have a `package.json` and a `RESULTS.md`, and the records in `imports.json`.
-2. Creates a temporary detached worktree under `.worktrees/.deploy-tmp/`, runs `npm ci` (or `npm install` when the candidate has no `package-lock.json`), then `npm run build -- --base=/<task-id>/<candidate-id>/ --outDir=<repository>/deploy/public/<task-id>/<candidate-id> --emptyOutDir`, and removes the temporary worktree again.
-3. Removes build output for candidates no longer in the archive, then regenerates `deploy/public/index.html` from every candidate directory present in `deploy/public/`, so a partial rebuild still lists everything that would be deployed. The vendor and model of each candidate come from its ID: `VENDORS` in `build.mjs` maps the first segment of the model ID to a vendor, and `ALIASES` maps historical IDs that do not follow the [candidate ID convention](#candidate-ids). Unrecognized IDs are listed under 未归类 and reported during the build.
+2. Creates a temporary detached worktree under `.worktrees/.deploy-tmp/`, runs `npm ci` (or `npm install` when the candidate has no `package-lock.json`), then builds it once per host: `npm run build -- --base=/<task-id>/<candidate-id>/ --outDir=<repository>/deploy/public/<task-id>/<candidate-id> --emptyOutDir` for the Worker, and the same with `--base=/llm-evals/<task-id>/<candidate-id>/` into `deploy/pages/` for GitHub Pages. It then removes the temporary worktree.
+3. Removes build output for candidates no longer in the archive, then regenerates `index.html` in `deploy/public/` and `deploy/pages/` from the candidate directories present in each, so a partial rebuild still lists everything that would be deployed. The index links with relative URLs, so the same page works at either host's root. The vendor and model of each candidate come from its ID: `VENDORS` in `build.mjs` maps the first segment of the model ID to a vendor, and `ALIASES` maps historical IDs that do not follow the [candidate ID convention](#candidate-ids). Unrecognized IDs are listed under 未归类 and reported during the build.
 4. Prints a per-candidate summary and exits non-zero if any candidate failed to build.
 
 The `--base` flag is a hosting adaptation applied at build time only: it rewrites asset URLs so an app works under its path prefix, and it never modifies a candidate's tracked files. Evaluation conclusions must still be based on each candidate's own build; this step only decides where the built files are served from.
 
-`deploy/public/` and `deploy/.wrangler/` are ignored, so build output is never committed. Deployment settings live in `deploy/wrangler.jsonc`: static assets from `./public`, `html_handling: auto-trailing-slash` (so `/<task-id>/<model-id>` redirects to the trailing-slash form), and the `llm-evals-result.narwh.dev` custom domain route.
+`deploy/public/`, `deploy/pages/`, and `deploy/.wrangler/` are ignored, so build output never reaches `main`. `deploy/pages.mjs` stages `deploy/pages/` in a private index, without line-ending conversion or ignore rules, adds `.nojekyll` so `_gallery/` is served, and pushes the result as a commit on `gh-pages`. GitHub Pages serves that branch and redirects directory paths to their trailing-slash form. Deployment settings live in `deploy/wrangler.jsonc`: static assets from `./public`, `html_handling: auto-trailing-slash` (so `/<task-id>/<model-id>` redirects to the trailing-slash form), and the `llm-evals-result.narwh.dev` custom domain route.
 
 The gallery is public, with no authentication gate. Unknown paths return 404 — there is no single-page-application fallback, because candidates are single-page apps without client-side routing.
 

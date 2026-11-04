@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// 把 origin 上每个 llm/<task-id> 分支的 solutions/<candidate-id>/ 构建到 deploy/public/<task-id>/<candidate-id>/，
-// 供单个 Worker 以路径前缀方式托管。用法：
+// 把 origin 上每个 llm/<task-id> 分支的 solutions/<candidate-id>/ 构建两份：deploy/public/ 给 Cloudflare Worker（根路径），
+// deploy/pages/ 给 GitHub Pages（/llm-evals/ 子路径）。用法：
 //   node deploy/build.mjs                 # 构建全部
 //   node deploy/build.mjs ui-ux-design/kimi-k3 [其他 task/model ...]   # 只构建指定候选
 //   BUILD_CONCURRENCY=2 node deploy/build.mjs
@@ -13,6 +13,11 @@ import { fileURLToPath } from "node:url";
 const DEPLOY_DIR = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(DEPLOY_DIR, "..");
 const PUBLIC_DIR = join(DEPLOY_DIR, "public");
+// 每个站点一份产物：作品的 Vite base 带上站点前缀，画廊页只用相对链接，两边内容相同。
+const SITES = [
+  { dir: PUBLIC_DIR, base: "/" },
+  { dir: join(DEPLOY_DIR, "pages"), base: "/llm-evals/" },
+];
 const TMP_ROOT = join(REPO_ROOT, ".worktrees", ".deploy-tmp");
 const CONCURRENCY = Math.max(1, Number(process.env.BUILD_CONCURRENCY ?? 4));
 // 画廊自身的静态资源；任务 id 以字母或数字开头，不会与它重名。
@@ -206,12 +211,13 @@ function dirSize(dir) {
 
 function buildOne({ ref, task, model }) {
   const tmp = join(TMP_ROOT, `${task}--${model}`);
-  const outDir = join(PUBLIC_DIR, task, model);
-  const base = `/${task}/${model}/`;
+  const outDirs = SITES.map((site) => join(site.dir, task, model));
 
   rmSync(tmp, { recursive: true, force: true });
-  rmSync(outDir, { recursive: true, force: true });
-  mkdirSync(outDir, { recursive: true });
+  for (const outDir of outDirs) {
+    rmSync(outDir, { recursive: true, force: true });
+    mkdirSync(outDir, { recursive: true });
+  }
   run(`git worktree add --detach --force ${quote(fwd(tmp))} ${ref}`);
 
   try {
@@ -220,11 +226,12 @@ function buildOne({ ref, task, model }) {
       ? "npm ci --no-audit --no-fund"
       : "npm install --no-audit --no-fund";
     run(install, solution);
-    run(`npm run build -- --base=${base} --outDir=${quote(fwd(outDir))} --emptyOutDir`, solution);
-
-    if (!existsSync(join(outDir, "index.html"))) throw new Error("构建后没有生成 index.html");
-    const { bytes, files } = dirSize(outDir);
-    return { ref, task, model, base, ok: true, bytes, files };
+    SITES.forEach((site, i) => {
+      run(`npm run build -- --base=${site.base}${task}/${model}/ --outDir=${quote(fwd(outDirs[i]))} --emptyOutDir`, solution);
+      if (!existsSync(join(outDirs[i], "index.html"))) throw new Error("构建后没有生成 index.html");
+    });
+    const { bytes, files } = dirSize(outDirs[0]);
+    return { ref, task, model, ok: true, bytes, files };
   } finally {
     try {
       run(`git worktree remove --force ${quote(fwd(tmp))}`);
@@ -235,25 +242,25 @@ function buildOne({ ref, task, model }) {
 }
 
 // 已从归档删除的候选不再部署。
-function prunePublished(archive) {
-  for (const task of readdirSync(PUBLIC_DIR, { withFileTypes: true })) {
+function prunePublished(archive, siteDir) {
+  for (const task of readdirSync(siteDir, { withFileTypes: true })) {
     if (!task.isDirectory() || task.name === ASSET_DIR) continue;
     const meta = archive.tasks.get(task.name);
-    for (const model of readdirSync(join(PUBLIC_DIR, task.name))) {
+    for (const model of readdirSync(join(siteDir, task.name))) {
       if (meta?.candidates.has(model)) continue;
-      rmSync(join(PUBLIC_DIR, task.name, model), { recursive: true, force: true });
-      console.log(`移除已不在归档中的产物 ${task.name}/${model}`);
+      rmSync(join(siteDir, task.name, model), { recursive: true, force: true });
+      console.log(`移除已不在归档中的产物 ${fwd(join(siteDir, task.name, model))}`);
     }
-    if (!meta) rmSync(join(PUBLIC_DIR, task.name), { recursive: true, force: true });
+    if (!meta) rmSync(join(siteDir, task.name), { recursive: true, force: true });
   }
 }
 
-function collectPublished() {
+function collectPublished(siteDir) {
   const published = [];
-  for (const task of readdirSync(PUBLIC_DIR, { withFileTypes: true })) {
+  for (const task of readdirSync(siteDir, { withFileTypes: true })) {
     if (!task.isDirectory()) continue;
-    for (const model of readdirSync(join(PUBLIC_DIR, task.name), { withFileTypes: true })) {
-      if (model.isDirectory() && existsSync(join(PUBLIC_DIR, task.name, model.name, "index.html"))) {
+    for (const model of readdirSync(join(siteDir, task.name), { withFileTypes: true })) {
+      if (model.isDirectory() && existsSync(join(siteDir, task.name, model.name, "index.html"))) {
         published.push({ task: task.name, model: model.name });
       }
     }
@@ -339,14 +346,14 @@ const TASK_ICONS = {
   "voxel-waterfall": "national-park",
 };
 const emoji = (name, size, className) =>
-  `<img class="${className}" src="/${ASSET_DIR}/emoji/${name}.png" alt="" width="${size}" height="${size}" decoding="async" />`;
+  `<img class="${className}" src="${ASSET_DIR}/emoji/${name}.png" alt="" width="${size}" height="${size}" decoding="async" />`;
 const taskEmoji = (task, size, className) => emoji(TASK_ICONS[task] ?? "puzzle-piece", size, className);
 
 // 厂商与模型 logo 来自 @lobehub/icons-static-svg 1.97.0（MIT，见 deploy/assets/logos/LICENSE），商标归各自所有者。
 // 模型 logo 按 model id 首段取；没有 logo 的模型用名字首字母。小米 MiMo 的 logo 是两行文字，缩小后认不出，所以不用。
 const VENDOR_LOGOS = { Anthropic: "anthropic", Cognition: "devin", DeepSeek: "deepseek-color", Google: "google-color", MiniMax: "minimax-color", "Moonshot AI": "moonshot", OpenAI: "openai", xAI: "xai", "Z.ai": "zai" };
 const MODEL_LOGOS = { claude: "claude-color", deepseek: "deepseek-color", gemini: "gemini-color", glm: "zai", gpt: "openai", grok: "grok", kimi: "kimi-color", minimax: "minimax-color", swe: "devin-color" };
-const logoSrc = (name) => `/${ASSET_DIR}/logos/${name}.svg`;
+const logoSrc = (name) => `${ASSET_DIR}/logos/${name}.svg`;
 const avatar = (item, size) => {
   const logo = MODEL_LOGOS[item.modelId.split("-")[0]];
   return `<span class="avatar ${size}" aria-hidden="true">${logo ? `<img src="${logoSrc(logo)}" alt="" decoding="async" />` : escapeHtml(item.name[0])}</span>`;
@@ -399,9 +406,9 @@ const effortLayer = (row, effort) => `data-effort="${escapeHtml(effort)}"${effor
 // 字体自托管在 assets/fonts/（OFL）。
 // shortcut: Noto Sans SC 只截取了本文件里出现的汉字（目前 358 个），标题出现新汉字时会回退到系统字体，届时按新字表重新下载子集。
 const STYLE = `
-      @font-face { font-family: Figtree; src: url("/${ASSET_DIR}/fonts/figtree-latin.woff2") format("woff2"); font-weight: 400 800; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
-      @font-face { font-family: "JetBrains Mono"; src: url("/${ASSET_DIR}/fonts/jetbrains-mono-latin.woff2") format("woff2"); font-weight: 400 500; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
-      @font-face { font-family: "Noto Sans SC Heading"; src: url("/${ASSET_DIR}/fonts/noto-sans-sc-heading.woff2") format("woff2"); font-weight: 700 800; font-display: swap; }
+      @font-face { font-family: Figtree; src: url("${ASSET_DIR}/fonts/figtree-latin.woff2") format("woff2"); font-weight: 400 800; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      @font-face { font-family: "JetBrains Mono"; src: url("${ASSET_DIR}/fonts/jetbrains-mono-latin.woff2") format("woff2"); font-weight: 400 500; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+      @font-face { font-family: "Noto Sans SC Heading"; src: url("${ASSET_DIR}/fonts/noto-sans-sc-heading.woff2") format("woff2"); font-weight: 700 800; font-display: swap; }
       :root { color-scheme: light; --ink: #16161a; --ink-2: #2b2b31; --ink-3: #3f3f46; --muted: #6b6b74; --line: #ececef; --line-2: #dcdce2; --soft: #f4f4f6; --soft-2: #fafafb; --tile: #f7f7f9; --blue: #2a5ff0; --blue-ink: #1d4ed8; --blue-soft: #eaf0ff; --red: #dc2f24; --green: #157a41; --green-soft: #e7f6ed; --navy: #121527; --navy-ink: #8c93b3; --bar: #d9d9e0; --shadow: 0 1px 2px rgb(22 22 26 / 0.04), 0 10px 28px rgb(22 22 26 / 0.06); --lift: 0 1px 2px rgb(22 22 26 / 0.06), 0 6px 16px rgb(22 22 26 / 0.08); --ease: cubic-bezier(0.22, 1, 0.36, 1); --mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", monospace; --sans: Figtree, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; --display: Figtree, "Noto Sans SC Heading", "PingFang SC", "Microsoft YaHei", sans-serif; }
       * { box-sizing: border-box; }
       html { scrollbar-color: #cfcfd6 transparent; scrollbar-width: thin; }
@@ -830,7 +837,8 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
   const promptUrl = (task) => `${archive.repoUrl}/blob/main/tasks/${task}/task.md`;
   const sourceUrl = (entry) => `${archive.repoUrl}/tree/llm/${entry.task}/tasks/${entry.task}/solutions/${entry.model}`;
   const reportUrl = (entry) => `${archive.repoUrl}/blob/llm/${entry.task}/tasks/${entry.task}/solutions/${entry.model}/RESULTS.md`;
-  const workUrl = (entry) => `/${encodeURIComponent(entry.task)}/${encodeURIComponent(entry.model)}/`;
+  // 相对链接：同一个画廊页既在根路径也在 /llm-evals/ 下提供。
+  const workUrl = (entry) => `${encodeURIComponent(entry.task)}/${encodeURIComponent(entry.model)}/`;
 
   const entries = published
     .map((entry) => {
@@ -1162,8 +1170,8 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#ffffff" />
     <title>LLM Evals</title>
-    <link rel="icon" href="/${ASSET_DIR}/emoji/test-tube.png" />
-    <link rel="preload" href="/${ASSET_DIR}/fonts/figtree-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="icon" href="${ASSET_DIR}/emoji/test-tube.png" />
+    <link rel="preload" href="${ASSET_DIR}/fonts/figtree-latin.woff2" as="font" type="font/woff2" crossorigin />
     <style>${STYLE}    </style>
   </head>
   <body>
@@ -1193,7 +1201,7 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
 
 async function main() {
   const filter = process.argv.slice(2);
-  mkdirSync(PUBLIC_DIR, { recursive: true });
+  for (const site of SITES) mkdirSync(site.dir, { recursive: true });
   mkdirSync(TMP_ROOT, { recursive: true });
   run("git fetch --all --prune");
 
@@ -1224,27 +1232,30 @@ async function main() {
 
   results.sort((a, b) => (a.task + a.model).localeCompare(b.task + b.model));
   const failed = results.filter((r) => !r.ok);
-  // 画廊页始终按 public/ 里实际存在的产物生成，部分重建不会漏掉其他候选。
-  prunePublished(archive);
-  cpSync(join(DEPLOY_DIR, "assets"), join(PUBLIC_DIR, ASSET_DIR), { recursive: true });
-  const published = collectPublished();
+  // 画廊页按各站点目录里实际存在的产物生成，部分重建不会漏掉其他候选。
+  const generatedAt = new Date().toISOString();
+  const sites = SITES.map((site) => {
+    prunePublished(archive, site.dir);
+    cpSync(join(DEPLOY_DIR, "assets"), join(site.dir, ASSET_DIR), { recursive: true });
+    return { ...site, published: collectPublished(site.dir) };
+  });
+  const published = sites[0].published;
   for (const model of new Set(published.map((entry) => entry.model))) {
     if (identify(model).vendor === UNCLASSIFIED) console.warn(`未识别厂商：${model}，请在 deploy/build.mjs 的 VENDORS 或 ALIASES 中补充`);
   }
   for (const { task, model } of published) {
     if (!archive.tasks.get(task)?.candidates.get(model)?.time) console.warn(`没有找到 ${task}/${model} 的候选标签，画廊里它的完成日期会显示为未知`);
   }
-  writeFileSync(
-    join(PUBLIC_DIR, "index.html"),
-    renderGallery(published, archive, { generatedAt: new Date().toISOString(), failed, skipped, guide }),
-    "utf8",
-  );
+  for (const site of sites) {
+    if (site.published.length !== published.length) console.warn(`${fwd(site.dir)} 有 ${site.published.length} 份作品，${fwd(PUBLIC_DIR)} 有 ${published.length} 份；全量构建一次可以补齐`);
+    writeFileSync(join(site.dir, "index.html"), renderGallery(site.published, archive, { generatedAt, failed, skipped, guide }), "utf8");
+  }
 
   console.log("\n================ 构建汇总 ================");
   for (const r of results) {
     console.log(`${r.ok ? "OK  " : "FAIL"}  ${`${r.task}/${r.model}`.padEnd(52)} ${r.ok ? `${r.files} 个文件 ${(r.bytes / 1024 / 1024).toFixed(1)} MB` : r.reason}`);
   }
-  console.log(`成功 ${results.length - failed.length} / ${results.length}，输出目录：${PUBLIC_DIR}`);
+  console.log(`成功 ${results.length - failed.length} / ${results.length}，输出目录：${SITES.map((site) => site.dir).join("、")}`);
   if (failed.length) process.exitCode = 1;
 }
 
