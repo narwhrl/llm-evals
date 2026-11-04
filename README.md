@@ -84,8 +84,8 @@ Candidates imported before `scripts/runs.mjs` ran in clones or worktrees inside 
 Every pushed task branch is built and published to one Cloudflare Worker, so all implementations can be viewed side by side at predictable paths.
 
 - Live site: <https://llm-evals-result.narwh.dev/>
-- URL layout: `https://llm-evals-result.narwh.dev/<task-id>/<model-id>/`
-- `/` serves a generated index page that links every published candidate.
+- URL layout: `https://llm-evals-result.narwh.dev/<task-id>/<candidate-id>/`
+- `/` is a matrix of models, grouped by vendor, against tasks. Each filled cell opens a candidate, each column header opens the task prompt, and expanding a model lists the source, result report, and recorded model identifier of every candidate. A model with candidates at several reasoning efforts gets a switch between them.
 
 ### Publish or Update
 
@@ -108,9 +108,9 @@ To publish a new candidate, import it into and push `llm/<task-id>`, then run bo
 
 `deploy/build.mjs`:
 
-1. Fetches `origin` and selects every `tasks/<task-id>/solutions/<candidate-id>/package.json` on an `llm/<task-id>` branch.
+1. Fetches `origin` and reads each `llm/<task-id>` branch once: its candidate directories, which of them have a `package.json` and a `RESULTS.md`, and the records in `imports.json`.
 2. Creates a temporary detached worktree under `.worktrees/.deploy-tmp/`, runs `npm ci` (or `npm install` when the candidate has no `package-lock.json`), then `npm run build -- --base=/<task-id>/<candidate-id>/ --outDir=<repository>/deploy/public/<task-id>/<candidate-id> --emptyOutDir`, and removes the temporary worktree again.
-3. Regenerates `deploy/public/index.html` from every candidate directory present in `deploy/public/`, so a partial rebuild still lists everything that would be deployed.
+3. Removes build output for candidates no longer in the archive, then regenerates `deploy/public/index.html` from every candidate directory present in `deploy/public/`, so a partial rebuild still lists everything that would be deployed. The vendor and model of each candidate come from its ID: `VENDORS` in `build.mjs` maps the first segment of the model ID to a vendor, and `ALIASES` maps historical IDs that do not follow the [candidate ID convention](#candidate-ids). Unrecognized IDs are listed under 未归类 and reported during the build.
 4. Prints a per-candidate summary and exits non-zero if any candidate failed to build.
 
 The `--base` flag is a hosting adaptation applied at build time only: it rewrites asset URLs so an app works under its path prefix, and it never modifies a candidate's tracked files. Evaluation conclusions must still be based on each candidate's own build; this step only decides where the built files are served from.

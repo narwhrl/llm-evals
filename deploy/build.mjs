@@ -6,7 +6,7 @@
 //   BUILD_CONCURRENCY=2 node deploy/build.mjs
 
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -28,36 +28,52 @@ function run(cmdline, cwd = REPO_ROOT, capture = false) {
   return res.stdout ?? "";
 }
 
-function discoverTargets(filter) {
+// 每个任务分支读一次：候选目录、是否可构建、是否有 RESULTS.md、imports.json 记录。
+function loadArchive() {
+  const repoUrl = run("git remote get-url origin", REPO_ROOT, true).trim().replace(/\.git$/, "");
   const refs = run("git for-each-ref --format=%(refname) refs/remotes/origin/llm/", REPO_ROOT, true)
     .trim()
     .split("\n")
     .filter(Boolean);
 
-  const targets = [];
-  const skipped = [];
+  const tasks = new Map();
   for (const ref of refs) {
     const task = ref.replace("refs/remotes/origin/llm/", "");
     if (!/^[a-z0-9][a-z0-9-]*$/.test(task)) continue;
-    const tree = `tasks/${task}/solutions`;
-    const probe = spawnSync("git", ["rev-parse", "--verify", `${ref}:${tree}`], {
-      cwd: REPO_ROOT,
-      stdio: "ignore",
-    });
-    if (probe.status !== 0) continue;
-    const models = run(`git ls-tree -d --name-only ${ref}:${tree}`, REPO_ROOT, true).trim().split("\n").filter(Boolean);
-    for (const model of models) {
+    const root = `tasks/${task}/solutions/`;
+    const candidates = new Map();
+    for (const file of run(`git ls-tree -r --name-only ${ref} ${root}`, REPO_ROOT, true).split("\n")) {
+      if (!file.startsWith(root)) continue;
+      const [model, ...rest] = file.slice(root.length).split("/");
       if (!/^[a-z0-9][a-z0-9.-]*$/.test(model)) continue;
+      if (!candidates.has(model)) candidates.set(model, { hasPackage: false, hasReport: false });
+      const path = rest.join("/");
+      if (path === "package.json") candidates.get(model).hasPackage = true;
+      if (path === "RESULTS.md") candidates.get(model).hasReport = true;
+    }
+    if (!candidates.size) continue;
+
+    const records = new Map();
+    const imports = spawnSync("git", ["show", `${ref}:tasks/${task}/imports.json`], { cwd: REPO_ROOT, encoding: "utf8" });
+    if (imports.status === 0) for (const record of JSON.parse(imports.stdout).candidates) records.set(record.candidateId, record);
+
+    const readme = join(REPO_ROOT, "tasks", task, "README.md");
+    const title = existsSync(readme)
+      ? readFileSync(readme, "utf8").split(/\r?\n/)[0].replace(/^#\s+/, "").replace(/\s+Evaluation$/, "")
+      : task;
+    tasks.set(task, { ref, title, short: title.split(" — ")[0], candidates, records });
+  }
+  return { repoUrl, tasks };
+}
+
+function selectTargets(archive, filter) {
+  const targets = [];
+  const skipped = [];
+  for (const [task, meta] of archive.tasks) {
+    for (const [model, candidate] of meta.candidates) {
       if (filter.length && !filter.includes(`${task}/${model}`)) continue;
-      const packageProbe = spawnSync("git", ["cat-file", "-e", `${ref}:${tree}/${model}/package.json`], {
-        cwd: REPO_ROOT,
-        stdio: "ignore",
-      });
-      if (packageProbe.status !== 0) {
-        skipped.push(`${task}/${model}`);
-        continue;
-      }
-      targets.push({ ref, task, model });
+      if (candidate.hasPackage) targets.push({ ref: meta.ref, task, model });
+      else skipped.push(`${task}/${model}`);
     }
   }
   targets.sort((a, b) => (a.task + a.model).localeCompare(b.task + b.model));
@@ -111,13 +127,73 @@ function buildOne({ ref, task, model }) {
   }
 }
 
-const TASK_LABELS = {
-  "cs-pvp-diorama": "CS PVP Diorama",
-  "gargantua-schwarzschild-raytracer": "Gargantua Schwarzschild Raytracer",
-  "ui-ux-design": "UI/UX Design",
-  "voxel-chinese-architecture": "Voxel Chinese Architecture",
-  "voxel-waterfall": "Voxel Waterfall",
+// 已从归档删除的候选不再部署。
+function prunePublished(archive) {
+  for (const task of readdirSync(PUBLIC_DIR, { withFileTypes: true })) {
+    if (!task.isDirectory()) continue;
+    const meta = archive.tasks.get(task.name);
+    for (const model of readdirSync(join(PUBLIC_DIR, task.name))) {
+      if (meta?.candidates.has(model)) continue;
+      rmSync(join(PUBLIC_DIR, task.name, model), { recursive: true, force: true });
+      console.log(`移除已不在归档中的产物 ${task.name}/${model}`);
+    }
+    if (!meta) rmSync(join(PUBLIC_DIR, task.name), { recursive: true, force: true });
+  }
+}
+
+function collectPublished() {
+  const published = [];
+  for (const task of readdirSync(PUBLIC_DIR, { withFileTypes: true })) {
+    if (!task.isDirectory()) continue;
+    for (const model of readdirSync(join(PUBLIC_DIR, task.name), { withFileTypes: true })) {
+      if (model.isDirectory() && existsSync(join(PUBLIC_DIR, task.name, model.name, "index.html"))) {
+        published.push({ task: task.name, model: model.name });
+      }
+    }
+  }
+  return published;
+}
+
+const EFFORTS = ["minimal", "low", "medium", "high", "xhigh", "max"];
+// 按 model id 首段识别厂商：[首段, 厂商, 品牌名, 品牌与版本号之间的连接符]。
+const VENDORS = [
+  ["claude", "Anthropic", "Claude"],
+  ["deepseek", "DeepSeek", "DeepSeek"],
+  ["gemini", "Google", "Gemini"],
+  ["glm", "Z.ai", "GLM", "-"],
+  ["gpt", "OpenAI", "GPT", "-"],
+  ["grok", "xAI", "Grok"],
+  ["kimi", "Moonshot AI", "Kimi"],
+  ["mimo", "Xiaomi", "MiMo"],
+  ["minimax", "MiniMax", "MiniMax"],
+  ["swe", "Cognition", "SWE", "-"],
+];
+// 不符合 <model-id>[-<effort>] 约定的历史候选 id。
+const ALIASES = {
+  "opus-5.5": { model: "claude-opus-5.5" },
+  "cursor-kimi-k3": { model: "kimi-k3", variant: "Cursor" },
+  "cursor-c343": { vendor: "未知厂商", name: "cursor-c343", variant: "Cursor" },
+  "space-bunny-free": { vendor: "未知厂商", name: "Space Bunny Free" },
+  "zcode-harness": { vendor: "多模型组合", name: "ZCode Harness" },
+  "omp-gpt-6-sol-minimax-m3": { vendor: "多模型组合", name: "OMP: GPT-6 Sol + MiniMax M3" },
 };
+const UNCLASSIFIED = "未归类";
+const TRAILING_GROUPS = ["多模型组合", "未知厂商", UNCLASSIFIED];
+
+function identify(candidate) {
+  const alias = ALIASES[candidate] ?? {};
+  const variant = alias.variant ?? "";
+  if (alias.name) return { vendor: alias.vendor, modelId: candidate, name: alias.name, effort: "", variant };
+  const tokens = (alias.model ?? candidate).split("-");
+  const effort = tokens.length > 1 && EFFORTS.includes(tokens.at(-1)) ? tokens.pop() : "";
+  const modelId = tokens.join("-");
+  const vendor = VENDORS.find(([prefix]) => prefix === tokens[0]);
+  if (!vendor) return { vendor: UNCLASSIFIED, modelId, name: modelId, effort, variant };
+  const [, vendorName, brand, joiner = " "] = vendor;
+  const [version, ...rest] = tokens.slice(1).map((t) => t[0].toUpperCase() + t.slice(1));
+  const name = [version ? `${brand}${joiner}${version}` : brand, ...rest].join(" ");
+  return { vendor: vendorName, modelId, name, effort, variant };
+}
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -128,381 +204,307 @@ function escapeHtml(value) {
     .replaceAll("'", "&#39;");
 }
 
-function encodePathSegment(value) {
-  return encodeURIComponent(String(value ?? ""));
-}
+const byVersionDesc = (a, b) => b.localeCompare(a, "en", { numeric: true });
+const effortRank = (effort) => (effort ? EFFORTS.indexOf(effort) + 1 : 0);
+const effortLabel = (effort) => effort || "默认";
 
-function formatTaskLabel(task) {
-  if (TASK_LABELS[task]) return TASK_LABELS[task];
-  return String(task)
-    .split("-")
-    .filter(Boolean)
-    .map((part) => (part.length <= 3 ? part.toUpperCase() : `${part[0].toUpperCase()}${part.slice(1)}`))
-    .join(" ");
-}
-
-function formatBytes(bytes) {
-  const value = Number(bytes) || 0;
-  if (value === 0) return "0 B";
-  if (value < 1024 * 1024) return `${Math.max(1, Math.round(value / 1024))} KB`;
-  return `${(value / 1024 / 1024).toFixed(1)} MB`;
-}
-
-function decorateEntry(entry) {
-  const taskLabel = formatTaskLabel(entry.task);
-  return {
-    ...entry,
-    taskLabel,
-    href: `/${encodePathSegment(entry.task)}/${encodePathSegment(entry.model)}/`,
-    searchText: `${entry.task} ${taskLabel} ${entry.model}`.toLocaleLowerCase(),
-  };
-}
-
-function collectPublished() {
-  const published = [];
-  for (const task of readdirSync(PUBLIC_DIR, { withFileTypes: true })) {
-    if (!task.isDirectory()) continue;
-    for (const model of readdirSync(join(PUBLIC_DIR, task.name), { withFileTypes: true })) {
-      if (!model.isDirectory()) continue;
-      const dir = join(PUBLIC_DIR, task.name, model.name);
-      if (!existsSync(join(dir, "index.html"))) continue;
-      const { bytes, files } = dirSize(dir);
-      published.push({ task: task.name, model: model.name, ok: true, bytes, files });
-    }
-  }
-  return published;
-}
-
-function renderGallery(entries, { generatedAt, failed, skipped }) {
-  const published = entries.filter((entry) => entry.ok).map(decorateEntry);
-  const byTask = new Map();
+function groupRows(published) {
+  const rows = new Map();
   for (const entry of published) {
-    if (!byTask.has(entry.task)) byTask.set(entry.task, []);
-    byTask.get(entry.task).push(entry);
+    const id = identify(entry.model);
+    const key = `${id.vendor}\n${id.modelId}`;
+    if (!rows.has(key)) rows.set(key, { vendor: id.vendor, modelId: id.modelId, name: id.name, efforts: new Map() });
+    const row = rows.get(key);
+    if (!row.efforts.has(id.effort)) row.efforts.set(id.effort, []);
+    row.efforts.get(id.effort).push({ ...entry, variant: id.variant });
   }
+  const vendors = new Map();
+  for (const row of rows.values()) {
+    if (!vendors.has(row.vendor)) vendors.set(row.vendor, []);
+    vendors.get(row.vendor).push(row);
+  }
+  const rank = (vendor) => TRAILING_GROUPS.indexOf(vendor);
+  return [...vendors.entries()]
+    .sort(([a], [b]) => rank(a) - rank(b) || a.localeCompare(b, "en", { sensitivity: "base" }))
+    .map(([vendor, list]) => [vendor, list.sort((a, b) => byVersionDesc(a.modelId, b.modelId))]);
+}
 
-  const taskEntries = [...byTask.entries()].sort(([a], [b]) => a.localeCompare(b));
-  const taskOptions = taskEntries
+function renderGallery(published, archive, { generatedAt, failed, skipped }) {
+  const tasks = [...new Set(published.map((entry) => entry.task))]
+    .sort()
+    .map((task) => ({ task, ...(archive.tasks.get(task) ?? { title: task, short: task, records: new Map() }) }));
+  const vendors = groupRows(published);
+  const modelCount = vendors.reduce((sum, [, rows]) => sum + rows.length, 0);
+  const promptUrl = (task) => `${archive.repoUrl}/blob/main/tasks/${task}/task.md`;
+  const sourceUrl = (entry) => `${archive.repoUrl}/tree/llm/${entry.task}/tasks/${entry.task}/solutions/${entry.model}`;
+  const reportUrl = (entry) => `${archive.repoUrl}/blob/llm/${entry.task}/tasks/${entry.task}/solutions/${entry.model}/RESULTS.md`;
+  const workUrl = (entry) => `/${encodeURIComponent(entry.task)}/${encodeURIComponent(entry.model)}/`;
+
+  const header = tasks
     .map(
-      ([task, taskItems]) =>
-        `<option value="${escapeHtml(task)}">${escapeHtml(formatTaskLabel(task))} · ${taskItems.length}</option>`,
+      (task) =>
+        `<th scope="col"><a href="${escapeHtml(promptUrl(task.task))}" title="${escapeHtml(`${task.title} 的题面`)}">${escapeHtml(task.short)}</a></th>`,
     )
     .join("");
-  let cardIndex = 0;
-  const sections = taskEntries
-    .map(([task, taskItems], sectionIndex) => {
-      const taskLabel = formatTaskLabel(task);
-      const cards = taskItems
-        .map((entry) => {
-          cardIndex += 1;
-          const cardNumber = String(cardIndex).padStart(2, "0");
-          return `<li class="work-card" data-work-card data-task="${escapeHtml(entry.task)}" data-search="${escapeHtml(entry.searchText)}">
-          <a class="work-link" href="${escapeHtml(entry.href)}">
-            <span class="card-top"><span class="card-number">[${cardNumber}]</span><span class="card-type">IMPLEMENTATION</span><span class="card-arrow" aria-hidden="true">↗</span></span>
-            <span class="card-copy">
-              <span class="card-kicker">~/ ${escapeHtml(entry.task)}</span>
-              <strong class="model">${escapeHtml(entry.model)}</strong>
-              <span class="card-bottom"><span class="meta">${entry.files} files <span aria-hidden="true">/</span> ${escapeHtml(formatBytes(entry.bytes))}</span><span class="open-label">打开作品 <span aria-hidden="true">→</span></span></span>
-            </span>
-          </a>
-        </li>`;
+
+  let rowIndex = 0;
+  const groups = vendors
+    .map(([vendor, rows]) => {
+      const body = rows
+        .map((row) => {
+          rowIndex += 1;
+          const detailId = `detail-${rowIndex}`;
+          const efforts = [...row.efforts.keys()].sort((a, b) => effortRank(a) - effortRank(b));
+          const current = efforts[0];
+          const ids = [...row.efforts.values()].flat().map((entry) => entry.model);
+          const search = [row.name, row.modelId, row.vendor, ...ids].join(" ").toLocaleLowerCase();
+          const segments =
+            efforts.length > 1
+              ? `<span class="efforts" role="group" aria-label="思考程度">${efforts
+                  .map(
+                    (effort) =>
+                      `<button type="button" data-effort-choice="${escapeHtml(effort)}" aria-pressed="${effort === current}">${escapeHtml(effortLabel(effort))}</button>`,
+                  )
+                  .join("")}</span>`
+              : "";
+          const layerAttrs = (effort) => `data-effort="${escapeHtml(effort)}"${effort === current ? "" : " hidden"}`;
+
+          const cells = tasks
+            .map((task) => {
+              const layers = efforts
+                .map((effort) => {
+                  const marks = row.efforts
+                    .get(effort)
+                    .filter((entry) => entry.task === task.task)
+                    .map((entry) => {
+                      const label = `${row.name}${effort ? `（${effort}）` : ""}：${task.title}${entry.variant ? `（${entry.variant}）` : ""}`;
+                      const variant = entry.variant ? `<span class="variant">${escapeHtml(entry.variant)}</span>` : "";
+                      return `<a class="mark" href="${escapeHtml(workUrl(entry))}" aria-label="${escapeHtml(label)}" title="${escapeHtml(entry.model)}"><span class="mark-label">${escapeHtml(task.short)}</span></a>${variant}`;
+                    })
+                    .join("");
+                  return `<span class="layer" ${layerAttrs(effort)}>${marks}</span>`;
+                })
+                .join("");
+              return `<td>${layers}</td>`;
+            })
+            .join("");
+
+          const details = efforts
+            .map((effort) => {
+              const items = row.efforts
+                .get(effort)
+                .sort((a, b) => a.task.localeCompare(b.task))
+                .map((entry) => {
+                  const task = tasks.find((t) => t.task === entry.task);
+                  const record = task.records.get(entry.model);
+                  const hasReport = archive.tasks.get(entry.task)?.candidates.get(entry.model)?.hasReport;
+                  return `<li>
+                    <span class="work-task">${escapeHtml(task.title)}${entry.variant ? `（${escapeHtml(entry.variant)}）` : ""}</span>
+                    <a href="${escapeHtml(workUrl(entry))}">打开作品</a>
+                    <a href="${escapeHtml(sourceUrl(entry))}">源码</a>
+                    ${hasReport ? `<a href="${escapeHtml(reportUrl(entry))}">报告</a>` : `<span class="missing">无报告</span>`}
+                    <code class="work-id">${escapeHtml(record?.model ?? entry.model)}</code>
+                  </li>`;
+                })
+                .join("");
+              return `<ul class="works" ${layerAttrs(effort)}>${items}</ul>`;
+            })
+            .join("");
+
+          return `<tr class="model-row" data-row data-search="${escapeHtml(search)}">
+            <th scope="row"><button class="model-name" type="button" aria-expanded="false" aria-controls="${detailId}">${escapeHtml(row.name)}</button>${segments}</th>
+            ${cells}
+          </tr>
+          <tr class="detail-row" id="${detailId}" hidden><td colspan="${tasks.length + 1}">${details}</td></tr>`;
         })
         .join("\n          ");
-      return `<section class="task-section" data-task-section data-task="${escapeHtml(task)}">
-        <header class="section-heading">
-          <div>
-            <p class="section-index"><span aria-hidden="true">/</span> ${String(sectionIndex + 1).padStart(2, "0")}</p>
-            <h2>${escapeHtml(taskLabel)}</h2>
-            <p class="section-slug"><code>${escapeHtml(task)}</code></p>
-          </div>
-          <p class="section-count"><strong>${String(taskItems.length).padStart(2, "0")}</strong><span>作品</span></p>
-        </header>
-        <ul class="work-grid">
-          ${cards}
-        </ul>
-      </section>`;
+      return `<tbody data-group>
+          <tr class="vendor"><th scope="rowgroup" colspan="${tasks.length + 1}">${escapeHtml(vendor)}<span class="vendor-count">${rows.length} 个模型</span></th></tr>
+          ${body}
+        </tbody>`;
     })
-    .join("\n      ");
+    .join("\n        ");
 
   const diagnosticEntries = [
     ...failed.map((entry) => ({ label: `${entry.task}/${entry.model}`, detail: `构建失败：${entry.reason}` })),
-    ...skipped.map((label) => ({ label, detail: "未找到可构建的 package.json，已跳过" })),
+    ...skipped.map((label) => ({ label, detail: "没有 package.json，未构建" })),
   ];
   const diagnostics = diagnosticEntries.length
     ? `<details class="diagnostics">
-        <summary><span>构建诊断</span><span class="diagnostic-count">${diagnosticEntries.length} 项</span></summary>
+        <summary>构建诊断（${diagnosticEntries.length} 项）</summary>
         <ul>
-          ${diagnosticEntries
-            .map(
-              (entry) =>
-                `<li><code>${escapeHtml(entry.label)}</code><span>${escapeHtml(entry.detail)}</span></li>`,
-            )
-            .join("\n          ")}
+          ${diagnosticEntries.map((entry) => `<li><code>${escapeHtml(entry.label)}</code>${escapeHtml(entry.detail)}</li>`).join("\n          ")}
         </ul>
       </details>`
     : "";
 
-  const total = published.length;
-  const taskCount = taskEntries.length;
   const generatedDate = new Date(generatedAt);
   const displayDate = Number.isNaN(generatedDate.valueOf())
     ? generatedAt
-    : generatedDate.toLocaleString("zh-CN", { dateStyle: "medium", timeStyle: "short" });
+    : generatedDate.toLocaleString("zh-CN", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Shanghai" });
 
   return `<!doctype html>
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#fafafa" />
-    <title>LLM Evals — 候选作品画廊</title>
+    <meta name="theme-color" content="#f3f4f6" />
+    <title>LLM Evals</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" />
     <style>
-      :root { color-scheme: light; --bg: #fafafa; --surface: #fff; --text: #171717; --muted: #666; --faint: #757575; --line: #e5e5e5; --accent: #0070f3; }
+      :root { color-scheme: light; --bg: #f3f4f6; --surface: #fff; --hover: #f7f8fa; --ink: #14171d; --muted: #5d6472; --rule: #dde1e7; --accent: #2343d1; --accent-ink: #1a32a3; }
       * { box-sizing: border-box; }
-      html { background: var(--bg); }
-      body { min-width: 320px; margin: 0; color: var(--text); background: var(--bg); font: 13px/1.6 "SFMono-Regular", Consolas, "Liberation Mono", "Noto Sans Mono CJK SC", monospace; -webkit-font-smoothing: antialiased; }
-      ::selection { color: #fff; background: var(--text); }
-      a { color: inherit; }
-      button, input, select, code { font: inherit; }
-      button, a, select, input { -webkit-tap-highlight-color: transparent; }
+      body { margin: 0; color: var(--ink); background: var(--bg); font: 15px/1.55 "IBM Plex Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; -webkit-font-smoothing: antialiased; }
+      a { color: var(--accent-ink); }
+      button, input { font: inherit; color: inherit; }
       [hidden] { display: none !important; }
-      h1, h2, p { margin: 0; }
-      .shell { width: min(100% - 96px, 1200px); margin: auto; border-inline: 1px solid var(--line); }
-      .topbar { min-height: 76px; display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 0 32px; border-bottom: 1px solid var(--line); }
-      .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; font-size: 15px; font-weight: 700; letter-spacing: -.6px; }
-      .brand-mark { display: grid; place-items: center; width: 26px; height: 26px; background: var(--text); color: white; font-size: 14px; font-style: normal; }
-      .brand-divider { height: 20px; width: 1px; margin: 0 5px; background: var(--line); transform: rotate(20deg); }
-      .brand-context, .topbar-note { color: var(--muted); font-size: 11px; font-weight: 400; letter-spacing: 0; }
-      .topbar-note { display: flex; align-items: center; gap: 8px; }
-      .status-dot { display: inline-block; width: 6px; height: 6px; background: currentColor; border-radius: 50%; }
-      .hero { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) 236px; gap: 48px; padding: 72px 40px 64px; border-bottom: 1px solid var(--line); background: var(--surface); }
-      .hero::before, .hero::after { content: "+"; position: absolute; bottom: -13px; z-index: 1; color: #a3a3a3; font-size: 18px; line-height: 24px; font-weight: 400; }
-      .hero::before { left: -6px; } .hero::after { right: -6px; }
-      .eyebrow { margin-bottom: 24px; font-size: 11px; color: var(--muted); }
-      .prompt { color: var(--accent); }
-      h1 { font-size: clamp(38px, 5.2vw, 66px); line-height: 1.1; letter-spacing: -.065em; font-weight: 500; }
-      .cursor { display: inline-block; width: .45em; height: .82em; margin-left: .15em; background: var(--text); vertical-align: -.02em; }
-      .lede { max-width: 580px; margin-top: 26px; color: var(--muted); font-size: 12px; line-height: 2; }
-      .hero-stats { align-self: end; border: 1px solid var(--line); background: var(--bg); }
-      .stats-title { padding: 9px 14px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 10px; }
-      .stat { display: flex; justify-content: space-between; align-items: baseline; padding: 12px 14px; }
-      .stat + .stat { border-top: 1px dashed var(--line); }
-      .stat strong { order: 2; font-size: 24px; font-weight: 400; line-height: 1; letter-spacing: -1px; }
-      .stat span { color: var(--muted); font-size: 11px; }
-      .workspace { padding: 0 40px 48px; }
-      .toolbar { padding: 30px 0 0; }
-      .filter-form { display: flex; flex-wrap: wrap; gap: 10px; }
-      .field { display: flex; align-items: center; height: 42px; border: 1px solid #d4d4d4; border-radius: 4px; background: var(--surface); }
-      .search-field { flex: 1; min-width: 200px; gap: 10px; padding: 0 12px; }
-      .search-icon { flex: none; width: 16px; height: 16px; color: var(--muted); }
-      .field input, .field select { width: 100%; min-width: 0; border: 0; outline: 0; color: var(--text); background: transparent; font-size: 12px; }
-      .field input::placeholder { color: var(--faint); }
-      .select-field { width: 270px; max-width: 100%; padding: 0 10px; }
-      .select-field select { cursor: pointer; height: 100%; }
-      .clear-button { min-height: 42px; padding: 0 12px; border: 1px solid #d4d4d4; border-radius: 4px; color: var(--text); background: white; cursor: pointer; font-size: 12px; }
-      .clear-button:hover { background: #f0f0f0; }
-      .result-line { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin: 18px 0 4px; color: var(--muted); font-size: 10px; }
-      .results-status::before { content: "↳ "; color: var(--faint); }
-      .view-label { letter-spacing: .06em; }
-      .task-section { padding-top: 34px; }
-      .section-heading { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 15px; }
-      .section-heading > div { display: grid; grid-template-columns: 38px minmax(0, 1fr); column-gap: 6px; align-items: baseline; }
-      .section-index { grid-row: span 2; color: var(--muted); font-size: 11px; }
-      .section-index span { color: #a3a3a3; }
-      h2 { font-size: 15px; font-weight: 600; line-height: 1.6; letter-spacing: -.4px; overflow-wrap: anywhere; }
-      .section-slug { margin-top: 2px; color: var(--faint); font-size: 10px; overflow-wrap: anywhere; }
-      .section-count { display: flex; align-items: center; gap: 8px; flex-shrink: 0; color: var(--muted); font-size: 10px; }
-      .section-count strong { display: grid; place-items: center; min-width: 25px; height: 23px; border: 1px solid var(--line); font-weight: 400; background: white; }
-      .work-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; margin: 0; padding: 1px; list-style: none; background: var(--line); border: 0; }
-      .work-card { position: relative; min-width: 0; background: var(--surface); transition: background .15s; }
-      .work-card:hover { z-index: 1; background: #fafafa; box-shadow: 0 0 0 1px #a3a3a3; }
-      .work-link { display: flex; height: 100%; min-height: 202px; flex-direction: column; padding: 22px; text-decoration: none; }
-      .card-top { display: flex; align-items: center; gap: 10px; color: var(--faint); font-size: 10px; }
-      .card-number { color: var(--muted); }
-      .card-type { font-size: 9px; letter-spacing: .07em; }
-      .card-arrow { margin-left: auto; color: var(--muted); font-size: 17px; line-height: 1; transition: transform .15s, color .15s; }
-      .card-copy { display: flex; flex: 1; min-width: 0; flex-direction: column; padding-top: 26px; }
-      .card-kicker { color: var(--faint); font-size: 9px; overflow-wrap: anywhere; }
-      .model { display: block; margin: 7px 0 25px; font-size: 18px; font-weight: 500; line-height: 1.3; letter-spacing: -.7px; overflow-wrap: anywhere; }
-      .card-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; margin-top: auto; padding-top: 14px; border-top: 1px dashed var(--line); font-size: 10px; }
-      .meta { color: var(--muted); } .meta > span { color: #a3a3a3; padding: 0 3px; }
-      .open-label { color: var(--muted); }
-      .work-card:hover .card-arrow { transform: translate(2px, -2px); color: var(--text); }
-      .work-card:hover .open-label { color: var(--accent); }
-      :is(a, button, summary):focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
-      .field:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
-      .empty-state { margin-top: 30px; padding: 64px 20px; border: 1px dashed #d4d4d4; color: var(--muted); text-align: center; font-size: 12px; }
-      .empty-state::before { content: "[ no results ]"; display: block; margin-bottom: 16px; font-size: 11px; }
-      .empty-state strong { display: block; margin-bottom: 8px; color: var(--text); font-size: 15px; font-weight: 500; }
-      .diagnostics { margin-top: 40px; border: 1px solid var(--line); color: var(--muted); background: white; font-size: 11px; }
-      .diagnostics summary { display: flex; gap: 10px; padding: 14px 16px; cursor: pointer; list-style: none; }
-      .diagnostics summary::-webkit-details-marker { display: none; }
-      .diagnostics summary::before { content: "+"; }
-      .diagnostics[open] summary::before { content: "−"; }
-      .diagnostic-count { margin-left: auto; }
-      .diagnostics ul { display: grid; gap: 12px; margin: 0; padding: 16px; border-top: 1px solid var(--line); list-style: none; }
-      .diagnostics li { display: grid; gap: 4px; overflow-wrap: anywhere; }
-      .diagnostics li code { color: var(--text); }
-      .footer { display: flex; justify-content: space-between; gap: 20px; padding: 22px 40px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; }
-      .footer-label { color: var(--text); }
-      .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-      @media (min-width: 1001px) { .work-card:only-child { grid-column: span 2; } }
-      @media (max-width: 1000px) {
-        .shell { width: calc(100% - 48px); }
-        .hero { grid-template-columns: minmax(0, 1fr) 190px; gap: 24px; padding: 56px 28px; }
-        .workspace { padding-inline: 28px; }
-        .work-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        .footer { padding-inline: 28px; }
-      }
-      @media (max-width: 640px) {
-        .shell { width: calc(100% - 32px); }
-        .topbar { min-height: 64px; padding: 0 18px; }
-        .brand-context, .brand-divider, .topbar-note { display: none; }
-        .hero { grid-template-columns: 1fr; padding: 42px 20px 32px; gap: 30px; }
-        h1 { font-size: clamp(34px, 8.8vw, 54px); }
-        .eyebrow { margin-bottom: 20px; font-size: 10px; }
-        .lede { margin-top: 20px; font-size: 11px; }
-        .hero-stats { display: grid; grid-template-columns: 1fr 1fr; }
-        .stats-title { grid-column: 1 / -1; }
-        .stat + .stat { border-top: 0; border-left: 1px solid var(--line); }
-        .workspace { padding: 0 16px 32px; }
-        .toolbar { padding-top: 24px; }
-        .search-field { flex-basis: 100%; min-width: 0; }
-        .select-field { flex: 1; width: auto; min-width: 0; }
-        .view-label { display: none; }
-        .task-section { padding-top: 28px; }
-        .section-heading { gap: 10px; align-items: start; }
-        .section-heading > div { grid-template-columns: 25px minmax(0, 1fr); }
-        h2 { font-size: 13px; } .section-slug { font-size: 9px; }
-        .section-count span { display: none; }
-        .work-grid { grid-template-columns: 1fr; }
-        .work-link { min-height: 190px; padding: 20px; }
-        .footer { flex-direction: column; gap: 8px; padding: 20px; font-size: 9px; }
+      .page { width: min(100% - 48px, 1240px); margin: 0 auto; padding: 56px 0 40px; }
+      .masthead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 24px 48px; margin-bottom: 28px; }
+      h1 { margin: 0; font: 600 48px/1 "IBM Plex Sans Condensed", sans-serif; letter-spacing: -0.02em; }
+      .intro { max-width: 48em; margin: 14px 0 0; color: var(--muted); }
+      .counts { margin: 4px 0 0; font-variant-numeric: tabular-nums; }
+      .search { display: flex; align-items: center; gap: 8px; width: 300px; max-width: 100%; height: 40px; padding: 0 12px; border: 1px solid var(--rule); border-radius: 6px; background: var(--surface); }
+      .search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgb(35 67 209 / 0.15); }
+      .search svg { flex: none; width: 16px; height: 16px; color: var(--muted); }
+      .search input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; }
+      .matrix { width: 100%; table-layout: fixed; border-collapse: separate; border-spacing: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; }
+      .matrix thead th { position: sticky; top: 0; z-index: 1; padding: 16px 6px 12px; border-bottom: 1px solid var(--rule); background: var(--surface); color: var(--muted); font: 500 13px/1.25 "IBM Plex Sans Condensed", sans-serif; text-align: center; vertical-align: bottom; }
+      .matrix thead th:first-child { width: 26%; border-top-left-radius: 8px; }
+      .matrix thead th:last-child { border-top-right-radius: 8px; }
+      .matrix thead a { color: inherit; text-decoration: none; }
+      .matrix thead a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+      .vendor th { padding: 22px 18px 6px; font: 600 16px/1.3 "IBM Plex Sans Condensed", sans-serif; text-align: left; }
+      tbody + tbody .vendor th { border-top: 1px solid var(--rule); }
+      .vendor-count { margin-left: 10px; color: var(--muted); font: 400 13px "IBM Plex Sans", sans-serif; }
+      .model-row th, .model-row td { padding: 7px 6px; }
+      .model-row th { padding-left: 18px; font-weight: 500; text-align: left; }
+      .model-row td { text-align: center; }
+      .model-row:hover > * { background: var(--hover); }
+      .model-name { padding: 0; border: 0; background: none; cursor: pointer; font-weight: 500; text-align: left; }
+      .model-name::after { content: ""; display: inline-block; width: 5px; height: 5px; margin: 0 0 3px 8px; border: solid var(--muted); border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); transition: transform .15s; }
+      .model-name[aria-expanded="true"]::after { margin-bottom: 0; transform: rotate(-135deg); }
+      .model-name:hover { color: var(--accent-ink); }
+      .efforts { display: inline-flex; margin-left: 10px; padding: 2px; border: 1px solid var(--rule); border-radius: 999px; vertical-align: 1px; }
+      .efforts button { padding: 0 9px; border: 0; border-radius: 999px; background: none; color: var(--muted); cursor: pointer; font-size: 12px; line-height: 20px; }
+      .efforts button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+      .layer { display: flex; justify-content: center; align-items: center; gap: 4px; min-height: 18px; }
+      .layer:empty::before { content: ""; width: 4px; height: 4px; border-radius: 50%; background: #c9ced6; }
+      .mark { display: inline-block; width: 18px; height: 18px; border-radius: 3px; background: var(--accent); transition: background .12s, transform .12s; }
+      .mark:hover { background: var(--accent-ink); transform: scale(1.12); }
+      .mark-label { display: none; }
+      .variant { color: var(--muted); font-size: 11px; }
+      .detail-row td { padding: 4px 18px 18px; background: var(--hover); }
+      .works { display: grid; gap: 6px; margin: 0; padding: 12px 0 0; border-top: 1px dashed var(--rule); list-style: none; font-size: 14px; }
+      .works li { display: grid; grid-template-columns: minmax(180px, 2.2fr) auto auto 3.5em 3fr; gap: 18px; align-items: baseline; }
+      .missing { color: var(--muted); }
+      .work-id { color: var(--muted); font-family: inherit; font-size: 13px; overflow-wrap: anywhere; }
+      :is(a, button, summary):focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+      .empty { margin: 24px 0 0; color: var(--muted); text-align: center; }
+      .diagnostics { margin-top: 32px; color: var(--muted); font-size: 13px; }
+      .diagnostics summary { cursor: pointer; }
+      .diagnostics ul { display: grid; gap: 6px; margin: 12px 0 0; padding: 0; list-style: none; }
+      .diagnostics code { margin-right: 12px; color: var(--ink); }
+      .footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; margin-top: 32px; color: var(--muted); font-size: 13px; }
+      .footer a { color: inherit; }
+      .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+      @media (max-width: 860px) {
+        .page { width: calc(100% - 32px); padding-top: 32px; }
+        h1 { font-size: 38px; }
+        .search { width: 100%; }
+        .matrix, .matrix tbody, .matrix tr, .matrix th, .matrix td { display: block; }
+        .matrix { border: 0; background: none; }
+        .matrix thead { display: none; }
+        .vendor th { padding: 22px 0 8px; border: 0 !important; }
+        .matrix .model-row { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 14px; border: 1px solid var(--rule); border-radius: 8px 8px 0 0; background: var(--surface); }
+        .model-row:has(+ .detail-row[hidden]) { margin-bottom: 8px; border-radius: 8px; }
+        .model-row:hover > * { background: none; }
+        .model-row th { flex-basis: 100%; padding: 0 0 2px; }
+        .model-row td { display: contents; }
+        .layer:empty { display: none; }
+        .mark { width: auto; height: auto; padding: 2px 8px; color: #fff; font-size: 13px; text-decoration: none; }
+        .mark-label { display: inline; }
+        .detail-row { margin-bottom: 8px; border: 1px solid var(--rule); border-top: 0; border-radius: 0 0 8px 8px; overflow: hidden; }
+        .detail-row td { padding: 0 14px 14px; }
+        .works li { display: flex; flex-wrap: wrap; gap: 4px 14px; padding-bottom: 6px; }
+        .work-task { flex-basis: 100%; font-weight: 500; }
       }
       @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
     </style>
   </head>
   <body>
-    <div class="shell">
-      <header class="topbar">
-        <a class="brand" href="/" aria-label="LLM Evals 首页"><i class="brand-mark" aria-hidden="true">&gt;_</i>llm/evals<span class="brand-divider" aria-hidden="true"></span><span class="brand-context">gallery</span></a>
-        <span class="topbar-note"><span class="status-dot" aria-hidden="true"></span>模型实验 / 作品索引</span>
+    <div class="page">
+      <header class="masthead">
+        <div>
+          <h1>LLM Evals</h1>
+          <p class="intro">同一道题交给不同模型，各自独立完成。列标题看题面，方块看作品，点模型名看源码和报告。</p>
+          <p class="counts">${tasks.length} 道题，${modelCount} 个模型，${published.length} 份作业</p>
+        </div>
+        <label class="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 5 5"></path></svg>
+          <span class="sr-only">搜索模型或厂商</span>
+          <input id="gallery-search" type="search" placeholder="搜索模型或厂商" autocomplete="off" spellcheck="false" />
+        </label>
       </header>
-      <main data-gallery>
-        <section class="hero" aria-labelledby="page-title">
-          <div>
-            <p class="eyebrow"><span class="prompt">~ $</span> ls ./experiments</p>
-            <h1 id="page-title">One prompt.<br />Many outputs.<span class="cursor" aria-hidden="true"></span></h1>
-            <p class="lede">同一道题，不同模型的答案。<br />浏览、运行、比较。让作品自己说话。</p>
-          </div>
-          <div class="hero-stats" aria-label="画廊统计">
-            <p class="stats-title">index / 实验索引</p>
-            <div class="stat"><strong>${String(total).padStart(2, "0")}</strong><span>作品 / entries</span></div>
-            <div class="stat"><strong>${String(taskCount).padStart(2, "0")}</strong><span>任务 / tasks</span></div>
-          </div>
-        </section>
-        <div class="workspace">
-        <section class="toolbar" aria-label="筛选作品">
-          <form class="filter-form" id="gallery-filters">
-            <label class="field search-field">
-              <span class="sr-only">搜索任务或模型</span>
-              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m16 16 5 5"></path></svg>
-              <input id="gallery-search" type="search" placeholder="搜索任务或模型…" autocomplete="off" spellcheck="false" enterkeyhint="search" />
-            </label>
-            <label class="field select-field">
-              <span class="sr-only">按任务筛选</span>
-              <select id="gallery-task"><option value="">全部任务 · ${taskCount}</option>${taskOptions}</select>
-            </label>
-            <button class="clear-button" id="gallery-clear" type="button" hidden>清除筛选</button>
-          </form>
-          <div class="result-line"><p class="results-status" id="gallery-status" aria-live="polite">显示 ${total} 个作品</p><span class="view-label">INDEX / BY TASK</span></div>
-        </section>
-        <div id="gallery-results">
-          ${sections}
-        </div>
-        <div class="empty-state" id="gallery-empty" hidden>
-          <strong>没有找到匹配的作品</strong>
-          换一个关键词，或清除当前筛选条件。
-        </div>
+      <main>
+        <table class="matrix">
+          <thead><tr><th scope="col"><span class="sr-only">模型</span></th>${header}</tr></thead>
+        ${groups}
+        </table>
+        <p class="empty" id="gallery-empty" hidden>没有匹配的模型，换个关键词。</p>
         ${diagnostics}
-        </div>
       </main>
       <footer class="footer">
-        <p><span class="footer-label">llm/evals</span> <span aria-hidden="true">/</span> 相同命题，独立实现。</p>
-        <p>最后更新 <time datetime="${escapeHtml(generatedAt)}">${escapeHtml(displayDate)}</time></p>
+        <p>构建于 <time datetime="${escapeHtml(generatedAt)}">${escapeHtml(displayDate)}</time></p>
+        <p><a href="${escapeHtml(archive.repoUrl)}">仓库与评测规则</a></p>
       </footer>
     </div>
     <script>
       (() => {
         const search = document.querySelector("#gallery-search");
-        const task = document.querySelector("#gallery-task");
-        const clear = document.querySelector("#gallery-clear");
-        const status = document.querySelector("#gallery-status");
         const empty = document.querySelector("#gallery-empty");
-        const cards = [...document.querySelectorAll("[data-work-card]")];
-        const sections = [...document.querySelectorAll("[data-task-section]")];
-        const total = cards.length;
+        const rows = [...document.querySelectorAll("[data-row]")].map((row) => {
+          const toggle = row.querySelector(".model-name");
+          const detail = document.getElementById(toggle.getAttribute("aria-controls"));
+          toggle.addEventListener("click", () => {
+            const open = toggle.getAttribute("aria-expanded") !== "true";
+            toggle.setAttribute("aria-expanded", String(open));
+            detail.hidden = !open;
+          });
+          row.querySelectorAll("[data-effort-choice]").forEach((choice) => {
+            choice.addEventListener("click", () => {
+              row.querySelectorAll("[data-effort-choice]").forEach((other) => other.setAttribute("aria-pressed", String(other === choice)));
+              for (const layer of [...row.querySelectorAll("[data-effort]"), ...detail.querySelectorAll("[data-effort]")]) {
+                layer.hidden = layer.dataset.effort !== choice.dataset.effortChoice;
+              }
+            });
+          });
+          return { row, toggle, detail };
+        });
+        const groups = [...document.querySelectorAll("[data-group]")];
 
-        const readUrlState = () => {
-          const params = new URLSearchParams(window.location.search);
-          return { query: params.get("q") || "", task: params.get("task") || "" };
-        };
-
-        const writeUrlState = () => {
-          const params = new URLSearchParams(window.location.search);
-          const query = search.value.trim();
-          if (query) params.set("q", query);
-          else params.delete("q");
-          if (task.value) params.set("task", task.value);
-          else params.delete("task");
-          const queryString = params.toString();
-          const next = window.location.pathname + (queryString ? "?" + queryString : "") + window.location.hash;
-          window.history.replaceState(null, "", next);
-        };
-
-        const applyFilters = (syncUrl = true) => {
+        const apply = () => {
           const query = search.value.trim().toLocaleLowerCase();
           let visible = 0;
-          cards.forEach((card) => {
-            const matchesQuery = !query || card.dataset.search.includes(query);
-            const matchesTask = !task.value || card.dataset.task === task.value;
-            const matches = matchesQuery && matchesTask;
-            card.hidden = !matches;
-            if (matches) visible += 1;
-          });
-          sections.forEach((section) => {
-            section.hidden = !section.querySelector("[data-work-card]:not([hidden])");
-          });
+          for (const { row, toggle, detail } of rows) {
+            const match = !query || row.dataset.search.includes(query);
+            row.hidden = !match;
+            detail.hidden = !match || toggle.getAttribute("aria-expanded") !== "true";
+            if (match) visible += 1;
+          }
+          for (const group of groups) group.hidden = !group.querySelector("[data-row]:not([hidden])");
           empty.hidden = visible !== 0;
-          status.textContent = visible === total ? "显示 " + total + " 个作品" : "显示 " + visible + " / " + total + " 个作品";
-          clear.hidden = !search.value.trim() && !task.value;
-          if (syncUrl) writeUrlState();
+          const params = new URLSearchParams(window.location.search);
+          if (query) params.set("q", search.value.trim());
+          else params.delete("q");
+          const next = params.toString();
+          window.history.replaceState(null, "", window.location.pathname + (next ? "?" + next : "") + window.location.hash);
         };
 
-        const initial = readUrlState();
-        search.value = initial.query;
-        task.value = initial.task;
-        if (task.value !== initial.task) task.value = "";
-        document.querySelector("#gallery-filters").addEventListener("submit", (event) => {
-          event.preventDefault();
-          applyFilters();
-        });
-        search.addEventListener("input", () => applyFilters());
-        task.addEventListener("change", () => applyFilters());
-        clear.addEventListener("click", () => {
-          search.value = "";
-          task.value = "";
-          search.focus();
-          applyFilters();
-        });
-        window.addEventListener("popstate", () => {
-          const next = readUrlState();
-          search.value = next.query;
-          task.value = next.task;
-          if (task.value !== next.task) task.value = "";
-          applyFilters(false);
-        });
-        applyFilters(false);
+        search.value = new URLSearchParams(window.location.search).get("q") || "";
+        search.addEventListener("input", apply);
+        apply();
       })();
     </script>
   </body>
@@ -516,7 +518,8 @@ async function main() {
   mkdirSync(TMP_ROOT, { recursive: true });
   run("git fetch --all --prune");
 
-  const { targets, skipped } = discoverTargets(filter);
+  const archive = loadArchive();
+  const { targets, skipped } = selectTargets(archive, filter);
   if (!targets.length) throw new Error("没有找到可构建的候选实现");
   console.log(`准备构建 ${targets.length} 个候选实现，并发 ${CONCURRENCY}，已跳过 ${skipped.length} 个缺少 package.json 的目录`);
 
@@ -542,14 +545,14 @@ async function main() {
   results.sort((a, b) => (a.task + a.model).localeCompare(b.task + b.model));
   const failed = results.filter((r) => !r.ok);
   // 画廊页始终按 public/ 里实际存在的产物生成，部分重建不会漏掉其他候选。
+  prunePublished(archive);
   const published = collectPublished();
-  const listed = new Set(published.map((e) => `${e.task}/${e.model}`));
-  const entries = [...published, ...results.filter((r) => !r.ok && !listed.has(`${r.task}/${r.model}`))];
-  entries.sort((a, b) => (a.task + a.model).localeCompare(b.task + b.model));
-  rmSync(join(PUBLIC_DIR, "index.html"), { force: true });
+  for (const model of new Set(published.map((entry) => entry.model))) {
+    if (identify(model).vendor === UNCLASSIFIED) console.warn(`未识别厂商：${model}，请在 deploy/build.mjs 的 VENDORS 或 ALIASES 中补充`);
+  }
   writeFileSync(
     join(PUBLIC_DIR, "index.html"),
-    renderGallery(entries, { generatedAt: new Date().toISOString(), failed, skipped }),
+    renderGallery(published, archive, { generatedAt: new Date().toISOString(), failed, skipped }),
     "utf8",
   );
 
