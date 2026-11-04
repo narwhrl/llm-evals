@@ -1,45 +1,14 @@
-# CS PVP Diorama Evaluation
+# CS PVP Diorama Archive
 
-## Task Record
+Candidates for `cs-pvp-diorama`. Task inputs and the evaluation procedure are on `main` at [`tasks/cs-pvp-diorama/`](https://github.com/narwhrl/llm-evals/tree/main/tasks/cs-pvp-diorama).
 
-- Task ID: `cs-pvp-diorama`
-- Canonical candidate path: `tasks/cs-pvp-diorama/solution/`
-- Candidate result report: `tasks/cs-pvp-diorama/solution/RESULTS.md`
-- Prompt: [`task.md`](task.md)
-- Status: Sixteen candidates archived on `llm/cs-pvp-diorama` at `tasks/cs-pvp-diorama/solutions/<candidate-id>/`. Historical source commits and trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json); later imports are recorded in [`imports.json`](imports.json).
-- Status: `minimax-m3.1-flash` (`magpie/minimax-code/MiniMax-M3.1-Flash`) was produced from the `63a46c3` baseline in an isolated worktree (`.worktrees/minimax-m3.1-flash/cs-pvp-diorama`), tagged `candidate/cs-pvp-diorama/minimax-m3.1-flash` at commit `e08f8c5` (tree `f9653f4`), and imported with a result report (RESULTS.md).
-- Status: `deepseek-v4.1-flash` (`deepseek-v4.1-flash (DeepSeek Harness, qoder-cn/dfmodel)`) was produced from the `091c801` baseline in an isolated worktree (`.worktrees/run-cs-pvp-deepseek`), tagged `candidate/cs-pvp-diorama/deepseek-v4.1-flash-2026-10` at commit `0bfd404` (tree `d848485`), and imported with a result report (RESULTS.md).
+- `solutions/<candidate-id>/` is the exact `tasks/cs-pvp-diorama/solution/` tree of the candidate tag named in its record.
+- [`imports.json`](imports.json) records imports after the 2026-09-28 migration; migrated candidates are recorded in [`migration/2026-09-28.json`](https://github.com/narwhrl/llm-evals/blob/main/migration/2026-09-28.json) on `main`.
+- `inputTree` in a record is the `tasks/cs-pvp-diorama` tree at its baseline; candidates with the same `inputTree` received identical task inputs.
+- Candidates imported before `scripts/runs.mjs` ran in clones or worktrees inside the repository; their isolation from other candidates is not verified.
+- `notes/` keeps the agent session plans recorded for some runs.
 
-## Shared Inputs
+## Provenance
 
-This task intentionally provides no starter project or fixed executable tests. Rendering engine, web framework, asset strategy, scene architecture, and interaction implementation are part of the evaluated response. Every candidate must receive the same repository baseline, task prompt, tool permissions, runtime conditions, browser viewport, and review procedure.
-
-The deliverable must run locally in a browser and support a production build without services that require credentials. Each model writes its code and result report under the canonical candidate path in its isolated clone; the curator archives the completed tree under that model's candidate ID.
-
-## Evaluation Procedure
-
-Before starting a round:
-
-1. Designate the current `main` commit as the shared baseline and record its full SHA in every candidate result report.
-2. Create each isolated model clone from that exact SHA according to the repository workflow.
-3. Evaluate every candidate in the same browser/runtime at a `1440 × 900` desktop viewport.
-4. Load the scene from a clean browser session, wait for its documented initialization path, and inspect it from multiple orbit angles and zoom levels.
-5. Exercise pointer drag/orbit and zoom controls; confirm that interaction remains responsive and that no visible UI, people, or geometry outside the square base appears.
-6. Inspect the four core regions, three route families, elevated positions, interiors, cover distribution, environmental props, lighting, materials, reflections, and subtle dynamic effects against the prompt.
-7. Run the candidate's documented production build command and local runtime command. Record the exact commands, results, browser observations, console failures, and any asset-loading failures.
-
-Each candidate result report must also include the complete model identifier, known limitations or failures, and any required human intervention, as required by the repository rules.
-
-## Review Axes
-
-Apply the prompt consistently and record observable evidence for:
-
-- **Diorama composition:** one complete square concrete base, compact balanced silhouette, collectible miniature scale, all scene content contained within the base;
-- **Map topology:** readable T spawn, CT spawn, A site, and B site connected by the central duel lane, left flanking alley, and right elevated flank, with credible sightlines and height variation;
-- **Regional fidelity:** the major structures, access points, tactical positions, interiors, cover, and signature props specified for every region are visibly represented;
-- **Environment detail:** wet asphalt and concrete, puddles, drainage, wires, corrosion, graffiti, freight markings, bullet impacts, and the requested family of tactical props form a coherent abandoned freight-yard streetscape;
-- **Art direction:** crisp toon-rendered outlines, restrained hard-surface materials, cool industrial rain-night ambience, and deliberate warm/cool/red tactical light contrast create the requested realistic-cartoon weight;
-- **Dynamic atmosphere:** rain, dripping and running water, puddle ripples and reflections, restrained light variation, steam, shutter vibration, and occasional lightning add life without undermining the static miniature presentation;
-- **Interaction and runtime quality:** direct full-scene presentation has no visible UI or people, orbit/drag/zoom viewing works across useful ranges, the production build succeeds, assets load reliably, and the scene remains stable during inspection.
-
-Do not infer quality from dependency count, mesh count, source size, or nominal feature claims. Comparison conclusions require observed browser behavior, build evidence, and path-aligned candidate diffs from the same baseline.
+- `minimax-m3.1-flash` (`magpie/minimax-code/MiniMax-M3.1-Flash`) was produced from the `63a46c3` baseline in an isolated worktree (`.worktrees/minimax-m3.1-flash/cs-pvp-diorama`), tagged `candidate/cs-pvp-diorama/minimax-m3.1-flash` at commit `e08f8c5` (tree `f9653f4`), and imported with a result report (RESULTS.md).
+- `deepseek-v4.1-flash` (`deepseek-v4.1-flash (DeepSeek Harness, qoder-cn/dfmodel)`) was produced from the `091c801` baseline in an isolated worktree (`.worktrees/run-cs-pvp-deepseek`), tagged `candidate/cs-pvp-diorama/deepseek-v4.1-flash-2026-10` at commit `0bfd404` (tree `d848485`), and imported with a result report (RESULTS.md).
