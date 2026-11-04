@@ -130,7 +130,7 @@ Every pushed task branch is built and published to one Cloudflare Worker, so all
   - All models (`#models`): every model's candidates.
   - Per task (`#<task-id>`): all of that task's candidates share one stage, so you can compare them.
 
-  A model with candidates at several reasoning efforts gets a switch between them. Completion dates come from the candidate tags' commit dates. Task icons are Fluent UI Emoji (MIT, `deploy/assets/emoji/`). Fonts are self-hosted OFL faces in `deploy/assets/fonts/`. The Chinese heading face is a subset covering only the characters in `deploy/build.mjs`, so new heading text needs a regenerated subset.
+  A model with candidates at several reasoning efforts gets a switch between them. Completion dates come from the candidate tags' commit dates. Task icons are Fluent UI Emoji (MIT, `deploy/assets/emoji/`). Vendor and model logos come from `@lobehub/icons-static-svg` 1.97.0 (MIT, `deploy/assets/logos/`); the marks belong to their owners. Fonts are self-hosted OFL faces in `deploy/assets/fonts/`. The Chinese heading face is a subset covering only the characters in `deploy/build.mjs`, so new heading text needs a regenerated subset.
 
 ### Publish or Update
 

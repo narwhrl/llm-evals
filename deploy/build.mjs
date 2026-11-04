@@ -338,6 +338,18 @@ const emoji = (name, size, className) =>
   `<img class="${className}" src="/${ASSET_DIR}/emoji/${name}.png" alt="" width="${size}" height="${size}" decoding="async" />`;
 const taskEmoji = (task, size, className) => emoji(TASK_ICONS[task] ?? "puzzle-piece", size, className);
 
+// 厂商与模型 logo 来自 @lobehub/icons-static-svg 1.97.0（MIT，见 deploy/assets/logos/LICENSE），商标归各自所有者。
+// 模型 logo 按 model id 首段取；没有 logo 的模型用名字首字母。小米 MiMo 的 logo 是两行文字，缩小后认不出，所以不用。
+const VENDOR_LOGOS = { Anthropic: "anthropic", Cognition: "devin", DeepSeek: "deepseek-color", Google: "google-color", MiniMax: "minimax-color", "Moonshot AI": "moonshot", OpenAI: "openai", xAI: "xai", "Z.ai": "zai" };
+const MODEL_LOGOS = { claude: "claude-color", deepseek: "deepseek-color", gemini: "gemini-color", glm: "zai", gpt: "openai", grok: "grok", kimi: "kimi-color", minimax: "minimax-color", swe: "devin-color" };
+const logoSrc = (name) => `/${ASSET_DIR}/logos/${name}.svg`;
+const avatar = (item, size) => {
+  const logo = MODEL_LOGOS[item.modelId.split("-")[0]];
+  return `<span class="avatar ${size}" aria-hidden="true">${logo ? `<img src="${logoSrc(logo)}" alt="" decoding="async" />` : escapeHtml(item.name[0])}</span>`;
+};
+const vendorLogo = (vendor) =>
+  VENDOR_LOGOS[vendor] ? `<img class="vendor-logo" src="${logoSrc(VENDOR_LOGOS[vendor])}" alt="" width="18" height="18" decoding="async" />` : "";
+
 const ICONS = {
   feed: '<path d="M4 5h16M4 12h16M4 19h10"/>',
   grid: '<rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/>',
@@ -457,7 +469,13 @@ const STYLE = `
       .day-head span { font-weight: 500; font-variant-numeric: tabular-nums; }
       .day-head::after { content: ""; flex: 1; height: 1px; background: var(--line); }
       .post { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 16px; margin-top: 24px; }
-      .post-art { width: 44px; height: 44px; }
+      .avatar { display: grid; place-items: center; flex: none; border: 1px solid var(--line); border-radius: 30%; background: #fff; color: var(--ink-3); font-weight: 800; }
+      .avatar img { width: 58%; height: 58%; }
+      .avatar.lg { width: 44px; height: 44px; font-size: 18px; }
+      .avatar.md { width: 36px; height: 36px; font-size: 15px; }
+      .avatar.sm { width: 28px; height: 28px; font-size: 13px; }
+      .vendor-logo { display: inline-block; width: 18px; height: 18px; margin-right: 8px; vertical-align: -3px; }
+      .who { display: flex; align-items: center; gap: 12px; min-width: 0; }
       .post-body { min-width: 0; container-type: inline-size; }
       .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
       .tag { display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 10px; border-radius: 999px; background: var(--soft); color: var(--ink-3); font-size: 12.5px; font-weight: 600; }
@@ -635,7 +653,7 @@ const STYLE = `
         h1 { gap: 10px; font-size: 32px; }
         .h-art { width: 32px; height: 32px; }
         .post { grid-template-columns: 36px minmax(0, 1fr); gap: 12px; }
-        .post-art { width: 36px; height: 36px; }
+        .avatar.lg { width: 36px; height: 36px; font-size: 15px; }
         .post-title { font-size: 20px; }
         .stage { height: 180px; }
         .stage.wide { height: 220px; }
@@ -866,7 +884,7 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
               ${entry.hasReport ? `<span class="tag ok">有报告</span>` : `<span class="tag">无报告</span>`}
             </div>`;
   const post = (entry) => `<article class="post" data-item data-search="${entrySearch(entry)}">
-          ${taskEmoji(entry.task, 44, "post-art")}
+          ${avatar(entry, "lg")}
           <div class="post-body">
             ${tags(entry)}
             <h3 class="post-title">${escapeHtml(entry.name)} 交了 ${escapeHtml(taskById.get(entry.task).short)}</h3>
@@ -944,7 +962,7 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
   const matrix = vendors
     .map(
       ([vendor, list]) => `<tbody data-group>
-            <tr class="vendor"><th scope="rowgroup" colspan="${tasks.length + 1}">${escapeHtml(vendor)}<span data-count="个模型">${list.length} 个模型</span></th></tr>
+            <tr class="vendor"><th scope="rowgroup" colspan="${tasks.length + 1}">${vendorLogo(vendor)}${escapeHtml(vendor)}<span data-count="个模型">${list.length} 个模型</span></th></tr>
             ${list.map(coverageRow).join("\n            ")}
           </tbody>`,
     )
@@ -979,7 +997,7 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
       )
       .join("");
     return `<div class="model-card" data-item data-effort-scope data-search="${searchText(row.name, row.modelId, row.vendor, ...ids)}">
-            <div class="model-head"><div><h3>${escapeHtml(row.name)}</h3><code>${escapeHtml(row.modelId)}</code></div>${effortSwitch(row)}</div>
+            <div class="model-head"><div class="who">${avatar(row, "md")}<div><h3>${escapeHtml(row.name)}</h3><code>${escapeHtml(row.modelId)}</code></div></div>${effortSwitch(row)}</div>
             ${lists}
           </div>`;
   };
@@ -988,7 +1006,7 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
         ${vendors
           .map(
             ([vendor, list]) => `<section class="group" data-group>
-          <h2 class="group-head">${escapeHtml(vendor)}<span data-count="个模型">${list.length} 个模型</span></h2>
+          <h2 class="group-head">${vendorLogo(vendor)}${escapeHtml(vendor)}<span data-count="个模型">${list.length} 个模型</span></h2>
           ${list.map(modelCard).join("\n          ")}
         </section>`,
           )
@@ -997,7 +1015,7 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
       </section>`;
 
   const entryRow = (task, entry) => `<li class="entry" data-item data-search="${entrySearch(entry)}">
-              <div class="entry-main"><b>${escapeHtml(entry.name)}</b><span>${escapeHtml(effortTag(entry.effort))}${entry.variant ? ` · ${escapeHtml(entry.variant)}` : ""} · ${dayText(entry.day)}</span></div>
+              ${avatar(entry, "sm")}<div class="entry-main"><b>${escapeHtml(entry.name)}</b><span>${escapeHtml(effortTag(entry.effort))}${entry.variant ? ` · ${escapeHtml(entry.variant)}` : ""} · ${dayText(entry.day)}</span></div>
               <button class="pill sm run" type="button" data-run="${escapeHtml(workUrl(entry))}" data-title="${escapeHtml(runLabel(entry))}" data-target="stage-${escapeHtml(task.task)}" aria-pressed="false">${icon("play")}运行</button>
               <a class="sub-link" href="${escapeHtml(workUrl(entry))}" target="_blank" rel="noopener">新窗口</a>
               <a class="sub-link" href="${escapeHtml(sourceUrl(entry))}">源码</a>
@@ -1007,7 +1025,7 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
     const groups = groupRows(task.list)
       .map(
         ([vendor, list]) => `<section class="group" data-group>
-          <h2 class="group-head">${escapeHtml(vendor)}</h2>
+          <h2 class="group-head">${vendorLogo(vendor)}${escapeHtml(vendor)}</h2>
           <ul class="entries">
             ${list
               .flatMap((row) => row.effortList.flatMap((effort) => row.efforts.get(effort)))
