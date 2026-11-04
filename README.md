@@ -1,71 +1,83 @@
 # LLM Coding Capability Benchmark
 
-This repository compares coding models under the same task, context, tools, and acceptance criteria. `main` stores shared inputs. Each `llm/<task-id>` branch collects the completed candidates for one task.
+This repository compares coding models under the same task, context, tools, and acceptance criteria. `main` stores shared inputs. Each `llm/<task-id>` branch archives the completed candidates for one task.
 
 ## Branching Model
 
-- `main`: The shared baseline, including task descriptions, starter code, fixed tests, test data, evaluation configuration, and repository rules. It must not contain a model-specific candidate solution.
-- `llm/<task-id>`: Completed candidate collection for one task. Each implementation lives at `tasks/<task-id>/solutions/<candidate-id>/`.
-- `candidate/<task-id>/<candidate-id>` tag: The original, unmodified candidate commit, with its implementation at `tasks/<task-id>/solution/`. The tag supports exact historical diffs against that candidate's recorded baseline.
-- All model runs in an evaluation round start in separate clones from the same pinned `main` commit. A task branch is an archive and gallery source, not a model's starting point.
+- `main`: The shared baseline, including task descriptions, starter code, fixed tests, test data, evaluation configuration, repository rules, and tooling. It contains no candidate solution and no archive status, so importing a candidate never moves it.
+- `llm/<task-id>`: The candidate archive for one task. It holds only `tasks/<task-id>/solutions/<candidate-id>/`, the import records in `tasks/<task-id>/imports.json`, and an archive README; it carries no copy of `main`.
+- `candidate/<task-id>/<candidate-id>` tag: The original, unmodified candidate commit, with its implementation at `tasks/<task-id>/solution/`. Later revisions use `-r2`, `-r3`, and so on. The tag supports exact historical diffs against that candidate's recorded baseline.
+- Models never run inside this repository. Each run gets its own folder outside it that contains only the pinned baseline commit.
 
 ## Tasks
 
-| Task | Round record | Candidate branches |
+| Task | Inputs | Archive |
 | --- | --- | --- |
-| `voxel-waterfall` | [`tasks/voxel-waterfall/`](tasks/voxel-waterfall/) | `llm/voxel-waterfall` |
-| `ui-ux-design` | [`tasks/ui-ux-design/`](tasks/ui-ux-design/) | `llm/ui-ux-design` |
 | `cs-pvp-diorama` | [`tasks/cs-pvp-diorama/`](tasks/cs-pvp-diorama/) | `llm/cs-pvp-diorama` |
-| `rainy-konbini-diorama` | [`tasks/rainy-konbini-diorama/`](tasks/rainy-konbini-diorama/) | `llm/rainy-konbini-diorama` |
-| `voxel-chinese-architecture` | [`tasks/voxel-chinese-architecture/`](tasks/voxel-chinese-architecture/) | `llm/voxel-chinese-architecture` |
 | `gargantua-schwarzschild-raytracer` | [`tasks/gargantua-schwarzschild-raytracer/`](tasks/gargantua-schwarzschild-raytracer/) | `llm/gargantua-schwarzschild-raytracer` |
-| `orbital-habitat-diorama` | [`tasks/orbital-habitat-diorama/`](tasks/orbital-habitat-diorama/) | No archived candidates |
+| `orbital-habitat-diorama` | [`tasks/orbital-habitat-diorama/`](tasks/orbital-habitat-diorama/) | `llm/orbital-habitat-diorama` |
+| `rainy-konbini-diorama` | [`tasks/rainy-konbini-diorama/`](tasks/rainy-konbini-diorama/) | `llm/rainy-konbini-diorama` |
+| `ui-ux-design` | [`tasks/ui-ux-design/`](tasks/ui-ux-design/) | `llm/ui-ux-design` |
+| `voxel-chinese-architecture` | [`tasks/voxel-chinese-architecture/`](tasks/voxel-chinese-architecture/) | `llm/voxel-chinese-architecture` |
+| `voxel-waterfall` | [`tasks/voxel-waterfall/`](tasks/voxel-waterfall/) | `llm/voxel-waterfall` |
 
-## Repository and Worktree Layout
-
-`llm-evals/` is the permanent `main` checkout. Task inputs are tracked under `tasks/`. Model runs use isolated, ignored clones under `.runs/`:
+## Repository Layout
 
 ```text
 llm-evals/                              # repository root; always main
 ├── tasks/
 │   └── <task-id>/
-│       ├── README.md                   # round record and reproducibility status
+│       ├── README.md                   # shared inputs, evaluation procedure, review axes
 │       ├── task.md                     # exact prompt and acceptance criteria
 │       ├── starter/                    # optional shared starter code
 │       └── tests/                      # optional fixed acceptance tests
+├── scripts/runs.mjs                    # creates isolated run folders and collects candidates
 ├── deploy/                             # candidate gallery build and deployment
 │   ├── build.mjs                       # builds candidates from task branches into public/
 │   ├── wrangler.jsonc                  # Worker, static assets, custom domain
 │   └── public/                         # generated gallery output (ignored)
-├── .runs/                              # ignored isolated model clones
-│   └── <task-id>/<model-id>/
-└── .worktrees/                         # ignored temporary gallery worktrees
+└── migration/2026-09-28.json           # frozen provenance of the migrated candidates
+
+../llm-runs/<task-id>/<candidate-id>/   # one isolated run folder per model, outside the repository
 ```
 
-Every model first writes to the same `tasks/<task-id>/solution/` path in its isolated clone. The curator imports that completed tree into `solutions/<candidate-id>/` on the task branch. [`migration/2026-09-28.json`](migration/2026-09-28.json) maps migrated candidates to their original refs, commits, tree hashes, and archive tags. `cursor-c343` is a source identifier with an unknown model identity.
+[`migration/2026-09-28.json`](migration/2026-09-28.json) maps candidates migrated on 2026-09-28 to their original refs, commits, tree hashes, and archive tags. `cursor-c343` is a source identifier with an unknown model identity.
+
+## Candidate IDs
+
+A candidate ID is the model ID, optionally followed by the reasoning effort used for the run: `<model-id>[-<effort>]`, where `<effort>` is one of `minimal`, `low`, `medium`, `high`, `xhigh`, or `max`. Omit the suffix for the model's default effort, for example `gpt-6.1-sol` or `grok-4.6-high`. The gallery groups candidates by this convention.
 
 ## Standard Evaluation Workflow
 
-1. On `main`, prepare `tasks/<task-id>/` with the prompt, starter code, executable acceptance criteria, fixed tests, and evaluation configuration.
-2. Commit that complete baseline and record its SHA before running any model.
-3. From the repository root, create a separate clone for each model. Expose only `main` and detach it at the pinned baseline:
+1. On `main`, prepare `tasks/<task-id>/` with the prompt, starter code, executable acceptance criteria, fixed tests, and evaluation configuration, and commit it.
+2. Create one isolated run folder per model:
 
    ```bash
-   git clone --no-local --single-branch --branch main --no-tags . .runs/<task-id>/<model-id>
-   git -C .runs/<task-id>/<model-id> checkout --detach <baseline-sha>
-   git -C .runs/<task-id>/<model-id> remote remove origin
+   node scripts/runs.mjs new <task-id> <candidate-id> [...]
    ```
 
-4. Give every model the same task text, repository contents, tool permissions, and runtime conditions.
-5. Run each model only in its clone. Commit its implementation and result report at `tasks/<task-id>/solution/`. Run the same tests, builds, static checks, and runtime scenarios in every clone, and preserve their exact results.
-6. Fetch each completed commit into the main repository, tag it `candidate/<task-id>/<candidate-id>`, and verify the tag points to the original commit. Import only its `solution/` tree into `tasks/<task-id>/solutions/<candidate-id>/` on `llm/<task-id>`; confirm the source and destination Git tree hashes match.
-7. Compare the original candidate tag with its recorded baseline and evidence:
+   Each folder under `../llm-runs/<task-id>/` is a separate Git repository that holds only the current `main` commit: no history, branches, tags, or remote. The command prints the baseline SHA and the task input tree.
+
+3. Give every model the same task text, repository contents, tool permissions, and runtime conditions, and limit each model to its own folder. Never run a model in a Git worktree of this repository or in a folder inside it; both expose every other candidate. Runs may proceed in parallel.
+4. Each model commits its implementation and result report at `tasks/<task-id>/solution/`. Run the same tests, builds, static checks, and runtime scenarios for every candidate, and preserve their exact results.
+5. Collect the completed runs:
+
+   ```bash
+   node scripts/runs.mjs collect <task-id> <candidate-id> [...]
+   git push origin llm/<task-id> candidate/<task-id>/<candidate-id> [...]
+   ```
+
+   For each candidate, `collect` fetches the run's commit, tags it `candidate/<task-id>/<candidate-id>`, imports its `solution/` tree into `llm/<task-id>`, appends a record to `imports.json`, and verifies that the source and destination tree hashes match. It stops if the tag or destination already exists, so revisions are imported by hand under a `-rN` tag. It warns about changes outside `solution/`, which are not imported.
+
+6. Compare candidates only when their records share the same `inputTree`, the `tasks/<task-id>` tree at their baseline. Review each candidate against its baseline:
 
    ```bash
    git diff <baseline-sha>...candidate/<task-id>/<candidate-id> -- tasks/<task-id>/solution/
    ```
 
-8. Preserve any needed generated evidence, then remove a completed clone when it is no longer in use.
+7. Preserve any needed generated evidence, then delete the run folder.
+
+Candidates imported before `scripts/runs.mjs` ran in clones or worktrees inside the repository; their isolation from other candidates is not verified.
 
 ## Candidate Gallery
 

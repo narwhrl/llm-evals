@@ -4,18 +4,19 @@ This file applies to the repository root and every subdirectory. It keeps model 
 
 ## Branch Invariants
 
-- `main` is the shared baseline. It contains shared tasks, starter code, documentation, tests, test data, and evaluation configuration, but no model-specific solutions.
-- Each completed task has one permanent `llm/<task-id>` branch. It collects candidates at `tasks/<task-id>/solutions/<candidate-id>/` and records their source commits in `migration/2026-09-28.json` for the migrated round. Record future imports in the task branch as well.
-- Run every model in its own isolated clone created from the same pinned `main` commit for that evaluation round. During generation, each clone writes to `tasks/<task-id>/solution/`. Commit the completed candidate there before importing it into the task branch.
-- Preserve each original candidate commit with an immutable `candidate/<task-id>/<candidate-id>` tag. Import its `solution/` Git tree into the task branch without changing its files; verify that the imported and source tree hashes match.
+- `main` is the shared baseline. It contains shared tasks, starter code, documentation, tests, test data, evaluation configuration, and tooling, but no model-specific solutions and no archive status. Importing a candidate never changes `main`.
+- Each completed task has one permanent `llm/<task-id>` branch that holds only that task's archive: candidates at `tasks/<task-id>/solutions/<candidate-id>/`, their records in `tasks/<task-id>/imports.json`, and an archive README. Candidates migrated on 2026-09-28 are recorded in `migration/2026-09-28.json` on `main`.
+- Preserve each original candidate commit with an immutable `candidate/<task-id>/<candidate-id>` tag. Import its `solution/` Git tree into the task branch without changing its files; verify that the imported and source tree hashes match. `node scripts/runs.mjs collect` does both.
 - Changes to tasks, fixed tests, or evaluation standards first become a new baseline commit on `main`. Apply the same rules to every model in a round.
 
-## Worktree Invariants
+## Run Isolation
 
 - `llm-evals/` is the permanent `main` checkout. Shared task inputs live under `tasks/<task-id>/`.
-- Run installation, generation, build, and verification in that model's isolated clone. Give every model the same pinned baseline, task text, permissions, and evaluation commands. Keep other candidates out of the clone.
-- Each model writes to the same path, `tasks/<task-id>/solution/`, during its run. Only the completed task branch uses candidate-specific archive directories under `solutions/`.
-- Keep the repository root on `main`. Preserve generated and ignored files in their original clone until its evidence has been accounted for.
+- Run every model in its own folder outside this repository, created with `node scripts/runs.mjs new` from the pinned `main` commit. The folder holds only that commit: no history, branches, tags, or remote. Never run a model in a Git worktree of this repository or in a folder inside it.
+- Run installation, generation, build, and verification in that model's folder. Give every model the same pinned baseline, task text, permissions, and evaluation commands. Keep other candidates out of the folder.
+- Each model writes to the same path, `tasks/<task-id>/solution/`, during its run, and commits the completed candidate there. Only the task branch uses candidate-specific archive directories under `solutions/`.
+- Candidates are comparable when their records share the same `inputTree`, the `tasks/<task-id>` tree at their baseline.
+- Keep the repository root on `main`. Preserve generated and ignored files in a run folder until its evidence has been accounted for.
 
 ## Implementation Constraints
 
@@ -40,7 +41,7 @@ This file applies to the repository root and every subdirectory. It keeps model 
 
 - Each commit must contain one logical change that can be independently explained, verified, and reverted.
 - Commit messages use `<type>: <description>`. Common types are `feat`, `fix`, `refactor`, `test`, `docs`, and `chore`.
-- Commit model-generated code and required notes in its isolated clone. Preserve that commit with a candidate tag, then import the exact solution tree into `llm/<task-id>`. Never place candidate code on `main`.
+- Commit model-generated code and required notes in its isolated run folder. Preserve that commit with a candidate tag, then import the exact solution tree into `llm/<task-id>`. Never place candidate code on `main`.
 - Before committing, review the change scope, verification results, and sensitive information. Do not mix unrelated formatting or refactoring into the commit.
 
 ## Result Report
