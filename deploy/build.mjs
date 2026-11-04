@@ -284,16 +284,20 @@ const ALIASES = {
   "zcode-harness": { vendor: "多模型组合", name: "ZCode Harness" },
   "omp-gpt-6-sol-minimax-m3": { vendor: "多模型组合", name: "OMP: GPT-6 Sol + MiniMax M3" },
 };
+// 候选 id 不带思考程度时按这里的档位显示，未列出的都是 max；MiMo 和 MiniMax M3 没有档位，只有思考开关。
+const DEFAULT_EFFORTS = { gemini: "high", "grok-4.7": "xhigh", mimo: "思考开启", "minimax-m3": "思考开启" };
+const defaultEffort = (modelId) => DEFAULT_EFFORTS[modelId] ?? DEFAULT_EFFORTS[modelId.split("-")[0]] ?? "max";
 const UNCLASSIFIED = "未归类";
 const TRAILING_GROUPS = ["多模型组合", "未知厂商", UNCLASSIFIED];
 
 function identify(candidate) {
   const alias = ALIASES[candidate] ?? {};
   const variant = alias.variant ?? "";
-  if (alias.name) return { vendor: alias.vendor, modelId: candidate, name: alias.name, effort: "", variant };
+  if (alias.name) return { vendor: alias.vendor, modelId: candidate, name: alias.name, effort: defaultEffort(candidate), variant };
   const tokens = (alias.model ?? candidate).split("-");
-  const effort = tokens.length > 1 && EFFORTS.includes(tokens.at(-1)) ? tokens.pop() : "";
+  const suffix = tokens.length > 1 && EFFORTS.includes(tokens.at(-1)) ? tokens.pop() : "";
   const modelId = tokens.join("-");
+  const effort = suffix || defaultEffort(modelId);
   const vendor = VENDORS.find(([prefix]) => prefix === tokens[0]);
   if (!vendor) return { vendor: UNCLASSIFIED, modelId, name: modelId, effort, variant };
   const [, vendorName, brand, joiner = " "] = vendor;
@@ -312,10 +316,9 @@ function escapeHtml(value) {
 }
 
 const byVersionDesc = (a, b) => b.localeCompare(a, "en", { numeric: true });
-const effortRank = (effort) => (effort ? EFFORTS.indexOf(effort) + 1 : 0);
-const effortLabel = (effort) => effort || "默认";
+const effortRank = (effort) => EFFORTS.indexOf(effort) + 1;
 // 思考程度统一写成 模型名:思考程度；candidate id 里仍用连字符，因为 Git 引用名和 Windows 路径不允许冒号。
-const modelEffort = (item) => `${item.modelId}:${effortLabel(item.effort)}`;
+const modelEffort = (item) => `${item.modelId}:${item.effort}`;
 
 const DAY_FORMAT = new Intl.DateTimeFormat("en-CA", { timeZone: TIME_ZONE, year: "numeric", month: "2-digit", day: "2-digit" });
 const CLOCK_FORMAT = new Intl.DateTimeFormat("en-GB", { timeZone: TIME_ZONE, hour: "2-digit", minute: "2-digit" });
@@ -387,7 +390,7 @@ function groupRows(entries) {
 function effortSwitch(row) {
   if (row.effortList.length < 2) return "";
   const buttons = row.effortList
-    .map((effort, i) => `<button type="button" data-effort-choice="${escapeHtml(effort)}" aria-pressed="${i === 0}">${escapeHtml(effortLabel(effort))}</button>`)
+    .map((effort, i) => `<button type="button" data-effort-choice="${escapeHtml(effort)}" aria-pressed="${i === 0}">${escapeHtml(effort)}</button>`)
     .join("");
   return `<span class="seg" role="group" aria-label="思考程度">${buttons}</span>`;
 }
@@ -1131,7 +1134,7 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
         ${viewHead(emoji("clipboard", 40, "h-art"), "运行指南", "每个模型一个独立文件夹 · 同一轮的模型发同一段提示词，只换尖括号里的值")}
         <section class="step">
           <h2 class="group-head">1. 开跑前</h2>
-          <p>在仓库根目录执行。每个模型会得到一个独立文件夹 <code>../llm-runs/&lt;task-id&gt;/&lt;candidate-id&gt;/</code>，在里面启动模型，可以同时跑多个。candidate-id 写成“模型名”或“模型名-思考程度”，比如 <code>gpt-6.1-sol</code>、<code>grok-4.6-high</code>。文件夹名和 Git 标签不能带冒号，所以这里用连字符；画廊里显示成 <code>grok-4.6:high</code>。</p>
+          <p>在仓库根目录执行。每个模型会得到一个独立文件夹 <code>../llm-runs/&lt;task-id&gt;/&lt;candidate-id&gt;/</code>，在里面启动模型，可以同时跑多个。candidate-id 写成“模型名”或“模型名-思考程度”，比如 <code>gpt-6.1-sol</code>、<code>grok-4.6-high</code>。文件夹名和 Git 标签不能带冒号，所以这里用连字符；画廊里显示成 <code>grok-4.6:high</code>。不带思考程度时按该模型的默认档位显示，多数是 max。</p>
           ${codeBlock(before)}
         </section>
         <section class="step">
