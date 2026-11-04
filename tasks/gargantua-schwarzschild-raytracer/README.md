@@ -1,48 +1,17 @@
-# GARGANTUA — Schwarzschild Black Hole Raytracer Evaluation
+# GARGANTUA — Schwarzschild Black Hole Raytracer Archive
 
-## Task Record
+Candidates for `gargantua-schwarzschild-raytracer`. Task inputs and the evaluation procedure are on `main` at [`tasks/gargantua-schwarzschild-raytracer/`](https://github.com/narwhrl/llm-evals/tree/main/tasks/gargantua-schwarzschild-raytracer).
 
-- Task ID: `gargantua-schwarzschild-raytracer`
-- Canonical candidate path: `tasks/gargantua-schwarzschild-raytracer/solution/`
-- Candidate result report: `tasks/gargantua-schwarzschild-raytracer/solution/RESULTS.md`
-- Prompt: [`task.md`](task.md)
-- Status: Seventeen candidates archived on `llm/gargantua-schwarzschild-raytracer` at `tasks/gargantua-schwarzschild-raytracer/solutions/<candidate-id>/`. Original commits and source trees are recorded in [`migration/2026-09-28.json`](../../migration/2026-09-28.json); `cursor-c343` has no confirmed model ID or result report. `glm-5.3-flash` and `opus-5.5` were produced from the `8409ab9` baseline in isolated clones and imported with result reports. The current `deepseek-v4.1-flash` archive is a from-scratch rerun from the `63a46c3` baseline; it supersedes the earlier `703a8da` revision at the same path, whose tag remains available for audit.
-- Status: `minimax-m3.1-flash` (`magpie/minimax-code/MiniMax-M3.1-Flash`) was produced from the `63a46c3` baseline in an isolated worktree (`.worktrees/minimax-m3.1-flash/gargantua-schwarzschild-raytracer`), tagged `candidate/gargantua-schwarzschild-raytracer/minimax-m3.1-flash` at commit `2cbeadd` (tree `cc15752`), and imported with a result report (RESULTS.md).
+- `solutions/<candidate-id>/` is the exact `tasks/gargantua-schwarzschild-raytracer/solution/` tree of the candidate tag named in its record.
+- [`imports.json`](imports.json) records imports after the 2026-09-28 migration; migrated candidates are recorded in [`migration/2026-09-28.json`](https://github.com/narwhrl/llm-evals/blob/main/migration/2026-09-28.json) on `main`.
+- `inputTree` in a record is the `tasks/gargantua-schwarzschild-raytracer` tree at its baseline; candidates with the same `inputTree` received identical task inputs.
+- Candidates imported before `scripts/runs.mjs` ran in clones or worktrees inside the repository; their isolation from other candidates is not verified.
+- `notes/` keeps the agent session plans recorded for some runs.
 
-- Status: `kimi-k3.1-pro` (`Kimi-K3.1-Pro`) was produced from the `b4585b3` baseline in isolated clone `.runs/gargantua-schwarzschild-raytracer/kimi-k3.1-pro`, tagged `candidate/gargantua-schwarzschild-raytracer/kimi-k3.1-pro` at commit `6fb01ee` (tree `7aec369`), and imported with a result report (RESULTS.md).
+## Provenance
 
-## Shared Inputs
-
-This task intentionally provides no starter project, implementation, golden image, or fixed executable test. Shader architecture, numerical integration formulation, UI construction, post-processing architecture, local asset/vendoring strategy, and quality strategy are evaluated parts of the response. Every candidate must receive the same baseline, prompt, permissions, browser/runtime, viewport matrix, and review procedure.
-
-The candidate must use React/Vite and a locally vendored Three.js ESM build at the canonical candidate path. Runtime must not fetch visual, audio, or library assets from a network. The required URL capture contract makes visual inspection reproducible without prescribing an art-direction clone or a particular Schwarzschild coordinate chart.
-
-## Evaluation Procedure
-
-Before starting a round:
-
-1. Designate the current `main` commit as the shared baseline. Create every isolated model clone from that exact SHA and require the full SHA in every candidate's `RESULTS.md`.
-2. In each clone, inspect `solution/` for the documented React/Vite source, lockfile, local `vendor/` contents, vendor provenance/licensing note, README, and result report. Verify that no candidate source is imported from another model's work.
-3. Install according to the candidate's documented command, run its documented production build, and serve the produced static files with its documented static-server command. Record exact commands, exit codes, package-install failures, network requests, browser console output, and asset-loading failures.
-4. Use a clean desktop browser profile at `1440 × 900` and a mobile profile at `390 × 844` with device scale factor `2`. Start at the base URL, wait for the documented ready condition, and confirm a stable full scene appears before any interaction.
-5. Inspect both source and runtime integrity. The visible main image must originate from the custom full-screen fragment shader; source must contain a numerical Schwarzschild null-geodesic integration path, event-horizon termination, curved-path disk intersections, and ordered multiple-crossing contribution logic. Reject a solution that replaces these with a black sphere, ordinary disk mesh, static image, video, screenshot, cubemap, panorama, remote asset, or one-pass flat-ring effect.
-6. At the desktop viewport, exercise orbit drag, wheel/pinch zoom, touch-equivalent camera input where available, each of four presets, cinematic loop pause/resume, HUD toggle, parameter reset, quality switching, and all `0`–`9` debug modes. Check that controls change the shader's actual view/state rather than only UI labels.
-7. Change representative camera, disk, background, post-processing, and quality controls; reload and verify versioned persisted state. Then use the visible reset control and verify defaults return. Inspect all 21 required parameter controls for labels, usable ranges, and observable or state-reported effect.
-8. Load the URL capture matrix with `capture=1`, `hud=0`, a fixed `time`, each `preset=0`–`3`, and each `debug=0`–`9`. Confirm query values apply before the first capture-ready frame; invalid values recover to defaults; `document.documentElement.dataset.gargantuaReady` becomes `true`; and `window.__GARGANTUA__` exposes the documented state methods without unhandled errors.
-9. Verify the three quality profiles produce a meaningful quality-budget change while retaining a readable event horizon, photon ring, and lensed disk on desktop and mobile. Check resize, Retina DPR handling, mobile HUD usability, and no persistent black screen.
-10. Where the browser exposes `WEBGL_lose_context`, induce a context loss and restoration after initial render. Verify that rendering pauses with a recoverable indication, state survives, renderer resources rebuild, and the final image returns without a page reload. If the environment cannot expose the extension, record that limitation rather than crediting an untested claim.
-11. Recycle every development/static server after inspection. Preserve observed screenshots, browser behavior, console output, build results, and known limitations consistently across all candidates.
-
-## Review Axes
-
-Apply the prompt consistently and record observable evidence for:
-
-- **Rendering integrity:** a local Three.js full-screen fragment shader numerically follows Schwarzschild null geodesics per pixel; all visible black-hole phenomena arise from that path rather than prohibited geometry or prerecorded visual substitutes.
-- **Relativistic image structure:** a genuinely dark event horizon, sharp photon-ring/critical behavior, lensed procedural stars and galaxy, primary and higher-order disk crossings, gravitational redshift, Doppler beaming, and animated disk turbulence are simultaneously legible.
-- **Cinematic image quality:** HDR range, Bloom, ACES tone mapping, restrained vignette/grain/chromatic aberration, hot disk emission, and stable contrast reinforce rather than conceal the physical structure.
-- **Interactive camera and HUD:** OrbitControls feed shader camera uniforms; cinematic loop and four distinct presets work; the full-screen HUD remains readable without occluding the subject; every required shortcut is discoverable and functional.
-- **Parameter, debug, and state behavior:** at least 21 meaningful controls persist and reset correctly; all ten debug modes provide distinct useful diagnostic views; quality profiles affect real rendering cost/quality.
-- **Automation and resilience:** the fixed URL capture contract, ready signal, state interface, invalid-query recovery, mobile/Retina behavior, and WebGL context-restoration path work without console errors or black screens.
-- **Packaging and reproducibility:** React/Vite build succeeds, the static runtime works without a backend or runtime remote assets, local vendor provenance is clear, commands/results are accurately reported, and no servers remain running after delivery.
-
-Do not infer quality from shader length, mesh count, package count, claims in `RESULTS.md`, or a single attractive still. Comparison conclusions require source inspection, observed browser behavior, capture-matrix evidence, and path-aligned candidate diffs from the same baseline.
+- `cursor-c343` has no confirmed model ID or result report.
+- `glm-5.3-flash` and `opus-5.5` were produced from the `8409ab9` baseline in isolated clones and imported with result reports.
+- The `deepseek-v4.1-flash` rerun from the `63a46c3` baseline superseded the earlier `703a8da` revision at the same path, whose tag remains available for audit; the current record is in [`imports.json`](imports.json).
+- `minimax-m3.1-flash` (`magpie/minimax-code/MiniMax-M3.1-Flash`) was produced from the `63a46c3` baseline in an isolated worktree (`.worktrees/minimax-m3.1-flash/gargantua-schwarzschild-raytracer`), tagged `candidate/gargantua-schwarzschild-raytracer/minimax-m3.1-flash` at commit `2cbeadd` (tree `cc15752`), and imported with a result report (RESULTS.md).
+- `kimi-k3.1-pro` (`Kimi-K3.1-Pro`) was produced from the `b4585b3` baseline in isolated clone `.runs/gargantua-schwarzschild-raytracer/kimi-k3.1-pro`, tagged `candidate/gargantua-schwarzschild-raytracer/kimi-k3.1-pro` at commit `6fb01ee` (tree `7aec369`), and imported with a result report (RESULTS.md).
