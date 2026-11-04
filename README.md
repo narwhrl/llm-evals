@@ -79,6 +79,45 @@ A candidate ID is the model ID, optionally followed by the reasoning effort used
 
 Candidates imported before `scripts/runs.mjs` ran in clones or worktrees inside the repository; their isolation from other candidates is not verified.
 
+## Running a Model
+
+The blocks below are the copyable form of the workflow above. The gallery reads them from this section at build time and shows them at `/#guide`. Send every model in a round the same prompt, changing only the bracketed values.
+
+<!-- run-guide -->
+Before the run, from the repository root (one folder per model; runs may proceed in parallel):
+
+```bash
+node scripts/runs.mjs new <task-id> <candidate-id> [<candidate-id> ...]
+```
+
+Prompt for the model, started inside `../llm-runs/<task-id>/<candidate-id>/`:
+
+```text
+当前目录是评测仓库的根目录。请完成 tasks/<task-id>/task.md 里的任务。
+
+模型标识：<完整模型标识，例如 provider/model-name，思考程度 high>
+
+规则：
+1. 只读写当前目录，不要访问这个目录以外的文件，也不要上网找别人的实现。
+2. 实现全部放在 tasks/<task-id>/solution/。不要改 task.md、README.md、AGENTS.md 或其他共享文件。
+3. 项目要能用 npm install 安装、npm run build 构建，并提交 package-lock.json。构建要接受 Vite 的 --base 和 --outDir 参数，因为作品会部署在 /<task-id>/<candidate-id>/ 这个子路径下。
+4. 调试时开的 dev server 和浏览器页面，结束前都要关掉。
+5. 在 tasks/<task-id>/solution/RESULTS.md 写明：上面的模型标识；起始 commit（运行 git rev-parse HEAD 得到）；实际运行过的命令和结果；已知限制、失败和需要人工介入的地方。没运行过的不要写成运行过。
+6. 完成后提交一次：git add tasks/<task-id>/solution，提交信息用 "feat: <一句话描述>"。
+```
+
+After the run, from the repository root:
+
+```bash
+node scripts/runs.mjs collect <task-id> <candidate-id>
+git push origin llm/<task-id> candidate/<task-id>/<candidate-id>
+node deploy/build.mjs <task-id>/<candidate-id>
+cd deploy && npx wrangler deploy
+```
+<!-- /run-guide -->
+
+Rule 2 places the implementation at `solution/` even where a task's own `task.md` names another location. If esbuild fails with `Access is denied` in the system temporary directory, point `TEMP` and `TMP` at a folder inside the repository before building.
+
 ## Candidate Gallery
 
 Every pushed task branch is built and published to one Cloudflare Worker, so all implementations can be viewed side by side at predictable paths.

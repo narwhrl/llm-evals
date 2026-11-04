@@ -164,6 +164,15 @@ function loadArchive() {
   return { repoUrl, tasks };
 }
 
+// 运行指南的命令和提示词以 README 的 Running a Model 一节为准，画廊只负责展示。
+function loadRunGuide() {
+  const readme = readFileSync(join(REPO_ROOT, "README.md"), "utf8").replace(/\r\n/g, "\n");
+  const section = readme.match(/<!-- run-guide -->([\s\S]*?)<!-- \/run-guide -->/)?.[1] ?? "";
+  const blocks = [...section.matchAll(/```\w*\n([\s\S]*?)\n```/g)].map((match) => match[1]);
+  if (blocks.length !== 3) throw new Error("README.md 的 run-guide 一节应有 3 个代码块：开跑前命令、提示词、跑完后命令");
+  return blocks;
+}
+
 function selectTargets(archive, filter) {
   const targets = [];
   const skipped = [];
@@ -372,7 +381,7 @@ function effortSwitch(row) {
 const effortLayer = (row, effort) => `data-effort="${escapeHtml(effort)}"${effort === row.effortList[0] ? "" : " hidden"}`;
 
 // 字体自托管在 assets/fonts/（OFL）。
-// shortcut: Noto Sans SC 只截取了本文件 UI 文案里的 316 个汉字，标题出现新汉字时会回退到系统字体，届时按新字表重新下载子集。
+// shortcut: Noto Sans SC 只截取了本文件里出现的汉字（目前 358 个），标题出现新汉字时会回退到系统字体，届时按新字表重新下载子集。
 const STYLE = `
       @font-face { font-family: Figtree; src: url("/${ASSET_DIR}/fonts/figtree-latin.woff2") format("woff2"); font-weight: 400 800; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
       @font-face { font-family: "JetBrains Mono"; src: url("/${ASSET_DIR}/fonts/jetbrains-mono-latin.woff2") format("woff2"); font-weight: 400 500; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
@@ -585,6 +594,17 @@ const STYLE = `
       .diagnostics ul { display: grid; gap: 6px; margin-top: 10px; }
       .diagnostics code { margin-right: 10px; color: var(--ink); font: 12px var(--mono); }
 
+      .step { margin-top: 32px; }
+      .step > p { max-width: 62ch; color: var(--ink-2); }
+      .step code { padding: 1px 6px; border-radius: 6px; background: var(--soft); font: 13px var(--mono); }
+      .code { position: relative; margin-top: 12px; border: 1px solid var(--line); border-radius: 16px; background: var(--soft-2); }
+      .code pre { margin: 0; padding: 16px 92px 16px 18px; overflow-x: auto; color: var(--ink-2); font: 13px/1.7 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; }
+      .code pre code { padding: 0; background: none; font: inherit; }
+      .code.prose pre { font: 14.5px/1.8 var(--sans); }
+      .copy { position: absolute; top: 10px; right: 10px; }
+      .guide-source { margin-top: 28px; color: var(--muted); font-size: 13px; }
+      .guide-source a { color: var(--ink-3); text-decoration: underline; text-underline-offset: 3px; }
+
       @media (max-width: 1199px) {
         .app { grid-template-columns: clamp(232px, 24vw, 280px) minmax(0, 1fr); }
         .side { grid-row: 1 / span 2; }
@@ -630,6 +650,8 @@ const STYLE = `
         .model-row th { padding: 6px 4px 6px 8px; font-size: 13px; }
         .mark { width: 18px; height: 18px; border-radius: 6px; }
         .rail { padding: 8px 16px 40px; border-top: 1px solid var(--line); }
+        .code pre { padding-right: 18px; }
+        .copy { position: static; margin: 0 0 10px 14px; }
       }
       @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 `;
@@ -714,7 +736,10 @@ const SCRIPT = `
             group.hidden = !visible;
             if (count) count.textContent = visible + " " + count.dataset.count;
           }
-          for (const view of views.values()) view.querySelector("[data-empty]").hidden = Boolean(view.querySelector("[data-item]:not([hidden])"));
+          for (const view of views.values()) {
+            const empty = view.querySelector("[data-empty]");
+            if (empty) empty.hidden = Boolean(view.querySelector("[data-item]:not([hidden])"));
+          }
           if (live && live.stage.closest("[data-item][hidden]")) stop();
           const params = new URLSearchParams(location.search);
           if (query) params.set("q", search.value.trim());
@@ -742,6 +767,16 @@ const SCRIPT = `
             apply();
             search.focus();
           }
+          const copy = event.target.closest("[data-copy]");
+          if (copy) {
+            navigator.clipboard
+              .writeText(copy.parentElement.querySelector("pre").textContent)
+              .then(
+                () => (copy.textContent = "已复制"),
+                () => (copy.textContent = "复制失败，请手动选择"),
+              )
+              .finally(() => setTimeout(() => (copy.textContent = "复制"), 1600));
+          }
         });
         addEventListener("keydown", (event) => {
           const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName) || document.activeElement.isContentEditable;
@@ -764,7 +799,7 @@ const SCRIPT = `
       })();
 `;
 
-function renderGallery(published, archive, { generatedAt, failed, skipped }) {
+function renderGallery(published, archive, { generatedAt, failed, skipped, guide }) {
   const generated = Date.parse(generatedAt) / 1000;
   const today = dayKey(generated);
   const weekAgo = addDays(today, -6);
@@ -1052,7 +1087,7 @@ function renderGallery(published, archive, { generatedAt, failed, skipped }) {
           )
           .join("\n        ")}
       </nav>
-      <nav class="nav bottom" aria-label="仓库"><a href="${escapeHtml(archive.repoUrl)}">${icon("github")}GitHub 仓库</a><a href="${escapeHtml(archive.repoUrl)}#readme">${icon("book")}评测规则</a></nav>
+      <nav class="nav bottom" aria-label="仓库"><a href="${escapeHtml(archive.repoUrl)}">${icon("github")}GitHub 仓库</a><a href="#guide" data-route="guide">${icon("book")}运行指南</a></nav>
     </aside>`;
 
   const diagnosticEntries = [
@@ -1068,6 +1103,29 @@ function renderGallery(published, archive, { generatedAt, failed, skipped }) {
         </details>`
     : "";
   const updated = `${dayLabel(today)} ${CLOCK_FORMAT.format(new Date(generated * 1000))}`;
+
+  const [before, prompt, after] = guide;
+  const codeBlock = (text, className = "") =>
+    `<div class="code${className}"><pre><code>${escapeHtml(text)}</code></pre><button class="pill sm copy" type="button" data-copy>复制</button></div>`;
+  const guideView = `<section class="view" data-view="guide" aria-label="运行指南" hidden>
+        ${viewHead(emoji("clipboard", 40, "h-art"), "运行指南", "每个模型一个独立文件夹 · 同一轮的模型发同一段提示词，只换尖括号里的值")}
+        <section class="step">
+          <h2 class="group-head">1. 开跑前</h2>
+          <p>在仓库根目录执行。每个模型会得到一个独立文件夹 <code>../llm-runs/&lt;task-id&gt;/&lt;candidate-id&gt;/</code>，在里面启动模型，可以同时跑多个。candidate-id 写成“模型名”或“模型名-思考程度”，比如 <code>gpt-6.1-sol</code>、<code>grok-4.6-high</code>。</p>
+          ${codeBlock(before)}
+        </section>
+        <section class="step">
+          <h2 class="group-head">2. 发给模型的提示词</h2>
+          <p>第 2 条把实现位置统一到 <code>solution/</code>，题面里写的位置以它为准。</p>
+          ${codeBlock(prompt, " prose")}
+        </section>
+        <section class="step">
+          <h2 class="group-head">3. 跑完后</h2>
+          <p>收回作品并推送，然后只构建这一份、重新部署，首页会按全部作品重新生成。</p>
+          ${codeBlock(after)}
+        </section>
+        <p class="guide-source">命令和提示词取自仓库 <a href="${escapeHtml(archive.repoUrl)}#running-a-model">README 的 Running a Model 一节</a>，改那里即可。</p>
+      </section>`;
 
   return `<!doctype html>
 <html lang="zh-CN">
@@ -1092,6 +1150,7 @@ function renderGallery(published, archive, { generatedAt, failed, skipped }) {
       ${recentView}
       ${coverageView}
       ${modelsView}
+      ${guideView}
       ${tasks.map(taskView).join("\n      ")}
       ${diagnostics ? `<footer class="page-foot">${diagnostics}</footer>` : ""}
       </div>
@@ -1111,6 +1170,7 @@ async function main() {
   run("git fetch --all --prune");
 
   const archive = loadArchive();
+  const guide = loadRunGuide();
   const { targets, skipped } = selectTargets(archive, filter);
   if (!targets.length) throw new Error("没有找到可构建的候选实现");
   console.log(`准备构建 ${targets.length} 个候选实现，并发 ${CONCURRENCY}，已跳过 ${skipped.length} 个缺少 package.json 的目录`);
@@ -1148,7 +1208,7 @@ async function main() {
   }
   writeFileSync(
     join(PUBLIC_DIR, "index.html"),
-    renderGallery(published, archive, { generatedAt: new Date().toISOString(), failed, skipped }),
+    renderGallery(published, archive, { generatedAt: new Date().toISOString(), failed, skipped, guide }),
     "utf8",
   );
 
