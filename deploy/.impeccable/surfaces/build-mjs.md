@@ -16,7 +16,7 @@ OWN-WORLD: pure white ground, #f4f4f6 gray containers, #ececef hairlines, 14 to 
 STORY: the curator sees what arrived lately and from whom, and runs any work inline. They can then jump to the same task to compare vendors, find one model's works under any reasoning effort, and see where coverage has gaps.
 
 FIRST VIEWPORT: three columns at 1440px.
-- Left: a 300px sidebar with the identity, three views, and seven tasks, each showing its count, latest date, and a red new badge.
+- Left: a 300px sidebar with the identity wordmark, three views, and the tasks as wrapping chips, each showing its candidate count and a red dot when it has new candidates.
 - Center: the feed at max 640px. It opens with "最近完成" at 44px/800 and a meta line. The newest post follows, with its navy stage and the "在这里运行" pill as the primary action.
 - Right: a 380px rail with the weekly bar chart annotated at the busiest day, 2×2 fact tiles, and the least-covered tasks.
 

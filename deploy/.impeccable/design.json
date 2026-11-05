@@ -99,12 +99,12 @@
       "css": ".ds-nav { display: grid; gap: 2px; width: 260px; } .ds-nav a { display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 14px; color: #16161a; font: 500 15px Figtree, sans-serif; cursor: pointer; transition: background-color 0.2s; } .ds-nav svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; } .ds-nav a:hover { background: #f7f7f9; } .ds-nav a[aria-current] { background: #f4f4f6; font-weight: 700; } .ds-nav a:focus-visible { outline: 2px solid #2a5ff0; outline-offset: 2px; }"
     },
     {
-      "name": "Tags and Badge",
+      "name": "Tags and Task Chip",
       "kind": "chip",
       "refersTo": "tag",
-      "description": "Gray fact tags, the green report tag, and the red new-count badge.",
-      "html": "<span class=\"ds-tag\">high 思考</span> <span class=\"ds-tag ds-ok\">有报告</span> <span class=\"ds-badge\">3</span>",
-      "css": ".ds-tag { display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 10px; border-radius: 999px; background: #f4f4f6; color: #3f3f46; font: 600 12.5px Figtree, sans-serif; } .ds-ok { background: #e7f6ed; color: #157a41; } .ds-ok::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; } .ds-badge { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: #dc2f24; color: #fff; font: 700 11.5px Figtree, sans-serif; font-variant-numeric: tabular-nums; }"
+      "description": "Gray fact tags, the green report tag, and a sidebar task chip with its count and red new dot.",
+      "html": "<span class=\"ds-tag\">high 思考</span> <span class=\"ds-tag ds-ok\">有报告</span> <span class=\"ds-chip\">GARGANTUA<span class=\"ds-n\">20</span><i class=\"ds-new\"></i></span>",
+      "css": ".ds-tag { display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 10px; border-radius: 999px; background: #f4f4f6; color: #3f3f46; font: 600 12.5px Figtree, sans-serif; } .ds-ok { background: #e7f6ed; color: #157a41; } .ds-ok::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; } .ds-chip { position: relative; display: inline-flex; align-items: center; gap: 7px; height: 36px; padding: 0 15px; border: 1px solid #ececef; border-radius: 999px; background: #fff; color: #16161a; font: 600 14px Figtree, sans-serif; } .ds-n { color: #6b6b74; font-weight: 500; font-variant-numeric: tabular-nums; } .ds-new { position: absolute; top: -2px; right: -2px; width: 10px; height: 10px; border: 2px solid #fff; border-radius: 50%; background: #dc2f24; }"
     },
     {
       "name": "Segmented Control",

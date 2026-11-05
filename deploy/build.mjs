@@ -416,20 +416,20 @@ const STYLE = `
 
       .app { display: grid; grid-template-columns: clamp(248px, 21vw, 300px) minmax(0, 1fr) clamp(320px, 26.4vw, 380px); min-height: 100vh; }
       .side { position: sticky; top: 0; height: 100vh; overflow-y: auto; display: flex; flex-direction: column; padding: 26px 18px; border-right: 1px solid var(--line); }
-      .me { display: flex; gap: 12px; align-items: center; padding: 0 12px 22px; }
-      .me b { display: block; font-size: 18px; font-weight: 800; line-height: 1.3; }
-      .me span { color: var(--muted); font-size: 13px; }
-      .nav, .tasks { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; }
+      .me { padding: 0 12px 22px; }
+      .me b { display: block; font-size: 22px; font-weight: 800; line-height: 1.2; letter-spacing: -0.02em; }
+      .nav { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; }
       .nav a { display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 14px; font-weight: 500; }
-      .nav a:hover, .task:hover { background: var(--tile); }
-      .nav a[aria-current], .task[aria-current] { background: var(--soft); }
+      .nav a:hover { background: var(--tile); }
+      .nav a[aria-current] { background: var(--soft); }
       .nav a[aria-current] { font-weight: 700; }
-      .label { margin: 12px 12px 6px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; font-weight: 500; }
-      .task { display: flex; align-items: center; gap: 12px; padding: 8px 12px; border-radius: 16px; }
-      .task-text { min-width: 0; }
-      .task b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14.5px; font-weight: 600; line-height: 1.35; }
-      .task small { display: block; color: var(--muted); font-size: 12.5px; white-space: nowrap; }
-      .badge { display: grid; place-items: center; flex: none; min-width: 20px; height: 20px; margin-left: auto; padding: 0 6px; border-radius: 999px; background: var(--red); color: #fff; font-size: 11.5px; font-weight: 700; font-variant-numeric: tabular-nums; }
+      .label { margin: 12px 12px 10px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; font-weight: 500; }
+      .tasks { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 6px; }
+      .task { position: relative; display: inline-flex; align-items: center; gap: 7px; height: 36px; padding: 0 15px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font-size: 14px; font-weight: 600; white-space: nowrap; }
+      .task:hover { border-color: var(--line-2); background: var(--soft-2); box-shadow: 0 1px 2px rgb(22 22 26 / 0.06); }
+      .task[aria-current] { border-color: transparent; background: var(--soft); box-shadow: none; }
+      .task .n { color: var(--muted); font-weight: 500; font-variant-numeric: tabular-nums; }
+      .new { position: absolute; top: -2px; right: -2px; width: 10px; height: 10px; border: 2px solid #fff; border-radius: 50%; background: var(--red); }
       .bottom { margin-top: auto; padding-top: 16px; }
 
       .main { min-width: 0; padding: 28px clamp(24px, 3.9vw, 56px) 64px; border-right: 1px solid var(--line); }
@@ -626,11 +626,8 @@ const STYLE = `
         .nav a { flex: none; height: 38px; padding: 0 14px; border: 1px solid var(--line); border-radius: 999px; }
         .nav a[aria-current] { border-color: transparent; }
         .label { display: none; }
-        .task { flex: none; gap: 8px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; }
-        .task[aria-current] { border-color: transparent; }
-        .task small { display: none; }
-        .task b { font-size: 14px; }
-        .badge { margin-left: 2px; }
+        .tasks { flex-wrap: nowrap; padding: 3px 16px; }
+        .task { flex: none; }
         .bottom { padding-top: 0; }
         .main { padding: 16px 16px 40px; border-right: 0; }
         .topbar { flex-wrap: wrap; gap: 10px; }
@@ -1078,14 +1075,14 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
 
   const navLink = (route, name, label) => `<a href="#${route === "recent" ? "" : route}" data-route="${route}">${icon(name)}${label}</a>`;
   const side = `<aside class="side">
-      <div class="me"><div><b>LLM Evals</b><span>${tasks.length} 道题 · ${rows.length} 个模型</span></div></div>
+      <div class="me"><b>LLM Evals</b></div>
       <nav class="nav" aria-label="视图">${navLink("recent", "feed", "最近完成")}${navLink("coverage", "grid", "覆盖情况")}${navLink("models", "models", "全部模型")}</nav>
       <h2 class="label">题目</h2>
       <nav class="tasks" aria-label="题目">
         ${tasks
           .map(
             (task) =>
-              `<a class="task" href="#${escapeHtml(task.task)}" data-route="${escapeHtml(task.task)}"><span class="task-text"><b>${escapeHtml(task.short)}</b><small>${task.list.length} 份 · ${dayText(task.latest)}</small></span>${task.fresh ? `<span class="sr-only">近 7 天新增</span><span class="badge" title="近 7 天新增 ${task.fresh} 份">${task.fresh}</span>` : ""}</a>`,
+              `<a class="task" href="#${escapeHtml(task.task)}" data-route="${escapeHtml(task.task)}">${escapeHtml(task.short)}<span class="n">${task.list.length}<span class="sr-only"> 份</span></span>${task.fresh ? `<span class="sr-only">，近 7 天新增 ${task.fresh} 份</span><i class="new" title="近 7 天新增 ${task.fresh} 份" aria-hidden="true"></i>` : ""}</a>`,
           )
           .join("\n        ")}
       </nav>

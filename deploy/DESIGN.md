@@ -113,12 +113,10 @@ components:
   tag-ok:
     backgroundColor: "{colors.green-soft}"
     textColor: "{colors.green}"
-  badge:
+  new-dot:
     backgroundColor: "{colors.red}"
-    textColor: "{colors.paper}"
     rounded: "{rounded.pill}"
-    height: "20px"
-    padding: "0 6px"
+    size: "10px"
   search:
     backgroundColor: "{colors.soft}"
     textColor: "{colors.muted}"
@@ -137,6 +135,12 @@ components:
     padding: "0 12px"
   nav-item-active:
     backgroundColor: "{colors.soft}"
+  task-chip:
+    backgroundColor: "{colors.paper}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.pill}"
+    height: "36px"
+    padding: "0 15px"
   link-card:
     backgroundColor: "{colors.soft-2}"
     rounded: "{rounded.card}"
@@ -191,7 +195,7 @@ A near-monochrome gray ladder on white, with three small accents that each own a
 - **Stage Navy** (`navy`): the run-in-place stage, and nothing else. Its text is `navy-ink`, a desaturated lavender gray; the current-work title in the stage bar lifts to #d5d8e6.
 
 ### Tertiary
-- **New Red** (`red`): the count badge for candidates from the last seven days, in the sidebar only.
+- **New Red** (`red`): the dot on a sidebar task chip that has candidates from the last seven days, in the sidebar only.
 - **Report Green** (`green` on `green-soft`): the "有报告" tag and the completion dot in a post footer.
 
 ### Neutral
@@ -274,7 +278,7 @@ Soft, low-contrast pills that warm on hover.
 ### Chips
 - **Tag:** 24px `soft` pill with `ink-3` text at 12.5px/600; linked tags darken to #e8e8ed on hover.
 - **Report tag:** `green-soft` ground, `green` text, with a 6px leading dot.
-- **New badge:** 20px red pill with white tabular count, right-aligned in a sidebar task row.
+- **New dot:** a 10px red dot with a 2px white ring at a task chip's top-right corner; the count of new candidates is in its title and in screen-reader text.
 
 ### Cards / Containers
 - **Corner Style:** 16 to 22px by size (see Shapes).
@@ -293,9 +297,9 @@ A `soft` pill track with 3px padding holding text buttons at 12px/600 in `muted`
 
 ### Navigation
 - **Sidebar items:** 44px rows with a 20px line icon, 500 weight, 14px radius. Hover takes the `tile` ground; the current view takes `soft` and 700 weight.
-- **Task rows:** the task name at 14.5px/600, a muted count and date line, and the red new badge. No leading icon.
+- **Task chips:** under the 题目 label, the tasks wrap as 36px white pills with a `line` border, holding the task name at 14px/600 and its candidate count in `muted` tabular figures. Hover follows the small pill (`line-2` border, `soft-2` ground, Nudge shadow); the current task fills with `soft` and drops its border; the New dot marks a task with candidates from the last seven days.
 - **Section label:** 13px/500 `muted` text over a hairline.
-- **Mobile:** both lists become horizontal scrollers of outlined pills; task meta lines hide.
+- **Mobile:** the view list becomes a horizontal scroller of outlined pills, and the task chips stop wrapping and scroll the same way.
 
 ### Run-in-Place Stage (signature)
 A navy card, 220px tall in a post (280px in the task view), holding only the Play pill and the work's path in mono (the task view holds a hint instead). Running grows it to the work's aspect plus a 48px bar (`calc(62.5cqw + 48px)`, capped at 78vh in the task view) over 0.5s. The iframe fades in over 0.4s behind a "正在载入…" placeholder. The bar shows the current title, an open-in-new-window link, and Stop. Only one work runs at a time, and the task view shares one stage across its candidates, tinting the running entry `blue-soft`.
