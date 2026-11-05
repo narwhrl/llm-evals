@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "taskId": "gaming-room-timeline",
+  "candidates": [
+    {
+      "candidateId": "claude-opus-5.5",
+      "baselineMain": "f95b2e8c1380b78d2bce7ce335e0ad2e974a5183",
+      "inputTree": "b307c133553f86206f182ea1e76bb923e6c70b1f",
+      "sourceRef": "run:../llm-runs/gaming-room-timeline/claude-opus-5.5",
+      "sourceCommit": "801e34063924f130c0cc5ed1e498721f8485a7e4",
+      "sourceTree": "03342b0ee3d1165e7729a0c67a468bf4050fd1cc",
+      "archiveTag": "candidate/gaming-room-timeline/claude-opus-5.5",
+      "destination": "tasks/gaming-room-timeline/solutions/claude-opus-5.5",
+      "resultReport": "tasks/gaming-room-timeline/solutions/claude-opus-5.5/RESULTS.md"
+    }
+  ]
+}
