@@ -33,7 +33,7 @@ One prompt, many independent implementations, all built and served side by side 
 
 ## Brand Commitments
 
-- Visual direction pinned by the owner on 2026-11-04: Soft Minimalist SaaS Dashboard, combining Notion's content typography, Linear's refined restraint, and shadcn/ui's component language. Pure white background, light gray containers, low-contrast thin borders, soft shadows, and medium-to-large radii. A fixed left sidebar with a modular content layout, clear hierarchy, and comfortable whitespace. A modern sans-serif with bold headings, restrained color emoji, cute illustrated icons, and a few status accent colors. Pill buttons, soft hover states, and light transitions, for a relaxed, warm, professional "cozy productivity" feel.
+- Visual direction pinned by the owner on 2026-11-04: Soft Minimalist SaaS Dashboard, combining Notion's content typography, Linear's refined restraint, and shadcn/ui's component language. Pure white background, light gray containers, low-contrast thin borders, soft shadows, and medium-to-large radii. A fixed left sidebar with a modular content layout, clear hierarchy, and comfortable whitespace. A modern sans-serif with bold headings, line icons for navigation only, and a few status accent colors. No emoji or illustrations: the owner dropped them on 2026-11-05, so tasks are identified by name. Pill buttons, soft hover states, and light transitions, for a relaxed, warm, professional "cozy productivity" feel.
 
 ## Evidence on Hand
 

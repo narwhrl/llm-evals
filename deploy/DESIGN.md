@@ -167,7 +167,7 @@ components:
 
 **Creative North Star: "The Running Feed"**
 
-The gallery is a cozy workspace feed: a white page, a fixed sidebar, a single reading column, and a right rail of facts. Each finished candidate arrives as a post, and its work runs in place inside a dark navy stage. The system is the owner's pinned direction, a soft minimalist SaaS dashboard, made concrete: light gray containers, hairline borders, medium-to-large radii, pill buttons, and color emoji as task illustrations.
+The gallery is a cozy workspace feed: a white page, a fixed sidebar, a single reading column, and a right rail of facts. Each finished candidate arrives as a post, and its work runs in place inside a dark navy stage. The system is the owner's pinned direction, a soft minimalist SaaS dashboard, made concrete: light gray containers, hairline borders, medium-to-large radii, pill buttons, and type in place of illustration.
 
 Density is comfortable rather than packed. Hierarchy comes from Figtree at heavy weights and from gray tonal steps, not from color. Color is reserved for jobs: blue marks presence and selection, red counts what is new, green confirms a report exists. The navy stage is the only dark surface, so the eye always finds the thing that runs.
 
@@ -177,7 +177,7 @@ The system shows facts only. Nothing in it is shaped like a score, a rank, a pod
 - Pure white ground with gray containers (#f4f4f6 family) and #ececef hairlines.
 - Radii from 14px to 22px on surfaces; every button and tag is a full pill.
 - Figtree 700 to 800 for headings; JetBrains Mono only for paths, IDs, and dates.
-- Fluent 3D emoji illustrate tasks; 1.7px-stroke line icons do navigation.
+- Tasks are identified by name, never by emoji or illustration; 1.7px-stroke line icons do navigation.
 - One dark surface: the navy stage where a work runs.
 
 ## Colors
@@ -220,7 +220,7 @@ A near-monochrome gray ladder on white, with three small accents that each own a
 **Character:** A friendly geometric sans at heavy weights gives the headings warmth; the monospace is a quiet utility voice reserved for machine facts.
 
 ### Hierarchy
-- **Display** (800, 44px, 1.15, -0.02em): the view title, one per view, paired with a 40px task emoji. 32px below 820px.
+- **Display** (800, 44px, 1.15, -0.02em): the view title, one per view. 32px below 820px.
 - **Headline** (700, 22px, 1.35): post titles, balanced wrap. Rail section heads use the same size at 800. 20px on mobile.
 - **Title** (700, 16px): rail card heads and model card heads; group heads step up to 18px at 800.
 - **Body** (400, 15px, 1.6): base UI text. Excerpts read at 16px with 1.75 line height in `ink-2`.
@@ -239,7 +239,7 @@ At 1200px and up, a three-column grid: a sticky sidebar `clamp(248px, 21vw, 300p
 
 Between 821px and 1199px the rail drops below the main column as an auto-fit grid of 260px minimums, capped to the feed width, with its chart card spanning the full row. At 820px and below everything stacks: the sidebar becomes a header whose views and tasks scroll horizontally as outlined pills, search moves to the top at full width, and the stage shrinks to 180px (220px wide).
 
-Spacing rhythm runs on 6, 10, 16, 24, and 36px: 6px between tags, 10 to 12px inside lists, 16px for internal card padding, 24px between posts, and 36px between days. The post grid is a 52px emoji gutter plus content.
+Spacing rhythm runs on 6, 10, 16, 24, and 36px: 6px between tags, 10 to 12px inside lists, 16px for internal card padding, 24px between posts, and 36px between days. The post grid is a 52px avatar gutter plus content.
 
 ## Elevation & Depth
 
@@ -293,15 +293,15 @@ A `soft` pill track with 3px padding holding text buttons at 12px/600 in `muted`
 
 ### Navigation
 - **Sidebar items:** 44px rows with a 20px line icon, 500 weight, 14px radius. Hover takes the `tile` ground; the current view takes `soft` and 700 weight.
-- **Task rows:** a 28px task emoji, the task name at 14.5px/600, a muted count and date line, and the red new badge.
+- **Task rows:** the task name at 14.5px/600, a muted count and date line, and the red new badge. No leading icon.
 - **Section label:** 13px/500 `muted` text over a hairline.
 - **Mobile:** both lists become horizontal scrollers of outlined pills; task meta lines hide.
 
 ### Run-in-Place Stage (signature)
-A navy card, 220px tall in a post (280px in the task view), with the task's 72px emoji over a soft drop shadow, the Play pill, and the work's path in mono. Running grows it to the work's aspect plus a 48px bar (`calc(62.5cqw + 48px)`, capped at 78vh in the task view) over 0.5s. The iframe fades in over 0.4s behind a "正在载入…" placeholder. The bar shows the current title, an open-in-new-window link, and Stop. Only one work runs at a time, and the task view shares one stage across its candidates, tinting the running entry `blue-soft`.
+A navy card, 220px tall in a post (280px in the task view), holding only the Play pill and the work's path in mono (the task view holds a hint instead). Running grows it to the work's aspect plus a 48px bar (`calc(62.5cqw + 48px)`, capped at 78vh in the task view) over 0.5s. The iframe fades in over 0.4s behind a "正在载入…" placeholder. The bar shows the current title, an open-in-new-window link, and Stop. Only one work runs at a time, and the task view shares one stage across its candidates, tinting the running entry `blue-soft`.
 
 ### Coverage Matrix
-A 20px-radius bordered frame holding a fixed-layout table: task emoji column heads with dark tooltips, vendor group rows in display type, and model rows whose cells are 22px Mark Blue squares (7px radius) for each candidate and a 5px gray dot for a gap. Marks scale to 1.1 and deepen to `blue-ink` on hover.
+A 20px-radius bordered frame holding a fixed-layout table: column heads that name each task in vertical 12.5px/600 `ink-3` text, read bottom to top and wrapping to a second line past 118px, vendor group rows in display type, and model rows whose cells are 22px Mark Blue squares (7px radius) for each candidate and a 5px gray dot for a gap. Marks scale to 1.1 and deepen to `blue-ink` on hover.
 
 ### Weekly Chart
 Ten bars in `bar` gray with 5px top radii, the busiest week in Mark Blue with a dashed blue leader to a blue pill annotation. Hovering a bar shows a dark tooltip and hides the annotation. The axis is in 11.5px mono.
@@ -311,7 +311,7 @@ Ten bars in `bar` gray with 5px top radii, the busiest week in Mark Blue with a 
 ### Do:
 - **Do** keep the page white and build depth from the gray ladder (`soft`, `soft-2`, `tile`) and 1px `line` hairlines.
 - **Do** make every button, tag, segmented control, and search field a full pill.
-- **Do** illustrate a task with its Fluent 3D emoji and navigate with 1.7px-stroke line icons; keep the two roles separate.
+- **Do** name a task in text wherever it appears and navigate with 1.7px-stroke line icons; add no emoji or illustration.
 - **Do** run a work inside the navy stage, one at a time, with the Play pill as the post's primary action.
 - **Do** set paths, IDs, and dates in JetBrains Mono and every count in tabular figures.
 - **Do** show a missing candidate as a visible gap (a gray dot), never as an empty space.

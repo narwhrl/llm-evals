@@ -25,7 +25,7 @@
       "green-soft": { "role": "tertiary", "displayName": "Report Green Wash", "canonical": "#e7f6ed", "tonalRamp": ["#06281a", "#0c4a28", "#157a41", "#2a9a5a", "#5fbb85", "#9fd8b4", "#cdeedb", "#e7f6ed"] }
     },
     "typographyMeta": {
-      "display": { "displayName": "Display", "purpose": "View title, one per view, beside a 40px task emoji. 32px below 820px." },
+      "display": { "displayName": "Display", "purpose": "View title, one per view. 32px below 820px." },
       "headline": { "displayName": "Headline", "purpose": "Post titles (700) and rail section heads (800). 20px on mobile." },
       "title": { "displayName": "Title", "purpose": "Rail card heads and model card heads; group heads at 18px/800." },
       "body": { "displayName": "Body", "purpose": "Base UI text." },
@@ -133,12 +133,12 @@
   ],
   "narrative": {
     "northStar": "The Running Feed",
-    "overview": "The gallery is a cozy workspace feed: a white page, a fixed sidebar, a single reading column, and a right rail of facts. Each finished candidate arrives as a post, and its work runs in place inside a dark navy stage. The system is the owner's pinned direction, a soft minimalist SaaS dashboard, made concrete: light gray containers, hairline borders, medium-to-large radii, pill buttons, and color emoji as task illustrations.\n\nDensity is comfortable rather than packed. Hierarchy comes from Figtree at heavy weights and from gray tonal steps, not from color. Color is reserved for jobs: blue marks presence and selection, red counts what is new, green confirms a report exists. The navy stage is the only dark surface, so the eye always finds the thing that runs.\n\nThe system shows facts only. Nothing in it is shaped like a score, a rank, a podium, or a thumbnail grid.",
+    "overview": "The gallery is a cozy workspace feed: a white page, a fixed sidebar, a single reading column, and a right rail of facts. Each finished candidate arrives as a post, and its work runs in place inside a dark navy stage. The system is the owner's pinned direction, a soft minimalist SaaS dashboard, made concrete: light gray containers, hairline borders, medium-to-large radii, pill buttons, and type in place of illustration.\n\nDensity is comfortable rather than packed. Hierarchy comes from Figtree at heavy weights and from gray tonal steps, not from color. Color is reserved for jobs: blue marks presence and selection, red counts what is new, green confirms a report exists. The navy stage is the only dark surface, so the eye always finds the thing that runs.\n\nThe system shows facts only. Nothing in it is shaped like a score, a rank, a podium, or a thumbnail grid.",
     "keyCharacteristics": [
       "Pure white ground with gray containers (#f4f4f6 family) and #ececef hairlines.",
       "Radii from 14px to 22px on surfaces; every button and tag is a full pill.",
       "Figtree 700 to 800 for headings; JetBrains Mono only for paths, IDs, and dates.",
-      "Fluent 3D emoji illustrate tasks; 1.7px-stroke line icons do navigation.",
+      "Tasks are identified by name, never by emoji or illustration; 1.7px-stroke line icons do navigation.",
       "One dark surface: the navy stage where a work runs."
     ],
     "rules": [
@@ -151,7 +151,7 @@
     "dos": [
       "**Do** keep the page white and build depth from the gray ladder (`soft`, `soft-2`, `tile`) and 1px `line` hairlines.",
       "**Do** make every button, tag, segmented control, and search field a full pill.",
-      "**Do** illustrate a task with its Fluent 3D emoji and navigate with 1.7px-stroke line icons; keep the two roles separate.",
+      "**Do** name a task in text wherever it appears and navigate with 1.7px-stroke line icons; add no emoji or illustration.",
       "**Do** run a work inside the navy stage, one at a time, with the Play pill as the post's primary action.",
       "**Do** set paths, IDs, and dates in JetBrains Mono and every count in tabular figures.",
       "**Do** show a missing candidate as a visible gap (a gray dot), never as an empty space."

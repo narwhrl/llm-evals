@@ -335,20 +335,6 @@ const addDays = (key, days) => new Date(Date.parse(`${key}T00:00:00Z`) + days * 
 const weekdayOf = (key) => new Date(`${key}T00:00:00Z`).getUTCDay();
 const weekStart = (key) => addDays(key, -((weekdayOf(key) + 6) % 7));
 
-// 题目插画用 Fluent Emoji 3D（MIT，见 deploy/assets/emoji/LICENSE）；没配图的新题目用拼图。
-const TASK_ICONS = {
-  "cs-pvp-diorama": "bullseye",
-  "gargantua-schwarzschild-raytracer": "milky-way",
-  "orbital-habitat-diorama": "satellite",
-  "rainy-konbini-diorama": "convenience-store",
-  "ui-ux-design": "artist-palette",
-  "voxel-chinese-architecture": "japanese-castle",
-  "voxel-waterfall": "national-park",
-};
-const emoji = (name, size, className) =>
-  `<img class="${className}" src="${ASSET_DIR}/emoji/${name}.png" alt="" width="${size}" height="${size}" decoding="async" />`;
-const taskEmoji = (task, size, className) => emoji(TASK_ICONS[task] ?? "puzzle-piece", size, className);
-
 // 厂商与模型 logo 来自 @lobehub/icons-static-svg 1.97.0（MIT，见 deploy/assets/logos/LICENSE），商标归各自所有者。
 // 模型 logo 按 model id 首段取；没有 logo 的模型用名字首字母。小米 MiMo 的 logo 是两行文字，缩小后认不出，所以不用。
 const VENDOR_LOGOS = { Anthropic: "anthropic", Cognition: "devin", DeepSeek: "deepseek-color", Google: "google-color", MiniMax: "minimax-color", "Moonshot AI": "moonshot", OpenAI: "openai", xAI: "xai", "Z.ai": "zai" };
@@ -430,9 +416,8 @@ const STYLE = `
 
       .app { display: grid; grid-template-columns: clamp(248px, 21vw, 300px) minmax(0, 1fr) clamp(320px, 26.4vw, 380px); min-height: 100vh; }
       .side { position: sticky; top: 0; height: 100vh; overflow-y: auto; display: flex; flex-direction: column; padding: 26px 18px; border-right: 1px solid var(--line); }
-      .me { display: flex; gap: 12px; align-items: center; padding: 0 8px 20px; }
-      .ava { display: grid; place-items: center; width: 46px; height: 46px; flex: none; border-radius: 50%; background: #eef2ff; }
-      .me b { display: block; font-size: 17px; line-height: 1.3; }
+      .me { display: flex; gap: 12px; align-items: center; padding: 0 12px 22px; }
+      .me b { display: block; font-size: 18px; font-weight: 800; line-height: 1.3; }
       .me span { color: var(--muted); font-size: 13px; }
       .nav, .tasks { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; }
       .nav a { display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 14px; font-weight: 500; }
@@ -440,8 +425,7 @@ const STYLE = `
       .nav a[aria-current], .task[aria-current] { background: var(--soft); }
       .nav a[aria-current] { font-weight: 700; }
       .label { margin: 12px 12px 6px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; font-weight: 500; }
-      .task { display: flex; align-items: center; gap: 12px; padding: 7px 12px; border-radius: 16px; }
-      .task-art { width: 28px; height: 28px; flex: none; }
+      .task { display: flex; align-items: center; gap: 12px; padding: 8px 12px; border-radius: 16px; }
       .task-text { min-width: 0; }
       .task b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14.5px; font-weight: 600; line-height: 1.35; }
       .task small { display: block; color: var(--muted); font-size: 12.5px; white-space: nowrap; }
@@ -464,8 +448,7 @@ const STYLE = `
       .view { animation: view-in 0.4s var(--ease); }
       @keyframes view-in { from { opacity: 0; transform: translateY(6px); } }
       .view-head { margin: 24px 0 4px; }
-      h1 { display: flex; align-items: center; gap: 14px; font-size: 44px; font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; }
-      .h-art { width: 40px; height: 40px; flex: none; }
+      h1 { font-size: 44px; font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; }
       .meta { margin-top: 4px; color: var(--muted); font-size: 14px; font-variant-numeric: tabular-nums; }
       .view-head .pill { margin-top: 14px; }
       .pill { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 16px; border: 1px solid transparent; border-radius: 999px; background: var(--soft); font-size: 14px; font-weight: 600; white-space: nowrap; }
@@ -502,7 +485,6 @@ const STYLE = `
       .stage.running { display: flex; flex-direction: column; height: calc(62.5cqw + 48px); }
       .stage.wide.running { height: min(calc(62.5cqw + 48px), 78vh); }
       .stage-idle { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; height: 100%; padding: 24px; text-align: center; }
-      .stage-art { width: 72px; height: 72px; filter: drop-shadow(0 8px 18px rgb(0 0 0 / 0.35)); }
       .play { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 18px; border: 0; border-radius: 999px; background: #fff; color: var(--ink); font-weight: 700; }
       .play .icon, .run .icon { width: 14px; height: 14px; }
       .play:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgb(0 0 0 / 0.35); }
@@ -539,15 +521,10 @@ const STYLE = `
 
       .matrix-wrap { margin-top: 24px; padding: 6px; overflow-x: auto; border: 1px solid var(--line); border-radius: 20px; }
       .matrix { width: 100%; min-width: 560px; table-layout: fixed; border-collapse: collapse; }
-      .matrix thead th { padding: 10px 2px 8px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 12px; font-weight: 600; vertical-align: bottom; }
+      .matrix thead th { padding: 12px 2px 10px; border-bottom: 1px solid var(--line); vertical-align: bottom; }
       .matrix thead th:first-child { width: 36%; }
-      .matrix thead a { position: relative; display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 14px; }
-      .matrix thead a:hover { background: var(--tile); }
-      .matrix thead a::after { content: attr(data-tip); position: absolute; top: calc(100% + 4px); left: 50%; z-index: 2; padding: 4px 8px; border-radius: 8px; background: var(--ink); color: #fff; font-size: 12px; font-weight: 600; white-space: nowrap; opacity: 0; pointer-events: none; transform: translate(-50%, -4px); transition: opacity 0.15s, transform 0.15s; }
-      .matrix thead th:last-child a::after { left: auto; right: 0; transform: translate(0, -4px); }
-      .matrix thead a:is(:hover, :focus-visible)::after { opacity: 1; transform: translate(-50%, 0); }
-      .matrix thead th:last-child a:is(:hover, :focus-visible)::after { transform: none; }
-      .th-art { width: 32px; height: 32px; }
+      .matrix thead a { display: inline-block; max-inline-size: 118px; padding: 8px 6px; border-radius: 10px; color: var(--ink-3); font-size: 12.5px; font-weight: 600; line-height: 1.25; text-align: left; writing-mode: vertical-rl; transform: rotate(180deg); }
+      .matrix thead a:hover { background: var(--tile); color: var(--ink); }
       .vendor th { padding: 16px 16px 6px; font-size: 13px; font-weight: 700; text-align: left; }
       .vendor span, .group-head span { margin-left: 8px; color: var(--muted); font-size: 13px; font-weight: 500; }
       tbody + tbody .vendor th { border-top: 1px solid var(--line); }
@@ -567,9 +544,8 @@ const STYLE = `
       .model-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 16px; margin-bottom: 4px; }
       .model-head h3 { font-size: 16px; font-weight: 700; }
       .model-head code { color: var(--muted); font: 12px var(--mono); }
-      .work { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto auto auto; align-items: center; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); }
+      .work { display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto; align-items: center; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); }
       .work:first-child { border-top: 0; }
-      .work-art { width: 28px; height: 28px; }
       .work-name { font-size: 14.5px; font-weight: 600; }
       .work-name .variant { margin-left: 6px; }
       .work-name:hover { color: var(--blue-ink); }
@@ -614,9 +590,8 @@ const STYLE = `
       .tiles p { padding: 14px 18px; border: 1px solid var(--line); border-radius: 18px; background: var(--tile); color: var(--muted); font-size: 13px; }
       .tiles b { display: block; color: var(--ink); font-size: 30px; font-weight: 800; line-height: 1.2; font-variant-numeric: tabular-nums; }
       .least li { border-bottom: 1px solid var(--line); }
-      .least a { display: flex; align-items: center; gap: 14px; margin: 4px -8px; padding: 8px; border-radius: 14px; }
+      .least a { display: flex; align-items: center; gap: 14px; margin: 4px -8px; padding: 10px 8px; border-radius: 14px; }
       .least a:hover { background: var(--tile); }
-      .least-art { width: 32px; height: 32px; }
       .least small { display: block; color: var(--muted); font-size: 12.5px; }
       .least b { display: block; font-size: 15px; }
       .page-foot { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
@@ -651,9 +626,8 @@ const STYLE = `
         .nav a { flex: none; height: 38px; padding: 0 14px; border: 1px solid var(--line); border-radius: 999px; }
         .nav a[aria-current] { border-color: transparent; }
         .label { display: none; }
-        .task { flex: none; gap: 8px; padding: 5px 12px 5px 7px; border: 1px solid var(--line); border-radius: 999px; }
+        .task { flex: none; gap: 8px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; }
         .task[aria-current] { border-color: transparent; }
-        .task-art { width: 24px; height: 24px; }
         .task small { display: none; }
         .task b { font-size: 14px; }
         .badge { margin-left: 2px; }
@@ -663,8 +637,7 @@ const STYLE = `
         .search { order: -1; width: 100%; }
         .search kbd { display: none; }
         .view-head { margin-top: 16px; }
-        h1 { gap: 10px; font-size: 32px; }
-        .h-art { width: 32px; height: 32px; }
+        h1 { font-size: 32px; }
         .post { grid-template-columns: 36px minmax(0, 1fr); gap: 12px; }
         .avatar.lg { width: 36px; height: 36px; font-size: 15px; }
         .post-title { font-size: 20px; }
@@ -675,8 +648,7 @@ const STYLE = `
         .matrix-wrap { padding: 4px; }
         .matrix { min-width: 0; }
         .matrix thead th:first-child { width: 34%; }
-        .matrix thead a { width: 32px; height: 32px; border-radius: 10px; }
-        .th-art { width: 24px; height: 24px; }
+        .matrix thead a { max-inline-size: none; padding: 6px 3px; font-size: 12px; white-space: nowrap; }
         .vendor th { padding: 14px 8px 4px; }
         .model-row th { padding: 6px 4px 6px 8px; font-size: 13px; }
         .mark { width: 18px; height: 18px; border-radius: 6px; }
@@ -886,8 +858,8 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
   const reportLink = (entry) =>
     entry.hasReport ? `<a class="sub-link" href="${escapeHtml(reportUrl(entry))}">报告</a>` : `<span class="sub-link off">无报告</span>`;
   const empty = `<p class="empty" data-empty hidden>没有匹配的作业。<button class="pill sm" type="button" data-clear>清除搜索</button></p>`;
-  const viewHead = (art, title, meta, extra = "") => `<header class="view-head">
-          <h1 tabindex="-1">${art}${escapeHtml(title)}</h1>
+  const viewHead = (title, meta, extra = "") => `<header class="view-head">
+          <h1 tabindex="-1">${escapeHtml(title)}</h1>
           <p class="meta">${meta}</p>${extra}
         </header>`;
 
@@ -905,7 +877,6 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
             ${entry.excerpt ? `<blockquote class="excerpt" cite="${escapeHtml(reportUrl(entry))}"><p>${escapeHtml(entry.excerpt)}</p></blockquote>` : ""}
             <div class="stage" data-stage>
               <div class="stage-idle">
-                ${taskEmoji(entry.task, 72, "stage-art")}
                 <button class="play" type="button" data-run="${escapeHtml(workUrl(entry))}" data-title="${escapeHtml(runLabel(entry))}">${icon("play")}在这里运行</button>
                 <code class="path">${escapeHtml(workUrl(entry))}</code>
               </div>
@@ -940,7 +911,7 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
     )
     .join("\n      ");
   const recentView = `<section class="view" data-view="recent" aria-label="最近完成">
-        ${viewHead(emoji("sparkles", 40, "h-art"), "最近完成", `最近一次 ${dayText(latestDay)} · 近 7 天 ${entries.filter(isFresh).length} 份 · 共 ${entries.length} 份`)}
+        ${viewHead("最近完成", `最近一次 ${dayText(latestDay)} · 近 7 天 ${entries.filter(isFresh).length} 份 · 共 ${entries.length} 份`)}
         ${feed}
         ${empty}
       </section>`;
@@ -948,7 +919,7 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
   const header = tasks
     .map(
       (task) =>
-        `<th scope="col"><a href="#${escapeHtml(task.task)}" data-tip="${escapeHtml(task.short)}">${taskEmoji(task.task, 32, "th-art")}<span class="sr-only">${escapeHtml(task.title)}</span></a></th>`,
+        `<th scope="col"><a href="#${escapeHtml(task.task)}">${escapeHtml(task.short)}</a></th>`,
     )
     .join("");
   const coverageRow = (row) => {
@@ -982,7 +953,7 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
     )
     .join("\n          ");
   const coverageView = `<section class="view" data-view="coverage" aria-label="覆盖情况" hidden>
-        ${viewHead(emoji("world-map", 40, "h-art"), "覆盖情况", `${rows.length} 个模型 × ${tasks.length} 道题 · 空缺 ${gaps} 格 · 点方块打开作品`)}
+        ${viewHead("覆盖情况", `${rows.length} 个模型 × ${tasks.length} 道题 · 空缺 ${gaps} 格 · 点方块打开作品`)}
         <div class="matrix-wrap">
           <table class="matrix">
             <thead><tr><th scope="col"><span class="sr-only">模型</span></th>${header}</tr></thead>
@@ -993,7 +964,6 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
       </section>`;
 
   const workRow = (entry) => `<li class="work">
-                ${taskEmoji(entry.task, 28, "work-art")}
                 <a class="work-name" href="${escapeHtml(workUrl(entry))}">${escapeHtml(taskById.get(entry.task).short)}${entry.variant ? `<span class="variant">${escapeHtml(entry.variant)}</span>` : ""}</a>
                 <span class="date">${entry.day ? entry.day.slice(5) : "—"}</span>
                 <a class="sub-link" href="${escapeHtml(sourceUrl(entry))}">源码</a>
@@ -1016,7 +986,7 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
           </div>`;
   };
   const modelsView = `<section class="view" data-view="models" aria-label="全部模型" hidden>
-        ${viewHead(emoji("robot", 40, "h-art"), "全部模型", `${rows.length} 个模型 · 按厂商分组`)}
+        ${viewHead("全部模型", `${rows.length} 个模型 · 按厂商分组`)}
         ${vendors
           .map(
             ([vendor, list]) => `<section class="group" data-group>
@@ -1051,9 +1021,9 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
       .join("\n        ");
     const meta = `${task.subtitle ? `${escapeHtml(task.subtitle)} · ` : ""}${task.list.length} 份 · ${task.models} / ${rows.length} 个模型做过`;
     return `<section class="view" data-view="${escapeHtml(task.task)}" aria-label="${escapeHtml(task.title)}" hidden>
-        ${viewHead(taskEmoji(task.task, 40, "h-art"), task.short, meta, `<a class="pill" href="${escapeHtml(promptUrl(task.task))}">${icon("book")}查看题面</a>`)}
+        ${viewHead(task.short, meta, `<a class="pill" href="${escapeHtml(promptUrl(task.task))}">${icon("book")}查看题面</a>`)}
         <div class="stage wide" id="stage-${escapeHtml(task.task)}" data-stage data-shared>
-          <div class="stage-idle">${taskEmoji(task.task, 72, "stage-art")}<p class="hint">从下面任选一份，在这里运行</p></div>
+          <div class="stage-idle"><p class="hint">从下面任选一份，在这里运行</p></div>
         </div>
         ${groups}
         ${empty}
@@ -1099,7 +1069,7 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
           ${least
             .map(
               (task) =>
-                `<li><a href="#${escapeHtml(task.task)}">${taskEmoji(task.task, 32, "least-art")}<span><b>${escapeHtml(task.short)}</b><small>${task.models} / ${rows.length} 个模型做过</small></span></a></li>`,
+                `<li><a href="#${escapeHtml(task.task)}"><span><b>${escapeHtml(task.short)}</b><small>${task.models} / ${rows.length} 个模型做过</small></span></a></li>`,
             )
             .join("\n          ")}
         </ul>
@@ -1108,14 +1078,14 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
 
   const navLink = (route, name, label) => `<a href="#${route === "recent" ? "" : route}" data-route="${route}">${icon(name)}${label}</a>`;
   const side = `<aside class="side">
-      <div class="me"><span class="ava">${emoji("test-tube", 28, "ava-art")}</span><div><b>LLM Evals</b><span>${tasks.length} 道题 · ${rows.length} 个模型</span></div></div>
+      <div class="me"><div><b>LLM Evals</b><span>${tasks.length} 道题 · ${rows.length} 个模型</span></div></div>
       <nav class="nav" aria-label="视图">${navLink("recent", "feed", "最近完成")}${navLink("coverage", "grid", "覆盖情况")}${navLink("models", "models", "全部模型")}</nav>
       <h2 class="label">题目</h2>
       <nav class="tasks" aria-label="题目">
         ${tasks
           .map(
             (task) =>
-              `<a class="task" href="#${escapeHtml(task.task)}" data-route="${escapeHtml(task.task)}">${taskEmoji(task.task, 28, "task-art")}<span class="task-text"><b>${escapeHtml(task.short)}</b><small>${task.list.length} 份 · ${dayText(task.latest)}</small></span>${task.fresh ? `<span class="sr-only">近 7 天新增</span><span class="badge" title="近 7 天新增 ${task.fresh} 份">${task.fresh}</span>` : ""}</a>`,
+              `<a class="task" href="#${escapeHtml(task.task)}" data-route="${escapeHtml(task.task)}"><span class="task-text"><b>${escapeHtml(task.short)}</b><small>${task.list.length} 份 · ${dayText(task.latest)}</small></span>${task.fresh ? `<span class="sr-only">近 7 天新增</span><span class="badge" title="近 7 天新增 ${task.fresh} 份">${task.fresh}</span>` : ""}</a>`,
           )
           .join("\n        ")}
       </nav>
@@ -1140,7 +1110,7 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
   const codeBlock = (text, className = "") =>
     `<div class="code${className}"><pre><code>${escapeHtml(text)}</code></pre><button class="pill sm copy" type="button" data-copy>复制</button></div>`;
   const guideView = `<section class="view" data-view="guide" aria-label="运行指南" hidden>
-        ${viewHead(emoji("clipboard", 40, "h-art"), "运行指南", "每个模型一个独立文件夹 · 同一轮的模型发同一段提示词，只换尖括号里的值")}
+        ${viewHead("运行指南", "每个模型一个独立文件夹 · 同一轮的模型发同一段提示词，只换尖括号里的值")}
         <section class="step">
           <p>两个文件夹并排放：第 1、3 步在 <code>llm-evals/</code> 里执行，第 2 步在模型自己的运行文件夹里。</p>
           <div class="code tree"><pre><code>${escapeHtml(layout)}</code></pre></div>
@@ -1170,7 +1140,7 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#ffffff" />
     <title>LLM Evals</title>
-    <link rel="icon" href="${ASSET_DIR}/emoji/test-tube.png" />
+    <link rel="icon" href="${ASSET_DIR}/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href="${ASSET_DIR}/fonts/figtree-latin.woff2" as="font" type="font/woff2" crossorigin />
     <style>${STYLE}    </style>
   </head>
@@ -1236,6 +1206,8 @@ async function main() {
   const generatedAt = new Date().toISOString();
   const sites = SITES.map((site) => {
     prunePublished(archive, site.dir);
+    // 先清空再复制，已从 deploy/assets/ 删除的文件不再随站点发布。
+    rmSync(join(site.dir, ASSET_DIR), { recursive: true, force: true });
     cpSync(join(DEPLOY_DIR, "assets"), join(site.dir, ASSET_DIR), { recursive: true });
     return { ...site, published: collectPublished(site.dir) };
   });

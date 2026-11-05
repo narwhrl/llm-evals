@@ -11,7 +11,7 @@ Scope: the gallery index that `build.mjs` writes to `public/index.html`. Mode: O
 
 THESIS: the gallery is a running feed. Each finished candidate arrives as a post whose work runs in place, so seeing what a model made takes one click. It refuses the category defaults of a thumbnail grid and a scoreboard table.
 
-OWN-WORLD: pure white ground, #f4f4f6 gray containers, #ececef hairlines, 14 to 22px radii, a soft two-layer shadow only on rail cards. Figtree bold headings; JetBrains Mono only for paths, IDs, and dates. Fluent 3D emoji serve as task illustrations; line icons serve as navigation. Navy #121527 stage cards. Accents do jobs: blue #2a5ff0 for marks and the chart highlight, red badges for new candidates in the last seven days, and green for "有报告". Buttons are pills.
+OWN-WORLD: pure white ground, #f4f4f6 gray containers, #ececef hairlines, 14 to 22px radii, a soft two-layer shadow only on rail cards. Figtree bold headings; JetBrains Mono only for paths, IDs, and dates. Tasks are named, never illustrated; line icons serve as navigation. Navy #121527 stage cards. Accents do jobs: blue #2a5ff0 for marks and the chart highlight, red badges for new candidates in the last seven days, and green for "有报告". Buttons are pills.
 
 STORY: the curator sees what arrived lately and from whom, and runs any work inline. They can then jump to the same task to compare vendors, find one model's works under any reasoning effort, and see where coverage has gaps.
 
