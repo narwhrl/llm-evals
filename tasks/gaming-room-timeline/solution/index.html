@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>同一个房间 · 2005—2025</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='6' width='26' height='18' rx='2' fill='%23d9ceb1'/%3E%3Crect x='6' y='9' width='20' height='12' fill='%233a78c9'/%3E%3Crect x='12' y='25' width='8' height='3' fill='%23d9ceb1'/%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <header class="hud panel">
+      <div class="brand">同一个房间<span>2005 — 2025</span></div>
+      <div class="era">
+        <div class="year" id="year">2005</div>
+        <div class="meta">
+          <div id="age"></div>
+          <div id="eraTitle" class="era-title"></div>
+        </div>
+      </div>
+      <p id="eraText"></p>
+    </header>
+
+    <nav class="views panel" aria-label="视角">
+      <button data-view="overview">全景</button>
+      <button data-view="desk">书桌</button>
+      <button data-view="screen">屏幕</button>
+      <button data-view="corner">角落</button>
+    </nav>
+
+    <aside class="threads panel" aria-label="贯穿二十年的旧物">
+      <h2>贯穿二十年的旧物</h2>
+      <div id="threadMain" class="chips"></div>
+      <div id="threadMore" class="chips small"></div>
+    </aside>
+
+    <div class="timeline panel">
+      <button id="play" class="play" aria-label="自动播放">▶</button>
+      <div class="track">
+        <input id="slider" type="range" min="2005" max="2025" step="0.01" value="2005" aria-label="年份" />
+        <div id="ticks" class="ticks"></div>
+      </div>
+      <output id="month" class="month"></output>
+    </div>
+
+    <section id="card" class="card" hidden>
+      <button class="close" id="cardClose" aria-label="关闭">×</button>
+      <div class="when" id="cardWhen"></div>
+      <h3 id="cardTitle"></h3>
+      <p id="cardText"></p>
+      <div id="cardYears" class="years"></div>
+      <button id="cardFocus" class="focus">靠近看看</button>
+    </section>
+
+    <div id="tip" class="tip" hidden></div>
+    <div id="hint" class="hint">拖动旋转 · 滚轮缩放 · 右键平移 · 点击物品看回忆 · 点击屏幕可以操作</div>
+    <div id="loading">正在布置房间……</div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
