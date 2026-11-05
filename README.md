@@ -15,6 +15,7 @@ This repository compares coding models under the same task, context, tools, and 
 | Task | Inputs | Archive |
 | --- | --- | --- |
 | `cs-pvp-diorama` | [`tasks/cs-pvp-diorama/`](tasks/cs-pvp-diorama/) | `llm/cs-pvp-diorama` |
+| `gaming-room-timeline` | [`tasks/gaming-room-timeline/`](tasks/gaming-room-timeline/) | `llm/gaming-room-timeline` |
 | `gargantua-schwarzschild-raytracer` | [`tasks/gargantua-schwarzschild-raytracer/`](tasks/gargantua-schwarzschild-raytracer/) | `llm/gargantua-schwarzschild-raytracer` |
 | `genshin-celestia` | [`tasks/genshin-celestia/`](tasks/genshin-celestia/) | `llm/genshin-celestia` |
 | `orbital-habitat-diorama` | [`tasks/orbital-habitat-diorama/`](tasks/orbital-habitat-diorama/) | `llm/orbital-habitat-diorama` |
