@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "taskId": "genshin-celestia",
+  "candidates": [
+    {
+      "candidateId": "claude-opus-5.5",
+      "baselineMain": "f95b2e8c1380b78d2bce7ce335e0ad2e974a5183",
+      "inputTree": "389f036e69eec03ef669224fc15bcf8a85992750",
+      "sourceRef": "run:../llm-runs/genshin-celestia/claude-opus-5.5",
+      "sourceCommit": "bb94236ce8a90232230f04d7987daf63b9d07d84",
+      "sourceTree": "630288992ee2f9946f38c27811babbc0891d61ea",
+      "archiveTag": "candidate/genshin-celestia/claude-opus-5.5",
+      "destination": "tasks/genshin-celestia/solutions/claude-opus-5.5",
+      "resultReport": "tasks/genshin-celestia/solutions/claude-opus-5.5/RESULTS.md"
+    }
+  ]
+}
