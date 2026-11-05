@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "taskId": "railway-town-diorama",
+  "candidates": [
+    {
+      "candidateId": "claude-opus-5.5",
+      "baselineMain": "f95b2e8c1380b78d2bce7ce335e0ad2e974a5183",
+      "inputTree": "f375976dcefcad1a507c3dec3f5d48092e191120",
+      "sourceRef": "run:../llm-runs/railway-town-diorama/claude-opus-5.5",
+      "sourceCommit": "a1fe76fdbbe923763fc92436cb13270ee94b7879",
+      "sourceTree": "59f1ae2dd8afd1d098c9c8925eb1bdc40bba2504",
+      "archiveTag": "candidate/railway-town-diorama/claude-opus-5.5",
+      "destination": "tasks/railway-town-diorama/solutions/claude-opus-5.5",
+      "resultReport": "tasks/railway-town-diorama/solutions/claude-opus-5.5/RESULTS.md"
+    }
+  ]
+}
