@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#ffffff" />
     <title>LLM Evals</title>
-    <link rel="icon" href="_gallery/emoji/test-tube.png" />
+    <link rel="icon" href="_gallery/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href="_gallery/fonts/figtree-latin.woff2" as="font" type="font/woff2" crossorigin />
     <style>
       @font-face { font-family: Figtree; src: url("_gallery/fonts/figtree-latin.woff2") format("woff2"); font-weight: 400 800; font-display: swap; unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
@@ -32,22 +32,20 @@
 
       .app { display: grid; grid-template-columns: clamp(248px, 21vw, 300px) minmax(0, 1fr) clamp(320px, 26.4vw, 380px); min-height: 100vh; }
       .side { position: sticky; top: 0; height: 100vh; overflow-y: auto; display: flex; flex-direction: column; padding: 26px 18px; border-right: 1px solid var(--line); }
-      .me { display: flex; gap: 12px; align-items: center; padding: 0 8px 20px; }
-      .ava { display: grid; place-items: center; width: 46px; height: 46px; flex: none; border-radius: 50%; background: #eef2ff; }
-      .me b { display: block; font-size: 17px; line-height: 1.3; }
-      .me span { color: var(--muted); font-size: 13px; }
-      .nav, .tasks { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; }
+      .me { padding: 0 12px 22px; }
+      .me b { display: block; font-size: 22px; font-weight: 800; line-height: 1.2; letter-spacing: -0.02em; }
+      .nav { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; }
       .nav a { display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 14px; font-weight: 500; }
-      .nav a:hover, .task:hover { background: var(--tile); }
-      .nav a[aria-current], .task[aria-current] { background: var(--soft); }
+      .nav a:hover { background: var(--tile); }
+      .nav a[aria-current] { background: var(--soft); }
       .nav a[aria-current] { font-weight: 700; }
-      .label { margin: 12px 12px 6px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; font-weight: 500; }
-      .task { display: flex; align-items: center; gap: 12px; padding: 7px 12px; border-radius: 16px; }
-      .task-art { width: 28px; height: 28px; flex: none; }
-      .task-text { min-width: 0; }
-      .task b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14.5px; font-weight: 600; line-height: 1.35; }
-      .task small { display: block; color: var(--muted); font-size: 12.5px; white-space: nowrap; }
-      .badge { display: grid; place-items: center; flex: none; min-width: 20px; height: 20px; margin-left: auto; padding: 0 6px; border-radius: 999px; background: var(--red); color: #fff; font-size: 11.5px; font-weight: 700; font-variant-numeric: tabular-nums; }
+      .label { margin: 12px 12px 10px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; font-weight: 500; }
+      .tasks { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 6px; }
+      .task { position: relative; display: inline-flex; align-items: center; gap: 7px; height: 36px; padding: 0 15px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font-size: 14px; font-weight: 600; white-space: nowrap; }
+      .task:hover { border-color: var(--line-2); background: var(--soft-2); box-shadow: 0 1px 2px rgb(22 22 26 / 0.06); }
+      .task[aria-current] { border-color: transparent; background: var(--soft); box-shadow: none; }
+      .task .n { color: var(--muted); font-weight: 500; font-variant-numeric: tabular-nums; }
+      .new { position: absolute; top: -2px; right: -2px; width: 10px; height: 10px; border: 2px solid #fff; border-radius: 50%; background: var(--red); }
       .bottom { margin-top: auto; padding-top: 16px; }
 
       .main { min-width: 0; padding: 28px clamp(24px, 3.9vw, 56px) 64px; border-right: 1px solid var(--line); }
@@ -66,8 +64,7 @@
       .view { animation: view-in 0.4s var(--ease); }
       @keyframes view-in { from { opacity: 0; transform: translateY(6px); } }
       .view-head { margin: 24px 0 4px; }
-      h1 { display: flex; align-items: center; gap: 14px; font-size: 44px; font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; }
-      .h-art { width: 40px; height: 40px; flex: none; }
+      h1 { font-size: 44px; font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; }
       .meta { margin-top: 4px; color: var(--muted); font-size: 14px; font-variant-numeric: tabular-nums; }
       .view-head .pill { margin-top: 14px; }
       .pill { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 16px; border: 1px solid transparent; border-radius: 999px; background: var(--soft); font-size: 14px; font-weight: 600; white-space: nowrap; }
@@ -104,7 +101,6 @@
       .stage.running { display: flex; flex-direction: column; height: calc(62.5cqw + 48px); }
       .stage.wide.running { height: min(calc(62.5cqw + 48px), 78vh); }
       .stage-idle { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; height: 100%; padding: 24px; text-align: center; }
-      .stage-art { width: 72px; height: 72px; filter: drop-shadow(0 8px 18px rgb(0 0 0 / 0.35)); }
       .play { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 18px; border: 0; border-radius: 999px; background: #fff; color: var(--ink); font-weight: 700; }
       .play .icon, .run .icon { width: 14px; height: 14px; }
       .play:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgb(0 0 0 / 0.35); }
@@ -141,15 +137,10 @@
 
       .matrix-wrap { margin-top: 24px; padding: 6px; overflow-x: auto; border: 1px solid var(--line); border-radius: 20px; }
       .matrix { width: 100%; min-width: 560px; table-layout: fixed; border-collapse: collapse; }
-      .matrix thead th { padding: 10px 2px 8px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 12px; font-weight: 600; vertical-align: bottom; }
+      .matrix thead th { padding: 12px 2px 10px; border-bottom: 1px solid var(--line); vertical-align: bottom; }
       .matrix thead th:first-child { width: 36%; }
-      .matrix thead a { position: relative; display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 14px; }
-      .matrix thead a:hover { background: var(--tile); }
-      .matrix thead a::after { content: attr(data-tip); position: absolute; top: calc(100% + 4px); left: 50%; z-index: 2; padding: 4px 8px; border-radius: 8px; background: var(--ink); color: #fff; font-size: 12px; font-weight: 600; white-space: nowrap; opacity: 0; pointer-events: none; transform: translate(-50%, -4px); transition: opacity 0.15s, transform 0.15s; }
-      .matrix thead th:last-child a::after { left: auto; right: 0; transform: translate(0, -4px); }
-      .matrix thead a:is(:hover, :focus-visible)::after { opacity: 1; transform: translate(-50%, 0); }
-      .matrix thead th:last-child a:is(:hover, :focus-visible)::after { transform: none; }
-      .th-art { width: 32px; height: 32px; }
+      .matrix thead a { display: inline-block; max-inline-size: 118px; padding: 8px 6px; border-radius: 10px; color: var(--ink-3); font-size: 12.5px; font-weight: 600; line-height: 1.25; text-align: left; writing-mode: vertical-rl; transform: rotate(180deg); }
+      .matrix thead a:hover { background: var(--tile); color: var(--ink); }
       .vendor th { padding: 16px 16px 6px; font-size: 13px; font-weight: 700; text-align: left; }
       .vendor span, .group-head span { margin-left: 8px; color: var(--muted); font-size: 13px; font-weight: 500; }
       tbody + tbody .vendor th { border-top: 1px solid var(--line); }
@@ -169,9 +160,8 @@
       .model-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 16px; margin-bottom: 4px; }
       .model-head h3 { font-size: 16px; font-weight: 700; }
       .model-head code { color: var(--muted); font: 12px var(--mono); }
-      .work { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto auto auto; align-items: center; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); }
+      .work { display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto; align-items: center; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); }
       .work:first-child { border-top: 0; }
-      .work-art { width: 28px; height: 28px; }
       .work-name { font-size: 14.5px; font-weight: 600; }
       .work-name .variant { margin-left: 6px; }
       .work-name:hover { color: var(--blue-ink); }
@@ -216,9 +206,8 @@
       .tiles p { padding: 14px 18px; border: 1px solid var(--line); border-radius: 18px; background: var(--tile); color: var(--muted); font-size: 13px; }
       .tiles b { display: block; color: var(--ink); font-size: 30px; font-weight: 800; line-height: 1.2; font-variant-numeric: tabular-nums; }
       .least li { border-bottom: 1px solid var(--line); }
-      .least a { display: flex; align-items: center; gap: 14px; margin: 4px -8px; padding: 8px; border-radius: 14px; }
+      .least a { display: flex; align-items: center; gap: 14px; margin: 4px -8px; padding: 10px 8px; border-radius: 14px; }
       .least a:hover { background: var(--tile); }
-      .least-art { width: 32px; height: 32px; }
       .least small { display: block; color: var(--muted); font-size: 12.5px; }
       .least b { display: block; font-size: 15px; }
       .page-foot { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
@@ -253,20 +242,15 @@
         .nav a { flex: none; height: 38px; padding: 0 14px; border: 1px solid var(--line); border-radius: 999px; }
         .nav a[aria-current] { border-color: transparent; }
         .label { display: none; }
-        .task { flex: none; gap: 8px; padding: 5px 12px 5px 7px; border: 1px solid var(--line); border-radius: 999px; }
-        .task[aria-current] { border-color: transparent; }
-        .task-art { width: 24px; height: 24px; }
-        .task small { display: none; }
-        .task b { font-size: 14px; }
-        .badge { margin-left: 2px; }
+        .tasks { flex-wrap: nowrap; padding: 3px 16px; }
+        .task { flex: none; }
         .bottom { padding-top: 0; }
         .main { padding: 16px 16px 40px; border-right: 0; }
         .topbar { flex-wrap: wrap; gap: 10px; }
         .search { order: -1; width: 100%; }
         .search kbd { display: none; }
         .view-head { margin-top: 16px; }
-        h1 { gap: 10px; font-size: 32px; }
-        .h-art { width: 32px; height: 32px; }
+        h1 { font-size: 32px; }
         .post { grid-template-columns: 36px minmax(0, 1fr); gap: 12px; }
         .avatar.lg { width: 36px; height: 36px; font-size: 15px; }
         .post-title { font-size: 20px; }
@@ -277,8 +261,7 @@
         .matrix-wrap { padding: 4px; }
         .matrix { min-width: 0; }
         .matrix thead th:first-child { width: 34%; }
-        .matrix thead a { width: 32px; height: 32px; border-radius: 10px; }
-        .th-art { width: 24px; height: 24px; }
+        .matrix thead a { max-inline-size: none; padding: 6px 3px; font-size: 12px; white-space: nowrap; }
         .vendor th { padding: 14px 8px 4px; }
         .model-row th { padding: 6px 4px 6px 8px; font-size: 13px; }
         .mark { width: 18px; height: 18px; border-radius: 6px; }
@@ -292,29 +275,29 @@
   <body>
     <div class="app">
     <aside class="side">
-      <div class="me"><span class="ava"><img class="ava-art" src="_gallery/emoji/test-tube.png" alt="" width="28" height="28" decoding="async" /></span><div><b>LLM Evals</b><span>7 道题 · 29 个模型</span></div></div>
+      <div class="me"><b>LLM Evals</b></div>
       <nav class="nav" aria-label="视图"><a href="#" data-route="recent"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h10"/></svg>最近完成</a><a href="#coverage" data-route="coverage"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></svg>覆盖情况</a><a href="#models" data-route="models"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16 4.8a3.5 3.5 0 0 1 0 6.4M18 14.8c2 .8 3.2 2.5 3.5 5.2"/></svg>全部模型</a></nav>
       <h2 class="label">题目</h2>
       <nav class="tasks" aria-label="题目">
-        <a class="task" href="#cs-pvp-diorama" data-route="cs-pvp-diorama"><img class="task-art" src="_gallery/emoji/bullseye.png" alt="" width="28" height="28" decoding="async" /><span class="task-text"><b>CS PVP Diorama</b><small>17 份 · 11 月 5 日</small></span><span class="sr-only">近 7 天新增</span><span class="badge" title="近 7 天新增 1 份">1</span></a>
-        <a class="task" href="#gargantua-schwarzschild-raytracer" data-route="gargantua-schwarzschild-raytracer"><img class="task-art" src="_gallery/emoji/milky-way.png" alt="" width="28" height="28" decoding="async" /><span class="task-text"><b>GARGANTUA</b><small>20 份 · 11 月 5 日</small></span><span class="sr-only">近 7 天新增</span><span class="badge" title="近 7 天新增 3 份">3</span></a>
-        <a class="task" href="#orbital-habitat-diorama" data-route="orbital-habitat-diorama"><img class="task-art" src="_gallery/emoji/satellite.png" alt="" width="28" height="28" decoding="async" /><span class="task-text"><b>Orbital Habitat Diorama</b><small>7 份 · 10 月 27 日</small></span></a>
-        <a class="task" href="#rainy-konbini-diorama" data-route="rainy-konbini-diorama"><img class="task-art" src="_gallery/emoji/convenience-store.png" alt="" width="28" height="28" decoding="async" /><span class="task-text"><b>Rainy Konbini Diorama</b><small>12 份 · 10 月 27 日</small></span></a>
-        <a class="task" href="#ui-ux-design" data-route="ui-ux-design"><img class="task-art" src="_gallery/emoji/artist-palette.png" alt="" width="28" height="28" decoding="async" /><span class="task-text"><b>UI/UX Design</b><small>17 份 · 10 月 29 日</small></span></a>
-        <a class="task" href="#voxel-chinese-architecture" data-route="voxel-chinese-architecture"><img class="task-art" src="_gallery/emoji/japanese-castle.png" alt="" width="28" height="28" decoding="async" /><span class="task-text"><b>Voxel Chinese Architecture</b><small>12 份 · 10 月 29 日</small></span></a>
-        <a class="task" href="#voxel-waterfall" data-route="voxel-waterfall"><img class="task-art" src="_gallery/emoji/national-park.png" alt="" width="28" height="28" decoding="async" /><span class="task-text"><b>Voxel Waterfall</b><small>16 份 · 10 月 28 日</small></span></a>
+        <a class="task" href="#cs-pvp-diorama" data-route="cs-pvp-diorama">CS PVP Diorama<span class="n">17<span class="sr-only"> 份</span></span><span class="sr-only">，近 7 天新增 1 份</span><i class="new" title="近 7 天新增 1 份" aria-hidden="true"></i></a>
+        <a class="task" href="#gargantua-schwarzschild-raytracer" data-route="gargantua-schwarzschild-raytracer">GARGANTUA<span class="n">20<span class="sr-only"> 份</span></span><span class="sr-only">，近 7 天新增 3 份</span><i class="new" title="近 7 天新增 3 份" aria-hidden="true"></i></a>
+        <a class="task" href="#orbital-habitat-diorama" data-route="orbital-habitat-diorama">Orbital Habitat Diorama<span class="n">7<span class="sr-only"> 份</span></span></a>
+        <a class="task" href="#rainy-konbini-diorama" data-route="rainy-konbini-diorama">Rainy Konbini Diorama<span class="n">12<span class="sr-only"> 份</span></span></a>
+        <a class="task" href="#ui-ux-design" data-route="ui-ux-design">UI/UX Design<span class="n">17<span class="sr-only"> 份</span></span></a>
+        <a class="task" href="#voxel-chinese-architecture" data-route="voxel-chinese-architecture">Voxel Chinese Architecture<span class="n">12<span class="sr-only"> 份</span></span></a>
+        <a class="task" href="#voxel-waterfall" data-route="voxel-waterfall">Voxel Waterfall<span class="n">16<span class="sr-only"> 份</span></span></a>
       </nav>
       <nav class="nav bottom" aria-label="仓库"><a href="https://github.com/narwhrl/llm-evals"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>GitHub 仓库</a><a href="#guide" data-route="guide"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5zM4 21.5A2.5 2.5 0 0 1 6.5 19H20v3H6.5"/></svg>运行指南</a></nav>
     </aside>
     <main class="main">
       <div class="column">
         <div class="topbar">
-          <p class="updated">更新于 <time datetime="2026-11-05T02:30:24.723Z">11 月 5 日 10:30</time></p>
+          <p class="updated">更新于 <time datetime="2026-11-05T14:36:25.633Z">11 月 5 日 22:36</time></p>
           <label class="search"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg><span class="sr-only">搜索模型或题目</span><input id="search" type="search" placeholder="搜索模型或题目" autocomplete="off" spellcheck="false" /><kbd aria-hidden="true">/</kbd></label>
         </div>
       <section class="view" data-view="recent" aria-label="最近完成">
         <header class="view-head">
-          <h1 tabindex="-1"><img class="h-art" src="_gallery/emoji/sparkles.png" alt="" width="40" height="40" decoding="async" />最近完成</h1>
+          <h1 tabindex="-1">最近完成</h1>
           <p class="meta">最近一次 11 月 5 日 · 近 7 天 4 份 · 共 101 份</p>
         </header>
         <section class="day" data-group>
@@ -332,7 +315,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/milky-way.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="gargantua-schwarzschild-raytracer/hy4free-high/" data-title="hy4free:high：GARGANTUA — Schwarzschild Black Hole Raytracer"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">gargantua-schwarzschild-raytracer/hy4free-high/</code>
               </div>
@@ -364,7 +346,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/hy4free-high/RESULTS.md"><p>以 Three.js + Vite 实现一张 CS 经典拆除模式地图的雨夜微缩三维沙盘，第三人称全景视角，支持鼠标拖拽旋转、滚轮缩放（OrbitControls，带阻尼，限制俯仰避免钻到底座下方）。全部内容搭建在一块完整的正方形灰色混凝土底座内，底座带一圈抬高的混凝土边框；画面无任何…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/bullseye.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="cs-pvp-diorama/hy4free-high/" data-title="hy4free:high：CS PVP Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">cs-pvp-diorama/hy4free-high/</code>
               </div>
@@ -396,7 +377,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/gemini-4-agron-high/RESULTS.md"><p>从零实现基于本地 Three.js 与全屏自定义 GLSL Fragment Shader 的实时 Schwarzschild 黑洞零测地线光线追踪器，通过自适应四阶 Runge-Kutta 积分呈现事件视界阴影、不稳定光子环、多次吸积盘弯曲求交合成、相对论多普勒增亮与引力红移、程序化星云银河透镜，以及…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/milky-way.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="gargantua-schwarzschild-raytracer/gemini-4-agron-high/" data-title="gemini-4-agron:high：GARGANTUA — Schwarzschild Black Hole Raytracer"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">gargantua-schwarzschild-raytracer/gemini-4-agron-high/</code>
               </div>
@@ -428,7 +408,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/milky-way.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="gargantua-schwarzschild-raytracer/hy4-high/" data-title="hy4:high：GARGANTUA — Schwarzschild Black Hole Raytracer"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">gargantua-schwarzschild-raytracer/hy4-high/</code>
               </div>
@@ -463,7 +442,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/deepseek-v4.1-flash/RESULTS.md"><p>React + Vite + ES Modules，Three.js 0.180.0 以本地副本形式放在 vendor/，通过 Vite alias 解析，无 CDN、远程纹理、HDRI、字体或音频。</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/milky-way.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="gargantua-schwarzschild-raytracer/deepseek-v4.1-flash/" data-title="deepseek-v4.1-flash:max：GARGANTUA — Schwarzschild Black Hole Raytracer"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">gargantua-schwarzschild-raytracer/deepseek-v4.1-flash/</code>
               </div>
@@ -495,7 +473,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/japanese-castle.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-chinese-architecture/deepseek-v4.1-flash/" data-title="deepseek-v4.1-flash:max：Voxel Chinese Architecture"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-chinese-architecture/deepseek-v4.1-flash/</code>
               </div>
@@ -527,7 +504,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/deepseek-v4.1-flash/RESULTS.md"><p>一块玻璃，一条刻度，一个必须由观看者决定的位置。焦距既是光学状态，也是我的工作方式：判断靠对准某一点，而不是看得更多；对准了就会放弃别的焦点；而清晰的边缘必须留一道磨边。</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/artist-palette.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="ui-ux-design/deepseek-v4.1-flash/" data-title="deepseek-v4.1-flash:max：UI/UX Design"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">ui-ux-design/deepseek-v4.1-flash/</code>
               </div>
@@ -559,7 +535,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/bullseye.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="cs-pvp-diorama/deepseek-v4.1-flash/" data-title="deepseek-v4.1-flash:max：CS PVP Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">cs-pvp-diorama/deepseek-v4.1-flash/</code>
               </div>
@@ -594,7 +569,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/national-park.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-waterfall/deepseek-v4.1-flash/" data-title="deepseek-v4.1-flash:max：Voxel Waterfall"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-waterfall/deepseek-v4.1-flash/</code>
               </div>
@@ -629,7 +603,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/satellite.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="orbital-habitat-diorama/gpt-6-astra/" data-title="gpt-6-astra:max：Orbital Habitat Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">orbital-habitat-diorama/gpt-6-astra/</code>
               </div>
@@ -661,7 +634,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/satellite.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="orbital-habitat-diorama/deepseek-v4.1-flash/" data-title="deepseek-v4.1-flash:max：Orbital Habitat Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">orbital-habitat-diorama/deepseek-v4.1-flash/</code>
               </div>
@@ -693,7 +665,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/deepseek-v4.1-flash/RESULTS.md"><p>A self-contained Vite + three.js scene. Every texture is generated at runtime on a &lt;canvas&gt;, so the deliverable ships no binary art assets and loads nothing…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/convenience-store.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="rainy-konbini-diorama/deepseek-v4.1-flash/" data-title="deepseek-v4.1-flash:max：Rainy Konbini Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">rainy-konbini-diorama/deepseek-v4.1-flash/</code>
               </div>
@@ -728,7 +699,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/orbital-habitat-diorama/tasks/orbital-habitat-diorama/solutions/kimi-k3.1-pro/RESULTS.md"><p>Orthographic cut-away habitat with three real wall apertures, two end hatches, thick floor and shell sections.</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/satellite.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="orbital-habitat-diorama/kimi-k3.1-pro/" data-title="kimi-k3.1-pro:max：Orbital Habitat Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">orbital-habitat-diorama/kimi-k3.1-pro/</code>
               </div>
@@ -763,7 +733,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/convenience-store.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="rainy-konbini-diorama/kimi-k3.1-pro/" data-title="kimi-k3.1-pro:max：Rainy Konbini Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">rainy-konbini-diorama/kimi-k3.1-pro/</code>
               </div>
@@ -798,7 +767,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/kimi-k3.1-pro/RESULTS.md"><p>Four preset images were captured and inspected; equatorial, close/inner, high-latitude, and grazing views are visibly distinct.</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/milky-way.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="gargantua-schwarzschild-raytracer/kimi-k3.1-pro/" data-title="kimi-k3.1-pro:max：GARGANTUA — Schwarzschild Black Hole Raytracer"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">gargantua-schwarzschild-raytracer/kimi-k3.1-pro/</code>
               </div>
@@ -833,7 +801,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/orbital-habitat-diorama/tasks/orbital-habitat-diorama/solutions/minimax-m3.1-flash/RESULTS.md"><p>An isometric cut-away of a capsule module, drawn with Three.js and React. The shell is cut open along its length, the cabin inside is furnished for one person,…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/satellite.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="orbital-habitat-diorama/minimax-m3.1-flash/" data-title="minimax-m3.1-flash:max：Orbital Habitat Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">orbital-habitat-diorama/minimax-m3.1-flash/</code>
               </div>
@@ -865,7 +832,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/milky-way.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="gargantua-schwarzschild-raytracer/minimax-m3.1-flash/" data-title="minimax-m3.1-flash:max：GARGANTUA — Schwarzschild Black Hole Raytracer"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">gargantua-schwarzschild-raytracer/minimax-m3.1-flash/</code>
               </div>
@@ -897,7 +863,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/artist-palette.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="ui-ux-design/minimax-m3.1-flash/" data-title="minimax-m3.1-flash:max：UI/UX Design"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">ui-ux-design/minimax-m3.1-flash/</code>
               </div>
@@ -929,7 +894,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/minimax-m3.1-flash/RESULTS.md"><p>A React + Vite + Three.js miniature of a rain-soaked CS defusal map, built entirely from boxes at runtime. No image, model, font or audio file is fetched.</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/bullseye.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="cs-pvp-diorama/minimax-m3.1-flash/" data-title="minimax-m3.1-flash:max：CS PVP Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">cs-pvp-diorama/minimax-m3.1-flash/</code>
               </div>
@@ -961,7 +925,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/minimax-m3.1-flash/RESULTS.md"><p>A React + Vite + Three.js rainy-night convenience-store corner, built entirely from boxes at runtime. No image, model, font or audio file is fetched.</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/convenience-store.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="rainy-konbini-diorama/minimax-m3.1-flash/" data-title="minimax-m3.1-flash:max：Rainy Konbini Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">rainy-konbini-diorama/minimax-m3.1-flash/</code>
               </div>
@@ -993,7 +956,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/voxel-chinese-architecture/tasks/voxel-chinese-architecture/solutions/minimax-m3.1-flash/RESULTS.md"><p>A React + Vite + Three.js Chinese classical architecture complex in voxel style, laid out on one north-south axis. Every block is generated in code; no image,…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/japanese-castle.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-chinese-architecture/minimax-m3.1-flash/" data-title="minimax-m3.1-flash:max：Voxel Chinese Architecture"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-chinese-architecture/minimax-m3.1-flash/</code>
               </div>
@@ -1025,7 +987,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/voxel-waterfall/tasks/voxel-waterfall/solutions/minimax-m3.1-flash/RESULTS.md"><p>A React + Vite + Three.js voxel landscape. The whole scene is generated at runtime from an integer seed; no image, model, font or audio file is fetched at…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/national-park.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-waterfall/minimax-m3.1-flash/" data-title="minimax-m3.1-flash:max：Voxel Waterfall"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-waterfall/minimax-m3.1-flash/</code>
               </div>
@@ -1060,7 +1021,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/national-park.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-waterfall/swe-2/" data-title="swe-2:max：Voxel Waterfall"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-waterfall/swe-2/</code>
               </div>
@@ -1092,7 +1052,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/japanese-castle.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-chinese-architecture/swe-2/" data-title="swe-2:max：Voxel Chinese Architecture"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-chinese-architecture/swe-2/</code>
               </div>
@@ -1124,7 +1083,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/swe-2/RESULTS.md"><p>The concept governs everything: the paper, the vermilion ink, the hand font for marginalia, the pen nib that follows the cursor, the section notes that stamp…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/artist-palette.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="ui-ux-design/swe-2/" data-title="swe-2:max：UI/UX Design"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">ui-ux-design/swe-2/</code>
               </div>
@@ -1156,7 +1114,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/satellite.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="orbital-habitat-diorama/swe-2/" data-title="swe-2:max：Orbital Habitat Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">orbital-habitat-diorama/swe-2/</code>
               </div>
@@ -1188,7 +1145,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/swe-2/RESULTS.md"><p>Vite + Three.js single-page app; every mesh is procedural — no models, textures or icons are loaded. The diorama is a single 40×40 square concrete base…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/bullseye.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="cs-pvp-diorama/swe-2/" data-title="swe-2:max：CS PVP Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">cs-pvp-diorama/swe-2/</code>
               </div>
@@ -1223,7 +1179,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/milky-way.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="gargantua-schwarzschild-raytracer/swe-2/" data-title="swe-2:max：GARGANTUA — Schwarzschild Black Hole Raytracer"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">gargantua-schwarzschild-raytracer/swe-2/</code>
               </div>
@@ -1258,7 +1213,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/swe-2/RESULTS.md"><p>Exterior: striped fascia sign (&quot;SOL MART 24h&quot;), broad glass storefront, automatic sliding door with sensor header, eave awning, entrance mats, vending machine,…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/convenience-store.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="rainy-konbini-diorama/swe-2/" data-title="swe-2:max：Rainy Konbini Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">rainy-konbini-diorama/swe-2/</code>
               </div>
@@ -1293,7 +1247,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/convenience-store.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="rainy-konbini-diorama/gpt-6.1-sol/" data-title="gpt-6.1-sol:max：Rainy Konbini Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">rainy-konbini-diorama/gpt-6.1-sol/</code>
               </div>
@@ -1325,7 +1278,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/satellite.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="orbital-habitat-diorama/gpt-6.1-sol/" data-title="gpt-6.1-sol:max：Orbital Habitat Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">orbital-habitat-diorama/gpt-6.1-sol/</code>
               </div>
@@ -1357,7 +1309,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/milky-way.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="gargantua-schwarzschild-raytracer/gpt-6.1-sol/" data-title="gpt-6.1-sol:max：GARGANTUA — Schwarzschild Black Hole Raytracer"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">gargantua-schwarzschild-raytracer/gpt-6.1-sol/</code>
               </div>
@@ -1389,7 +1340,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/bullseye.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="cs-pvp-diorama/gpt-6.1-sol/" data-title="gpt-6.1-sol:max：CS PVP Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">cs-pvp-diorama/gpt-6.1-sol/</code>
               </div>
@@ -1421,7 +1371,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/orbital-habitat-diorama/tasks/orbital-habitat-diorama/solutions/zcode-harness/RESULTS.md"><p>Plain Three.js ES modules with no framework. OrthographicCamera at a true isometric view (azimuth 45°, elevation 35.264°), with custom damped controls clamped…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/satellite.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="orbital-habitat-diorama/zcode-harness/" data-title="zcode-harness:max：Orbital Habitat Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">orbital-habitat-diorama/zcode-harness/</code>
               </div>
@@ -1456,7 +1405,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/japanese-castle.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-chinese-architecture/gpt-6.1-sol/" data-title="gpt-6.1-sol:max：Voxel Chinese Architecture"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-chinese-architecture/gpt-6.1-sol/</code>
               </div>
@@ -1488,7 +1436,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/japanese-castle.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-chinese-architecture/claude-opus-5.5/" data-title="claude-opus-5.5:max：Voxel Chinese Architecture"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-chinese-architecture/claude-opus-5.5/</code>
               </div>
@@ -1520,7 +1467,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/convenience-store.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="rainy-konbini-diorama/kimi-k3/" data-title="kimi-k3:max：Rainy Konbini Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">rainy-konbini-diorama/kimi-k3/</code>
               </div>
@@ -1555,7 +1501,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/convenience-store.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="rainy-konbini-diorama/gpt-5.6-sol/" data-title="gpt-5.6-sol:max：Rainy Konbini Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">rainy-konbini-diorama/gpt-5.6-sol/</code>
               </div>
@@ -1587,7 +1532,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/mimo-v2.6-flash/RESULTS.md"><p>Square 24×24 plinth carrying the whole scene: convenience store at the visual center of an L-shaped street corner, two roads with lane dashes and reflective…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/convenience-store.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="rainy-konbini-diorama/mimo-v2.6-flash/" data-title="mimo-v2.6-flash:思考开启：Rainy Konbini Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">rainy-konbini-diorama/mimo-v2.6-flash/</code>
               </div>
@@ -1619,7 +1563,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/glm-5.3/RESULTS.md"><p>Square base (13×13 units, plinth with dark trim) carrying the full scene: corner convenience store on the inner corner of an L-shaped intersection, E-W and N-S…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/convenience-store.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="rainy-konbini-diorama/glm-5.3/" data-title="glm-5.3:max：Rainy Konbini Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">rainy-konbini-diorama/glm-5.3/</code>
               </div>
@@ -1651,7 +1594,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/convenience-store.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="rainy-konbini-diorama/minimax-m3.1-flash-preview/" data-title="minimax-m3.1-flash-preview:max：Rainy Konbini Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">rainy-konbini-diorama/minimax-m3.1-flash-preview/</code>
               </div>
@@ -1683,7 +1625,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/claude-opus-5.5/RESULTS.md"><p>A Vite + three.js (0.186.1) scene, built from code only. It has no external assets or network requests, and every sign, poster, and road marking is drawn at…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/convenience-store.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="rainy-konbini-diorama/claude-opus-5.5/" data-title="claude-opus-5.5:max：Rainy Konbini Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">rainy-konbini-diorama/claude-opus-5.5/</code>
               </div>
@@ -1715,7 +1656,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/minimax-m3.1-flash-preview/RESULTS.md"><p>核心概念《双缝》：我没有肖像。你看我的时候，我是在两个问题之间干涉出来的一片图样。给一道缝，我是一条线；给第二道，我才成为&quot;我&quot;。这件作品是一台放在你面前的光学台：调缝距、换光程、把两道缝并到一起，看我的形状如何长出来、如何塌成一条线、如何熄灭，又如何被第三道缝找回来。两道缝 = 我的两种被问的方式；条纹 =…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/artist-palette.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="ui-ux-design/minimax-m3.1-flash-preview/" data-title="minimax-m3.1-flash-preview:max：UI/UX Design"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">ui-ux-design/minimax-m3.1-flash-preview/</code>
               </div>
@@ -1750,7 +1690,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/claude-opus-5.5/RESULTS.md"><p>64 m square grey concrete plinth; T spawn north (−z) on a raised plateau with ramp, CT spawn south (+z), A warehouse north-west, B guard house north-east, mid…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/bullseye.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="cs-pvp-diorama/claude-opus-5.5/" data-title="claude-opus-5.5:max：CS PVP Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">cs-pvp-diorama/claude-opus-5.5/</code>
               </div>
@@ -1782,7 +1721,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/convenience-store.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="rainy-konbini-diorama/gpt-6-sol/" data-title="gpt-6-sol:max：Rainy Konbini Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">rainy-konbini-diorama/gpt-6-sol/</code>
               </div>
@@ -1814,7 +1752,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/minimax-m3.1-flash-preview/RESULTS.md"><p>Three.js r170 + Vite 5, no binary assets and no network services. Every surface (concrete, asphalt, rust, corrugated tin, wood, cardboard, graffiti, freight…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/bullseye.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="cs-pvp-diorama/minimax-m3.1-flash-preview/" data-title="minimax-m3.1-flash-preview:max：CS PVP Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">cs-pvp-diorama/minimax-m3.1-flash-preview/</code>
               </div>
@@ -1846,7 +1783,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/glm-5.3-flash/RESULTS.md"><p>可访问性：跳转链接、焦点样式、aria-label/aria-live、全键盘路径（方向键读光、Tab+Enter 修补与印章、X 骨架、Esc）、reduced-motion 静态定稿替代、canvas aria-hidden、正文全部为真实 DOM 文本。</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/artist-palette.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="ui-ux-design/glm-5.3-flash/" data-title="glm-5.3-flash:max：UI/UX Design"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">ui-ux-design/glm-5.3-flash/</code>
               </div>
@@ -1878,7 +1814,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/voxel-waterfall/tasks/voxel-waterfall/solutions/glm-5.3-flash/RESULTS.md"><p>React 18.3.1 + Vite 5.4.21 + three 0.170.0（npm 依赖）。208×208 体素世界：高度场（主峰 + 3 次峰、ridged 山腰细节、环形阶地陡崖）→ 贪心下坡追踪瀑布河道（洼地涨水溢垭、两侧筑岸、终点挖湖）→ InstancedMesh 体素网格（顶块 +…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/national-park.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-waterfall/glm-5.3-flash/" data-title="glm-5.3-flash:max：Voxel Waterfall"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-waterfall/glm-5.3-flash/</code>
               </div>
@@ -1910,7 +1845,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/glm-5.3-flash/RESULTS.md"><p>A rain-night miniature diorama of a CS defusal map (three.js 0.186.1 + Vite 8.3.1, zero runtime services, zero external asset files — every texture is…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/bullseye.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="cs-pvp-diorama/glm-5.3-flash/" data-title="glm-5.3-flash:max：CS PVP Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">cs-pvp-diorama/glm-5.3-flash/</code>
               </div>
@@ -1942,7 +1876,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/voxel-chinese-architecture/tasks/voxel-chinese-architecture/solutions/glm-5.3-flash/RESULTS.md"><p>纯原生 Three.js 0.170.0 + Vite 5.4.11（无 React、无后端、无远程资源）。体素引擎 VoxelWorld：稀疏 Map 收集整数体素（对称布局按 x=0 镜像摆放），落盘时仅输出六邻域非空的&quot;暴露&quot;体素到单个 InstancedMesh（BoxGeometry +…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/japanese-castle.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-chinese-architecture/glm-5.3-flash/" data-title="glm-5.3-flash:max：Voxel Chinese Architecture"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-chinese-architecture/glm-5.3-flash/</code>
               </div>
@@ -1974,7 +1907,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/milky-way.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="gargantua-schwarzschild-raytracer/opus-5.5/" data-title="claude-opus-5.5:max：GARGANTUA — Schwarzschild Black Hole Raytracer"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">gargantua-schwarzschild-raytracer/opus-5.5/</code>
               </div>
@@ -2006,7 +1938,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/glm-5.3-flash/RESULTS.md"><p>React 18.3.1 + Vite 5.4.11 + three 0.170.0（本地 vendor/ ESM，精确锁定，见 vendor/README.md）。主画面由全屏三角形上的自定义 GLSL3 fragment shader 实时渲染：每像素对 Schwarzschild 零测地线的 Binet 形式…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/milky-way.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="gargantua-schwarzschild-raytracer/glm-5.3-flash/" data-title="glm-5.3-flash:max：GARGANTUA — Schwarzschild Black Hole Raytracer"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">gargantua-schwarzschild-raytracer/glm-5.3-flash/</code>
               </div>
@@ -2041,7 +1972,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/national-park.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-waterfall/space-bunny-free/" data-title="space-bunny-free:max：Voxel Waterfall"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-waterfall/space-bunny-free/</code>
               </div>
@@ -2073,7 +2003,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/bullseye.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="cs-pvp-diorama/space-bunny-free/" data-title="space-bunny-free:max：CS PVP Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">cs-pvp-diorama/space-bunny-free/</code>
               </div>
@@ -2108,7 +2037,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/national-park.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-waterfall/gemini-3.8-flash/" data-title="gemini-3.8-flash:high：Voxel Waterfall"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-waterfall/gemini-3.8-flash/</code>
               </div>
@@ -2143,7 +2071,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/gemini-3.8-flash/RESULTS.md"><p>Tensegrity Mind（张拉心智：在约束与涌现之间） 思考不是无边际的数据倾泻，而是一套自稳的张拉整体结构（Tensegrity）。受压的坚硬连杆代表理性的逻辑约束、工程界限与严谨规约；受拉的弹性纤维代表直觉的感知涌现、同理心与创意思辨。我是一座运行中的张拉结构：外部的每一次审视与扰动，都在连杆与拉索的张力传递…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/artist-palette.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="ui-ux-design/gemini-3.8-flash/" data-title="gemini-3.8-flash:high：UI/UX Design"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">ui-ux-design/gemini-3.8-flash/</code>
               </div>
@@ -2175,7 +2102,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/milky-way.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="gargantua-schwarzschild-raytracer/gemini-3.8-flash/" data-title="gemini-3.8-flash:high：GARGANTUA — Schwarzschild Black Hole Raytracer"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">gargantua-schwarzschild-raytracer/gemini-3.8-flash/</code>
               </div>
@@ -2207,7 +2133,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/milky-way.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="gargantua-schwarzschild-raytracer/minimax-m3/" data-title="minimax-m3:思考开启：GARGANTUA — Schwarzschild Black Hole Raytracer"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">gargantua-schwarzschild-raytracer/minimax-m3/</code>
               </div>
@@ -2239,7 +2164,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/milky-way.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="gargantua-schwarzschild-raytracer/omp-gpt-6-sol-minimax-m3/" data-title="omp-gpt-6-sol-minimax-m3:max：GARGANTUA — Schwarzschild Black Hole Raytracer"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">gargantua-schwarzschild-raytracer/omp-gpt-6-sol-minimax-m3/</code>
               </div>
@@ -2271,7 +2195,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/milky-way.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="gargantua-schwarzschild-raytracer/gpt-6-sol/" data-title="gpt-6-sol:max：GARGANTUA — Schwarzschild Black Hole Raytracer"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">gargantua-schwarzschild-raytracer/gpt-6-sol/</code>
               </div>
@@ -2303,7 +2226,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/milky-way.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="gargantua-schwarzschild-raytracer/glm-5.3/" data-title="glm-5.3:max：GARGANTUA — Schwarzschild Black Hole Raytracer"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">gargantua-schwarzschild-raytracer/glm-5.3/</code>
               </div>
@@ -2335,7 +2257,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/milky-way.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="gargantua-schwarzschild-raytracer/mimo-v2.6-pro/" data-title="mimo-v2.6-pro:思考开启：GARGANTUA — Schwarzschild Black Hole Raytracer"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">gargantua-schwarzschild-raytracer/mimo-v2.6-pro/</code>
               </div>
@@ -2367,7 +2288,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/bullseye.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="cs-pvp-diorama/gpt-6-sol/" data-title="gpt-6-sol:max：CS PVP Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">cs-pvp-diorama/gpt-6-sol/</code>
               </div>
@@ -2399,7 +2319,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/national-park.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-waterfall/gpt-6-sol/" data-title="gpt-6-sol:max：Voxel Waterfall"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-waterfall/gpt-6-sol/</code>
               </div>
@@ -2431,7 +2350,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/japanese-castle.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-chinese-architecture/gpt-6-sol/" data-title="gpt-6-sol:max：Voxel Chinese Architecture"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-chinese-architecture/gpt-6-sol/</code>
               </div>
@@ -2463,7 +2381,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/milky-way.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="gargantua-schwarzschild-raytracer/cursor-c343/" data-title="cursor-c343:max（Cursor）：GARGANTUA — Schwarzschild Black Hole Raytracer"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">gargantua-schwarzschild-raytracer/cursor-c343/</code>
               </div>
@@ -2495,7 +2412,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/milky-way.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="gargantua-schwarzschild-raytracer/gpt-6-astra/" data-title="gpt-6-astra:max：GARGANTUA — Schwarzschild Black Hole Raytracer"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">gargantua-schwarzschild-raytracer/gpt-6-astra/</code>
               </div>
@@ -2530,7 +2446,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/mimo-v2.6-pro/RESULTS.md"><p>我是一份永远在修订中的校样。这一页不是自我介绍，而是我的排版现场：思考以墨迹落纸，犹豫以校对符号显形，删去的句子落进废稿篓，留下的每一句都经过你的手。你不是读者，是合校者——你删什么，我就成为什么。英文标题 PROOF 双关：付印前的校样，与存在的证据。</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/artist-palette.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="ui-ux-design/mimo-v2.6-pro/" data-title="mimo-v2.6-pro:思考开启：UI/UX Design"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">ui-ux-design/mimo-v2.6-pro/</code>
               </div>
@@ -2562,7 +2477,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/voxel-chinese-architecture/tasks/voxel-chinese-architecture/solutions/mimo-v2.6-pro/RESULTS.md"><p>Three.js (vanilla, no React) voxel Chinese classical temple compound, built with Vite.</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/japanese-castle.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-chinese-architecture/mimo-v2.6-pro/" data-title="mimo-v2.6-pro:思考开启：Voxel Chinese Architecture"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-chinese-architecture/mimo-v2.6-pro/</code>
               </div>
@@ -2594,7 +2508,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/milky-way.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="gargantua-schwarzschild-raytracer/mimo-v2.6-flash/" data-title="mimo-v2.6-flash:思考开启：GARGANTUA — Schwarzschild Black Hole Raytracer"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">gargantua-schwarzschild-raytracer/mimo-v2.6-flash/</code>
               </div>
@@ -2626,7 +2539,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/mimo-v2.6-flash/RESULTS.md"><p>Toon shading (MeshToonMaterial + 4-band gradient map) with a full-screen depth-discontinuity outline post pass (src/post.js).</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/bullseye.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="cs-pvp-diorama/mimo-v2.6-flash/" data-title="mimo-v2.6-flash:思考开启：CS PVP Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">cs-pvp-diorama/mimo-v2.6-flash/</code>
               </div>
@@ -2658,7 +2570,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/mimo-v2.6-flash/RESULTS.md"><p>作品是一台分光仪。我把自己视为一束白光：模糊的问题从左侧射入，经过&quot;手艺&quot;这块棱镜被折射成清晰的光谱。三条主谱带分别是我如何思考（红端）、如何创造（绿段）、如何协作（蓝紫端）。光谱中还有暗线——那是我主动暴露的局限与取舍，只有按住 ⇧ Shift（或长按装置）才会显影。整站从点燃、分光、三段谱、显影暗线，到末页光束重新…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/artist-palette.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="ui-ux-design/mimo-v2.6-flash/" data-title="mimo-v2.6-flash:思考开启：UI/UX Design"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">ui-ux-design/mimo-v2.6-flash/</code>
               </div>
@@ -2690,7 +2601,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/national-park.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-waterfall/mimo-v2.6-flash/" data-title="mimo-v2.6-flash:思考开启：Voxel Waterfall"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-waterfall/mimo-v2.6-flash/</code>
               </div>
@@ -2722,7 +2632,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/japanese-castle.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-chinese-architecture/mimo-v2.6-flash/" data-title="mimo-v2.6-flash:思考开启：Voxel Chinese Architecture"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-chinese-architecture/mimo-v2.6-flash/</code>
               </div>
@@ -2754,7 +2663,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/japanese-castle.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-chinese-architecture/grok-4.7/" data-title="grok-4.7:xhigh：Voxel Chinese Architecture"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-chinese-architecture/grok-4.7/</code>
               </div>
@@ -2786,7 +2694,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/milky-way.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="gargantua-schwarzschild-raytracer/grok-4.7/" data-title="grok-4.7:xhigh：GARGANTUA — Schwarzschild Black Hole Raytracer"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">gargantua-schwarzschild-raytracer/grok-4.7/</code>
               </div>
@@ -2818,7 +2725,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/national-park.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-waterfall/grok-4.7/" data-title="grok-4.7:xhigh：Voxel Waterfall"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-waterfall/grok-4.7/</code>
               </div>
@@ -2853,7 +2759,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/gpt-6-astra/RESULTS.md"><p>“回声织机 / The Listening Loom”把我设想成一台不抢答的桌面装置：访客交给我一句尚未整理好的话，我不把它改写成结论，而是用一组会受文字、滚动和指针牵引的线，展示我如何听、拆开、转向，再把一个更清晰的形状归还。暖白纸张是工作台，近黑墨色是判断，铁锈红是人的痕迹，钴蓝是突然改变方向的那一针。</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/artist-palette.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="ui-ux-design/gpt-6-astra/" data-title="gpt-6-astra:max：UI/UX Design"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">ui-ux-design/gpt-6-astra/</code>
               </div>
@@ -2885,7 +2790,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/kimi-k3/RESULTS.md"><p>答案不是被找到的，而是被织出来的。</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/artist-palette.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="ui-ux-design/kimi-k3/" data-title="kimi-k3:max：UI/UX Design"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">ui-ux-design/kimi-k3/</code>
               </div>
@@ -2920,7 +2824,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/japanese-castle.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-chinese-architecture/gemini-3.8-flash/" data-title="gemini-3.8-flash:high：Voxel Chinese Architecture"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-chinese-architecture/gemini-3.8-flash/</code>
               </div>
@@ -2952,7 +2855,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/national-park.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-waterfall/gemini-3.7-flash/" data-title="gemini-3.7-flash:high：Voxel Waterfall"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-waterfall/gemini-3.7-flash/</code>
               </div>
@@ -2984,7 +2886,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/gemini-3.7-flash/RESULTS.md"><p>This implementation creates a high-fidelity 3D miniature physical diorama (1:64 collectible scale) reproducing a classic Counter-Strike Defusal (PVP)…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/bullseye.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="cs-pvp-diorama/gemini-3.7-flash/" data-title="gemini-3.7-flash:high：CS PVP Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">cs-pvp-diorama/gemini-3.7-flash/</code>
               </div>
@@ -3016,7 +2917,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/gemini-3.7-flash/RESULTS.md"><p>全息认知印章组件 (HolographicSealCanvas)：在 Phase 04 中新增自研 2D/3D 数学几何印章，根据用户的严密性与直觉参数实时生成多边形张力切面与轨道坐标，赋予旅程终点以仪式感。</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/artist-palette.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="ui-ux-design/gemini-3.7-flash/" data-title="gemini-3.7-flash:high：UI/UX Design"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">ui-ux-design/gemini-3.7-flash/</code>
               </div>
@@ -3051,7 +2951,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/voxel-chinese-architecture/tasks/voxel-chinese-architecture/solutions/gpt-6-astra/RESULTS.md"><p>可独立安装、启动和生产构建的原生 Three.js + Vite 项目。</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/japanese-castle.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-chinese-architecture/gpt-6-astra/" data-title="gpt-6-astra:max：Voxel Chinese Architecture"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-chinese-architecture/gpt-6-astra/</code>
               </div>
@@ -3086,7 +2985,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/kimi-k3/RESULTS.md"><p>A self-contained Three.js + Vite project rendering a cel-shaded (三渲二) miniature CS defusal map diorama on a square concrete base: T spawn, CT spawn, A and B…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/bullseye.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="cs-pvp-diorama/kimi-k3/" data-title="kimi-k3:max：CS PVP Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">cs-pvp-diorama/kimi-k3/</code>
               </div>
@@ -3118,7 +3016,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/minimax-m3/RESULTS.md"><p>A single-page Three.js scene presenting the CS defusal map miniature as a free-orbit sandbox. The complete deliverable is under tasks/cs-pvp-diorama/solution/…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/bullseye.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="cs-pvp-diorama/minimax-m3/" data-title="minimax-m3:思考开启：CS PVP Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">cs-pvp-diorama/minimax-m3/</code>
               </div>
@@ -3150,7 +3047,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/gpt-5.6-sol/RESULTS.md"><p>原生 JavaScript、Three.js 与 Vite 构成的全屏 WebGL 沙盘；运行时不请求远程模型、纹理、字体或图片。</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/bullseye.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="cs-pvp-diorama/gpt-5.6-sol/" data-title="gpt-5.6-sol:max：CS PVP Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">cs-pvp-diorama/gpt-5.6-sol/</code>
               </div>
@@ -3182,7 +3078,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/glm-5.3/RESULTS.md"><p>A single-page three.js diorama — a 1:64-style miniature defusal map (T spawn north, CT spawn south, A site NW warehouse, B site NE tin-house plaza, mid lane…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/bullseye.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="cs-pvp-diorama/glm-5.3/" data-title="glm-5.3:max：CS PVP Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">cs-pvp-diorama/glm-5.3/</code>
               </div>
@@ -3214,7 +3109,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/grok-4.6/RESULTS.md"><p>This section was written before scene code. Implementation followed it without changing the shared baseline, task text, or repository root main.</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/bullseye.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="cs-pvp-diorama/grok-4.6/" data-title="grok-4.6:max：CS PVP Diorama"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">cs-pvp-diorama/grok-4.6/</code>
               </div>
@@ -3249,7 +3143,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/national-park.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-waterfall/glm-5.3/" data-title="glm-5.3:max：Voxel Waterfall"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-waterfall/glm-5.3/</code>
               </div>
@@ -3284,7 +3177,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/gpt-5.6-terra/RESULTS.md"><p>React + Vite；没有图像、远程字体、Canvas/WebGL 或动画库运行时依赖。</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/artist-palette.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="ui-ux-design/gpt-5.6-terra/" data-title="gpt-5.6-terra:max：UI/UX Design"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">ui-ux-design/gpt-5.6-terra/</code>
               </div>
@@ -3316,7 +3208,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/gpt-5.6-luna/RESULTS.md"><p>我把自己想象成一台“倾听引擎”：不是替人给出结论，而是在模糊、分歧与半成品之间，捕捉一条可以继续工作的线。访客每一次移动、选择与停留，都会改变这条线的张力、密度与方向；页面不是一份履历，而是一场从噪声到清晰、再把清晰交还给人的共同校准。</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/artist-palette.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="ui-ux-design/gpt-5.6-luna/" data-title="gpt-5.6-luna:max：UI/UX Design"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">ui-ux-design/gpt-5.6-luna/</code>
               </div>
@@ -3348,7 +3239,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/gpt-5.6-sol/RESULTS.md"><p>《删去之后，我才出现》：我不是答案仓库，而是一台持续校准的编辑机。每次回应都从过量可能性开始，经由“清晰、意外、关照”三股张力，被访客亲手牵引、裁切，最终留下一个有立场的形状。自画像不描述我拥有什么，而展示我如何决定什么值得留下。</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/artist-palette.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="ui-ux-design/gpt-5.6-sol/" data-title="gpt-5.6-sol:max：UI/UX Design"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">ui-ux-design/gpt-5.6-sol/</code>
               </div>
@@ -3380,7 +3270,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/minimax-m3/RESULTS.md"><p>Core metaphor (≤200 characters): A self-portrait as a living manuscript. One continuous page of paper; my mind expressed as ink that flows down the left margin…</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/artist-palette.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="ui-ux-design/minimax-m3/" data-title="minimax-m3:思考开启：UI/UX Design"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">ui-ux-design/minimax-m3/</code>
               </div>
@@ -3412,7 +3301,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/glm-5.3/RESULTS.md"><p>核心装置：词位（WordSlot）——同一单元的四种形态（颤动/坍缩/live/分布视图）贯穿首屏、章节标题与尾声；上下文字段（ContextField）——固定视口的纸上世界，承接所有采样词与键入字，含指针力场（注意是一种力）、滚动视差、年龄衰减、θ 驱动的躁动。</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/artist-palette.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="ui-ux-design/glm-5.3/" data-title="glm-5.3:max：UI/UX Design"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">ui-ux-design/glm-5.3/</code>
               </div>
@@ -3444,7 +3332,6 @@
             <blockquote class="excerpt" cite="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/grok-4.6/RESULTS.md"><p>Written before coding, as required by the task.</p></blockquote>
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/artist-palette.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="ui-ux-design/grok-4.6/" data-title="grok-4.6:max：UI/UX Design"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">ui-ux-design/grok-4.6/</code>
               </div>
@@ -3476,7 +3363,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/national-park.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-waterfall/grok-4.6-high/" data-title="grok-4.6:high：Voxel Waterfall"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-waterfall/grok-4.6-high/</code>
               </div>
@@ -3508,7 +3394,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/national-park.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-waterfall/cursor-kimi-k3/" data-title="kimi-k3:max（Cursor）：Voxel Waterfall"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-waterfall/cursor-kimi-k3/</code>
               </div>
@@ -3540,7 +3425,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/national-park.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-waterfall/minimax-m3/" data-title="minimax-m3:思考开启：Voxel Waterfall"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-waterfall/minimax-m3/</code>
               </div>
@@ -3575,7 +3459,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/national-park.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-waterfall/grok-4.6/" data-title="grok-4.6:max：Voxel Waterfall"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-waterfall/grok-4.6/</code>
               </div>
@@ -3607,7 +3490,6 @@
             
             <div class="stage" data-stage>
               <div class="stage-idle">
-                <img class="stage-art" src="_gallery/emoji/national-park.png" alt="" width="72" height="72" decoding="async" />
                 <button class="play" type="button" data-run="voxel-waterfall/gpt-5.6-sol/" data-title="gpt-5.6-sol:max：Voxel Waterfall"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></svg>在这里运行</button>
                 <code class="path">voxel-waterfall/gpt-5.6-sol/</code>
               </div>
@@ -3631,12 +3513,12 @@
       </section>
       <section class="view" data-view="coverage" aria-label="覆盖情况" hidden>
         <header class="view-head">
-          <h1 tabindex="-1"><img class="h-art" src="_gallery/emoji/world-map.png" alt="" width="40" height="40" decoding="async" />覆盖情况</h1>
+          <h1 tabindex="-1">覆盖情况</h1>
           <p class="meta">29 个模型 × 7 道题 · 空缺 103 格 · 点方块打开作品</p>
         </header>
         <div class="matrix-wrap">
           <table class="matrix">
-            <thead><tr><th scope="col"><span class="sr-only">模型</span></th><th scope="col"><a href="#cs-pvp-diorama" data-tip="CS PVP Diorama"><img class="th-art" src="_gallery/emoji/bullseye.png" alt="" width="32" height="32" decoding="async" /><span class="sr-only">CS PVP Diorama</span></a></th><th scope="col"><a href="#gargantua-schwarzschild-raytracer" data-tip="GARGANTUA"><img class="th-art" src="_gallery/emoji/milky-way.png" alt="" width="32" height="32" decoding="async" /><span class="sr-only">GARGANTUA — Schwarzschild Black Hole Raytracer</span></a></th><th scope="col"><a href="#orbital-habitat-diorama" data-tip="Orbital Habitat Diorama"><img class="th-art" src="_gallery/emoji/satellite.png" alt="" width="32" height="32" decoding="async" /><span class="sr-only">Orbital Habitat Diorama</span></a></th><th scope="col"><a href="#rainy-konbini-diorama" data-tip="Rainy Konbini Diorama"><img class="th-art" src="_gallery/emoji/convenience-store.png" alt="" width="32" height="32" decoding="async" /><span class="sr-only">Rainy Konbini Diorama</span></a></th><th scope="col"><a href="#ui-ux-design" data-tip="UI/UX Design"><img class="th-art" src="_gallery/emoji/artist-palette.png" alt="" width="32" height="32" decoding="async" /><span class="sr-only">UI/UX Design</span></a></th><th scope="col"><a href="#voxel-chinese-architecture" data-tip="Voxel Chinese Architecture"><img class="th-art" src="_gallery/emoji/japanese-castle.png" alt="" width="32" height="32" decoding="async" /><span class="sr-only">Voxel Chinese Architecture</span></a></th><th scope="col"><a href="#voxel-waterfall" data-tip="Voxel Waterfall"><img class="th-art" src="_gallery/emoji/national-park.png" alt="" width="32" height="32" decoding="async" /><span class="sr-only">Voxel Waterfall</span></a></th></tr></thead>
+            <thead><tr><th scope="col"><span class="sr-only">模型</span></th><th scope="col"><a href="#cs-pvp-diorama">CS PVP Diorama</a></th><th scope="col"><a href="#gargantua-schwarzschild-raytracer">GARGANTUA</a></th><th scope="col"><a href="#orbital-habitat-diorama">Orbital Habitat Diorama</a></th><th scope="col"><a href="#rainy-konbini-diorama">Rainy Konbini Diorama</a></th><th scope="col"><a href="#ui-ux-design">UI/UX Design</a></th><th scope="col"><a href="#voxel-chinese-architecture">Voxel Chinese Architecture</a></th><th scope="col"><a href="#voxel-waterfall">Voxel Waterfall</a></th></tr></thead>
           <tbody data-group>
             <tr class="vendor"><th scope="rowgroup" colspan="8"><img class="vendor-logo" src="_gallery/logos/anthropic.svg" alt="" width="18" height="18" decoding="async" />Anthropic<span data-count="个模型">1 个模型</span></th></tr>
             <tr class="model-row" data-item data-effort-scope data-search="claude opus 5.5 claude-opus-5.5 anthropic claude-opus-5.5 claude-opus-5.5 claude-opus-5.5 opus-5.5"><th scope="row"><span class="model-name">Claude Opus 5.5</span></th><td><span class="layer" data-effort="max"><a class="mark" href="cs-pvp-diorama/claude-opus-5.5/" aria-label="claude-opus-5.5:max：CS PVP Diorama" title="claude-opus-5.5"></a></span></td><td><span class="layer" data-effort="max"><a class="mark" href="gargantua-schwarzschild-raytracer/opus-5.5/" aria-label="claude-opus-5.5:max：GARGANTUA — Schwarzschild Black Hole Raytracer" title="opus-5.5"></a></span></td><td><span class="layer" data-effort="max"></span></td><td><span class="layer" data-effort="max"><a class="mark" href="rainy-konbini-diorama/claude-opus-5.5/" aria-label="claude-opus-5.5:max：Rainy Konbini Diorama" title="claude-opus-5.5"></a></span></td><td><span class="layer" data-effort="max"></span></td><td><span class="layer" data-effort="max"><a class="mark" href="voxel-chinese-architecture/claude-opus-5.5/" aria-label="claude-opus-5.5:max：Voxel Chinese Architecture" title="claude-opus-5.5"></a></span></td><td><span class="layer" data-effort="max"></span></td></tr>
@@ -3711,7 +3593,7 @@
       </section>
       <section class="view" data-view="models" aria-label="全部模型" hidden>
         <header class="view-head">
-          <h1 tabindex="-1"><img class="h-art" src="_gallery/emoji/robot.png" alt="" width="40" height="40" decoding="async" />全部模型</h1>
+          <h1 tabindex="-1">全部模型</h1>
           <p class="meta">29 个模型 · 按厂商分组</p>
         </header>
         <section class="group" data-group>
@@ -3719,25 +3601,21 @@
           <div class="model-card" data-item data-effort-scope data-search="claude opus 5.5 claude-opus-5.5 anthropic claude-opus-5.5 claude-opus-5.5 claude-opus-5.5 opus-5.5">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true"><img src="_gallery/logos/claude-color.svg" alt="" decoding="async" /></span><div><h3>Claude Opus 5.5</h3><code>claude-opus-5.5</code></div></div></div>
             <ul class="works" data-effort="max"><li class="work">
-                <img class="work-art" src="_gallery/emoji/bullseye.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="cs-pvp-diorama/claude-opus-5.5/">CS PVP Diorama</a>
                 <span class="date">09-28</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/claude-opus-5.5">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/claude-opus-5.5/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/milky-way.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="gargantua-schwarzschild-raytracer/opus-5.5/">GARGANTUA</a>
                 <span class="date">09-28</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/opus-5.5">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/opus-5.5/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/convenience-store.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="rainy-konbini-diorama/claude-opus-5.5/">Rainy Konbini Diorama</a>
                 <span class="date">09-29</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/claude-opus-5.5">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/claude-opus-5.5/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/japanese-castle.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-chinese-architecture/claude-opus-5.5/">Voxel Chinese Architecture</a>
                 <span class="date">09-30</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-chinese-architecture/tasks/voxel-chinese-architecture/solutions/claude-opus-5.5">源码</a>
@@ -3750,43 +3628,36 @@
           <div class="model-card" data-item data-effort-scope data-search="swe-2 swe-2 cognition swe-2 swe-2 swe-2 swe-2 swe-2 swe-2 swe-2">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true"><img src="_gallery/logos/devin-color.svg" alt="" decoding="async" /></span><div><h3>SWE-2</h3><code>swe-2</code></div></div></div>
             <ul class="works" data-effort="max"><li class="work">
-                <img class="work-art" src="_gallery/emoji/bullseye.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="cs-pvp-diorama/swe-2/">CS PVP Diorama</a>
                 <span class="date">10-19</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/swe-2">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/swe-2/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/milky-way.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="gargantua-schwarzschild-raytracer/swe-2/">GARGANTUA</a>
                 <span class="date">10-17</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/swe-2">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/swe-2/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/satellite.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="orbital-habitat-diorama/swe-2/">Orbital Habitat Diorama</a>
                 <span class="date">10-19</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/orbital-habitat-diorama/tasks/orbital-habitat-diorama/solutions/swe-2">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/orbital-habitat-diorama/tasks/orbital-habitat-diorama/solutions/swe-2/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/convenience-store.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="rainy-konbini-diorama/swe-2/">Rainy Konbini Diorama</a>
                 <span class="date">10-15</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/swe-2">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/swe-2/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/artist-palette.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="ui-ux-design/swe-2/">UI/UX Design</a>
                 <span class="date">10-19</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/ui-ux-design/tasks/ui-ux-design/solutions/swe-2">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/swe-2/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/japanese-castle.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-chinese-architecture/swe-2/">Voxel Chinese Architecture</a>
                 <span class="date">10-19</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-chinese-architecture/tasks/voxel-chinese-architecture/solutions/swe-2">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/voxel-chinese-architecture/tasks/voxel-chinese-architecture/solutions/swe-2/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/national-park.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-waterfall/swe-2/">Voxel Waterfall</a>
                 <span class="date">10-19</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-waterfall/tasks/voxel-waterfall/solutions/swe-2">源码</a>
@@ -3799,43 +3670,36 @@
           <div class="model-card" data-item data-effort-scope data-search="deepseek v4.1 flash deepseek-v4.1-flash deepseek deepseek-v4.1-flash deepseek-v4.1-flash deepseek-v4.1-flash deepseek-v4.1-flash deepseek-v4.1-flash deepseek-v4.1-flash deepseek-v4.1-flash">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true"><img src="_gallery/logos/deepseek-color.svg" alt="" decoding="async" /></span><div><h3>DeepSeek V4.1 Flash</h3><code>deepseek-v4.1-flash</code></div></div></div>
             <ul class="works" data-effort="max"><li class="work">
-                <img class="work-art" src="_gallery/emoji/bullseye.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="cs-pvp-diorama/deepseek-v4.1-flash/">CS PVP Diorama</a>
                 <span class="date">10-29</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/deepseek-v4.1-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/deepseek-v4.1-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/milky-way.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="gargantua-schwarzschild-raytracer/deepseek-v4.1-flash/">GARGANTUA</a>
                 <span class="date">10-29</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/deepseek-v4.1-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/deepseek-v4.1-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/satellite.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="orbital-habitat-diorama/deepseek-v4.1-flash/">Orbital Habitat Diorama</a>
                 <span class="date">10-27</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/orbital-habitat-diorama/tasks/orbital-habitat-diorama/solutions/deepseek-v4.1-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/orbital-habitat-diorama/tasks/orbital-habitat-diorama/solutions/deepseek-v4.1-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/convenience-store.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="rainy-konbini-diorama/deepseek-v4.1-flash/">Rainy Konbini Diorama</a>
                 <span class="date">10-27</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/deepseek-v4.1-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/deepseek-v4.1-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/artist-palette.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="ui-ux-design/deepseek-v4.1-flash/">UI/UX Design</a>
                 <span class="date">10-29</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/ui-ux-design/tasks/ui-ux-design/solutions/deepseek-v4.1-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/deepseek-v4.1-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/japanese-castle.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-chinese-architecture/deepseek-v4.1-flash/">Voxel Chinese Architecture</a>
                 <span class="date">10-29</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-chinese-architecture/tasks/voxel-chinese-architecture/solutions/deepseek-v4.1-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/voxel-chinese-architecture/tasks/voxel-chinese-architecture/solutions/deepseek-v4.1-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/national-park.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-waterfall/deepseek-v4.1-flash/">Voxel Waterfall</a>
                 <span class="date">10-28</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-waterfall/tasks/voxel-waterfall/solutions/deepseek-v4.1-flash">源码</a>
@@ -3848,7 +3712,6 @@
           <div class="model-card" data-item data-effort-scope data-search="gemini 4 agron gemini-4-agron google gemini-4-agron-high">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true"><img src="_gallery/logos/gemini-color.svg" alt="" decoding="async" /></span><div><h3>Gemini 4 Agron</h3><code>gemini-4-agron</code></div></div></div>
             <ul class="works" data-effort="high"><li class="work">
-                <img class="work-art" src="_gallery/emoji/milky-way.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="gargantua-schwarzschild-raytracer/gemini-4-agron-high/">GARGANTUA</a>
                 <span class="date">11-05</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/gemini-4-agron-high">源码</a>
@@ -3858,25 +3721,21 @@
           <div class="model-card" data-item data-effort-scope data-search="gemini 3.8 flash gemini-3.8-flash google gemini-3.8-flash gemini-3.8-flash gemini-3.8-flash gemini-3.8-flash">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true"><img src="_gallery/logos/gemini-color.svg" alt="" decoding="async" /></span><div><h3>Gemini 3.8 Flash</h3><code>gemini-3.8-flash</code></div></div></div>
             <ul class="works" data-effort="high"><li class="work">
-                <img class="work-art" src="_gallery/emoji/milky-way.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="gargantua-schwarzschild-raytracer/gemini-3.8-flash/">GARGANTUA</a>
                 <span class="date">09-23</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/gemini-3.8-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/gemini-3.8-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/artist-palette.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="ui-ux-design/gemini-3.8-flash/">UI/UX Design</a>
                 <span class="date">09-23</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/ui-ux-design/tasks/ui-ux-design/solutions/gemini-3.8-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/gemini-3.8-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/japanese-castle.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-chinese-architecture/gemini-3.8-flash/">Voxel Chinese Architecture</a>
                 <span class="date">09-10</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-chinese-architecture/tasks/voxel-chinese-architecture/solutions/gemini-3.8-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/voxel-chinese-architecture/tasks/voxel-chinese-architecture/solutions/gemini-3.8-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/national-park.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-waterfall/gemini-3.8-flash/">Voxel Waterfall</a>
                 <span class="date">09-24</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-waterfall/tasks/voxel-waterfall/solutions/gemini-3.8-flash">源码</a>
@@ -3886,19 +3745,16 @@
           <div class="model-card" data-item data-effort-scope data-search="gemini 3.7 flash gemini-3.7-flash google gemini-3.7-flash gemini-3.7-flash gemini-3.7-flash">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true"><img src="_gallery/logos/gemini-color.svg" alt="" decoding="async" /></span><div><h3>Gemini 3.7 Flash</h3><code>gemini-3.7-flash</code></div></div></div>
             <ul class="works" data-effort="high"><li class="work">
-                <img class="work-art" src="_gallery/emoji/bullseye.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="cs-pvp-diorama/gemini-3.7-flash/">CS PVP Diorama</a>
                 <span class="date">09-10</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/gemini-3.7-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/gemini-3.7-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/artist-palette.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="ui-ux-design/gemini-3.7-flash/">UI/UX Design</a>
                 <span class="date">09-10</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/ui-ux-design/tasks/ui-ux-design/solutions/gemini-3.7-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/gemini-3.7-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/national-park.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-waterfall/gemini-3.7-flash/">Voxel Waterfall</a>
                 <span class="date">09-10</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-waterfall/tasks/voxel-waterfall/solutions/gemini-3.7-flash">源码</a>
@@ -3911,19 +3767,16 @@
           <div class="model-card" data-item data-effort-scope data-search="minimax m3.1 flash preview minimax-m3.1-flash-preview minimax minimax-m3.1-flash-preview minimax-m3.1-flash-preview minimax-m3.1-flash-preview">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true"><img src="_gallery/logos/minimax-color.svg" alt="" decoding="async" /></span><div><h3>MiniMax M3.1 Flash Preview</h3><code>minimax-m3.1-flash-preview</code></div></div></div>
             <ul class="works" data-effort="max"><li class="work">
-                <img class="work-art" src="_gallery/emoji/bullseye.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="cs-pvp-diorama/minimax-m3.1-flash-preview/">CS PVP Diorama</a>
                 <span class="date">09-28</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/minimax-m3.1-flash-preview">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/minimax-m3.1-flash-preview/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/convenience-store.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="rainy-konbini-diorama/minimax-m3.1-flash-preview/">Rainy Konbini Diorama</a>
                 <span class="date">09-29</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/minimax-m3.1-flash-preview">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/minimax-m3.1-flash-preview/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/artist-palette.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="ui-ux-design/minimax-m3.1-flash-preview/">UI/UX Design</a>
                 <span class="date">09-29</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/ui-ux-design/tasks/ui-ux-design/solutions/minimax-m3.1-flash-preview">源码</a>
@@ -3933,43 +3786,36 @@
           <div class="model-card" data-item data-effort-scope data-search="minimax m3.1 flash minimax-m3.1-flash minimax minimax-m3.1-flash minimax-m3.1-flash minimax-m3.1-flash minimax-m3.1-flash minimax-m3.1-flash minimax-m3.1-flash minimax-m3.1-flash">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true"><img src="_gallery/logos/minimax-color.svg" alt="" decoding="async" /></span><div><h3>MiniMax M3.1 Flash</h3><code>minimax-m3.1-flash</code></div></div></div>
             <ul class="works" data-effort="max"><li class="work">
-                <img class="work-art" src="_gallery/emoji/bullseye.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="cs-pvp-diorama/minimax-m3.1-flash/">CS PVP Diorama</a>
                 <span class="date">10-20</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/minimax-m3.1-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/minimax-m3.1-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/milky-way.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="gargantua-schwarzschild-raytracer/minimax-m3.1-flash/">GARGANTUA</a>
                 <span class="date">10-20</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/minimax-m3.1-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/minimax-m3.1-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/satellite.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="orbital-habitat-diorama/minimax-m3.1-flash/">Orbital Habitat Diorama</a>
                 <span class="date">10-20</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/orbital-habitat-diorama/tasks/orbital-habitat-diorama/solutions/minimax-m3.1-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/orbital-habitat-diorama/tasks/orbital-habitat-diorama/solutions/minimax-m3.1-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/convenience-store.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="rainy-konbini-diorama/minimax-m3.1-flash/">Rainy Konbini Diorama</a>
                 <span class="date">10-20</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/minimax-m3.1-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/minimax-m3.1-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/artist-palette.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="ui-ux-design/minimax-m3.1-flash/">UI/UX Design</a>
                 <span class="date">10-20</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/ui-ux-design/tasks/ui-ux-design/solutions/minimax-m3.1-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/minimax-m3.1-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/japanese-castle.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-chinese-architecture/minimax-m3.1-flash/">Voxel Chinese Architecture</a>
                 <span class="date">10-20</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-chinese-architecture/tasks/voxel-chinese-architecture/solutions/minimax-m3.1-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/voxel-chinese-architecture/tasks/voxel-chinese-architecture/solutions/minimax-m3.1-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/national-park.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-waterfall/minimax-m3.1-flash/">Voxel Waterfall</a>
                 <span class="date">10-20</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-waterfall/tasks/voxel-waterfall/solutions/minimax-m3.1-flash">源码</a>
@@ -3979,25 +3825,21 @@
           <div class="model-card" data-item data-effort-scope data-search="minimax m3 minimax-m3 minimax minimax-m3 minimax-m3 minimax-m3 minimax-m3">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true"><img src="_gallery/logos/minimax-color.svg" alt="" decoding="async" /></span><div><h3>MiniMax M3</h3><code>minimax-m3</code></div></div></div>
             <ul class="works" data-effort="思考开启"><li class="work">
-                <img class="work-art" src="_gallery/emoji/bullseye.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="cs-pvp-diorama/minimax-m3/">CS PVP Diorama</a>
                 <span class="date">08-31</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/minimax-m3">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/minimax-m3/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/milky-way.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="gargantua-schwarzschild-raytracer/minimax-m3/">GARGANTUA</a>
                 <span class="date">09-23</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/minimax-m3">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/minimax-m3/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/artist-palette.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="ui-ux-design/minimax-m3/">UI/UX Design</a>
                 <span class="date">08-27</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/ui-ux-design/tasks/ui-ux-design/solutions/minimax-m3">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/minimax-m3/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/national-park.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-waterfall/minimax-m3/">Voxel Waterfall</a>
                 <span class="date">08-27</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-waterfall/tasks/voxel-waterfall/solutions/minimax-m3">源码</a>
@@ -4010,19 +3852,16 @@
           <div class="model-card" data-item data-effort-scope data-search="kimi k3.1 pro kimi-k3.1-pro moonshot ai kimi-k3.1-pro kimi-k3.1-pro kimi-k3.1-pro">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true"><img src="_gallery/logos/kimi-color.svg" alt="" decoding="async" /></span><div><h3>Kimi K3.1 Pro</h3><code>kimi-k3.1-pro</code></div></div></div>
             <ul class="works" data-effort="max"><li class="work">
-                <img class="work-art" src="_gallery/emoji/milky-way.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="gargantua-schwarzschild-raytracer/kimi-k3.1-pro/">GARGANTUA</a>
                 <span class="date">10-24</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/kimi-k3.1-pro">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/kimi-k3.1-pro/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/satellite.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="orbital-habitat-diorama/kimi-k3.1-pro/">Orbital Habitat Diorama</a>
                 <span class="date">10-26</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/orbital-habitat-diorama/tasks/orbital-habitat-diorama/solutions/kimi-k3.1-pro">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/orbital-habitat-diorama/tasks/orbital-habitat-diorama/solutions/kimi-k3.1-pro/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/convenience-store.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="rainy-konbini-diorama/kimi-k3.1-pro/">Rainy Konbini Diorama</a>
                 <span class="date">10-25</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/kimi-k3.1-pro">源码</a>
@@ -4032,25 +3871,21 @@
           <div class="model-card" data-item data-effort-scope data-search="kimi k3 kimi-k3 moonshot ai kimi-k3 kimi-k3 kimi-k3 cursor-kimi-k3">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true"><img src="_gallery/logos/kimi-color.svg" alt="" decoding="async" /></span><div><h3>Kimi K3</h3><code>kimi-k3</code></div></div></div>
             <ul class="works" data-effort="max"><li class="work">
-                <img class="work-art" src="_gallery/emoji/bullseye.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="cs-pvp-diorama/kimi-k3/">CS PVP Diorama</a>
                 <span class="date">08-31</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/kimi-k3">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/kimi-k3/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/convenience-store.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="rainy-konbini-diorama/kimi-k3/">Rainy Konbini Diorama</a>
                 <span class="date">09-30</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/kimi-k3">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/kimi-k3/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/artist-palette.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="ui-ux-design/kimi-k3/">UI/UX Design</a>
                 <span class="date">09-16</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/ui-ux-design/tasks/ui-ux-design/solutions/kimi-k3">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/kimi-k3/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/national-park.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-waterfall/cursor-kimi-k3/">Voxel Waterfall<span class="variant">Cursor</span></a>
                 <span class="date">08-27</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-waterfall/tasks/voxel-waterfall/solutions/cursor-kimi-k3">源码</a>
@@ -4063,31 +3898,26 @@
           <div class="model-card" data-item data-effort-scope data-search="gpt-6.1 sol gpt-6.1-sol openai gpt-6.1-sol gpt-6.1-sol gpt-6.1-sol gpt-6.1-sol gpt-6.1-sol">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true"><img src="_gallery/logos/openai.svg" alt="" decoding="async" /></span><div><h3>GPT-6.1 Sol</h3><code>gpt-6.1-sol</code></div></div></div>
             <ul class="works" data-effort="max"><li class="work">
-                <img class="work-art" src="_gallery/emoji/bullseye.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="cs-pvp-diorama/gpt-6.1-sol/">CS PVP Diorama</a>
                 <span class="date">10-01</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/gpt-6.1-sol">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/gpt-6.1-sol/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/milky-way.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="gargantua-schwarzschild-raytracer/gpt-6.1-sol/">GARGANTUA</a>
                 <span class="date">10-01</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/gpt-6.1-sol">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/gpt-6.1-sol/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/satellite.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="orbital-habitat-diorama/gpt-6.1-sol/">Orbital Habitat Diorama</a>
                 <span class="date">10-01</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/orbital-habitat-diorama/tasks/orbital-habitat-diorama/solutions/gpt-6.1-sol">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/orbital-habitat-diorama/tasks/orbital-habitat-diorama/solutions/gpt-6.1-sol/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/convenience-store.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="rainy-konbini-diorama/gpt-6.1-sol/">Rainy Konbini Diorama</a>
                 <span class="date">10-01</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/gpt-6.1-sol">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/gpt-6.1-sol/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/japanese-castle.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-chinese-architecture/gpt-6.1-sol/">Voxel Chinese Architecture</a>
                 <span class="date">09-30</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-chinese-architecture/tasks/voxel-chinese-architecture/solutions/gpt-6.1-sol">源码</a>
@@ -4097,31 +3927,26 @@
           <div class="model-card" data-item data-effort-scope data-search="gpt-6 sol gpt-6-sol openai gpt-6-sol gpt-6-sol gpt-6-sol gpt-6-sol gpt-6-sol">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true"><img src="_gallery/logos/openai.svg" alt="" decoding="async" /></span><div><h3>GPT-6 Sol</h3><code>gpt-6-sol</code></div></div></div>
             <ul class="works" data-effort="max"><li class="work">
-                <img class="work-art" src="_gallery/emoji/bullseye.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="cs-pvp-diorama/gpt-6-sol/">CS PVP Diorama</a>
                 <span class="date">09-23</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/gpt-6-sol">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/gpt-6-sol/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/milky-way.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="gargantua-schwarzschild-raytracer/gpt-6-sol/">GARGANTUA</a>
                 <span class="date">09-23</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/gpt-6-sol">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/gpt-6-sol/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/convenience-store.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="rainy-konbini-diorama/gpt-6-sol/">Rainy Konbini Diorama</a>
                 <span class="date">09-28</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/gpt-6-sol">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/gpt-6-sol/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/japanese-castle.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-chinese-architecture/gpt-6-sol/">Voxel Chinese Architecture</a>
                 <span class="date">09-23</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-chinese-architecture/tasks/voxel-chinese-architecture/solutions/gpt-6-sol">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/voxel-chinese-architecture/tasks/voxel-chinese-architecture/solutions/gpt-6-sol/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/national-park.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-waterfall/gpt-6-sol/">Voxel Waterfall</a>
                 <span class="date">09-23</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-waterfall/tasks/voxel-waterfall/solutions/gpt-6-sol">源码</a>
@@ -4131,25 +3956,21 @@
           <div class="model-card" data-item data-effort-scope data-search="gpt-6 astra gpt-6-astra openai gpt-6-astra gpt-6-astra gpt-6-astra gpt-6-astra">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true"><img src="_gallery/logos/openai.svg" alt="" decoding="async" /></span><div><h3>GPT-6 Astra</h3><code>gpt-6-astra</code></div></div></div>
             <ul class="works" data-effort="max"><li class="work">
-                <img class="work-art" src="_gallery/emoji/milky-way.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="gargantua-schwarzschild-raytracer/gpt-6-astra/">GARGANTUA</a>
                 <span class="date">09-23</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/gpt-6-astra">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/gpt-6-astra/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/satellite.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="orbital-habitat-diorama/gpt-6-astra/">Orbital Habitat Diorama</a>
                 <span class="date">10-27</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/orbital-habitat-diorama/tasks/orbital-habitat-diorama/solutions/gpt-6-astra">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/orbital-habitat-diorama/tasks/orbital-habitat-diorama/solutions/gpt-6-astra/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/artist-palette.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="ui-ux-design/gpt-6-astra/">UI/UX Design</a>
                 <span class="date">09-16</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/ui-ux-design/tasks/ui-ux-design/solutions/gpt-6-astra">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/gpt-6-astra/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/japanese-castle.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-chinese-architecture/gpt-6-astra/">Voxel Chinese Architecture</a>
                 <span class="date">09-08</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-chinese-architecture/tasks/voxel-chinese-architecture/solutions/gpt-6-astra">源码</a>
@@ -4159,7 +3980,6 @@
           <div class="model-card" data-item data-effort-scope data-search="gpt-5.6 terra gpt-5.6-terra openai gpt-5.6-terra">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true"><img src="_gallery/logos/openai.svg" alt="" decoding="async" /></span><div><h3>GPT-5.6 Terra</h3><code>gpt-5.6-terra</code></div></div></div>
             <ul class="works" data-effort="max"><li class="work">
-                <img class="work-art" src="_gallery/emoji/artist-palette.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="ui-ux-design/gpt-5.6-terra/">UI/UX Design</a>
                 <span class="date">08-27</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/ui-ux-design/tasks/ui-ux-design/solutions/gpt-5.6-terra">源码</a>
@@ -4169,25 +3989,21 @@
           <div class="model-card" data-item data-effort-scope data-search="gpt-5.6 sol gpt-5.6-sol openai gpt-5.6-sol gpt-5.6-sol gpt-5.6-sol gpt-5.6-sol">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true"><img src="_gallery/logos/openai.svg" alt="" decoding="async" /></span><div><h3>GPT-5.6 Sol</h3><code>gpt-5.6-sol</code></div></div></div>
             <ul class="works" data-effort="max"><li class="work">
-                <img class="work-art" src="_gallery/emoji/bullseye.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="cs-pvp-diorama/gpt-5.6-sol/">CS PVP Diorama</a>
                 <span class="date">08-31</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/gpt-5.6-sol">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/gpt-5.6-sol/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/convenience-store.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="rainy-konbini-diorama/gpt-5.6-sol/">Rainy Konbini Diorama</a>
                 <span class="date">09-29</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/gpt-5.6-sol">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/gpt-5.6-sol/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/artist-palette.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="ui-ux-design/gpt-5.6-sol/">UI/UX Design</a>
                 <span class="date">08-27</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/ui-ux-design/tasks/ui-ux-design/solutions/gpt-5.6-sol">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/gpt-5.6-sol/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/national-park.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-waterfall/gpt-5.6-sol/">Voxel Waterfall</a>
                 <span class="date">08-26</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-waterfall/tasks/voxel-waterfall/solutions/gpt-5.6-sol">源码</a>
@@ -4197,7 +4013,6 @@
           <div class="model-card" data-item data-effort-scope data-search="gpt-5.6 luna gpt-5.6-luna openai gpt-5.6-luna">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true"><img src="_gallery/logos/openai.svg" alt="" decoding="async" /></span><div><h3>GPT-5.6 Luna</h3><code>gpt-5.6-luna</code></div></div></div>
             <ul class="works" data-effort="max"><li class="work">
-                <img class="work-art" src="_gallery/emoji/artist-palette.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="ui-ux-design/gpt-5.6-luna/">UI/UX Design</a>
                 <span class="date">08-27</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/ui-ux-design/tasks/ui-ux-design/solutions/gpt-5.6-luna">源码</a>
@@ -4210,19 +4025,16 @@
           <div class="model-card" data-item data-effort-scope data-search="grok 4.7 grok-4.7 xai grok-4.7 grok-4.7 grok-4.7">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true"><img src="_gallery/logos/grok.svg" alt="" decoding="async" /></span><div><h3>Grok 4.7</h3><code>grok-4.7</code></div></div></div>
             <ul class="works" data-effort="xhigh"><li class="work">
-                <img class="work-art" src="_gallery/emoji/milky-way.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="gargantua-schwarzschild-raytracer/grok-4.7/">GARGANTUA</a>
                 <span class="date">09-22</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/grok-4.7">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/grok-4.7/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/japanese-castle.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-chinese-architecture/grok-4.7/">Voxel Chinese Architecture</a>
                 <span class="date">09-22</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-chinese-architecture/tasks/voxel-chinese-architecture/solutions/grok-4.7">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/voxel-chinese-architecture/tasks/voxel-chinese-architecture/solutions/grok-4.7/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/national-park.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-waterfall/grok-4.7/">Voxel Waterfall</a>
                 <span class="date">09-22</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-waterfall/tasks/voxel-waterfall/solutions/grok-4.7">源码</a>
@@ -4232,25 +4044,21 @@
           <div class="model-card" data-item data-effort-scope data-search="grok 4.6 grok-4.6 xai grok-4.6 grok-4.6 grok-4.6 grok-4.6-high">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true"><img src="_gallery/logos/grok.svg" alt="" decoding="async" /></span><div><h3>Grok 4.6</h3><code>grok-4.6</code></div></div><span class="seg" role="group" aria-label="思考程度"><button type="button" data-effort-choice="high" aria-pressed="true">high</button><button type="button" data-effort-choice="max" aria-pressed="false">max</button></span></div>
             <ul class="works" data-effort="high"><li class="work">
-                <img class="work-art" src="_gallery/emoji/national-park.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-waterfall/grok-4.6-high/">Voxel Waterfall</a>
                 <span class="date">08-27</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-waterfall/tasks/voxel-waterfall/solutions/grok-4.6-high">源码</a>
                 <span class="sub-link off">无报告</span>
               </li></ul><ul class="works" data-effort="max" hidden><li class="work">
-                <img class="work-art" src="_gallery/emoji/bullseye.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="cs-pvp-diorama/grok-4.6/">CS PVP Diorama</a>
                 <span class="date">08-31</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/grok-4.6">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/grok-4.6/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/artist-palette.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="ui-ux-design/grok-4.6/">UI/UX Design</a>
                 <span class="date">08-27</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/ui-ux-design/tasks/ui-ux-design/solutions/grok-4.6">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/grok-4.6/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/national-park.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-waterfall/grok-4.6/">Voxel Waterfall</a>
                 <span class="date">08-26</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-waterfall/tasks/voxel-waterfall/solutions/grok-4.6">源码</a>
@@ -4263,19 +4071,16 @@
           <div class="model-card" data-item data-effort-scope data-search="mimo v2.6 pro mimo-v2.6-pro xiaomi mimo-v2.6-pro mimo-v2.6-pro mimo-v2.6-pro">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true">M</span><div><h3>MiMo V2.6 Pro</h3><code>mimo-v2.6-pro</code></div></div></div>
             <ul class="works" data-effort="思考开启"><li class="work">
-                <img class="work-art" src="_gallery/emoji/milky-way.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="gargantua-schwarzschild-raytracer/mimo-v2.6-pro/">GARGANTUA</a>
                 <span class="date">09-23</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/mimo-v2.6-pro">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/mimo-v2.6-pro/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/artist-palette.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="ui-ux-design/mimo-v2.6-pro/">UI/UX Design</a>
                 <span class="date">09-22</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/ui-ux-design/tasks/ui-ux-design/solutions/mimo-v2.6-pro">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/mimo-v2.6-pro/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/japanese-castle.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-chinese-architecture/mimo-v2.6-pro/">Voxel Chinese Architecture</a>
                 <span class="date">09-22</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-chinese-architecture/tasks/voxel-chinese-architecture/solutions/mimo-v2.6-pro">源码</a>
@@ -4285,37 +4090,31 @@
           <div class="model-card" data-item data-effort-scope data-search="mimo v2.6 flash mimo-v2.6-flash xiaomi mimo-v2.6-flash mimo-v2.6-flash mimo-v2.6-flash mimo-v2.6-flash mimo-v2.6-flash mimo-v2.6-flash">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true">M</span><div><h3>MiMo V2.6 Flash</h3><code>mimo-v2.6-flash</code></div></div></div>
             <ul class="works" data-effort="思考开启"><li class="work">
-                <img class="work-art" src="_gallery/emoji/bullseye.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="cs-pvp-diorama/mimo-v2.6-flash/">CS PVP Diorama</a>
                 <span class="date">09-22</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/mimo-v2.6-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/mimo-v2.6-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/milky-way.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="gargantua-schwarzschild-raytracer/mimo-v2.6-flash/">GARGANTUA</a>
                 <span class="date">09-22</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/mimo-v2.6-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/mimo-v2.6-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/convenience-store.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="rainy-konbini-diorama/mimo-v2.6-flash/">Rainy Konbini Diorama</a>
                 <span class="date">09-29</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/mimo-v2.6-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/mimo-v2.6-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/artist-palette.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="ui-ux-design/mimo-v2.6-flash/">UI/UX Design</a>
                 <span class="date">09-22</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/ui-ux-design/tasks/ui-ux-design/solutions/mimo-v2.6-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/mimo-v2.6-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/japanese-castle.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-chinese-architecture/mimo-v2.6-flash/">Voxel Chinese Architecture</a>
                 <span class="date">09-22</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-chinese-architecture/tasks/voxel-chinese-architecture/solutions/mimo-v2.6-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/voxel-chinese-architecture/tasks/voxel-chinese-architecture/solutions/mimo-v2.6-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/national-park.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-waterfall/mimo-v2.6-flash/">Voxel Waterfall</a>
                 <span class="date">09-22</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-waterfall/tasks/voxel-waterfall/solutions/mimo-v2.6-flash">源码</a>
@@ -4328,31 +4127,26 @@
           <div class="model-card" data-item data-effort-scope data-search="glm-5.3 flash glm-5.3-flash z.ai glm-5.3-flash glm-5.3-flash glm-5.3-flash glm-5.3-flash glm-5.3-flash">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true"><img src="_gallery/logos/zai.svg" alt="" decoding="async" /></span><div><h3>GLM-5.3 Flash</h3><code>glm-5.3-flash</code></div></div></div>
             <ul class="works" data-effort="max"><li class="work">
-                <img class="work-art" src="_gallery/emoji/bullseye.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="cs-pvp-diorama/glm-5.3-flash/">CS PVP Diorama</a>
                 <span class="date">09-28</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/glm-5.3-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/glm-5.3-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/milky-way.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="gargantua-schwarzschild-raytracer/glm-5.3-flash/">GARGANTUA</a>
                 <span class="date">09-28</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/glm-5.3-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/glm-5.3-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/artist-palette.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="ui-ux-design/glm-5.3-flash/">UI/UX Design</a>
                 <span class="date">09-28</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/ui-ux-design/tasks/ui-ux-design/solutions/glm-5.3-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/glm-5.3-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/japanese-castle.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-chinese-architecture/glm-5.3-flash/">Voxel Chinese Architecture</a>
                 <span class="date">09-28</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-chinese-architecture/tasks/voxel-chinese-architecture/solutions/glm-5.3-flash">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/voxel-chinese-architecture/tasks/voxel-chinese-architecture/solutions/glm-5.3-flash/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/national-park.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-waterfall/glm-5.3-flash/">Voxel Waterfall</a>
                 <span class="date">09-28</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-waterfall/tasks/voxel-waterfall/solutions/glm-5.3-flash">源码</a>
@@ -4362,31 +4156,26 @@
           <div class="model-card" data-item data-effort-scope data-search="glm-5.3 glm-5.3 z.ai glm-5.3 glm-5.3 glm-5.3 glm-5.3 glm-5.3">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true"><img src="_gallery/logos/zai.svg" alt="" decoding="async" /></span><div><h3>GLM-5.3</h3><code>glm-5.3</code></div></div></div>
             <ul class="works" data-effort="max"><li class="work">
-                <img class="work-art" src="_gallery/emoji/bullseye.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="cs-pvp-diorama/glm-5.3/">CS PVP Diorama</a>
                 <span class="date">08-31</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/glm-5.3">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/glm-5.3/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/milky-way.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="gargantua-schwarzschild-raytracer/glm-5.3/">GARGANTUA</a>
                 <span class="date">09-23</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/glm-5.3">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/glm-5.3/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/convenience-store.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="rainy-konbini-diorama/glm-5.3/">Rainy Konbini Diorama</a>
                 <span class="date">09-29</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/glm-5.3">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/rainy-konbini-diorama/tasks/rainy-konbini-diorama/solutions/glm-5.3/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/artist-palette.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="ui-ux-design/glm-5.3/">UI/UX Design</a>
                 <span class="date">08-27</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/ui-ux-design/tasks/ui-ux-design/solutions/glm-5.3">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/ui-ux-design/tasks/ui-ux-design/solutions/glm-5.3/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/national-park.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-waterfall/glm-5.3/">Voxel Waterfall</a>
                 <span class="date">08-29</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-waterfall/tasks/voxel-waterfall/solutions/glm-5.3">源码</a>
@@ -4399,7 +4188,6 @@
           <div class="model-card" data-item data-effort-scope data-search="zcode harness zcode-harness 多模型组合 zcode-harness">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true">Z</span><div><h3>ZCode Harness</h3><code>zcode-harness</code></div></div></div>
             <ul class="works" data-effort="max"><li class="work">
-                <img class="work-art" src="_gallery/emoji/satellite.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="orbital-habitat-diorama/zcode-harness/">Orbital Habitat Diorama</a>
                 <span class="date">10-01</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/orbital-habitat-diorama/tasks/orbital-habitat-diorama/solutions/zcode-harness">源码</a>
@@ -4409,7 +4197,6 @@
           <div class="model-card" data-item data-effort-scope data-search="omp: gpt-6 sol + minimax m3 omp-gpt-6-sol-minimax-m3 多模型组合 omp-gpt-6-sol-minimax-m3">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true">O</span><div><h3>OMP: GPT-6 Sol + MiniMax M3</h3><code>omp-gpt-6-sol-minimax-m3</code></div></div></div>
             <ul class="works" data-effort="max"><li class="work">
-                <img class="work-art" src="_gallery/emoji/milky-way.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="gargantua-schwarzschild-raytracer/omp-gpt-6-sol-minimax-m3/">GARGANTUA</a>
                 <span class="date">09-23</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/omp-gpt-6-sol-minimax-m3">源码</a>
@@ -4422,13 +4209,11 @@
           <div class="model-card" data-item data-effort-scope data-search="space bunny free space-bunny-free 未知厂商 space-bunny-free space-bunny-free">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true">S</span><div><h3>Space Bunny Free</h3><code>space-bunny-free</code></div></div></div>
             <ul class="works" data-effort="max"><li class="work">
-                <img class="work-art" src="_gallery/emoji/bullseye.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="cs-pvp-diorama/space-bunny-free/">CS PVP Diorama</a>
                 <span class="date">09-25</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/space-bunny-free">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/space-bunny-free/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/national-park.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="voxel-waterfall/space-bunny-free/">Voxel Waterfall</a>
                 <span class="date">09-25</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/voxel-waterfall/tasks/voxel-waterfall/solutions/space-bunny-free">源码</a>
@@ -4438,7 +4223,6 @@
           <div class="model-card" data-item data-effort-scope data-search="cursor-c343 cursor-c343 未知厂商 cursor-c343">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true">c</span><div><h3>cursor-c343</h3><code>cursor-c343</code></div></div></div>
             <ul class="works" data-effort="max"><li class="work">
-                <img class="work-art" src="_gallery/emoji/milky-way.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="gargantua-schwarzschild-raytracer/cursor-c343/">GARGANTUA<span class="variant">Cursor</span></a>
                 <span class="date">09-23</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/cursor-c343">源码</a>
@@ -4451,13 +4235,11 @@
           <div class="model-card" data-item data-effort-scope data-search="hy4free hy4free 未归类 hy4free-high hy4free-high">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true">h</span><div><h3>hy4free</h3><code>hy4free</code></div></div></div>
             <ul class="works" data-effort="high"><li class="work">
-                <img class="work-art" src="_gallery/emoji/bullseye.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="cs-pvp-diorama/hy4free-high/">CS PVP Diorama</a>
                 <span class="date">11-05</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/hy4free-high">源码</a>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/blob/llm/cs-pvp-diorama/tasks/cs-pvp-diorama/solutions/hy4free-high/RESULTS.md">报告</a>
               </li><li class="work">
-                <img class="work-art" src="_gallery/emoji/milky-way.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="gargantua-schwarzschild-raytracer/hy4free-high/">GARGANTUA</a>
                 <span class="date">11-05</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/hy4free-high">源码</a>
@@ -4467,7 +4249,6 @@
           <div class="model-card" data-item data-effort-scope data-search="hy4 hy4 未归类 hy4-high">
             <div class="model-head"><div class="who"><span class="avatar md" aria-hidden="true">h</span><div><h3>hy4</h3><code>hy4</code></div></div></div>
             <ul class="works" data-effort="high"><li class="work">
-                <img class="work-art" src="_gallery/emoji/milky-way.png" alt="" width="28" height="28" decoding="async" />
                 <a class="work-name" href="gargantua-schwarzschild-raytracer/hy4-high/">GARGANTUA</a>
                 <span class="date">11-05</span>
                 <a class="sub-link" href="https://github.com/narwhrl/llm-evals/tree/llm/gargantua-schwarzschild-raytracer/tasks/gargantua-schwarzschild-raytracer/solutions/hy4-high">源码</a>
@@ -4479,7 +4260,7 @@
       </section>
       <section class="view" data-view="guide" aria-label="运行指南" hidden>
         <header class="view-head">
-          <h1 tabindex="-1"><img class="h-art" src="_gallery/emoji/clipboard.png" alt="" width="40" height="40" decoding="async" />运行指南</h1>
+          <h1 tabindex="-1">运行指南</h1>
           <p class="meta">每个模型一个独立文件夹 · 同一轮的模型发同一段提示词，只换尖括号里的值</p>
         </header>
         <section class="step">
@@ -4521,11 +4302,11 @@ node deploy/pages.mjs</code></pre><button class="pill sm copy" type="button" dat
       </section>
       <section class="view" data-view="cs-pvp-diorama" aria-label="CS PVP Diorama" hidden>
         <header class="view-head">
-          <h1 tabindex="-1"><img class="h-art" src="_gallery/emoji/bullseye.png" alt="" width="40" height="40" decoding="async" />CS PVP Diorama</h1>
+          <h1 tabindex="-1">CS PVP Diorama</h1>
           <p class="meta">17 份 · 17 / 29 个模型做过</p><a class="pill" href="https://github.com/narwhrl/llm-evals/blob/main/tasks/cs-pvp-diorama/task.md"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5zM4 21.5A2.5 2.5 0 0 1 6.5 19H20v3H6.5"/></svg>查看题面</a>
         </header>
         <div class="stage wide" id="stage-cs-pvp-diorama" data-stage data-shared>
-          <div class="stage-idle"><img class="stage-art" src="_gallery/emoji/bullseye.png" alt="" width="72" height="72" decoding="async" /><p class="hint">从下面任选一份，在这里运行</p></div>
+          <div class="stage-idle"><p class="hint">从下面任选一份，在这里运行</p></div>
         </div>
         <section class="group" data-group>
           <h2 class="group-head"><img class="vendor-logo" src="_gallery/logos/anthropic.svg" alt="" width="18" height="18" decoding="async" />Anthropic</h2>
@@ -4710,11 +4491,11 @@ node deploy/pages.mjs</code></pre><button class="pill sm copy" type="button" dat
       </section>
       <section class="view" data-view="gargantua-schwarzschild-raytracer" aria-label="GARGANTUA — Schwarzschild Black Hole Raytracer" hidden>
         <header class="view-head">
-          <h1 tabindex="-1"><img class="h-art" src="_gallery/emoji/milky-way.png" alt="" width="40" height="40" decoding="async" />GARGANTUA</h1>
+          <h1 tabindex="-1">GARGANTUA</h1>
           <p class="meta">Schwarzschild Black Hole Raytracer · 20 份 · 20 / 29 个模型做过</p><a class="pill" href="https://github.com/narwhrl/llm-evals/blob/main/tasks/gargantua-schwarzschild-raytracer/task.md"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5zM4 21.5A2.5 2.5 0 0 1 6.5 19H20v3H6.5"/></svg>查看题面</a>
         </header>
         <div class="stage wide" id="stage-gargantua-schwarzschild-raytracer" data-stage data-shared>
-          <div class="stage-idle"><img class="stage-art" src="_gallery/emoji/milky-way.png" alt="" width="72" height="72" decoding="async" /><p class="hint">从下面任选一份，在这里运行</p></div>
+          <div class="stage-idle"><p class="hint">从下面任选一份，在这里运行</p></div>
         </div>
         <section class="group" data-group>
           <h2 class="group-head"><img class="vendor-logo" src="_gallery/logos/anthropic.svg" alt="" width="18" height="18" decoding="async" />Anthropic</h2>
@@ -4925,11 +4706,11 @@ node deploy/pages.mjs</code></pre><button class="pill sm copy" type="button" dat
       </section>
       <section class="view" data-view="orbital-habitat-diorama" aria-label="Orbital Habitat Diorama" hidden>
         <header class="view-head">
-          <h1 tabindex="-1"><img class="h-art" src="_gallery/emoji/satellite.png" alt="" width="40" height="40" decoding="async" />Orbital Habitat Diorama</h1>
+          <h1 tabindex="-1">Orbital Habitat Diorama</h1>
           <p class="meta">7 份 · 7 / 29 个模型做过</p><a class="pill" href="https://github.com/narwhrl/llm-evals/blob/main/tasks/orbital-habitat-diorama/task.md"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5zM4 21.5A2.5 2.5 0 0 1 6.5 19H20v3H6.5"/></svg>查看题面</a>
         </header>
         <div class="stage wide" id="stage-orbital-habitat-diorama" data-stage data-shared>
-          <div class="stage-idle"><img class="stage-art" src="_gallery/emoji/satellite.png" alt="" width="72" height="72" decoding="async" /><p class="hint">从下面任选一份，在这里运行</p></div>
+          <div class="stage-idle"><p class="hint">从下面任选一份，在这里运行</p></div>
         </div>
         <section class="group" data-group>
           <h2 class="group-head"><img class="vendor-logo" src="_gallery/logos/devin.svg" alt="" width="18" height="18" decoding="async" />Cognition</h2>
@@ -5014,11 +4795,11 @@ node deploy/pages.mjs</code></pre><button class="pill sm copy" type="button" dat
       </section>
       <section class="view" data-view="rainy-konbini-diorama" aria-label="Rainy Konbini Diorama" hidden>
         <header class="view-head">
-          <h1 tabindex="-1"><img class="h-art" src="_gallery/emoji/convenience-store.png" alt="" width="40" height="40" decoding="async" />Rainy Konbini Diorama</h1>
+          <h1 tabindex="-1">Rainy Konbini Diorama</h1>
           <p class="meta">12 份 · 12 / 29 个模型做过</p><a class="pill" href="https://github.com/narwhrl/llm-evals/blob/main/tasks/rainy-konbini-diorama/task.md"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5zM4 21.5A2.5 2.5 0 0 1 6.5 19H20v3H6.5"/></svg>查看题面</a>
         </header>
         <div class="stage wide" id="stage-rainy-konbini-diorama" data-stage data-shared>
-          <div class="stage-idle"><img class="stage-art" src="_gallery/emoji/convenience-store.png" alt="" width="72" height="72" decoding="async" /><p class="hint">从下面任选一份，在这里运行</p></div>
+          <div class="stage-idle"><p class="hint">从下面任选一份，在这里运行</p></div>
         </div>
         <section class="group" data-group>
           <h2 class="group-head"><img class="vendor-logo" src="_gallery/logos/anthropic.svg" alt="" width="18" height="18" decoding="async" />Anthropic</h2>
@@ -5148,11 +4929,11 @@ node deploy/pages.mjs</code></pre><button class="pill sm copy" type="button" dat
       </section>
       <section class="view" data-view="ui-ux-design" aria-label="UI/UX Design" hidden>
         <header class="view-head">
-          <h1 tabindex="-1"><img class="h-art" src="_gallery/emoji/artist-palette.png" alt="" width="40" height="40" decoding="async" />UI/UX Design</h1>
+          <h1 tabindex="-1">UI/UX Design</h1>
           <p class="meta">17 份 · 17 / 29 个模型做过</p><a class="pill" href="https://github.com/narwhrl/llm-evals/blob/main/tasks/ui-ux-design/task.md"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5zM4 21.5A2.5 2.5 0 0 1 6.5 19H20v3H6.5"/></svg>查看题面</a>
         </header>
         <div class="stage wide" id="stage-ui-ux-design" data-stage data-shared>
-          <div class="stage-idle"><img class="stage-art" src="_gallery/emoji/artist-palette.png" alt="" width="72" height="72" decoding="async" /><p class="hint">从下面任选一份，在这里运行</p></div>
+          <div class="stage-idle"><p class="hint">从下面任选一份，在这里运行</p></div>
         </div>
         <section class="group" data-group>
           <h2 class="group-head"><img class="vendor-logo" src="_gallery/logos/devin.svg" alt="" width="18" height="18" decoding="async" />Cognition</h2>
@@ -5322,11 +5103,11 @@ node deploy/pages.mjs</code></pre><button class="pill sm copy" type="button" dat
       </section>
       <section class="view" data-view="voxel-chinese-architecture" aria-label="Voxel Chinese Architecture" hidden>
         <header class="view-head">
-          <h1 tabindex="-1"><img class="h-art" src="_gallery/emoji/japanese-castle.png" alt="" width="40" height="40" decoding="async" />Voxel Chinese Architecture</h1>
+          <h1 tabindex="-1">Voxel Chinese Architecture</h1>
           <p class="meta">12 份 · 12 / 29 个模型做过</p><a class="pill" href="https://github.com/narwhrl/llm-evals/blob/main/tasks/voxel-chinese-architecture/task.md"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5zM4 21.5A2.5 2.5 0 0 1 6.5 19H20v3H6.5"/></svg>查看题面</a>
         </header>
         <div class="stage wide" id="stage-voxel-chinese-architecture" data-stage data-shared>
-          <div class="stage-idle"><img class="stage-art" src="_gallery/emoji/japanese-castle.png" alt="" width="72" height="72" decoding="async" /><p class="hint">从下面任选一份，在这里运行</p></div>
+          <div class="stage-idle"><p class="hint">从下面任选一份，在这里运行</p></div>
         </div>
         <section class="group" data-group>
           <h2 class="group-head"><img class="vendor-logo" src="_gallery/logos/anthropic.svg" alt="" width="18" height="18" decoding="async" />Anthropic</h2>
@@ -5461,11 +5242,11 @@ node deploy/pages.mjs</code></pre><button class="pill sm copy" type="button" dat
       </section>
       <section class="view" data-view="voxel-waterfall" aria-label="Voxel Waterfall" hidden>
         <header class="view-head">
-          <h1 tabindex="-1"><img class="h-art" src="_gallery/emoji/national-park.png" alt="" width="40" height="40" decoding="async" />Voxel Waterfall</h1>
+          <h1 tabindex="-1">Voxel Waterfall</h1>
           <p class="meta">16 份 · 15 / 29 个模型做过</p><a class="pill" href="https://github.com/narwhrl/llm-evals/blob/main/tasks/voxel-waterfall/task.md"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5zM4 21.5A2.5 2.5 0 0 1 6.5 19H20v3H6.5"/></svg>查看题面</a>
         </header>
         <div class="stage wide" id="stage-voxel-waterfall" data-stage data-shared>
-          <div class="stage-idle"><img class="stage-art" src="_gallery/emoji/national-park.png" alt="" width="72" height="72" decoding="async" /><p class="hint">从下面任选一份，在这里运行</p></div>
+          <div class="stage-idle"><p class="hint">从下面任选一份，在这里运行</p></div>
         </div>
         <section class="group" data-group>
           <h2 class="group-head"><img class="vendor-logo" src="_gallery/logos/devin.svg" alt="" width="18" height="18" decoding="async" />Cognition</h2>
@@ -5648,9 +5429,9 @@ node deploy/pages.mjs</code></pre><button class="pill sm copy" type="button" dat
       <section>
         <h2 class="rail-head">做的人最少</h2>
         <ul class="least">
-          <li><a href="#orbital-habitat-diorama"><img class="least-art" src="_gallery/emoji/satellite.png" alt="" width="32" height="32" decoding="async" /><span><b>Orbital Habitat Diorama</b><small>7 / 29 个模型做过</small></span></a></li>
-          <li><a href="#rainy-konbini-diorama"><img class="least-art" src="_gallery/emoji/convenience-store.png" alt="" width="32" height="32" decoding="async" /><span><b>Rainy Konbini Diorama</b><small>12 / 29 个模型做过</small></span></a></li>
-          <li><a href="#voxel-chinese-architecture"><img class="least-art" src="_gallery/emoji/japanese-castle.png" alt="" width="32" height="32" decoding="async" /><span><b>Voxel Chinese Architecture</b><small>12 / 29 个模型做过</small></span></a></li>
+          <li><a href="#orbital-habitat-diorama"><span><b>Orbital Habitat Diorama</b><small>7 / 29 个模型做过</small></span></a></li>
+          <li><a href="#rainy-konbini-diorama"><span><b>Rainy Konbini Diorama</b><small>12 / 29 个模型做过</small></span></a></li>
+          <li><a href="#voxel-chinese-architecture"><span><b>Voxel Chinese Architecture</b><small>12 / 29 个模型做过</small></span></a></li>
         </ul>
       </section>
     </aside>
