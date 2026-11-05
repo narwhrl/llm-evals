@@ -59,6 +59,17 @@
           "reason": "Earlier revision at the same gallery path, built from baseline 63a46c3. Its tag and commit remain intact for audit; the gallery now serves this rerun from baseline 091c801."
         }
       ]
+    },
+    {
+      "candidateId": "hy4free-high",
+      "baselineMain": "8416a7da87b303d0489f47d09309a6fe2f671114",
+      "inputTree": "4be6a8145d569c0e17555c7567b691d4aab01f44",
+      "sourceRef": "run:../llm-runs/gargantua-schwarzschild-raytracer/hy4free-high",
+      "sourceCommit": "a71d3026e248abd5ac20b1e97d4cfc33e537505b",
+      "sourceTree": "c24d43e1d151e565ad227e38ab6922e34fda724e",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/hy4free-high",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/hy4free-high",
+      "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/hy4free-high/RESULTS.md"
     }
   ]
 }
