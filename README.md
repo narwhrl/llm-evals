@@ -17,6 +17,7 @@ This repository compares coding models under the same task, context, tools, and 
 | `cs-pvp-diorama` | [`tasks/cs-pvp-diorama/`](tasks/cs-pvp-diorama/) | `llm/cs-pvp-diorama` |
 | `gargantua-schwarzschild-raytracer` | [`tasks/gargantua-schwarzschild-raytracer/`](tasks/gargantua-schwarzschild-raytracer/) | `llm/gargantua-schwarzschild-raytracer` |
 | `orbital-habitat-diorama` | [`tasks/orbital-habitat-diorama/`](tasks/orbital-habitat-diorama/) | `llm/orbital-habitat-diorama` |
+| `railway-town-diorama` | [`tasks/railway-town-diorama/`](tasks/railway-town-diorama/) | `llm/railway-town-diorama` |
 | `rainy-konbini-diorama` | [`tasks/rainy-konbini-diorama/`](tasks/rainy-konbini-diorama/) | `llm/rainy-konbini-diorama` |
 | `ui-ux-design` | [`tasks/ui-ux-design/`](tasks/ui-ux-design/) | `llm/ui-ux-design` |
 | `voxel-chinese-architecture` | [`tasks/voxel-chinese-architecture/`](tasks/voxel-chinese-architecture/) | `llm/voxel-chinese-architecture` |
