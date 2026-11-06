@@ -277,6 +277,7 @@ const VENDORS = [
   ["glm", "Z.ai", "GLM", "-"],
   ["gpt", "OpenAI", "GPT", "-"],
   ["grok", "xAI", "Grok"],
+  ["hy4", "Tencent", "Hunyuan 4"],
   ["kimi", "Moonshot AI", "Kimi"],
   ["mimo", "Xiaomi", "MiMo"],
   ["minimax", "MiniMax", "MiniMax"],
@@ -286,6 +287,7 @@ const VENDORS = [
 const ALIASES = {
   "opus-5.5": { model: "claude-opus-5.5" },
   "cursor-kimi-k3": { model: "kimi-k3", variant: "Cursor" },
+  "hy4free-high": { model: "hy4-high", variant: "Free" },
   "cursor-c343": { vendor: "未知厂商", name: "cursor-c343", variant: "Cursor" },
   "space-bunny-free": { vendor: "未知厂商", name: "Space Bunny Free" },
   "zcode-harness": { vendor: "多模型组合", name: "ZCode Harness" },
