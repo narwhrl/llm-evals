@@ -12,6 +12,17 @@
       "archiveTag": "candidate/genshin-celestia/claude-opus-5.5",
       "destination": "tasks/genshin-celestia/solutions/claude-opus-5.5",
       "resultReport": "tasks/genshin-celestia/solutions/claude-opus-5.5/RESULTS.md"
+    },
+    {
+      "candidateId": "gpt-6-astra-ultra",
+      "baselineMain": "55b71efeded8a28b59af881484296ca606a067e1",
+      "inputTree": "389f036e69eec03ef669224fc15bcf8a85992750",
+      "sourceRef": "run:../llm-runs/genshin-celestia/gpt-6-astra-ultra",
+      "sourceCommit": "5f90e8b55a007f71b040436c379c097c7e830d32",
+      "sourceTree": "a46c6dc1419d9d11afb8ddc2fcd21d977f0962a7",
+      "archiveTag": "candidate/genshin-celestia/gpt-6-astra-ultra",
+      "destination": "tasks/genshin-celestia/solutions/gpt-6-astra-ultra",
+      "resultReport": "tasks/genshin-celestia/solutions/gpt-6-astra-ultra/RESULTS.md"
     }
   ]
 }
