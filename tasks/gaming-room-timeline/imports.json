@@ -12,6 +12,17 @@
       "archiveTag": "candidate/gaming-room-timeline/claude-opus-5.5",
       "destination": "tasks/gaming-room-timeline/solutions/claude-opus-5.5",
       "resultReport": "tasks/gaming-room-timeline/solutions/claude-opus-5.5/RESULTS.md"
+    },
+    {
+      "candidateId": "gpt-6-astra-ultra",
+      "baselineMain": "55b71efeded8a28b59af881484296ca606a067e1",
+      "inputTree": "b307c133553f86206f182ea1e76bb923e6c70b1f",
+      "sourceRef": "run:../llm-runs/gaming-room-timeline/gpt-6-astra-ultra",
+      "sourceCommit": "b93b599e4ceff1ffc3ab9bca9c73d5f4b387deca",
+      "sourceTree": "6232b2ccdd4a0076dd4e5acf898af0634bd76a3f",
+      "archiveTag": "candidate/gaming-room-timeline/gpt-6-astra-ultra",
+      "destination": "tasks/gaming-room-timeline/solutions/gpt-6-astra-ultra",
+      "resultReport": "tasks/gaming-room-timeline/solutions/gpt-6-astra-ultra/RESULTS.md"
     }
   ]
 }

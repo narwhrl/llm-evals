@@ -1,0 +1,8 @@
+node_modules/
+dist/
+dist-subpath/
+.npm-cache/
+evidence/
+.browsers/
+test-results/
+playwright-report/
