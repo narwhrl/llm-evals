@@ -51,7 +51,7 @@ llm-evals/                              # repository root; always main
 
 ## Candidate IDs
 
-A candidate ID is the model ID, optionally followed by the reasoning effort used for the run: `<model-id>[-<effort>]`, where `<effort>` is one of `minimal`, `low`, `medium`, `high`, `xhigh`, or `max`. Omit the suffix when the run used the model's default effort, for example `gpt-6.1-sol` or `grok-4.6-high`. The default is `max`, except `high` for Gemini models and `xhigh` for `grok-4.7`; MiMo models and `minimax-m3` have no effort levels, only thinking on, shown as `思考开启`. These defaults live in `DEFAULT_EFFORTS` in `deploy/build.mjs`. The gallery groups candidates by this convention. Reports and the gallery write the effort as `<model-id>:<effort>`, for example `grok-4.6:high`; candidate IDs use a hyphen instead because Git ref names and Windows paths cannot contain `:`.
+A candidate ID is the model ID, optionally followed by the reasoning effort used for the run: `<model-id>[-<effort>]`, where `<effort>` is one of `minimal`, `low`, `medium`, `high`, `xhigh`, `max`, or `ultra`. Omit the suffix when the run used the model's default effort, for example `gpt-6.1-sol` or `grok-4.6-high`. The default is `max`, except `high` for Gemini models and `xhigh` for `grok-4.7`; MiMo models and `minimax-m3` have no effort levels, only thinking on, shown as `思考开启`. These defaults live in `DEFAULT_EFFORTS` in `deploy/build.mjs`. The gallery groups candidates by this convention. Reports and the gallery write the effort as `<model-id>:<effort>`, for example `grok-4.6:high`; candidate IDs use a hyphen instead because Git ref names and Windows paths cannot contain `:`.
 
 ## Standard Evaluation Workflow
 
