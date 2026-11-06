@@ -12,6 +12,17 @@
       "archiveTag": "candidate/railway-town-diorama/claude-opus-5.5",
       "destination": "tasks/railway-town-diorama/solutions/claude-opus-5.5",
       "resultReport": "tasks/railway-town-diorama/solutions/claude-opus-5.5/RESULTS.md"
+    },
+    {
+      "candidateId": "gpt-6-astra-ultra",
+      "baselineMain": "55b71efeded8a28b59af881484296ca606a067e1",
+      "inputTree": "f375976dcefcad1a507c3dec3f5d48092e191120",
+      "sourceRef": "run:../llm-runs/railway-town-diorama/gpt-6-astra-ultra",
+      "sourceCommit": "be61d2c5f58d7615d7bdde6dc61894c8dd3068a9",
+      "sourceTree": "01d236324c84ed89acd9c71d29d7b50448fba408",
+      "archiveTag": "candidate/railway-town-diorama/gpt-6-astra-ultra",
+      "destination": "tasks/railway-town-diorama/solutions/gpt-6-astra-ultra",
+      "resultReport": "tasks/railway-town-diorama/solutions/gpt-6-astra-ultra/RESULTS.md"
     }
   ]
 }
