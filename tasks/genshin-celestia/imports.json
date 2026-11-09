@@ -23,6 +23,17 @@
       "archiveTag": "candidate/genshin-celestia/gpt-6-astra-ultra",
       "destination": "tasks/genshin-celestia/solutions/gpt-6-astra-ultra",
       "resultReport": "tasks/genshin-celestia/solutions/gpt-6-astra-ultra/RESULTS.md"
+    },
+    {
+      "candidateId": "crouton-alpha-max",
+      "baselineMain": "bb5e741d5c1148ab73932f26803d54d9da42b062",
+      "inputTree": "389f036e69eec03ef669224fc15bcf8a85992750",
+      "sourceRef": "run:../llm-runs/genshin-celestia/crouton-alpha-max",
+      "sourceCommit": "1ef5ddba469b92727478c75a75411a2834771825",
+      "sourceTree": "57167881f3cd09861149c8420974e0fc50fc5a30",
+      "archiveTag": "candidate/genshin-celestia/crouton-alpha-max",
+      "destination": "tasks/genshin-celestia/solutions/crouton-alpha-max",
+      "resultReport": "tasks/genshin-celestia/solutions/crouton-alpha-max/RESULTS.md"
     }
   ]
 }
