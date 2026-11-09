@@ -288,8 +288,8 @@ const ALIASES = {
   "opus-5.5": { model: "claude-opus-5.5" },
   "cursor-kimi-k3": { model: "kimi-k3", variant: "Cursor" },
   "hy4free-high": { model: "hy4-high", variant: "Free" },
-  "cursor-c343": { vendor: "未知厂商", name: "cursor-c343", variant: "Cursor" },
-  "space-bunny-free": { vendor: "未知厂商", name: "Space Bunny Free" },
+  "cursor-c343": { vendor: "Stealth", name: "cursor-c343", variant: "Cursor" },
+  "space-bunny-free": { vendor: "Stealth", name: "Space Bunny Free" },
   "zcode-harness": { vendor: "多模型组合", name: "ZCode Harness" },
   "omp-gpt-6-sol-minimax-m3": { vendor: "多模型组合", name: "OMP: GPT-6 Sol + MiniMax M3" },
 };
@@ -297,7 +297,7 @@ const ALIASES = {
 const DEFAULT_EFFORTS = { gemini: "high", "grok-4.7": "xhigh", mimo: "思考开启", "minimax-m3": "思考开启" };
 const defaultEffort = (modelId) => DEFAULT_EFFORTS[modelId] ?? DEFAULT_EFFORTS[modelId.split("-")[0]] ?? "max";
 const UNCLASSIFIED = "未归类";
-const TRAILING_GROUPS = ["多模型组合", "未知厂商", UNCLASSIFIED];
+const TRAILING_GROUPS = ["多模型组合", "Stealth", UNCLASSIFIED];
 
 function identify(candidate) {
   const alias = ALIASES[candidate] ?? {};
