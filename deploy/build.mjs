@@ -272,6 +272,7 @@ const EFFORTS = ["minimal", "low", "medium", "high", "xhigh", "max", "ultra"];
 // 按 model id 首段识别厂商：[首段, 厂商, 品牌名, 品牌与版本号之间的连接符]。
 const VENDORS = [
   ["claude", "Anthropic", "Claude"],
+  ["crouton", "Stealth", "Crouton"],
   ["deepseek", "DeepSeek", "DeepSeek"],
   ["gemini", "Google", "Gemini"],
   ["glm", "Z.ai", "GLM", "-"],

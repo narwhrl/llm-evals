@@ -147,6 +147,8 @@ Every pushed task branch is built once and published to two hosts with the same 
 
   A model with candidates at several reasoning efforts gets a switch between them. Completion dates come from the candidate tags' commit dates. Vendor and model logos come from `@lobehub/icons-static-svg` 1.97.0 (MIT, `deploy/assets/logos/`); the marks belong to their owners. Fonts are self-hosted OFL faces in `deploy/assets/fonts/`. The Chinese heading face is a subset covering only the characters in `deploy/build.mjs`, so new heading text needs a regenerated subset.
 
+Anonymous limited-time models, including Qoduck and Crouton Alpha, are grouped under Stealth.
+
 ### Publish or Update
 
 Prerequisites: Node.js with npm, and an authenticated Wrangler session (`npx wrangler login`) on an account that owns the `narwh.dev` zone, plus push access to `origin` for GitHub Pages. Run the commands from the repository root:
