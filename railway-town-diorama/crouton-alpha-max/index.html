@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>铁路小镇沙盘 · Crouton Alpha</title>
+    <style>
+      html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #2b2118; }
+      #app { position: fixed; inset: 0; }
+      #app canvas { display: block; }
+      .panel {
+        position: fixed; left: 50%; transform: translateX(-50%);
+        bottom: 14px; display: flex; align-items: center; gap: 10px;
+        background: rgba(38, 28, 18, 0.82); border: 1px solid #6b543a;
+        border-radius: 12px; padding: 8px 12px; color: #f3e2c2;
+        font-family: "Microsoft YaHei", system-ui, sans-serif; font-size: 13px;
+        backdrop-filter: blur(3px); z-index: 10; flex-wrap: wrap; justify-content: center;
+      }
+      .panel button {
+        background: #4a3823; color: #ffe9bd; border: 1px solid #8a6d45;
+        border-radius: 8px; padding: 5px 12px; cursor: pointer; font-size: 13px;
+      }
+      .panel button.active { background: #8a5a22; border-color: #d9a54e; }
+      .panel label { display: flex; align-items: center; gap: 6px; }
+      .panel input[type="range"] { width: 110px; }
+      .title {
+        position: fixed; left: 14px; top: 12px; color: #f3e2c2;
+        font-family: "Microsoft YaHei", system-ui, sans-serif;
+        background: rgba(38, 28, 18, 0.6); padding: 6px 12px; border-radius: 10px;
+        border: 1px solid rgba(138, 109, 69, 0.5); font-size: 13px; z-index: 10;
+      }
+    </style>
+    <script type="module" crossorigin src="/llm-evals/railway-town-diorama/crouton-alpha-max/assets/index-qIddo1gA.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <div class="title">铁路小镇沙盘 · 拖动旋转，滚轮缩放</div>
+    <div class="panel">
+      <button id="btnPlay">暂停</button>
+      <button id="btnDay">夜晚</button>
+      <button id="btnReset">复位</button>
+      <label>速度 <input id="speed" type="range" min="0.2" max="2.5" step="0.1" value="1.0" /> <span id="speedVal">1.0×</span></label>
+    </div>
+  </body>
+</html>
