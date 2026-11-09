@@ -23,6 +23,17 @@
       "archiveTag": "candidate/gaming-room-timeline/gpt-6-astra-ultra",
       "destination": "tasks/gaming-room-timeline/solutions/gpt-6-astra-ultra",
       "resultReport": "tasks/gaming-room-timeline/solutions/gpt-6-astra-ultra/RESULTS.md"
+    },
+    {
+      "candidateId": "crouton-alpha-max",
+      "baselineMain": "bb5e741d5c1148ab73932f26803d54d9da42b062",
+      "inputTree": "b307c133553f86206f182ea1e76bb923e6c70b1f",
+      "sourceRef": "run:../llm-runs/gaming-room-timeline/crouton-alpha-max",
+      "sourceCommit": "cbfc51578478a04a759e82a77364d33418f9bb7b",
+      "sourceTree": "aae773e0a4505b0c553903b6511c67db7935435b",
+      "archiveTag": "candidate/gaming-room-timeline/crouton-alpha-max",
+      "destination": "tasks/gaming-room-timeline/solutions/crouton-alpha-max",
+      "resultReport": "tasks/gaming-room-timeline/solutions/crouton-alpha-max/RESULTS.md"
     }
   ]
 }
