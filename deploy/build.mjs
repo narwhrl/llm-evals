@@ -281,6 +281,7 @@ const VENDORS = [
   ["kimi", "Moonshot AI", "Kimi"],
   ["mimo", "Xiaomi", "MiMo"],
   ["minimax", "MiniMax", "MiniMax"],
+  ["qoduck", "Stealth", "Qoduck"],
   ["swe", "Cognition", "SWE", "-"],
 ];
 // 不符合 <model-id>[-<effort>] 约定的历史候选 id。
