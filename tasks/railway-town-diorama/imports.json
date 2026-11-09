@@ -23,6 +23,17 @@
       "archiveTag": "candidate/railway-town-diorama/gpt-6-astra-ultra",
       "destination": "tasks/railway-town-diorama/solutions/gpt-6-astra-ultra",
       "resultReport": "tasks/railway-town-diorama/solutions/gpt-6-astra-ultra/RESULTS.md"
+    },
+    {
+      "candidateId": "crouton-alpha-max",
+      "baselineMain": "bb5e741d5c1148ab73932f26803d54d9da42b062",
+      "inputTree": "f375976dcefcad1a507c3dec3f5d48092e191120",
+      "sourceRef": "run:../llm-runs/railway-town-diorama/crouton-alpha-max",
+      "sourceCommit": "9827313da01f5d7cfdceb3819f3720fa9b3d0388",
+      "sourceTree": "621e2fb121891aee5dcb42e262e469ae418abacb",
+      "archiveTag": "candidate/railway-town-diorama/crouton-alpha-max",
+      "destination": "tasks/railway-town-diorama/solutions/crouton-alpha-max",
+      "resultReport": "tasks/railway-town-diorama/solutions/crouton-alpha-max/RESULTS.md"
     }
   ]
 }
