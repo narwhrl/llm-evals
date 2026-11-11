@@ -1,0 +1,1251 @@
+[hidden] {
+  display: none !important;
+}
+
+.screen-surface {
+  container-type: size;
+}
+
+.os-screen {
+  --accent: #8fd3ff;
+  --accent-ink: #07141c;
+  --chrome: rgba(255, 255, 255, 0.08);
+  --body-ink: #e8f1f3;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  font-family: var(--sans);
+  font-size: clamp(9px, 1.65cqh, 14px);
+  color: var(--body-ink);
+  user-select: none;
+}
+
+.os-wallpaper {
+  position: absolute;
+  inset: 0;
+  background: #2d7a72;
+}
+
+.os-topline {
+  position: absolute;
+  z-index: 2;
+  top: 0.8em;
+  left: 1.2em;
+  right: 1.2em;
+  display: flex;
+  justify-content: space-between;
+  color: rgba(255, 255, 255, 0.38);
+  font-family: var(--mono);
+  font-size: 0.72em;
+  letter-spacing: 0.1em;
+  pointer-events: none;
+}
+
+.desk-icons {
+  position: absolute;
+  z-index: 2;
+  top: 3.3em;
+  left: 1.2em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8em;
+}
+
+.desk-icon {
+  display: flex;
+  width: 6.5em;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.3em;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 0.82em;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+}
+
+.desk-icon:hover .desk-icon-art,
+.desk-icon:focus-visible .desk-icon-art {
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.desk-icon-art {
+  display: grid;
+  width: 2.7em;
+  height: 2.7em;
+  place-items: center;
+  border-radius: 0.25em;
+  transition: background 0.18s ease;
+}
+
+.desk-icon-art svg {
+  width: 2em;
+  height: 2em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+}
+
+.game-window {
+  position: absolute;
+  z-index: 3;
+  top: 9%;
+  bottom: 8.5%;
+  left: 12%;
+  right: 4%;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 0.3em;
+  background: #b6b3a4;
+  box-shadow:
+    0 1.6em 4em rgba(0, 0, 0, 0.34),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.game-titlebar {
+  display: flex;
+  min-height: 2em;
+  align-items: center;
+  gap: 0.7em;
+  padding: 0.35em 0.65em;
+  background: linear-gradient(#4a8ae3, #1d4d9b);
+  color: #fff;
+  font-size: 0.86em;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.title-dots {
+  display: flex;
+  gap: 0.25em;
+}
+
+.title-dots i {
+  width: 0.45em;
+  height: 0.45em;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.game-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.title-buttons {
+  flex: none;
+  font-family: var(--mono);
+  font-size: 0.82em;
+  opacity: 0.8;
+}
+
+.game-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 67% 42%, rgba(71, 100, 122, 0.25), transparent 32%),
+    radial-gradient(circle at 46% 45%, #122739, #040a0f 68%);
+}
+
+.arcade-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.arcade-scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.16;
+  background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.55) 0 1px, transparent 1px 4px);
+  mix-blend-mode: multiply;
+}
+
+.game-cover {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.2em 3.4em;
+  text-align: center;
+  cursor: default;
+}
+
+.game-cover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 36%, rgba(25, 70, 101, 0.3), transparent 45%),
+    linear-gradient(to top, rgba(0, 0, 0, 0.58), transparent 55%);
+  pointer-events: none;
+}
+
+.cover-kicker {
+  position: relative;
+  z-index: 2;
+  margin: 0 0 0.7em;
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.74em;
+  letter-spacing: 0.2em;
+}
+
+.game-cover h2 {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  color: #f2f6f2;
+  font-family: var(--serif);
+  font-size: 3.1em;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  line-height: 1.1;
+  text-shadow: 0 0.15em 1em rgba(0, 0, 0, 0.4);
+}
+
+.cover-tagline {
+  position: relative;
+  z-index: 2;
+  margin: 0.8em 0 0;
+  color: rgba(238, 245, 241, 0.6);
+  font-family: var(--serif);
+  font-size: 0.94em;
+  letter-spacing: 0.06em;
+}
+
+.cover-art {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 38em;
+  height: 22em;
+  transform: translate(-50%, -50%);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.cover-orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 26em;
+  height: 8.6em;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotate(-17deg);
+}
+
+.cover-planet {
+  position: absolute;
+  top: 50%;
+  left: 57%;
+  width: 4.8em;
+  height: 4.8em;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, #fff4de 0, var(--accent) 13%, #1c323e 60%, #071013 100%);
+  box-shadow: 0 0 4em color-mix(in srgb, var(--accent) 32%, transparent);
+  transform: translate(-50%, -50%);
+}
+
+.cover-ship {
+  position: absolute;
+  top: 22%;
+  left: 35%;
+  color: var(--accent);
+  font-size: 2.4em;
+  text-shadow: 0 0 1em var(--accent);
+  animation: cover-float 6s ease-in-out infinite;
+}
+
+.cover-spark {
+  position: absolute;
+  width: 0.18em;
+  height: 0.18em;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0.7em var(--accent);
+}
+
+.cover-spark.s1 {
+  top: 21%;
+  left: 22%;
+}
+
+.cover-spark.s2 {
+  top: 66%;
+  left: 74%;
+  animation: sparkle 3.2s 0.5s infinite;
+}
+
+.cover-spark.s3 {
+  top: 74%;
+  left: 30%;
+  animation: sparkle 4s 1.2s infinite;
+}
+
+.launch-button {
+  position: relative;
+  z-index: 3;
+  min-width: 8.6em;
+  margin-top: 1.6em;
+  padding: 0.7em 1.3em;
+  border: 1px solid color-mix(in srgb, var(--accent) 42%, transparent);
+  border-radius: 0.3em;
+  background: color-mix(in srgb, var(--accent) 78%, #ffffff 4%);
+  color: #071316;
+  font-size: 0.9em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  box-shadow: 0 0.7em 2em color-mix(in srgb, var(--accent) 16%, transparent);
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.launch-button:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.cover-note {
+  position: relative;
+  z-index: 2;
+  max-width: 28em;
+  margin: 1.4em 0 0;
+  color: rgba(231, 240, 236, 0.47);
+  font-size: 0.74em;
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+}
+
+.game-hint {
+  position: absolute;
+  z-index: 4;
+  left: 1em;
+  bottom: 0.8em;
+  margin: 0;
+  color: rgba(235, 242, 238, 0.32);
+  font-family: var(--mono);
+  font-size: 0.76em;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+}
+
+.arcade-hud {
+  position: absolute;
+  z-index: 5;
+  top: 0.9em;
+  left: 1em;
+  right: 1em;
+  display: flex;
+  align-items: center;
+  gap: 1.4em;
+  color: rgba(240, 247, 243, 0.62);
+  font-family: var(--mono);
+  font-size: 0.92em;
+  letter-spacing: 0.06em;
+  pointer-events: none;
+  text-shadow: 0 1px 4px #000;
+}
+
+.arcade-hud b {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.hud-restart {
+  margin-left: auto;
+  padding: 0.35em 0.65em;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0.2em;
+  background: rgba(0, 0, 0, 0.3);
+  color: inherit;
+  font-family: var(--mono);
+  font-size: 0.92em;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.arcade-end {
+  position: absolute;
+  z-index: 6;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(4, 8, 10, 0.72);
+  backdrop-filter: blur(5px);
+  text-align: center;
+}
+
+.end-kicker {
+  margin: 0;
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.72em;
+  letter-spacing: 0.2em;
+}
+
+.end-score {
+  margin: 0.35em 0 0;
+  color: #fff4df;
+  font-family: var(--mono);
+  font-size: 3.6em;
+  font-weight: 300;
+}
+
+.end-score b {
+  color: var(--accent);
+  font-weight: 300;
+}
+
+.end-line {
+  margin: 0.3em 0 0;
+  color: rgba(235, 240, 236, 0.45);
+  font-size: 0.76em;
+}
+
+.game-statusbar {
+  display: flex;
+  min-height: 1.8em;
+  align-items: center;
+  gap: 1.1em;
+  padding: 0 0.8em;
+  background: rgba(0, 0, 0, 0.15);
+  color: rgba(42, 46, 41, 0.6);
+  font-family: var(--mono);
+  font-size: 0.64em;
+}
+
+.status-led {
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background: #4e7e61;
+  box-shadow: 0 0 0.5em rgba(78, 126, 97, 0.5);
+}
+
+.status-right {
+  margin-left: auto;
+}
+
+.memory-slip {
+  position: absolute;
+  z-index: 3;
+  top: 17%;
+  right: 2.4%;
+  bottom: 16%;
+  display: flex;
+  width: 21%;
+  flex-direction: column;
+  padding: 1.3em;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(7, 17, 24, 0.44);
+  box-shadow: 0 1.5em 3em rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(8px);
+}
+
+.memory-slip .slip-kicker {
+  margin: 0 0 1.2em;
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.62em;
+  letter-spacing: 0.15em;
+}
+
+.memory-slip h3 {
+  margin: 0 0 0.8em;
+  font-family: var(--serif);
+  font-size: 1.5em;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+.memory-slip p {
+  margin: 0;
+  color: rgba(224, 238, 235, 0.56);
+  font-size: 0.72em;
+  line-height: 1.8;
+}
+
+.slip-rule {
+  height: 1px;
+  margin: auto 0 0.8em;
+  background: rgba(255, 255, 255, 0.13);
+}
+
+.memory-slip .slip-foot {
+  color: rgba(224, 238, 235, 0.33);
+  font-family: var(--mono);
+  font-size: 0.6em;
+  letter-spacing: 0.08em;
+}
+
+.os-taskbar {
+  position: absolute;
+  z-index: 4;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  height: 6.2%;
+  min-height: 1.9em;
+  align-items: center;
+  gap: 0.7em;
+  padding: 0 1em;
+  background: linear-gradient(#2e70c8, #19499c);
+  color: #fff;
+  font-size: 0.8em;
+}
+
+.start-pill {
+  padding: 0.35em 0.9em;
+  border: 0;
+  border-radius: 0.4em;
+  background: linear-gradient(#74b85b, #3a8a2f);
+  color: #fff;
+  font-size: 0.9em;
+  font-weight: 700;
+  font-style: italic;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.task-app {
+  padding: 0.28em 0.9em;
+  border-radius: 0.2em;
+  background: rgba(255, 255, 255, 0.13);
+  font-size: 0.86em;
+}
+
+.task-tray {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 0.78em;
+  opacity: 0.8;
+}
+
+.screen-toast {
+  position: absolute;
+  z-index: 10;
+  bottom: 9.5%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.8em 1.2em;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.3em;
+  background: rgba(8, 15, 19, 0.85);
+  color: rgba(241, 246, 242, 0.85);
+  font-size: 0.76em;
+  letter-spacing: 0.03em;
+  box-shadow: 0 0.7em 2em rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+}
+
+/* 2005 — Windows XP */
+.os-xp .os-wallpaper {
+  background:
+    radial-gradient(circle at 62% 35%, rgba(255, 255, 255, 0.28), transparent 26%),
+    radial-gradient(circle at 50% 60%, #5ba69a 0, #2e7c73 45%, #145251 100%);
+}
+
+.os-xp .desk-icons {
+  color: #f4f8ee;
+}
+
+.os-xp .game-window {
+  border-radius: 0.25em;
+  background: #b8b5a8;
+  box-shadow:
+    0 1.6em 4em rgba(0, 0, 0, 0.38),
+    inset 1px 1px 0 rgba(255, 255, 255, 0.7),
+    inset -1px -1px 0 rgba(58, 53, 44, 0.45);
+}
+
+.os-xp .game-titlebar {
+  background: linear-gradient(90deg, #2b5fa9, #4c8ce1 45%, #2b5fa9);
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.42);
+}
+
+.os-xp .game-stage {
+  background:
+    radial-gradient(circle at 50% 44%, rgba(29, 74, 102, 0.38), transparent 38%),
+    linear-gradient(#0a1620, #02070b);
+}
+
+.os-xp .game-cover::before {
+  background:
+    radial-gradient(circle at 38% 45%, rgba(92, 160, 178, 0.2), transparent 44%),
+    linear-gradient(to top, rgba(0, 0, 0, 0.52), transparent 58%);
+}
+
+.os-xp .game-cover h2 {
+  font-family: "SimSun", "Songti SC", serif;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-shadow: 0.1em 0.1em 0 #0b2432;
+}
+
+.os-xp .cover-kicker {
+  color: #b6ddda;
+}
+
+.os-xp .cover-art {
+  opacity: 0.38;
+}
+
+.os-xp .cover-planet {
+  width: 3.5em;
+  height: 3.5em;
+  border-radius: 0%;
+  background: #8bb7b2;
+  box-shadow: 0.5em 0.5em 0 #4d7775;
+  transform: translate(-50%, -50%) rotate(8deg);
+}
+
+.os-xp .cover-orbit {
+  width: 22em;
+  height: 7em;
+  border-style: dashed;
+  border-color: rgba(173, 219, 212, 0.35);
+}
+
+.os-xp .cover-ship {
+  font-size: 1.7em;
+  color: #d9f3ed;
+  text-shadow: 0.2em 0 0 #4b7e79;
+}
+
+.os-xp .launch-button {
+  border: 1px solid #4a783d;
+  border-radius: 0.2em;
+  background: linear-gradient(#8ac272, #4c9339 55%, #3e7d2c);
+  color: #fff;
+  font-family: "SimSun", "Microsoft YaHei", sans-serif;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.35);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.48),
+    0 0.5em 1.5em rgba(0, 0, 0, 0.24);
+}
+
+.os-xp .cover-note {
+  color: rgba(222, 237, 239, 0.48);
+}
+
+.os-xp .game-hint,
+.os-xp .arcade-hud {
+  font-family: "SimSun", "Microsoft YaHei", monospace;
+}
+
+.os-xp .memory-slip {
+  display: none;
+}
+
+.os-xp .game-window {
+  left: 14%;
+  right: 4%;
+  top: 8.5%;
+  bottom: 9.5%;
+}
+
+.os-xp .os-taskbar {
+  height: 7.5%;
+  background: linear-gradient(#3476ce 0, #2a6ac4 12%, #1f58ae 52%, #1a4c9c 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+/* 2010 — Windows 7 Aero */
+.os-win7 {
+  --accent: #9feaff;
+  --accent-ink: #0b2c3a;
+}
+
+.os-win7 .os-wallpaper {
+  background:
+    radial-gradient(circle at 50% 45%, rgba(160, 234, 255, 0.4), transparent 22%),
+    radial-gradient(circle at 50% 55%, #237fae 0, #0c4f78 44%, #062333 100%);
+}
+
+.os-win7 .os-wallpaper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.22;
+  background: repeating-radial-gradient(ellipse at 52% 50%, transparent 0 12px, rgba(178, 241, 255, 0.18) 13px 14px);
+  transform: rotate(-8deg) scale(1.2);
+}
+
+.os-win7 .desk-icons {
+  color: #eafaff;
+}
+
+.os-win7 .game-window {
+  left: 14%;
+  right: 26.5%;
+  top: 9%;
+  bottom: 9%;
+  border: 1px solid rgba(221, 250, 255, 0.48);
+  border-radius: 0.45em;
+  background: rgba(205, 240, 250, 0.2);
+  box-shadow:
+    0 1.8em 4em rgba(0, 10, 20, 0.42),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.26);
+  backdrop-filter: blur(9px);
+}
+
+.os-win7 .game-titlebar {
+  background: linear-gradient(rgba(233, 252, 255, 0.52), rgba(131, 216, 241, 0.32));
+  color: #effcff;
+  text-shadow: 0 1px 2px rgba(0, 26, 40, 0.65);
+  border-bottom: 1px solid rgba(228, 252, 255, 0.24);
+}
+
+.os-win7 .game-stage {
+  background:
+    radial-gradient(circle at 57% 38%, rgba(80, 222, 247, 0.2), transparent 35%),
+    radial-gradient(circle at 35% 60%, #0e3d55, #04121b 70%);
+}
+
+.os-win7 .arcade-scanlines {
+  opacity: 0.07;
+}
+
+.os-win7 .game-cover h2 {
+  font-family: var(--sans);
+  font-weight: 300;
+  letter-spacing: 0.18em;
+}
+
+.os-win7 .cover-art {
+  opacity: 0.42;
+}
+
+.os-win7 .cover-planet {
+  background: radial-gradient(circle at 35% 30%, #f5ffff 0, #7ee7fb 12%, #11607d 58%, #03131a 100%);
+}
+
+.os-win7 .launch-button {
+  border: 1px solid rgba(206, 250, 255, 0.6);
+  border-radius: 999px;
+  background: linear-gradient(rgba(224, 252, 255, 0.8), rgba(100, 211, 236, 0.55));
+  color: #072b3a;
+  font-weight: 500;
+  box-shadow: 0 0.4em 1.6em rgba(51, 188, 222, 0.28);
+}
+
+.os-win7 .game-statusbar {
+  color: rgba(220, 248, 255, 0.52);
+  background: rgba(5, 28, 40, 0.24);
+}
+
+.os-win7 .memory-slip {
+  top: 19%;
+  bottom: 17%;
+  border-color: rgba(218, 252, 255, 0.24);
+  background: rgba(205, 245, 255, 0.12);
+}
+
+.os-win7 .memory-slip h3 {
+  font-family: var(--sans);
+  font-weight: 300;
+}
+
+.os-win7 .os-taskbar {
+  height: 6.6%;
+  background: linear-gradient(rgba(94, 177, 211, 0.64), rgba(16, 73, 108, 0.84));
+  border-top: 1px solid rgba(217, 252, 255, 0.3);
+  backdrop-filter: blur(8px);
+}
+
+.os-win7 .start-pill {
+  border-radius: 50%;
+  width: 2em;
+  height: 2em;
+  padding: 0;
+  overflow: hidden;
+  color: transparent;
+  background:
+    radial-gradient(circle at 38% 33%, rgba(255, 255, 255, 0.7), transparent 22%),
+    radial-gradient(circle, #76d7ef 0 38%, #2c9fc7 40% 62%, #196d8e 64% 100%);
+}
+
+.os-win7 .start-pill::after {
+  content: "◈";
+  color: #fff;
+}
+
+.os-win7 .task-app {
+  background: rgba(219, 252, 255, 0.08);
+  border: 1px solid rgba(219, 252, 255, 0.2);
+}
+
+/* 2015 — Steam */
+.os-steam {
+  --accent: #7cf0c8;
+  --accent-ink: #061b15;
+}
+
+.os-steam .os-wallpaper {
+  background:
+    radial-gradient(circle at 68% 36%, rgba(37, 97, 80, 0.55), transparent 33%),
+    linear-gradient(#0c1112, #070a0b);
+}
+
+.os-steam .os-topline {
+  color: rgba(196, 218, 208, 0.38);
+}
+
+.os-steam .desk-icons {
+  top: 4em;
+  left: 1.4em;
+  color: rgba(207, 227, 218, 0.76);
+}
+
+.os-steam .desk-icon-art {
+  border-radius: 0;
+}
+
+.os-steam .game-window {
+  left: 16%;
+  right: 2.4%;
+  top: 7%;
+  bottom: 7%;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.25em;
+  background: #111617;
+  box-shadow: 0 2em 5em rgba(0, 0, 0, 0.52);
+}
+
+.os-steam .game-titlebar {
+  background: #171e1f;
+  color: rgba(211, 230, 221, 0.74);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-weight: 400;
+}
+
+.os-steam .title-dots i:nth-child(1) {
+  background: #4b7b6c;
+}
+
+.os-steam .title-dots i:nth-child(2) {
+  background: #5d7d6b;
+}
+
+.os-steam .title-dots i:nth-child(3) {
+  background: #7f6f52;
+}
+
+.os-steam .game-stage {
+  background:
+    radial-gradient(circle at 64% 40%, rgba(124, 240, 200, 0.15), transparent 34%),
+    linear-gradient(135deg, #071b16, #06100e 55%, #030706);
+}
+
+.os-steam .arcade-scanlines,
+.os-stream .arcade-scanlines,
+.os-modern .arcade-scanlines {
+  display: none;
+}
+
+.os-steam .game-cover {
+  align-items: flex-start;
+  padding-left: 4.5em;
+  text-align: left;
+}
+
+.os-steam .game-cover h2 {
+  font-size: 3.5em;
+  letter-spacing: 0.12em;
+}
+
+.os-steam .cover-kicker {
+  letter-spacing: 0.28em;
+}
+
+.os-steam .cover-art {
+  left: 67%;
+  width: 34em;
+}
+
+.os-steam .cover-planet {
+  left: 58%;
+  background: radial-gradient(circle at 33% 30%, #e9fff8 0, #7cf0c8 12%, #1d5d4b 55%, #04100c 100%);
+}
+
+.os-steam .cover-orbit {
+  border-color: rgba(124, 240, 200, 0.38);
+}
+
+.os-steam .launch-button {
+  border-radius: 0.15em;
+  background: linear-gradient(#74e8c0, #38b48e);
+  color: #05241a;
+  font-weight: 700;
+}
+
+.os-steam .cover-note {
+  max-width: 24em;
+  text-align: left;
+}
+
+.os-steam .game-statusbar {
+  color: rgba(191, 216, 204, 0.38);
+  background: #0d1213;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.os-steam .status-led {
+  background: #7cf0c8;
+}
+
+.os-steam .memory-slip {
+  display: none;
+}
+
+.os-steam .os-taskbar {
+  height: 5.6%;
+  background: #0c1112;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgba(194, 216, 205, 0.58);
+}
+
+.os-steam .start-pill {
+  background: transparent;
+  color: rgba(196, 219, 208, 0.52);
+  font-style: normal;
+  font-weight: 400;
+  box-shadow: none;
+}
+
+.os-steam .task-app {
+  background: transparent;
+  color: rgba(204, 228, 216, 0.5);
+}
+
+/* 2020 — stream studio */
+.os-stream {
+  --accent: #ffb36b;
+  --accent-ink: #2c1608;
+}
+
+.os-stream .os-wallpaper {
+  background:
+    radial-gradient(circle at 30% 42%, rgba(104, 72, 129, 0.26), transparent 34%),
+    linear-gradient(120deg, #141019, #0a080d);
+}
+
+.os-stream .os-topline {
+  color: rgba(229, 211, 233, 0.38);
+}
+
+.os-stream .desk-icons {
+  display: none;
+}
+
+.os-stream .game-window {
+  left: 2.2%;
+  right: 29%;
+  top: 9.5%;
+  bottom: 8.5%;
+  border-color: rgba(255, 255, 255, 0.1);
+  border-radius: 0.2em;
+  background: #151118;
+  box-shadow: 0 2em 5em rgba(0, 0, 0, 0.56);
+}
+
+.os-stream .game-titlebar {
+  background: #1b1620;
+  color: rgba(234, 218, 238, 0.65);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-weight: 400;
+}
+
+.os-stream .game-title::before {
+  content: "LIVE  ";
+  color: #ff897e;
+  font-family: var(--mono);
+  font-size: 0.8em;
+  letter-spacing: 0.12em;
+}
+
+.os-stream .game-stage {
+  background:
+    radial-gradient(circle at 62% 40%, rgba(184, 122, 73, 0.26), transparent 34%),
+    linear-gradient(135deg, #241b24, #121014 54%, #080708);
+}
+
+.os-stream .game-cover {
+  align-items: flex-start;
+  padding-left: 4em;
+  text-align: left;
+}
+
+.os-stream .game-cover h2 {
+  font-size: 3.3em;
+  text-shadow: 0 0 0.9em rgba(255, 146, 81, 0.22);
+}
+
+.os-stream .cover-art {
+  left: 70%;
+  opacity: 0.58;
+}
+
+.os-stream .cover-planet {
+  background: radial-gradient(circle at 33% 30%, #ffe5c9 0, #ffb36b 14%, #984e28 57%, #190d08 100%);
+}
+
+.os-stream .cover-orbit {
+  border-color: rgba(255, 179, 107, 0.42);
+}
+
+.os-stream .launch-button {
+  border-radius: 0.1em;
+  background: #f0a05f;
+  color: #251207;
+}
+
+.os-stream .memory-slip {
+  top: 10.5%;
+  bottom: 17%;
+  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(20, 16, 23, 0.82);
+}
+
+.os-stream .game-statusbar {
+  color: rgba(210, 194, 214, 0.4);
+  background: #100d13;
+}
+
+.os-stream .os-taskbar {
+  background: #100d13;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgba(213, 196, 216, 0.58);
+}
+
+.os-stream .start-pill {
+  background: rgba(255, 179, 107, 0.13);
+  border: 1px solid rgba(255, 179, 107, 0.22);
+  color: #f4c394;
+  font-style: normal;
+  font-weight: 500;
+  box-shadow: none;
+}
+
+.os-stream .task-app {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* 2025 — quiet modern */
+.os-modern {
+  --accent: #ffd9a0;
+  --accent-ink: #241407;
+}
+
+.os-modern .os-wallpaper {
+  background:
+    radial-gradient(circle at 70% 43%, rgba(220, 157, 91, 0.2), transparent 30%),
+    radial-gradient(circle at 24% 72%, rgba(123, 91, 55, 0.14), transparent 26%),
+    linear-gradient(120deg, #15110d, #0a0807);
+}
+
+.os-modern .os-topline {
+  color: rgba(241, 222, 196, 0.32);
+}
+
+.os-modern .desk-icons {
+  top: 5em;
+  color: rgba(246, 231, 210, 0.66);
+  gap: 1.3em;
+}
+
+.os-modern .desk-icon-art svg {
+  stroke-width: 1.1;
+}
+
+.os-modern .game-window {
+  left: 18%;
+  right: 26%;
+  top: 8%;
+  bottom: 11%;
+  border: 1px solid rgba(255, 231, 199, 0.14);
+  border-radius: 0.4em;
+  background: #15110d;
+  box-shadow:
+    0 2.2em 6em rgba(0, 0, 0, 0.62),
+    0 0 4em rgba(215, 154, 88, 0.04);
+}
+
+.os-modern .game-titlebar {
+  background: rgba(255, 241, 220, 0.04);
+  color: rgba(248, 232, 210, 0.6);
+  border-bottom: 1px solid rgba(255, 232, 201, 0.08);
+  font-weight: 400;
+}
+
+.os-modern .title-dots i {
+  background: rgba(255, 217, 160, 0.4);
+}
+
+.os-modern .game-stage {
+  background:
+    radial-gradient(circle at 66% 37%, rgba(209, 143, 78, 0.19), transparent 33%),
+    linear-gradient(135deg, #1d140e, #0b0806 60%, #050302);
+}
+
+.os-modern .game-cover {
+  align-items: flex-start;
+  padding-left: 4.2em;
+  text-align: left;
+}
+
+.os-modern .game-cover h2 {
+  font-size: 3.2em;
+  letter-spacing: 0.1em;
+}
+
+.os-modern .cover-art {
+  left: 68%;
+  opacity: 0.64;
+}
+
+.os-modern .cover-planet {
+  background: radial-gradient(circle at 32% 28%, #fff1d8 0, #dfad70 10%, #7e522f 54%, #120c07 100%);
+}
+
+.os-modern .cover-orbit {
+  border-color: rgba(255, 217, 160, 0.32);
+}
+
+.os-modern .launch-button {
+  border-radius: 999px;
+  background: #e8c08c;
+  color: #251607;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+}
+
+.os-modern .memory-slip {
+  top: 19%;
+  bottom: 17%;
+  border-color: rgba(255, 231, 200, 0.1);
+  background: rgba(255, 242, 223, 0.035);
+}
+
+.os-modern .memory-slip h3 {
+  font-family: var(--serif);
+  font-weight: 400;
+}
+
+.os-modern .game-statusbar {
+  color: rgba(234, 214, 187, 0.35);
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.os-modern .os-taskbar {
+  height: 6%;
+  background: rgba(16, 12, 9, 0.85);
+  color: rgba(239, 221, 196, 0.58);
+  border-top: 1px solid rgba(255, 233, 202, 0.08);
+}
+
+.os-modern .start-pill {
+  border: 1px solid rgba(255, 220, 169, 0.14);
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(247, 225, 194, 0.65);
+  font-style: normal;
+  font-weight: 400;
+  box-shadow: none;
+}
+
+.os-modern .task-app {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Shared desktop details */
+.os-screen::after {
+  content: "";
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 4em rgba(0, 0, 0, 0.24);
+}
+
+.os-xp::after {
+  box-shadow:
+    inset 0 0 5em rgba(0, 0, 0, 0.36),
+    inset 0 0 1.5em rgba(37, 24, 8, 0.4);
+}
+
+@keyframes cover-float {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(2px, -8px);
+  }
+}
+
+@keyframes sparkle {
+  0%,
+  100% {
+    opacity: 0.18;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 900px), (max-height: 560px) {
+  .os-screen {
+    font-size: clamp(8px, 1.7cqh, 12px);
+  }
+
+  .desk-icons {
+    display: none;
+  }
+
+  .memory-slip {
+    display: none;
+  }
+
+  .game-window,
+  .os-xp .game-window,
+  .os-win7 .game-window,
+  .os-steam .game-window,
+  .os-stream .game-window,
+  .os-modern .game-window {
+    left: 2.5%;
+    right: 2.5%;
+    top: 7%;
+    bottom: 8.5%;
+  }
+
+  .cover-note {
+    max-width: 22em;
+  }
+}
