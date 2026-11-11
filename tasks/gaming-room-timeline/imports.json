@@ -34,6 +34,17 @@
       "archiveTag": "candidate/gaming-room-timeline/crouton-alpha-max",
       "destination": "tasks/gaming-room-timeline/solutions/crouton-alpha-max",
       "resultReport": "tasks/gaming-room-timeline/solutions/crouton-alpha-max/RESULTS.md"
+    },
+    {
+      "candidateId": "kimi-k3.1-pro-max",
+      "baselineMain": "d16fa111d3b6651e11d7c38e8773f7228b4edeb6",
+      "inputTree": "b307c133553f86206f182ea1e76bb923e6c70b1f",
+      "sourceRef": "run:../llm-runs/gaming-room-timeline/kimi-k3.1-pro-max",
+      "sourceCommit": "b24d261cb4c52af4189b50282f9b75774786864d",
+      "sourceTree": "d3862f774edd457d1cb8aa16ba7597815868c912",
+      "archiveTag": "candidate/gaming-room-timeline/kimi-k3.1-pro-max",
+      "destination": "tasks/gaming-room-timeline/solutions/kimi-k3.1-pro-max",
+      "resultReport": "tasks/gaming-room-timeline/solutions/kimi-k3.1-pro-max/RESULTS.md"
     }
   ]
 }
