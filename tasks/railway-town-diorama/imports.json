@@ -34,6 +34,17 @@
       "archiveTag": "candidate/railway-town-diorama/crouton-alpha-max",
       "destination": "tasks/railway-town-diorama/solutions/crouton-alpha-max",
       "resultReport": "tasks/railway-town-diorama/solutions/crouton-alpha-max/RESULTS.md"
+    },
+    {
+      "candidateId": "kimi-k3.1-pro-max",
+      "baselineMain": "d16fa111d3b6651e11d7c38e8773f7228b4edeb6",
+      "inputTree": "f375976dcefcad1a507c3dec3f5d48092e191120",
+      "sourceRef": "run:../llm-runs/railway-town-diorama/kimi-k3.1-pro-max",
+      "sourceCommit": "f67465c10640d9e91655eedfc5a7ff9f56321dbf",
+      "sourceTree": "03845de27a73d61f6410c8cda1c1c5cf6b838f3f",
+      "archiveTag": "candidate/railway-town-diorama/kimi-k3.1-pro-max",
+      "destination": "tasks/railway-town-diorama/solutions/kimi-k3.1-pro-max",
+      "resultReport": "tasks/railway-town-diorama/solutions/kimi-k3.1-pro-max/RESULTS.md"
     }
   ]
 }
