@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f4f0e8" />
+    <meta name="description" content="一间房间，二十年游戏时光。探索从 2005 到 2025 的玩家房间。" />
+    <title>存档房间 · A Room in Time</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232c4b40'/%3E%3Cpath d='M9 8h14v16H9z' fill='%23f4f0e8'/%3E%3Cpath d='M11 10h10v8H11zM15 20h2v2h-2z' fill='%232c4b40'/%3E%3C/svg%3E" />
+    <script type="module" crossorigin src="/llm-evals/gaming-room-timeline/kimi-k3.1-pro-max/assets/index-DB_znyvR.js"></script>
+    <link rel="stylesheet" crossorigin href="/llm-evals/gaming-room-timeline/kimi-k3.1-pro-max/assets/index-BOrP1GTG.css">
+  </head>
+  <body>
+    <div id="app">
+      <header class="site-header">
+        <a class="brand" href="./" aria-label="存档房间首页">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span>存档房间<span class="brand-en">A ROOM IN TIME</span></span>
+        </a>
+        <div class="header-note">一位玩家的二十年<span>2005 — 2025</span></div>
+        <button class="about-button" id="about-button">关于这房间 <span>↗</span></button>
+      </header>
+
+      <main>
+        <section class="intro" aria-labelledby="page-title">
+          <div>
+            <p class="eyebrow">VOL. 01 / THE PLAYER'S ROOM</p>
+            <h1 id="page-title">有些热爱，<br>从未下线。</h1>
+          </div>
+          <div class="intro-copy">
+            <p>从一台笨重的电脑，到属于自己的电竞房。<br>设备不断更新，有些旧物却一直都在。</p>
+            <div class="gesture-hints"><span>拖动旋转</span><span>滚轮缩放</span><span>点击物品</span></div>
+          </div>
+        </section>
+
+        <section class="experience" aria-label="可交互三维房间">
+          <div id="scene-container">
+            <canvas id="room-canvas" aria-label="三维游戏房间，可拖动旋转、滚轮缩放并点击物品"></canvas>
+            <div class="scene-vignette"></div>
+            <div class="scene-topline">
+              <div class="era-badge"><span class="live-dot"></span><span id="era-label">拨号上网的年代</span></div>
+              <span class="scene-number">ROOM 01 / <span id="scene-year">2005</span></span>
+            </div>
+            <div class="view-tools" aria-label="观察视角">
+              <button class="view-button active" id="view-room" title="房间全景"><span class="view-icon room-icon"></span>全景</button>
+              <button class="view-button" id="view-desk" title="靠近桌面"><span class="view-icon desk-icon"></span>桌面</button>
+              <span class="tool-divider"></span>
+              <button class="icon-button" id="reset-view" aria-label="重置视角" title="重置视角">↺</button>
+            </div>
+            <div class="object-hint" id="object-hint"><span>+</span><b id="hint-name">旧电脑</b><small>点击查看</small></div>
+            <div class="room-caption"><span id="room-caption">「周末写完作业，才能玩一会儿。」</span><span class="caption-rule"></span></div>
+            <div class="compass" aria-hidden="true"><span>N</span><i></i></div>
+            <div id="loading" class="loading"><span class="loading-cube"></span><p>正在打开旧房间…</p></div>
+          </div>
+
+          <aside class="memory-panel" id="memory-panel">
+            <div class="memory-top"><span>ROOM NOTES</span><span id="note-index">01 / 05</span></div>
+            <div class="year-display"><span id="year-display">2005</span><span class="year-unit">年</span></div>
+            <h2 id="era-title">一切开始的地方</h2>
+            <p id="era-description">卧室的一角挤下了整片世界。CRT 显示器嗡嗡作响，光盘在抽屉里越积越多；那盏台灯，一直亮到今天。</p>
+            <div class="era-tags" id="era-tags"><span>CRT 大头显示器</span><span>Windows XP</span><span>光盘收藏</span></div>
+            <div class="memory-divider"></div>
+            <button class="featured-object" id="featured-object">
+              <span class="featured-icon" id="featured-icon">▱</span>
+              <span><small>这一年的房间记忆</small><strong id="featured-name">第一台电脑</strong></span>
+              <span class="arrow">↗</span>
+            </button>
+            <div class="keepsake-note"><span class="tiny-star">✳</span><p>寻找房间里的常驻旧物<br><span>台灯、搪瓷杯和机器人一直在。</span></p></div>
+          </aside>
+        </section>
+
+        <section class="timeline" aria-label="时间轴">
+          <button id="play-button" class="play-button" aria-label="自动播放时间" aria-pressed="false"><span class="play-triangle"></span></button>
+          <div class="timeline-main">
+            <div class="timeline-heading"><label for="year-slider">拖动时间，看看房间的变化</label><span id="play-status">自由探索</span></div>
+            <div class="slider-wrap">
+              <input type="range" id="year-slider" min="2005" max="2025" step="0.1" value="2005" aria-valuetext="2005 年" />
+              <div class="slider-labels"><button data-year="2005">2005</button><button data-year="2010">2010</button><button data-year="2015">2015</button><button data-year="2020">2020</button><button data-year="2025">2025</button></div>
+            </div>
+          </div>
+          <div class="timeline-end"><span class="timeline-dot"></span><span>20 年 · 仍在继续</span></div>
+        </section>
+        <footer><span>用一间房，保存热爱。</span><span>BUILT WITH MEMORIES, NOT JUST POLYGONS.</span><button id="help-button">操作指南 ?</button></footer>
+      </main>
+    </div>
+
+    <dialog id="detail-dialog" class="detail-dialog">
+      <button class="dialog-close" aria-label="关闭">×</button>
+      <div id="detail-content"></div>
+    </dialog>
+    <dialog id="info-dialog" class="info-dialog">
+      <button class="dialog-close" aria-label="关闭">×</button>
+      <p class="eyebrow">A ROOM IN TIME</p>
+      <h2>房间会变，热爱不会。</h2>
+      <p>这是一位普通玩家从 2005 到 2025 的房间。拖动时间轴，看电脑角慢慢长成电竞房；点击物品，读一段属于它的记忆。</p>
+      <div class="help-grid"><span>旋转房间</span><b>鼠标拖动</b><span>靠近 / 远离</span><b>鼠标滚轮</b><span>平移视角</span><b>右键拖动</b><span>查看物品</span><b>点击发光物品</b><span>操作电脑</span><b>点击屏幕</b><span>自动播放</span><b>空格键</b></div>
+      <p class="info-small">六个代表年份：2005、2009、2013、2017、2021、2025。所有模型、材质与屏幕内容均在本地生成，无需外部资源。</p>
+    </dialog>
+  </body>
+</html>

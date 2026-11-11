@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#efe9dc" />
+    <meta name="description" content="A little railway town, made to be explored." />
+    <title>Alderbrook — A little world in motion</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%232a4942'/%3E%3Cpath d='M14 42V22h27v20M41 29h6l5 13H14zm6-13v6m8-6v6M11 50h43M19 55h27' fill='none' stroke='%23f4e7c4' stroke-width='4' stroke-linejoin='round'/%3E%3C/svg%3E" />
+    <script type="module" crossorigin src="/llm-evals/railway-town-diorama/kimi-k3.1-pro-max/assets/index-UPYumhG3.js"></script>
+    <link rel="stylesheet" crossorigin href="/llm-evals/railway-town-diorama/kimi-k3.1-pro-max/assets/index-Pa1Sv-ao.css">
+  </head>
+  <body>
+    <main id="app">
+      <div id="scene" aria-label="可旋转与缩放的微缩铁路小镇三维场景"></div>
+      <header class="masthead">
+        <div class="brand-mark" aria-hidden="true"><span>A</span></div>
+        <div>
+          <p class="eyebrow">THE TABLETOP COLLECTION <span>№ 004</span></p>
+          <h1>Alderbrook<span class="title-period">.</span></h1>
+          <p class="subtitle">A little world in motion.</p>
+        </div>
+      </header>
+      <div class="edition-tag"><span class="status-dot"></span> A LIVING MINIATURE</div>
+      <aside class="scene-note">
+        <span class="note-line"></span>
+        <p>THE EVENING LOCAL</p>
+        <span>ALDERBROOK VALLEY · EST. 1924</span>
+      </aside>
+      <footer class="control-dock">
+        <div class="location-caption">
+          <span class="tiny-label">NOW ARRIVING</span>
+          <strong>Alderbrook Station</strong>
+          <span id="train-status"><i></i> En route</span>
+        </div>
+        <div class="controls" aria-label="沙盘控制">
+          <button id="play-toggle" class="icon-button" type="button" aria-label="暂停列车" title="暂停 / 运行">
+            <svg id="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14" /></svg>
+            <svg id="play-icon" viewBox="0 0 24 24" aria-hidden="true" hidden><path d="m8 5 11 7-11 7Z" /></svg>
+          </button>
+          <span class="control-divider"></span>
+          <div class="speed-control">
+            <label for="speed">SPEED</label>
+            <input id="speed" type="range" min="0.5" max="2" step="0.25" value="1" aria-label="列车速度" />
+            <output id="speed-value" for="speed">1×</output>
+          </div>
+          <span class="control-divider"></span>
+          <button id="light-toggle" class="text-button" type="button" aria-label="切换到夜景">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.5" /><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" /></svg>
+            <span id="light-label">Evening</span>
+          </button>
+          <button id="reset" class="icon-button" type="button" aria-label="复位列车与视角" title="复位视角、列车与速度">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 7M4 4v6h6" /></svg>
+          </button>
+        </div>
+        <div class="navigation-hint">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2" width="10" height="18" rx="5" /><path d="M12 2v7" /></svg>
+          <span>拖动旋转 <b>·</b> 滚轮缩放</span>
+        </div>
+      </footer>
+      <div id="loading" role="status"><span class="loading-ring"></span>Building a little world…</div>
+    </main>
+  </body>
+</html>
