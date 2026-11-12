@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>二十年，一间房 · 2005—2025</title>
+    <link rel="icon" href="data:," />
+    <script type="module" crossorigin src="/llm-evals/gaming-room-timeline/claude-fable-5-2-xhigh/assets/index-C9hsK7XW.js"></script>
+    <link rel="stylesheet" crossorigin href="/llm-evals/gaming-room-timeline/claude-fable-5-2-xhigh/assets/index-DDDFCqNC.css">
+  </head>
+  <body>
+    <canvas id="scene"></canvas>
+
+    <header class="panel" id="chapter">
+      <h1>二十年，一间房</h1>
+      <h2 id="chapter-title"></h2>
+      <p id="chapter-text"></p>
+    </header>
+
+    <nav class="panel" id="side">
+      <div class="row" id="views">
+        <button data-view="room">全景</button>
+        <button data-view="desk">桌面</button>
+        <button data-view="screen">屏幕</button>
+      </div>
+      <h3>贯穿二十年的旧物</h3>
+      <div id="keepsakes"></div>
+    </nav>
+
+    <aside class="panel" id="card" hidden>
+      <button id="card-close" aria-label="关闭">×</button>
+      <span id="card-tag"></span>
+      <h3 id="card-title"></h3>
+      <p id="card-text"></p>
+    </aside>
+
+    <div id="tip" hidden></div>
+
+    <footer class="panel" id="timeline">
+      <button id="play" aria-label="自动播放">▶</button>
+      <output id="year">2005</output>
+      <div id="track">
+        <input id="slider" type="range" min="2005" max="2025" step="0.05" value="2005" aria-label="年份" />
+        <div id="ticks"></div>
+      </div>
+      <p id="hint">拖动旋转 · 滚轮缩放 · 右键平移 · 点物品看回忆 · 点屏幕可操作</p>
+    </footer>
+
+  </body>
+</html>
