@@ -67,6 +67,17 @@
       "archiveTag": "candidate/genshin-celestia/claude-fable-5-2-xhigh",
       "destination": "tasks/genshin-celestia/solutions/claude-fable-5-2-xhigh",
       "resultReport": "tasks/genshin-celestia/solutions/claude-fable-5-2-xhigh/RESULTS.md"
+    },
+    {
+      "candidateId": "swe-2-max",
+      "baselineMain": "d16fa111d3b6651e11d7c38e8773f7228b4edeb6",
+      "inputTree": "389f036e69eec03ef669224fc15bcf8a85992750",
+      "sourceRef": "run:../llm-runs/genshin-celestia/swe-2-max",
+      "sourceCommit": "3012303ddeca08db663723a63393e8ffb82f3560",
+      "sourceTree": "64ff81f0e75ffab631f45d15170f493a8cdd580d",
+      "archiveTag": "candidate/genshin-celestia/swe-2-max",
+      "destination": "tasks/genshin-celestia/solutions/swe-2-max",
+      "resultReport": "tasks/genshin-celestia/solutions/swe-2-max/RESULTS.md"
     }
   ]
 }
