@@ -67,6 +67,17 @@
       "archiveTag": "candidate/gaming-room-timeline/claude-fable-5-2-xhigh",
       "destination": "tasks/gaming-room-timeline/solutions/claude-fable-5-2-xhigh",
       "resultReport": "tasks/gaming-room-timeline/solutions/claude-fable-5-2-xhigh/RESULTS.md"
+    },
+    {
+      "candidateId": "swe-2-max",
+      "baselineMain": "d16fa111d3b6651e11d7c38e8773f7228b4edeb6",
+      "inputTree": "b307c133553f86206f182ea1e76bb923e6c70b1f",
+      "sourceRef": "run:../llm-runs/gaming-room-timeline/swe-2-max",
+      "sourceCommit": "8d530da71d0a6ea2971e5955787ec7c3a25dbb32",
+      "sourceTree": "c65775e28f94d807f7f0dec4572063350aa3d3fc",
+      "archiveTag": "candidate/gaming-room-timeline/swe-2-max",
+      "destination": "tasks/gaming-room-timeline/solutions/swe-2-max",
+      "resultReport": "tasks/gaming-room-timeline/solutions/swe-2-max/RESULTS.md"
     }
   ]
 }
