@@ -45,6 +45,17 @@
       "archiveTag": "candidate/gaming-room-timeline/kimi-k3.1-pro-max",
       "destination": "tasks/gaming-room-timeline/solutions/kimi-k3.1-pro-max",
       "resultReport": "tasks/gaming-room-timeline/solutions/kimi-k3.1-pro-max/RESULTS.md"
+    },
+    {
+      "candidateId": "deepseek-v4.1-flash-max",
+      "baselineMain": "d16fa111d3b6651e11d7c38e8773f7228b4edeb6",
+      "inputTree": "b307c133553f86206f182ea1e76bb923e6c70b1f",
+      "sourceRef": "run:../llm-runs/gaming-room-timeline/deepseek-v4.1-flash-max",
+      "sourceCommit": "7ca227ffd059d06122ebb4087b9b5d3e0421d513",
+      "sourceTree": "0cf4c2a181ab3c510a994fe97fc2bd9c1e379650",
+      "archiveTag": "candidate/gaming-room-timeline/deepseek-v4.1-flash-max",
+      "destination": "tasks/gaming-room-timeline/solutions/deepseek-v4.1-flash-max",
+      "resultReport": "tasks/gaming-room-timeline/solutions/deepseek-v4.1-flash-max/RESULTS.md"
     }
   ]
 }
