@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#171310" />
+    <meta name="description" content="一个可以沿着时间探索的三维房间：2005 到 2025，一位玩家的二十年。" />
+    <title>二十年的房间 · 2005—2025</title>
+    <link rel="icon" href="/llm-evals/gaming-room-timeline/deepseek-v4.1-flash-max/favicon.svg" type="image/svg+xml" />
+    <script type="module" crossorigin src="/llm-evals/gaming-room-timeline/deepseek-v4.1-flash-max/assets/index-Cc95Ehbv.js"></script>
+    <link rel="stylesheet" crossorigin href="/llm-evals/gaming-room-timeline/deepseek-v4.1-flash-max/assets/index-BSOp4Uk7.css">
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="scene" aria-label="可交互的三维游戏房间"></canvas>
+      <div class="ambient-vignette" aria-hidden="true"></div>
+      <div class="ambient-grain" aria-hidden="true"></div>
+
+      <header class="masthead">
+        <div class="brand">
+          <p class="eyebrow">2005 — 2025</p>
+          <h1>二十年的房间</h1>
+          <p class="sub">一位玩家，从卧室电脑角到自己的电竞房</p>
+        </div>
+        <div class="viewswitch" role="group" aria-label="视角">
+          <button type="button" data-view="overview" class="active" aria-pressed="true">全景</button>
+          <button type="button" data-view="desk" aria-pressed="false">桌面</button>
+        </div>
+      </header>
+
+      <div id="hover-label" class="hover-label" aria-hidden="true"></div>
+
+      <aside id="memory" class="memory" aria-live="polite" aria-hidden="true">
+        <button type="button" class="memory-close" id="memory-close" aria-label="关闭记忆卡">×</button>
+        <p class="memory-kicker" id="memory-kicker"></p>
+        <h2 id="memory-title"></h2>
+        <p class="memory-body" id="memory-body"></p>
+        <blockquote id="memory-quote"></blockquote>
+        <span class="memory-badge" id="memory-badge">陪伴二十年</span>
+      </aside>
+
+      <p id="toast" class="toast" role="status"></p>
+
+      <p class="stage-hint" aria-hidden="true">
+        <span>拖动旋转</span><i></i><span>滚轮靠近</span><i></i><span>点击物品</span>
+      </p>
+
+      <section class="time-deck" aria-label="时间轴">
+        <div class="time-head">
+          <div class="year-block">
+            <span class="year" id="year">2005</span>
+            <span class="year-caption" id="year-caption">十岁 · 第一次开机</span>
+          </div>
+          <button type="button" class="play" id="play" aria-label="自动播放时间">
+            <svg class="play-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3.2v9.6L12 8z" /></svg>
+            <svg class="pause-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3h2.2v10H5zm3.8 0H11v10H8.8z" /></svg>
+            <span id="play-label">自动播放</span>
+          </button>
+        </div>
+        <div class="slider-wrap">
+          <input id="year-slider" type="range" min="2005" max="2025" step="1" value="2005" aria-label="时间，2005 到 2025 年" />
+          <div class="ticks" id="ticks">
+            <button type="button" data-year="2005"><i></i><span>2005</span></button>
+            <button type="button" data-year="2010"><i></i><span>2010</span></button>
+            <button type="button" data-year="2015"><i></i><span>2015</span></button>
+            <button type="button" data-year="2020"><i></i><span>2020</span></button>
+            <button type="button" data-year="2025"><i></i><span>2025</span></button>
+          </div>
+        </div>
+      </section>
+
+      <div id="screen-modal" class="screen-modal" aria-hidden="true">
+        <div class="screen-backdrop" data-screen-close></div>
+        <div class="monitor-frame" role="dialog" aria-modal="true" aria-label="电脑屏幕">
+          <div class="monitor-bar">
+            <span id="monitor-label">CRT 17″ · 2005</span>
+            <button type="button" class="screen-close" id="screen-close" data-screen-close>Esc 离开屏幕</button>
+          </div>
+          <div class="screen-surface" id="screen-surface"></div>
+          <div class="monitor-chin"><i></i><span id="monitor-caption">PHILIPS 107S</span><i></i></div>
+        </div>
+      </div>
+
+      <div class="loading" id="loading">
+        <div class="loading-mark">20<span>·</span>25</div>
+        <p>正在开灯</p>
+      </div>
+    </div>
+  </body>
+</html>
