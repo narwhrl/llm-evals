@@ -67,6 +67,17 @@
       "archiveTag": "candidate/railway-town-diorama/claude-fable-5-2-xhigh",
       "destination": "tasks/railway-town-diorama/solutions/claude-fable-5-2-xhigh",
       "resultReport": "tasks/railway-town-diorama/solutions/claude-fable-5-2-xhigh/RESULTS.md"
+    },
+    {
+      "candidateId": "swe-2-max",
+      "baselineMain": "d16fa111d3b6651e11d7c38e8773f7228b4edeb6",
+      "inputTree": "f375976dcefcad1a507c3dec3f5d48092e191120",
+      "sourceRef": "run:../llm-runs/railway-town-diorama/swe-2-max",
+      "sourceCommit": "44122f92041f893fb10432d7426d3bf04a8a4f06",
+      "sourceTree": "13a3e0834ad95984c98d652a2ff25db2ea21b766",
+      "archiveTag": "candidate/railway-town-diorama/swe-2-max",
+      "destination": "tasks/railway-town-diorama/solutions/swe-2-max",
+      "resultReport": "tasks/railway-town-diorama/solutions/swe-2-max/RESULTS.md"
     }
   ]
 }
