@@ -45,6 +45,17 @@
       "archiveTag": "candidate/genshin-celestia/kimi-k3.1-pro-max",
       "destination": "tasks/genshin-celestia/solutions/kimi-k3.1-pro-max",
       "resultReport": "tasks/genshin-celestia/solutions/kimi-k3.1-pro-max/RESULTS.md"
+    },
+    {
+      "candidateId": "deepseek-v4.1-flash-max",
+      "baselineMain": "d16fa111d3b6651e11d7c38e8773f7228b4edeb6",
+      "inputTree": "389f036e69eec03ef669224fc15bcf8a85992750",
+      "sourceRef": "run:../llm-runs/genshin-celestia/deepseek-v4.1-flash-max",
+      "sourceCommit": "5ecde0b170873da94002b4bdecd0bda1fd47ee50",
+      "sourceTree": "72f6abf9426f9599426de048c04a7e0b56c534d6",
+      "archiveTag": "candidate/genshin-celestia/deepseek-v4.1-flash-max",
+      "destination": "tasks/genshin-celestia/solutions/deepseek-v4.1-flash-max",
+      "resultReport": "tasks/genshin-celestia/solutions/deepseek-v4.1-flash-max/RESULTS.md"
     }
   ]
 }
