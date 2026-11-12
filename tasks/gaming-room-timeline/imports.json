@@ -56,6 +56,17 @@
       "archiveTag": "candidate/gaming-room-timeline/deepseek-v4.1-flash-max",
       "destination": "tasks/gaming-room-timeline/solutions/deepseek-v4.1-flash-max",
       "resultReport": "tasks/gaming-room-timeline/solutions/deepseek-v4.1-flash-max/RESULTS.md"
+    },
+    {
+      "candidateId": "claude-fable-5-2-xhigh",
+      "baselineMain": "d16fa111d3b6651e11d7c38e8773f7228b4edeb6",
+      "inputTree": "b307c133553f86206f182ea1e76bb923e6c70b1f",
+      "sourceRef": "run:../llm-runs/gaming-room-timeline/claude-fable-5-2-xhigh",
+      "sourceCommit": "71bec6f5d513587c4c2cb3026d2de6a4a5232742",
+      "sourceTree": "050083ec9c094821568592d7e35a1a23c88f815b",
+      "archiveTag": "candidate/gaming-room-timeline/claude-fable-5-2-xhigh",
+      "destination": "tasks/gaming-room-timeline/solutions/claude-fable-5-2-xhigh",
+      "resultReport": "tasks/gaming-room-timeline/solutions/claude-fable-5-2-xhigh/RESULTS.md"
     }
   ]
 }
