@@ -1,0 +1,78 @@
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #2b2019;
+  font-family: "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
+}
+
+#scene {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  touch-action: none;
+}
+
+.panel {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  white-space: nowrap;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(38, 27, 20, 0.82);
+  border: 1px solid rgba(255, 226, 180, 0.22);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  color: #f6e7cf;
+  font-size: 14px;
+  backdrop-filter: blur(6px);
+}
+
+.panel button {
+  min-width: 64px;
+  padding: 7px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 226, 180, 0.35);
+  background: #5a3d28;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.panel button:hover {
+  background: #70492d;
+}
+
+.panel button:focus-visible,
+.panel input:focus-visible {
+  outline: 2px solid #ffd27a;
+  outline-offset: 2px;
+}
+
+.speed {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.speed input {
+  width: 150px;
+  accent-color: #e8a04a;
+}
+
+.speed output {
+  width: 44px;
+  font-variant-numeric: tabular-nums;
+}
+
+.status {
+  min-width: 72px;
+  padding-left: 12px;
+  border-left: 1px solid rgba(255, 226, 180, 0.22);
+  color: #ffd9a0;
+}
