@@ -56,6 +56,17 @@
       "archiveTag": "candidate/railway-town-diorama/deepseek-v4.1-flash-max",
       "destination": "tasks/railway-town-diorama/solutions/deepseek-v4.1-flash-max",
       "resultReport": "tasks/railway-town-diorama/solutions/deepseek-v4.1-flash-max/RESULTS.md"
+    },
+    {
+      "candidateId": "claude-fable-5-2-xhigh",
+      "baselineMain": "d16fa111d3b6651e11d7c38e8773f7228b4edeb6",
+      "inputTree": "f375976dcefcad1a507c3dec3f5d48092e191120",
+      "sourceRef": "run:../llm-runs/railway-town-diorama/claude-fable-5-2-xhigh",
+      "sourceCommit": "9775b2d38a99713f57a90b889d724fce7ce2a5a3",
+      "sourceTree": "d96abbdc162b9040ae6b4694bab7610a3e95cced",
+      "archiveTag": "candidate/railway-town-diorama/claude-fable-5-2-xhigh",
+      "destination": "tasks/railway-town-diorama/solutions/claude-fable-5-2-xhigh",
+      "resultReport": "tasks/railway-town-diorama/solutions/claude-fable-5-2-xhigh/RESULTS.md"
     }
   ]
 }
