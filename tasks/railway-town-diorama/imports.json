@@ -45,6 +45,17 @@
       "archiveTag": "candidate/railway-town-diorama/kimi-k3.1-pro-max",
       "destination": "tasks/railway-town-diorama/solutions/kimi-k3.1-pro-max",
       "resultReport": "tasks/railway-town-diorama/solutions/kimi-k3.1-pro-max/RESULTS.md"
+    },
+    {
+      "candidateId": "deepseek-v4.1-flash-max",
+      "baselineMain": "d16fa111d3b6651e11d7c38e8773f7228b4edeb6",
+      "inputTree": "f375976dcefcad1a507c3dec3f5d48092e191120",
+      "sourceRef": "run:../llm-runs/railway-town-diorama/deepseek-v4.1-flash-max",
+      "sourceCommit": "4eccde81a88a7147c69c227a8594441340af246a",
+      "sourceTree": "78b2ef7f98506e6f8028b93692fed1f8383a1e00",
+      "archiveTag": "candidate/railway-town-diorama/deepseek-v4.1-flash-max",
+      "destination": "tasks/railway-town-diorama/solutions/deepseek-v4.1-flash-max",
+      "resultReport": "tasks/railway-town-diorama/solutions/deepseek-v4.1-flash-max/RESULTS.md"
     }
   ]
 }
