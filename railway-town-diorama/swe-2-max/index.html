@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Railway Town Diorama</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>🚂</text></svg>" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        background: #1c1a24;
+        font-family:
+          'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+      }
+      #app {
+        position: fixed;
+        inset: 0;
+      }
+      #hud {
+        position: fixed;
+        left: 16px;
+        bottom: 16px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        padding: 10px 14px;
+        border-radius: 12px;
+        background: rgba(20, 16, 28, 0.72);
+        border: 1px solid rgba(255, 214, 160, 0.25);
+        backdrop-filter: blur(6px);
+        color: #f3e6cf;
+        user-select: none;
+        z-index: 10;
+      }
+      #hud button {
+        appearance: none;
+        border: 1px solid rgba(255, 214, 160, 0.4);
+        background: rgba(255, 190, 110, 0.12);
+        color: #f3e6cf;
+        font: inherit;
+        font-size: 13px;
+        padding: 6px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition:
+          background 0.15s,
+          border-color 0.15s;
+      }
+      #hud button:hover {
+        background: rgba(255, 190, 110, 0.28);
+      }
+      #hud button.active {
+        background: rgba(255, 190, 110, 0.45);
+        border-color: #ffd9a0;
+      }
+      #hud label {
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      #speed {
+        width: 110px;
+        accent-color: #ffb45e;
+      }
+      #speedValue {
+        min-width: 44px;
+        font-variant-numeric: tabular-nums;
+      }
+      #title {
+        position: fixed;
+        left: 18px;
+        top: 14px;
+        color: #f3e6cf;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+        z-index: 10;
+        pointer-events: none;
+      }
+      #title h1 {
+        font-size: 15px;
+        font-weight: 600;
+        margin: 0;
+        letter-spacing: 0.04em;
+      }
+      #title p {
+        font-size: 11px;
+        margin: 2px 0 0;
+        opacity: 0.7;
+      }
+    </style>
+    <script type="module" crossorigin src="/llm-evals/railway-town-diorama/swe-2-max/assets/index-D_fuey3U.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <div id="title">
+      <h1>Railway Town Diorama</h1>
+      <p>Drag to orbit &middot; scroll to zoom</p>
+    </div>
+    <div id="hud">
+      <button id="runBtn" title="Run / pause">Pause</button>
+      <button id="resetBtn" title="Reset camera, train and speed">Reset</button>
+      <button id="nightBtn" title="Toggle day / night">Night</button>
+      <label>
+        Speed
+        <input id="speed" type="range" min="0.2" max="2.5" step="0.05" value="1" />
+        <span id="speedValue">1.00&times;</span>
+      </label>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Celestia</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        background: #8fb7e0;
+      }
+      canvas {
+        display: block;
+      }
+      #loader {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(#3d6fb4, #bcd9ee);
+        transition: opacity 0.9s ease;
+        z-index: 10;
+        pointer-events: none;
+      }
+      #loader.done {
+        opacity: 0;
+      }
+      #loader svg {
+        width: 120px;
+        height: 120px;
+        animation: spin 14s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+    <script type="module" crossorigin src="/llm-evals/genshin-celestia/swe-2-max/assets/index-D1vpFL8U.js"></script>
+  </head>
+  <body>
+    <div id="loader">
+      <svg viewBox="0 0 100 100" fill="none">
+        <circle cx="50" cy="50" r="40" stroke="#f5e0a8" stroke-width="1.5" />
+        <ellipse cx="50" cy="50" rx="40" ry="16" stroke="#f5e0a8" stroke-width="1.5" />
+        <ellipse
+          cx="50"
+          cy="50"
+          rx="16"
+          ry="40"
+          stroke="#f5e0a8"
+          stroke-width="1.5"
+          transform="rotate(30 50 50)"
+        />
+        <circle cx="50" cy="50" r="4" fill="#f5e0a8" />
+      </svg>
+    </div>
+  </body>
+</html>

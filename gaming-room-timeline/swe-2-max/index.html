@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>游戏房二十年 · Gaming Room Timeline</title>
+  <style>html,body{color:#e8ded2;background:#14100d;height:100%;margin:0;font-family:Segoe UI,Microsoft YaHei,system-ui,-apple-system,BlinkMacSystemFont,Roboto,Noto Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif;overflow:hidden}#app{position:fixed;top:0;bottom:0;left:0;right:0}canvas{display:block}.panel{-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);background:#181410d1;border:1px solid #ffdcaa29;border-radius:10px;position:absolute;box-shadow:0 4px 18px #00000073}#hud{min-width:250px;padding:10px 14px;top:14px;left:14px}#hud .title{letter-spacing:.08em;opacity:.75;font-size:13px}#hud .year{color:#ffcf8f;font-size:30px;font-weight:700;line-height:1.15}#hud .phase{opacity:.85;margin-top:2px;font-size:12px}#hud .hint{opacity:.55;margin-top:6px;font-size:11px}#timeline{align-items:center;gap:12px;width:min(720px,86vw);padding:10px 16px 12px;display:flex;bottom:14px;left:50%;transform:translate(-50%)}#playBtn{color:#ffcf8f;cursor:pointer;background:#ffbe6e1f;border:1px solid #ffdcaa59;border-radius:50%;flex:none;width:34px;height:34px;font-size:14px}#playBtn:hover{background:#ffbe6e40}#sliderWrap{flex-direction:column;flex:1;gap:4px;display:flex}#yearSlider{accent-color:#ffb45e;cursor:pointer;width:100%}#marks{opacity:.7;height:14px;font-size:10px;position:relative}#marks span{white-space:nowrap;cursor:pointer;position:absolute;transform:translate(-50%)}#marks span:hover{color:#ffcf8f;opacity:1}#marks span:before{content:"";background:#ffdcaa80;width:1px;height:4px;margin:0 auto 1px;display:block}#info{width:280px;max-height:60vh;padding:12px 14px;font-size:12px;line-height:1.55;display:none;top:14px;right:14px;overflow:auto}#info h3{color:#ffcf8f;margin:0 0 6px;font-size:13px}#info .era{opacity:.6;margin-bottom:6px;font-size:11px}#info .mem{background:#ffb45e12;border-left:2px solid #ffb45e;border-radius:0 6px 6px 0;margin-top:8px;padding:8px;font-style:italic}#screenOverlay{pointer-events:auto;background:#000;display:none;position:absolute;overflow:hidden}#screenOverlay svg{width:100%;height:100%;display:block}#screenOverlay text{pointer-events:none;-webkit-user-select:none;user-select:none}#toast{padding:8px 18px;font-size:13px;display:none;position:absolute;top:18%;left:50%;transform:translate(-50%)}</style>
+  <script type="module" crossorigin src="/llm-evals/gaming-room-timeline/swe-2-max/assets/index-CDLQoTX4.js"></script>
+</head>
+<body>
+  <div id="app"></div>
+
+  <div id="hud" class="panel">
+    <div class="title">同一间房 · 二十年游戏时光</div>
+    <div class="year" id="yearLabel">2005</div>
+    <div class="phase" id="phaseLabel"></div>
+    <div class="hint">拖动旋转 · 滚轮缩放 · 点击物品看记忆 · 点击屏幕进入桌面</div>
+  </div>
+
+  <div id="timeline" class="panel">
+    <button id="playBtn" title="自动播放">▶</button>
+    <div id="sliderWrap">
+      <input id="yearSlider" type="range" min="2005" max="2025" step="0.05" value="2005" />
+      <div id="marks"></div>
+    </div>
+  </div>
+
+  <div id="info" class="panel"></div>
+
+  <div id="screenOverlay"></div>
+
+  <div id="toast" class="panel"></div>
+
+</body>
+</html>
