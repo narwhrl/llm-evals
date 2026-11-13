@@ -278,7 +278,8 @@ const VENDORS = [
   ["glm", "Z.ai", "GLM", "-"],
   ["gpt", "OpenAI", "GPT", "-"],
   ["grok", "xAI", "Grok"],
-  ["hy4", "Tencent", "Hunyuan 4"],
+  // models.dev canonical model: tencent/hy4, display name: Hy4.
+  ["hy4", "Tencent", "Hy4"],
   ["kimi", "Moonshot AI", "Kimi"],
   ["mimo", "Xiaomi", "MiMo"],
   ["minimax", "MiniMax", "MiniMax"],
@@ -339,11 +340,11 @@ const addDays = (key, days) => new Date(Date.parse(`${key}T00:00:00Z`) + days * 
 const weekdayOf = (key) => new Date(`${key}T00:00:00Z`).getUTCDay();
 const weekStart = (key) => addDays(key, -((weekdayOf(key) + 6) % 7));
 
-// 厂商与模型 logo 来自 @lobehub/icons-static-svg 1.97.0（MIT，见 deploy/assets/logos/LICENSE），商标归各自所有者。
+// 厂商与模型 logo 来自 LobeHub lobe-icons（MIT，见 deploy/assets/logos/LICENSE），商标归各自所有者。
 // 模型 logo 按 model id 首段取；没有 logo 的模型用名字首字母。小米 MiMo 的 logo 是两行文字，缩小后认不出，所以不用。
-const VENDOR_LOGOS = { Anthropic: "anthropic", Cognition: "devin", DeepSeek: "deepseek-color", Google: "google-color", MiniMax: "minimax-color", "Moonshot AI": "moonshot", OpenAI: "openai", xAI: "xai", "Z.ai": "zai" };
-const MODEL_LOGOS = { claude: "claude-color", deepseek: "deepseek-color", gemini: "gemini-color", glm: "zai", gpt: "openai", grok: "grok", kimi: "kimi-color", minimax: "minimax-color", swe: "devin-color" };
-const logoSrc = (name) => `${ASSET_DIR}/logos/${name}.svg`;
+const VENDOR_LOGOS = { Anthropic: "anthropic", Cognition: "devin", DeepSeek: "deepseek-color", Google: "google-color", MiniMax: "minimax-color", "Moonshot AI": "moonshot", OpenAI: "openai", Tencent: "tencent-color.png", xAI: "xai", "Z.ai": "zai" };
+const MODEL_LOGOS = { claude: "claude-color", deepseek: "deepseek-color", gemini: "gemini-color", glm: "zai", gpt: "openai", grok: "grok", hy4: "hunyuan-color.png", kimi: "kimi-color", minimax: "minimax-color", swe: "devin-color" };
+const logoSrc = (name) => `${ASSET_DIR}/logos/${name.includes(".") ? name : `${name}.svg`}`;
 const avatar = (item, size) => {
   const logo = MODEL_LOGOS[item.modelId.split("-")[0]];
   return `<span class="avatar ${size}" aria-hidden="true">${logo ? `<img src="${logoSrc(logo)}" alt="" decoding="async" />` : escapeHtml(item.name[0])}</span>`;
