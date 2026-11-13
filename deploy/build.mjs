@@ -290,7 +290,6 @@ const VENDORS = [
 const ALIASES = {
   "opus-5.5": { model: "claude-opus-5.5" },
   "cursor-kimi-k3": { model: "kimi-k3", variant: "Cursor" },
-  "hy4free-high": { model: "hy4-high", variant: "Free" },
   "cursor-c343": { vendor: "Stealth", name: "cursor-c343", variant: "Cursor" },
   "space-bunny-free": { vendor: "Stealth", name: "Space Bunny Free" },
   "zcode-harness": { vendor: "多模型组合", name: "ZCode Harness" },
