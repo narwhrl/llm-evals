@@ -61,17 +61,6 @@
       ]
     },
     {
-      "candidateId": "hy4free-high",
-      "baselineMain": "8416a7da87b303d0489f47d09309a6fe2f671114",
-      "inputTree": "4be6a8145d569c0e17555c7567b691d4aab01f44",
-      "sourceRef": "run:../llm-runs/gargantua-schwarzschild-raytracer/hy4free-high",
-      "sourceCommit": "a71d3026e248abd5ac20b1e97d4cfc33e537505b",
-      "sourceTree": "c24d43e1d151e565ad227e38ab6922e34fda724e",
-      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/hy4free-high",
-      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/hy4free-high",
-      "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/hy4free-high/RESULTS.md"
-    },
-    {
       "candidateId": "gemini-4-agron-high",
       "baselineMain": "8416a7da87b303d0489f47d09309a6fe2f671114",
       "inputTree": "4be6a8145d569c0e17555c7567b691d4aab01f44",
@@ -81,17 +70,6 @@
       "archiveTag": "candidate/gargantua-schwarzschild-raytracer/gemini-4-agron-high",
       "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/gemini-4-agron-high",
       "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/gemini-4-agron-high/RESULTS.md"
-    },
-    {
-      "candidateId": "hy4-high",
-      "baselineMain": "0f0501c504b94f8d8baed437de4bb894a3bb40ab",
-      "inputTree": "4be6a8145d569c0e17555c7567b691d4aab01f44",
-      "sourceRef": "run:../llm-runs/gargantua-schwarzschild-raytracer/hy4-high",
-      "sourceCommit": "981ea76e586fb8c672c516d618bc7b330e300f01",
-      "sourceTree": "f1bad9d0177b2a2a06ea81c155b38f47e423a915",
-      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/hy4-high",
-      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/hy4-high",
-      "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/hy4-high/RESULTS.md"
     }
   ]
 }
