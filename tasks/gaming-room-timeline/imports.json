@@ -81,6 +81,7 @@
     },
     {
       "candidateId": "muse-spark-1.3",
+      "harness": "oh-my-pi",
       "baselineMain": "9ec1360f064c8cef28862671c58bc40ecfb1bd75",
       "inputTree": "b307c133553f86206f182ea1e76bb923e6c70b1f",
       "sourceRef": "run:../llm-runs/gaming-room-timeline/muse-spark-1.3",
