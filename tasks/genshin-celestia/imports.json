@@ -78,6 +78,17 @@
       "archiveTag": "candidate/genshin-celestia/swe-2-max",
       "destination": "tasks/genshin-celestia/solutions/swe-2-max",
       "resultReport": "tasks/genshin-celestia/solutions/swe-2-max/RESULTS.md"
+    },
+    {
+      "candidateId": "muse-spark-1.3",
+      "baselineMain": "9ec1360f064c8cef28862671c58bc40ecfb1bd75",
+      "inputTree": "389f036e69eec03ef669224fc15bcf8a85992750",
+      "sourceRef": "run:../llm-runs/genshin-celestia/muse-spark-1.3",
+      "sourceCommit": "68ad8e7e3ab22b213ee4ba3e3206ee9a00876859",
+      "sourceTree": "c285343b96f081ad1422c87add28ab7eb8680be1",
+      "archiveTag": "candidate/genshin-celestia/muse-spark-1.3",
+      "destination": "tasks/genshin-celestia/solutions/muse-spark-1.3",
+      "resultReport": "tasks/genshin-celestia/solutions/muse-spark-1.3/RESULTS.md"
     }
   ]
 }
