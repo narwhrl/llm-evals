@@ -81,6 +81,7 @@
     },
     {
       "candidateId": "muse-spark-1.3",
+      "harness": "oh-my-pi",
       "baselineMain": "9ec1360f064c8cef28862671c58bc40ecfb1bd75",
       "inputTree": "389f036e69eec03ef669224fc15bcf8a85992750",
       "sourceRef": "run:../llm-runs/genshin-celestia/muse-spark-1.3",
