@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" href="data:," />
+<style>
+  :root { --panel: rgba(24,16,10,.78); --paper:#f5e8d5; --amber:#ffb35c; --muted:#c9b69a; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; height:100%; overflow:hidden; background:#171008; color:var(--paper);
+    font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif; }
+  #scene { position:fixed; inset:0; }
+  #scene canvas { display:block; }
+  .card { position:fixed; background:var(--panel); border:1px solid rgba(255,179,92,.25);
+    border-radius:12px; backdrop-filter:blur(6px); box-shadow:0 6px 24px rgba(0,0,0,.35); }
+  #title { top:14px; left:14px; padding:10px 14px; max-width:300px; }
+  #title h1 { margin:0; font-size:17px; letter-spacing:.5px; }
+  #title h1 span { color:var(--amber); }
+  #title p { margin:6px 0 0; font-size:12px; color:var(--muted); line-height:1.6; }
+  #views { top:14px; right:14px; padding:8px; display:flex; gap:8px; }
+  #views button { cursor:pointer; border:1px solid rgba(255,179,92,.4); background:transparent;
+    color:var(--paper); border-radius:8px; padding:7px 12px; font-size:13px; }
+  #views button:hover { background:rgba(255,179,92,.18); }
+  #timeline { left:50%; transform:translateX(-50%); bottom:14px; width:min(720px,92vw);
+    padding:12px 16px 14px; }
+  #timeline .row { display:flex; align-items:center; gap:12px; }
+  #play { cursor:pointer; width:40px; height:40px; border-radius:50%; flex:none;
+    border:1px solid var(--amber); background:rgba(255,179,92,.15); color:var(--amber); font-size:16px; }
+  #play:hover { background:rgba(255,179,92,.3); }
+  #yearbox { flex:none; width:128px; }
+  #year { font-size:24px; font-weight:700; color:var(--amber); line-height:1; }
+  #era { font-size:12px; color:var(--muted); margin-top:3px; }
+  #slider { flex:1; accent-color:var(--amber); height:28px; cursor:pointer; }
+  #ticks { display:flex; justify-content:space-between; font-size:11px; color:var(--muted);
+    padding:2px 52px 0 184px; }
+  #ticks span { cursor:pointer; }
+  #ticks span:hover { color:var(--amber); }
+  #info { right:14px; top:64px; width:290px; padding:14px 16px; display:none; }
+  #info.show { display:block; }
+  #info h2 { margin:0 0 2px; font-size:15px; }
+  #info .tag { font-size:11px; color:var(--amber); margin-bottom:8px; }
+  #info p { margin:0; font-size:13px; line-height:1.75; color:#efe0c8; white-space:pre-line; }
+  #info button { margin-top:10px; cursor:pointer; background:transparent; color:var(--muted);
+    border:1px solid rgba(255,255,255,.2); border-radius:8px; padding:5px 12px; font-size:12px; }
+  #hint { left:14px; bottom:14px; padding:8px 12px; font-size:12px; color:var(--muted); max-width:250px; }
+  #hint b { color:var(--amber); font-weight:600; }
+  #loading { inset:0; display:flex; align-items:center; justify-content:center;
+    background:#171008; z-index:10; border:none; border-radius:0; font-size:14px; color:var(--muted); }
+  @media (max-width:700px){ #hint{ display:none; } #ticks{ padding-left:120px; } }
+</style>
+</head>
+<body>
+<div id="scene" aria-label="三维游戏房间场景"></div>
+
+<div class="card" id="title">
+  <h1>一间房 · <span>二十年</span></h1>
+  <p>2005—2025 · 从卧室电脑角到电竞房。拖动时间滑杆，点开带 <b>✦</b> 的旧物。</p>
+</div>
+
+<div class="card" id="views">
+  <button id="btn-wide" type="button">全景</button>
+  <button id="btn-desk" type="button">桌面特写</button>
+</div>
+
+<aside class="card" id="info" aria-live="polite">
+  <h2 id="info-title"></h2>
+  <div class="tag" id="info-tag"></div>
+  <p id="info-body"></p>
+  <button id="info-close" type="button">关闭</button>
+</aside>
+
+<div class="card" id="timeline">
+  <div class="row">
+    <button id="play" type="button" aria-label="自动播放">▶</button>
+    <div id="yearbox"><div id="year">2005</div><div id="era">卧室电脑角</div></div>
+    <input id="slider" type="range" min="2005" max="2025" step="0.1" value="2005"
+      aria-label="年份 2005 到 2025" />
+  </div>
+  <div id="ticks">
+    <span data-y="2005">2005</span><span data-y="2009">2009</span><span data-y="2013">2013</span>
+    <span data-y="2017">2017</span><span data-y="2021">2021</span><span data-y="2025">2025</span>
+  </div>
+</div>
+
+<div class="card" id="hint">🖱️ 拖拽旋转 · 滚轮推近 · <b>点击电脑屏幕</b>切换桌面 / 小游戏（← → 移动，空格发射）</div>
+<div class="card" id="loading">正在铺设 2005 年的地板…</div>
+
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>
