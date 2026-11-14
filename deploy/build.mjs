@@ -297,7 +297,7 @@ const ALIASES = {
   "omp-gpt-6-sol-minimax-m3": { vendor: "多模型组合", name: "OMP: GPT-6 Sol + MiniMax M3" },
 };
 // 候选 id 不带思考程度时按这里的档位显示，未列出的都是 max；MiMo 和 MiniMax M3 没有档位，只有思考开关。
-const DEFAULT_EFFORTS = { gemini: "high", "grok-4.7": "xhigh", mimo: "思考开启", "minimax-m3": "思考开启", "muse-spark-1.3": "xhigh" };
+const DEFAULT_EFFORTS = { gemini: "high", "gemini-4-carbon": "medium", "grok-4.7": "xhigh", mimo: "思考开启", "minimax-m3": "思考开启", "muse-spark-1.3": "xhigh" };
 const defaultEffort = (modelId) => DEFAULT_EFFORTS[modelId] ?? DEFAULT_EFFORTS[modelId.split("-")[0]] ?? "max";
 const UNCLASSIFIED = "未归类";
 const TRAILING_GROUPS = ["多模型组合", "Stealth", UNCLASSIFIED];
