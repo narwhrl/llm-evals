@@ -80,6 +80,18 @@
       "destination": "tasks/orbital-habitat-diorama/solutions/gpt-6-astra",
       "resultReport": "tasks/orbital-habitat-diorama/solutions/gpt-6-astra/RESULTS.md",
       "note": "Model field records the user-supplied evaluation identifier; the exact backend build identifier is not exposed. Verification details and limitations are in RESULTS.md."
+    },
+    {
+      "candidateId": "muse-spark-1.3",
+      "harness": "OMP CLI",
+      "baselineMain": "9ec1360f064c8cef28862671c58bc40ecfb1bd75",
+      "inputTree": "1989711c358c98d75711e8ec1fe86d759dadb387",
+      "sourceRef": "run:../llm-runs/orbital-habitat-diorama/muse-spark-1.3",
+      "sourceCommit": "be480d29ee811c8bfc06a4bac1a9139c5a081e00",
+      "sourceTree": "f27cbe95322a0ad5294d5a6467a24969b19a3b47",
+      "archiveTag": "candidate/orbital-habitat-diorama/muse-spark-1.3",
+      "destination": "tasks/orbital-habitat-diorama/solutions/muse-spark-1.3",
+      "resultReport": "tasks/orbital-habitat-diorama/solutions/muse-spark-1.3/RESULTS.md"
     }
   ]
 }
