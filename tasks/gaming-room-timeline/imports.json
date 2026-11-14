@@ -90,6 +90,18 @@
       "archiveTag": "candidate/gaming-room-timeline/muse-spark-1.3",
       "destination": "tasks/gaming-room-timeline/solutions/muse-spark-1.3",
       "resultReport": "tasks/gaming-room-timeline/solutions/muse-spark-1.3/RESULTS.md"
+    },
+    {
+      "candidateId": "gpt-6.1-terra",
+      "harness": "codex-cli",
+      "baselineMain": "f0b766a5c2fde437b4dae88afc6606c2aa8b0a18",
+      "inputTree": "b307c133553f86206f182ea1e76bb923e6c70b1f",
+      "sourceRef": "run:../llm-runs/gaming-room-timeline/gpt-6.1-terra",
+      "sourceCommit": "d1c2948b562863dc2100601b96c2bf18ce61840d",
+      "sourceTree": "0b51a8f0c049eb32066fb058d24ce9bd2e78b936",
+      "archiveTag": "candidate/gaming-room-timeline/gpt-6.1-terra",
+      "destination": "tasks/gaming-room-timeline/solutions/gpt-6.1-terra",
+      "resultReport": "tasks/gaming-room-timeline/solutions/gpt-6.1-terra/RESULTS.md"
     }
   ]
 }
