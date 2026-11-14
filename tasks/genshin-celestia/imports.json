@@ -102,6 +102,18 @@
       "archiveTag": "candidate/genshin-celestia/gpt-6.1-terra",
       "destination": "tasks/genshin-celestia/solutions/gpt-6.1-terra",
       "resultReport": "tasks/genshin-celestia/solutions/gpt-6.1-terra/RESULTS.md"
+    },
+    {
+      "candidateId": "gemini-4-carbon",
+      "harness": "pi",
+      "baselineMain": "f0b766a5c2fde437b4dae88afc6606c2aa8b0a18",
+      "inputTree": "389f036e69eec03ef669224fc15bcf8a85992750",
+      "sourceRef": "run:../llm-runs/genshin-celestia/gemini-4-carbon",
+      "sourceCommit": "2e9917b238eb60a7966067ed0258861721d94dc2",
+      "sourceTree": "8f430838f9f76baff9e4c4d80c43590fd60a747f",
+      "archiveTag": "candidate/genshin-celestia/gemini-4-carbon",
+      "destination": "tasks/genshin-celestia/solutions/gemini-4-carbon",
+      "resultReport": "tasks/genshin-celestia/solutions/gemini-4-carbon/RESULTS.md"
     }
   ]
 }
