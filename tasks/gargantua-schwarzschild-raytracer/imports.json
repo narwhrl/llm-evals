@@ -86,6 +86,18 @@
       "archiveTag": "candidate/gargantua-schwarzschild-raytracer/muse-spark-1.3",
       "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/muse-spark-1.3",
       "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/muse-spark-1.3/RESULTS.md"
+    },
+    {
+      "candidateId": "gemini-4-carbon",
+      "harness": "pi",
+      "baselineMain": "1d1fcb9e1d745cca9a36285df78555dede277136",
+      "inputTree": "4be6a8145d569c0e17555c7567b691d4aab01f44",
+      "sourceRef": "run:../llm-runs/gargantua-schwarzschild-raytracer/gemini-4-carbon",
+      "sourceCommit": "ca4ea661c0168c83afbcc4125ab38e75233ed6cb",
+      "sourceTree": "7cb47c19c479fc84c71250214971e02c26cc98cb",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/gemini-4-carbon",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/gemini-4-carbon",
+      "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/gemini-4-carbon/RESULTS.md"
     }
   ]
 }
