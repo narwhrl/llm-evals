@@ -77,6 +77,18 @@
       "destination": "tasks/voxel-chinese-architecture/solutions/deepseek-v4.1-flash",
       "resultReport": "tasks/voxel-chinese-architecture/solutions/deepseek-v4.1-flash/RESULTS.md",
       "note": "Voxel Chinese courtyard complex: about 47k instanced voxels across site, walls, main hall, side halls, gate, bell and drum towers, and a pagoda, rendered in 104 draw calls. Built from zero without a starter project, without subagents and without reading other candidates. Verified counts, draw calls, production build, and multi-angle visual acceptance; browser tab and dev server closed afterwards."
+    },
+    {
+      "candidateId": "muse-spark-1.3",
+      "harness": "OMP CLI",
+      "baselineMain": "9ec1360f064c8cef28862671c58bc40ecfb1bd75",
+      "inputTree": "1562d563f2202519f2d82c902750cf4a0d553ebd",
+      "sourceRef": "run:../llm-runs/voxel-chinese-architecture/muse-spark-1.3",
+      "sourceCommit": "4ac9be08421485099b2822b973cd672a502597cd",
+      "sourceTree": "071cb4c1fa05dbb7e2f878a64f9a19371cb9d785",
+      "archiveTag": "candidate/voxel-chinese-architecture/muse-spark-1.3",
+      "destination": "tasks/voxel-chinese-architecture/solutions/muse-spark-1.3",
+      "resultReport": "tasks/voxel-chinese-architecture/solutions/muse-spark-1.3/RESULTS.md"
     }
   ]
 }
