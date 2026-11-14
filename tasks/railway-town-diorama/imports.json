@@ -81,6 +81,7 @@
     },
     {
       "candidateId": "muse-spark-1.3",
+      "harness": "oh-my-pi",
       "baselineMain": "9ec1360f064c8cef28862671c58bc40ecfb1bd75",
       "inputTree": "f375976dcefcad1a507c3dec3f5d48092e191120",
       "sourceRef": "run:../llm-runs/railway-town-diorama/muse-spark-1.3",
