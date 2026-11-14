@@ -114,6 +114,18 @@
       "archiveTag": "candidate/genshin-celestia/gemini-4-carbon",
       "destination": "tasks/genshin-celestia/solutions/gemini-4-carbon",
       "resultReport": "tasks/genshin-celestia/solutions/gemini-4-carbon/RESULTS.md"
+    },
+    {
+      "candidateId": "hy4-high",
+      "harness": "ZCode",
+      "baselineMain": "1d1fcb9e1d745cca9a36285df78555dede277136",
+      "inputTree": "389f036e69eec03ef669224fc15bcf8a85992750",
+      "sourceRef": "run:../llm-runs/genshin-celestia/hy4-high",
+      "sourceCommit": "82250d72288f4dadd2dbffe256e2c8fa2792e371",
+      "sourceTree": "bd67209564da64d2ad8626d64d5e8bf25f73cf25",
+      "archiveTag": "candidate/genshin-celestia/hy4-high",
+      "destination": "tasks/genshin-celestia/solutions/hy4-high",
+      "resultReport": "tasks/genshin-celestia/solutions/hy4-high/RESULTS.md"
     }
   ]
 }
