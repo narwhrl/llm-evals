@@ -170,6 +170,18 @@
       "destination": "tasks/rainy-konbini-diorama/solutions/deepseek-v4.1-flash",
       "resultReport": "tasks/rainy-konbini-diorama/solutions/deepseek-v4.1-flash/RESULTS.md",
       "note": "Pinned to main 091c801 (same baseline as kimi-k3.1-pro). tasks/rainy-konbini-diorama/task.md is byte-identical to the earlier baselines; only unrelated task docs changed. Built from zero with no starter project; run without subagents or other models per the user's instruction. Imported the exact source Git tree with git read-tree; source and destination tree hashes match (852f9d2), and all 20 file blob hashes are identical. Visual acceptance was done by the model itself through a hand-written Chrome DevTools Protocol driver at a verified 1440x900 viewport, reading frames back from the WebGL canvas rather than via Page.captureScreenshot, which intermittently returns black frames in headless Chrome. RESULTS.md records the twelve captured views with per-view luminance statistics, real pointer drag and wheel zoom, and a 66-second motion soak covering all four traffic-signal phases and full door open/close cycles. The candidate found and fixed six defects itself during acceptance; the most significant was a whole-frame blackout at low camera heights, traced to reversed-edge smoothstep calls (undefined in GLSL) returning NaN in the glass-runoff shader, which UnrealBloomPass then smeared across the entire frame."
+    },
+    {
+      "candidateId": "muse-spark-1.3",
+      "harness": "OMP CLI",
+      "baselineMain": "9ec1360f064c8cef28862671c58bc40ecfb1bd75",
+      "inputTree": "faaa451b1b7d4b8b67745d6e913c486e86e35248",
+      "sourceRef": "run:../llm-runs/rainy-konbini-diorama/muse-spark-1.3",
+      "sourceCommit": "3b1df56d3944126c0436d0a85fd024891f681dac",
+      "sourceTree": "4b96ffa0979f39cbcecc0be428f877bf7a90c3b7",
+      "archiveTag": "candidate/rainy-konbini-diorama/muse-spark-1.3",
+      "destination": "tasks/rainy-konbini-diorama/solutions/muse-spark-1.3",
+      "resultReport": "tasks/rainy-konbini-diorama/solutions/muse-spark-1.3/RESULTS.md"
     }
   ]
 }
