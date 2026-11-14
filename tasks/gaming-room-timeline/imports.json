@@ -102,6 +102,18 @@
       "archiveTag": "candidate/gaming-room-timeline/gpt-6.1-terra",
       "destination": "tasks/gaming-room-timeline/solutions/gpt-6.1-terra",
       "resultReport": "tasks/gaming-room-timeline/solutions/gpt-6.1-terra/RESULTS.md"
+    },
+    {
+      "candidateId": "hy4-high",
+      "harness": "ZCode",
+      "baselineMain": "1d1fcb9e1d745cca9a36285df78555dede277136",
+      "inputTree": "b307c133553f86206f182ea1e76bb923e6c70b1f",
+      "sourceRef": "run:../llm-runs/gaming-room-timeline/hy4-high",
+      "sourceCommit": "b8523a01c044401757aec737f14cba9a5dd2c349",
+      "sourceTree": "76958e8f0bffc8ae32b2753e23626b620c5d7643",
+      "archiveTag": "candidate/gaming-room-timeline/hy4-high",
+      "destination": "tasks/gaming-room-timeline/solutions/hy4-high",
+      "resultReport": "tasks/gaming-room-timeline/solutions/hy4-high/RESULTS.md"
     }
   ]
 }

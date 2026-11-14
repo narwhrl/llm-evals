@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:," />
+    <title>一间房，二十年 · Gaming Room Timeline</title>
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="scene"></canvas>
+      <div id="vignette"></div>
+
+      <header id="titlebar">
+        <div class="eyebrow">A ROOM · TWENTY YEARS</div>
+        <h1>一间房，二十年</h1>
+        <div class="year-line">
+          <span id="year">2005</span>
+          <span class="divider"></span>
+          <span id="era-name">卧室电脑角</span>
+        </div>
+        <p id="era-desc"></p>
+      </header>
+
+      <nav id="viewbar">
+        <button data-view="overview" class="active">全景</button>
+        <button data-view="desk">桌面</button>
+        <button data-view="keepsakes">旧物角</button>
+        <span class="nav-divider"></span>
+        <button id="help-btn">操作说明</button>
+      </nav>
+
+      <aside id="notes" class="hidden">
+        <button id="notes-close" aria-label="关闭">×</button>
+        <div id="notes-era"></div>
+        <h2 id="notes-title"></h2>
+        <p id="notes-body"></p>
+        <div id="notes-tag"></div>
+      </aside>
+
+      <section id="timeline">
+        <button id="play" aria-label="自动播放">▶<span>自动播放</span></button>
+        <div class="track">
+          <input id="slider" type="range" min="2005" max="2025" step="0.05" value="2005" aria-label="年份 2005 至 2025" />
+          <div id="ticks"></div>
+        </div>
+        <button id="speed" aria-label="播放速度">1×</button>
+      </section>
+
+      <div id="legend">
+        <div class="legend-title">贯穿二十年的旧物</div>
+        <div class="legend-items">
+          <span data-keepsake="mug">褪色马克杯</span>
+          <span data-keepsake="dino">绿色小恐龙</span>
+          <span data-keepsake="photo">拍立得合影</span>
+        </div>
+      </div>
+
+      <div id="hint">拖动旋转 · 滚轮缩放 · 点击物品读记忆 · 点击屏幕里的图标</div>
+      <div id="screen-hint" class="hidden">屏幕可操作：点图标、按钮或格子</div>
+
+      <div id="help" class="hidden">
+        <button id="help-close" aria-label="关闭">×</button>
+        <h2>怎么逛这间房</h2>
+        <ul>
+          <li>拖动<b>年份滑杆</b>看 2005—2025 的变化；按<b>自动播放</b>让它自己走，随时拖动即可接管。</li>
+          <li>鼠标拖动<b>旋转</b>房间，滚轮<b>缩放</b>；用右上角按钮切到<b>桌面</b>细看或去<b>旧物角</b>。</li>
+          <li>点击带说明的物品，会浮出它当年的来历；左下角三件旧物二十年都在，可以逐年找它们。</li>
+          <li>显示器是活的：点桌面图标、按钮或格子能打开窗口、玩两下、再关掉。</li>
+        </ul>
+        <p>房间、家具、纹理和屏幕画面全部由代码生成，不加载任何外部图片或字体。</p>
+      </div>
+
+      <div id="loading"><div class="loading-inner">正在把房间搬进来…</div></div>
+    </div>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
