@@ -74,6 +74,18 @@
     {
       "candidateId": "cursor-c343",
       "harness": "Cursor"
+    },
+    {
+      "candidateId": "muse-spark-1.3",
+      "harness": "OMP CLI",
+      "baselineMain": "9ec1360f064c8cef28862671c58bc40ecfb1bd75",
+      "inputTree": "4be6a8145d569c0e17555c7567b691d4aab01f44",
+      "sourceRef": "run:../llm-runs/gargantua-schwarzschild-raytracer/muse-spark-1.3",
+      "sourceCommit": "d28f8f1eff447134bbda94f81b3c48ccd2477253",
+      "sourceTree": "39b533d90624c9d1d5620d34e461e2c02fbeb924",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/muse-spark-1.3",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/muse-spark-1.3",
+      "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/muse-spark-1.3/RESULTS.md"
     }
   ]
 }
