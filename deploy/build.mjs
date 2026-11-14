@@ -290,8 +290,8 @@ const VENDORS = [
 // 不符合 <model-id>[-<effort>] 约定的历史候选 id。
 const ALIASES = {
   "opus-5.5": { model: "claude-opus-5.5" },
-  "cursor-kimi-k3": { model: "kimi-k3", variant: "Cursor" },
-  "cursor-c343": { vendor: "Stealth", name: "cursor-c343", variant: "Cursor" },
+  "cursor-kimi-k3": { model: "kimi-k3" },
+  "cursor-c343": { vendor: "Stealth", name: "cursor-c343" },
   "space-bunny-free": { vendor: "Stealth", name: "Space Bunny Free" },
   "zcode-harness": { vendor: "多模型组合", name: "ZCode Harness" },
   "omp-gpt-6-sol-minimax-m3": { vendor: "多模型组合", name: "OMP: GPT-6 Sol + MiniMax M3" },
@@ -304,18 +304,17 @@ const TRAILING_GROUPS = ["多模型组合", "Stealth", UNCLASSIFIED];
 
 function identify(candidate) {
   const alias = ALIASES[candidate] ?? {};
-  const variant = alias.variant ?? "";
-  if (alias.name) return { vendor: alias.vendor, modelId: candidate, name: alias.name, effort: defaultEffort(candidate), variant };
+  if (alias.name) return { vendor: alias.vendor, modelId: candidate, name: alias.name, effort: defaultEffort(candidate) };
   const tokens = (alias.model ?? candidate).split("-");
   const suffix = tokens.length > 1 && EFFORTS.includes(tokens.at(-1)) ? tokens.pop() : "";
   const modelId = tokens.join("-");
   const effort = suffix || defaultEffort(modelId);
   const vendor = VENDORS.find(([prefix]) => prefix === tokens[0]);
-  if (!vendor) return { vendor: UNCLASSIFIED, modelId, name: modelId, effort, variant };
+  if (!vendor) return { vendor: UNCLASSIFIED, modelId, name: modelId, effort };
   const [, vendorName, brand, joiner = " "] = vendor;
   const [version, ...rest] = tokens.slice(1).map((t) => t[0].toUpperCase() + t.slice(1));
   const name = [version ? `${brand}${joiner}${version}` : brand, ...rest].join(" ");
-  return { vendor: vendorName, modelId, name, effort, variant };
+  return { vendor: vendorName, modelId, name, effort };
 }
 
 function escapeHtml(value) {
@@ -522,7 +521,7 @@ const STYLE = `
       .seg button { padding: 0 10px; border: 0; border-radius: 999px; background: none; color: var(--muted); font-size: 12px; font-weight: 600; line-height: 22px; }
       .seg button:hover { color: var(--ink); }
       .seg button[aria-pressed="true"] { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgb(22 22 26 / 0.12); }
-      .variant { color: var(--muted); font-size: 11px; font-weight: 600; }
+      .harness { color: var(--muted); font-size: 11px; font-weight: 600; }
 
       .matrix-wrap { margin-top: 24px; padding: 6px; overflow-x: auto; border: 1px solid var(--line); border-radius: 20px; }
       .matrix { width: 100%; min-width: 560px; table-layout: fixed; border-collapse: collapse; }
@@ -552,7 +551,7 @@ const STYLE = `
       .work { display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto; align-items: center; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); }
       .work:first-child { border-top: 0; }
       .work-name { font-size: 14.5px; font-weight: 600; }
-      .work-name .variant { margin-left: 6px; }
+      .work-name .harness { margin-left: 6px; }
       .work-name:hover { color: var(--blue-ink); }
       .date { color: var(--muted); font: 12px var(--mono); }
       .sub-link { color: var(--ink-3); font-size: 13px; font-weight: 600; }
@@ -818,10 +817,12 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
     .map((entry) => {
       const meta = archive.tasks.get(entry.task);
       const candidate = meta?.candidates.get(entry.model) ?? {};
+      const record = meta?.records.get(entry.model);
       return {
         ...entry,
         ...identify(entry.model),
-        record: meta?.records.get(entry.model),
+        record,
+        harness: record?.harness ?? "",
         time: candidate.time ?? 0,
         day: candidate.time ? dayKey(candidate.time) : "",
         hasReport: Boolean(candidate.hasReport),
@@ -854,9 +855,9 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
   const dayText = (day) => (day ? dayLabel(day) : "日期未知");
 
   const searchText = (...parts) => escapeHtml(parts.filter(Boolean).join(" ").toLocaleLowerCase());
-  const entrySearch = (entry) => searchText(entry.name, entry.modelId, entry.model, entry.vendor, entry.variant, taskById.get(entry.task).title);
+  const entrySearch = (entry) => searchText(entry.name, entry.modelId, entry.model, entry.vendor, entry.harness, taskById.get(entry.task).title);
   const runLabel = (entry) =>
-    `${modelEffort(entry)}${entry.variant ? `（${entry.variant}）` : ""}：${taskById.get(entry.task).title}`;
+    `${modelEffort(entry)}${entry.harness ? `（${entry.harness}）` : ""}：${taskById.get(entry.task).title}`;
   const reportLink = (entry) =>
     entry.hasReport ? `<a class="sub-link" href="${escapeHtml(reportUrl(entry))}">报告</a>` : `<span class="sub-link off">无报告</span>`;
   const empty = `<p class="empty" data-empty hidden>没有匹配的作业。<button class="pill sm" type="button" data-clear>清除搜索</button></p>`;
@@ -868,7 +869,7 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
   const tags = (entry) => `<div class="tags">
               <a class="tag" href="#${escapeHtml(entry.task)}">${escapeHtml(taskById.get(entry.task).short)}</a>
               <span class="tag id">${escapeHtml(modelEffort(entry))}</span>
-              ${entry.variant ? `<span class="tag">${escapeHtml(entry.variant)}</span>` : ""}
+              ${entry.harness ? `<span class="tag">${escapeHtml(entry.harness)}</span>` : ""}
               ${entry.hasReport ? `<span class="tag ok">有报告</span>` : `<span class="tag">无报告</span>`}
             </div>`;
   const post = (entry) => `<article class="post" data-item data-search="${entrySearch(entry)}">
@@ -943,8 +944,8 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
         return `<td>${layers}</td>`;
       })
       .join("");
-    const ids = [...row.efforts.values()].flat().map((entry) => entry.model);
-    return `<tr class="model-row" data-item data-effort-scope data-search="${searchText(row.name, row.modelId, row.vendor, ...ids)}"><th scope="row"><span class="model-name">${escapeHtml(row.name)}</span>${effortSwitch(row)}</th>${cells}</tr>`;
+    const terms = [...row.efforts.values()].flat().flatMap((entry) => [entry.model, entry.harness]);
+    return `<tr class="model-row" data-item data-effort-scope data-search="${searchText(row.name, row.modelId, row.vendor, ...terms)}"><th scope="row"><span class="model-name">${escapeHtml(row.name)}</span>${effortSwitch(row)}</th>${cells}</tr>`;
   };
   const matrix = vendors
     .map(
@@ -966,13 +967,13 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
       </section>`;
 
   const workRow = (entry) => `<li class="work">
-                <a class="work-name" href="${escapeHtml(workUrl(entry))}">${escapeHtml(taskById.get(entry.task).short)}${entry.variant ? `<span class="variant">${escapeHtml(entry.variant)}</span>` : ""}</a>
+                <a class="work-name" href="${escapeHtml(workUrl(entry))}">${escapeHtml(taskById.get(entry.task).short)}${entry.harness ? `<span class="harness">${escapeHtml(entry.harness)}</span>` : ""}</a>
                 <span class="date">${entry.day ? entry.day.slice(5) : "—"}</span>
                 <a class="sub-link" href="${escapeHtml(sourceUrl(entry))}">源码</a>
                 ${reportLink(entry)}
               </li>`;
   const modelCard = (row) => {
-    const ids = [...row.efforts.values()].flat().map((entry) => entry.model);
+    const terms = [...row.efforts.values()].flat().flatMap((entry) => [entry.model, entry.harness]);
     const lists = row.effortList
       .map(
         (effort) =>
@@ -982,7 +983,7 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
             .join("")}</ul>`,
       )
       .join("");
-    return `<div class="model-card" data-item data-effort-scope data-search="${searchText(row.name, row.modelId, row.vendor, ...ids)}">
+    return `<div class="model-card" data-item data-effort-scope data-search="${searchText(row.name, row.modelId, row.vendor, ...terms)}">
             <div class="model-head"><div class="who">${avatar(row, "md")}<div><h3>${escapeHtml(row.name)}</h3><code>${escapeHtml(row.modelId)}</code></div></div>${effortSwitch(row)}</div>
             ${lists}
           </div>`;
@@ -1001,7 +1002,7 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
       </section>`;
 
   const entryRow = (task, entry) => `<li class="entry" data-item data-search="${entrySearch(entry)}">
-              ${avatar(entry, "sm")}<div class="entry-main"><b>${escapeHtml(entry.name)}</b><span>${escapeHtml(modelEffort(entry))}${entry.variant ? ` · ${escapeHtml(entry.variant)}` : ""} · ${dayText(entry.day)}</span></div>
+              ${avatar(entry, "sm")}<div class="entry-main"><b>${escapeHtml(entry.name)}</b><span>${escapeHtml(modelEffort(entry))}${entry.harness ? ` · ${escapeHtml(entry.harness)}` : ""} · ${dayText(entry.day)}</span></div>
               <button class="pill sm run" type="button" data-run="${escapeHtml(workUrl(entry))}" data-title="${escapeHtml(runLabel(entry))}" data-target="stage-${escapeHtml(task.task)}" aria-pressed="false">${icon("play")}运行</button>
               <a class="sub-link" href="${escapeHtml(workUrl(entry))}" target="_blank" rel="noopener">新窗口</a>
               <a class="sub-link" href="${escapeHtml(sourceUrl(entry))}">源码</a>
@@ -1129,7 +1130,7 @@ function renderGallery(published, archive, { generatedAt, failed, skipped, guide
         </section>
         <section class="step">
           <h2 class="group-head">3. 跑完后</h2>
-          <p>等模型提交以后，回到 <code>llm-evals/</code> 里执行：收回作品并推送，然后只构建这一份、重新部署，首页会按全部作品重新生成。</p>
+          <p>等模型提交以后，回到 <code>llm-evals/</code> 里执行：收回作品并推送，然后只构建这一份、重新部署，首页会按全部作品重新生成。<code>--harness</code> 必填，写模型运行所在的客户端，比如 <code>Codex CLI</code>、<code>Claude Code</code>，以 RESULTS.md 里写的为准，画廊会把它显示在作品旁边。</p>
           ${codeBlock(after)}
         </section>
         <p class="guide-source">命令和提示词取自仓库 <a href="${escapeHtml(archive.repoUrl)}#running-a-model">README 的 Running a Model 一节</a>，改那里即可。</p>

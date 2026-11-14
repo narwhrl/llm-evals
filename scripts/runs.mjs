@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // 模型运行的隔离工作区，放在仓库目录之外（默认 ../llm-runs/<task-id>/<candidate-id>/）。用法：
 //   node scripts/runs.mjs new <task-id> <candidate-id> [...]      每个候选一个只含 main 基线提交的独立仓库：无历史、无其他 ref
-//   node scripts/runs.mjs collect <task-id> <candidate-id> [...]  收回候选提交：打 candidate 标签，导入 llm/<task-id>，校验树哈希
+//   node scripts/runs.mjs collect <task-id> <candidate-id> [...] --harness <harness>
+//                                                                收回候选提交：打 candidate 标签，导入 llm/<task-id>，校验树哈希，记下运行所在的 harness
 
 import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, rmSync } from "node:fs";
@@ -57,7 +58,8 @@ function archiveTip(task) {
   throw new Error(`llm/${task} 本地与 origin 已分叉，先手动合并`);
 }
 
-function collect(task, candidates) {
+function collect(task, candidates, harness) {
+  if (!harness?.trim()) throw new Error('collect 需要 --harness <harness>，写模型运行所在的客户端，例如 --harness "Codex CLI"');
   const branch = `refs/heads/llm/${task}`;
   const before = git(["rev-parse", "-q", "--verify", branch], { allowFail: true }) ?? "";
   let tip = archiveTip(task);
@@ -99,6 +101,7 @@ function collect(task, candidates) {
       const hasResults = git(["cat-file", "-e", `${head}:${solution}/RESULTS.md`], { allowFail: true }) !== null;
       imports.candidates.push({
         candidateId: candidate,
+        harness: harness.trim(),
         baselineMain: baseline,
         inputTree: git(["rev-parse", `${baseline}:tasks/${task}`]),
         sourceRef: `run:${relative(REPO_ROOT, dir).replaceAll("\\", "/")}`,
@@ -126,9 +129,11 @@ function collect(task, candidates) {
 
 try {
   const [command, ...rest] = process.argv.slice(2);
+  const at = rest.indexOf("--harness");
+  const harness = at < 0 ? undefined : rest.splice(at, 2)[1];
   const { task, candidates } = parseArgs(rest);
   if (command === "new") newRuns(task, candidates);
-  else if (command === "collect") collect(task, candidates);
+  else if (command === "collect") collect(task, candidates, harness);
   else throw new Error(`未知命令：${command}`);
 } catch (error) {
   console.error(error.message);

@@ -27,7 +27,7 @@ One prompt, many independent implementations, all built and served side by side 
 ## Capabilities and Constraints
 
 - Static HTML generated at build time; no backend and no authentication; the site is public.
-- Facts available per candidate: task, candidate ID, vendor and model (derived from the ID), reasoning effort (ID suffix), harness variant, the built work, its source tree, whether a `RESULTS.md` exists, the recorded model identifier when `imports.json` has one, and the original candidate commit date from its tag.
+- Facts available per candidate: task, candidate ID, vendor and model (derived from the ID), reasoning effort (ID suffix), the harness when `imports.json` records it, the built work, its source tree, whether a `RESULTS.md` exists, the recorded model identifier when `imports.json` has one, and the original candidate commit date from its tag.
 - Seven tasks, 26 models, and 97 candidates today; all three counts grow.
 - UI copy is Chinese; model and task names keep their original form.
 

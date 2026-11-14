@@ -69,11 +69,11 @@ A candidate ID is the model ID, optionally followed by the reasoning effort used
 5. Collect the completed runs:
 
    ```bash
-   node scripts/runs.mjs collect <task-id> <candidate-id> [...]
+   node scripts/runs.mjs collect <task-id> <candidate-id> [...] --harness "<harness>"
    git push origin llm/<task-id> candidate/<task-id>/<candidate-id> [...]
    ```
 
-   For each candidate, `collect` fetches the run's commit, tags it `candidate/<task-id>/<candidate-id>`, imports its `solution/` tree into `llm/<task-id>`, appends a record to `imports.json`, and verifies that the source and destination tree hashes match. It stops if the tag or destination already exists, so revisions are imported by hand under a `-rN` tag. It warns about changes outside `solution/`, which are not imported.
+   For each candidate, `collect` fetches the run's commit, tags it `candidate/<task-id>/<candidate-id>`, imports its `solution/` tree into `llm/<task-id>`, appends a record to `imports.json`, and verifies that the source and destination tree hashes match. `--harness` is required and names the agent client the model ran in, such as `Codex CLI`, `Claude Code`, or `ZCode`; the record stores it as `harness`, so collect candidates from different harnesses in separate calls. It stops if the tag or destination already exists, so revisions are imported by hand under a `-rN` tag. It warns about changes outside `solution/`, which are not imported.
 
 6. Compare candidates only when their records share the same `inputTree`, the `tasks/<task-id>` tree at their baseline. Review each candidate against its baseline:
 
@@ -116,14 +116,14 @@ node scripts/runs.mjs new <task-id> <candidate-id> [<candidate-id> ...]
 2. 实现全部放在 tasks/<task-id>/solution/。不要改 task.md、README.md、AGENTS.md 或其他共享文件。
 3. 项目要能用 npm install 安装、npm run build 构建，并提交 package-lock.json。构建要接受 Vite 的 --base 和 --outDir 参数，因为作品会部署在 /<task-id>/<candidate-id>/ 这个子路径下。
 4. 调试时开的 dev server 和浏览器页面，结束前都要关掉。
-5. 在 tasks/<task-id>/solution/RESULTS.md 写明：上面的模型标识；起始 commit（运行 git rev-parse HEAD 得到）；实际运行过的命令和结果；已知限制、失败和需要人工介入的地方。没运行过的不要写成运行过。
+5. 在 tasks/<task-id>/solution/RESULTS.md 写明：上面的模型标识；你运行所在的 harness（客户端，如 Codex CLI、Claude Code，不确定就先问开发者，不要猜）；起始 commit（运行 git rev-parse HEAD 得到）；实际运行过的命令和结果；已知限制、失败和需要人工介入的地方。没运行过的不要写成运行过。
 6. 完成后提交一次：git add tasks/<task-id>/solution，提交信息用 "feat: <一句话描述>"。
 ```
 
 3. After the model has committed, back in `llm-evals/`:
 
 ```bash
-node scripts/runs.mjs collect <task-id> <candidate-id>
+node scripts/runs.mjs collect <task-id> <candidate-id> --harness "<harness>"
 git push origin llm/<task-id> candidate/<task-id>/<candidate-id>
 node deploy/build.mjs <task-id>/<candidate-id>
 npx wrangler deploy --cwd deploy
@@ -140,12 +140,12 @@ Every pushed task branch is built once and published to two hosts with the same 
 - Cloudflare Worker: <https://llm-evals-result.narwh.dev/>, with each candidate at `/<task-id>/<candidate-id>/`.
 - GitHub Pages: <https://narwhrl.github.io/llm-evals/>, with each candidate at `/llm-evals/<task-id>/<candidate-id>/`.
 - The site root is the gallery index. It has four views:
-  - Recent (default): candidates newest first, each with its report excerpt, model identifier, and source and report links. A candidate runs in place when you click it.
+  - Recent (default): candidates newest first, each with its report excerpt, model identifier, harness, and source and report links. A candidate runs in place when you click it.
   - Coverage (`#coverage`): a vendor → model × task matrix.
   - All models (`#models`): every model's candidates.
   - Per task (`#<task-id>`): all of that task's candidates share one stage, so you can compare them.
 
-  A model with candidates at several reasoning efforts gets a switch between them. Completion dates come from the candidate tags' commit dates. Vendor and model logos come from `@lobehub/icons-static-svg` 1.97.0 (MIT, `deploy/assets/logos/`); the marks belong to their owners. Fonts are self-hosted OFL faces in `deploy/assets/fonts/`. The Chinese heading face is a subset covering only the characters in `deploy/build.mjs`, so new heading text needs a regenerated subset.
+  A model with candidates at several reasoning efforts gets a switch between them. Completion dates come from the candidate tags' commit dates. Harnesses come from the `harness` field of `imports.json` records. Candidates collected before the field existed show none, except the Muse Spark candidates (`oh-my-pi`) and the migrated `cursor-*` candidates (`Cursor`), whose records hold only `candidateId` and `harness`. Vendor and model logos come from `@lobehub/icons-static-svg` 1.97.0 (MIT, `deploy/assets/logos/`); the marks belong to their owners. Fonts are self-hosted OFL faces in `deploy/assets/fonts/`. The Chinese heading face is a subset covering only the characters in `deploy/build.mjs`, so new heading text needs a regenerated subset.
 
 Anonymous limited-time models, including Qoduck and Crouton Alpha, are grouped under Stealth.
 

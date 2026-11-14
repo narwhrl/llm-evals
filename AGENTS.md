@@ -49,6 +49,7 @@ This file applies to the repository root and every subdirectory. It keeps model 
 Every candidate implementation must record at least:
 
 - The complete model identifier.
+- The harness the model ran in, such as Codex CLI or Claude Code. If it is unclear, ask the developer; do not guess.
 - The starting `main` commit SHA.
 - The verification commands actually run and their results.
 - Known limitations, failures, and required human intervention.
