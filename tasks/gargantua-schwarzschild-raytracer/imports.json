@@ -70,6 +70,10 @@
       "archiveTag": "candidate/gargantua-schwarzschild-raytracer/gemini-4-agron-high",
       "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/gemini-4-agron-high",
       "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/gemini-4-agron-high/RESULTS.md"
+    },
+    {
+      "candidateId": "cursor-c343",
+      "harness": "Cursor"
     }
   ]
 }
