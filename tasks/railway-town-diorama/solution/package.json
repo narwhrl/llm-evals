@@ -1,0 +1,19 @@
+{
+  "name": "railway-town-diorama",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Desktop miniature railway town diorama built with Three.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 4173"
+  },
+  "dependencies": {
+    "puppeteer-core": "^25.17.0",
+    "three": "^0.180.0"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  }
+}

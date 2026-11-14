@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <section id="panel" aria-label="沙盘控制">
+      <h1>铁路小镇沙盘</h1>
+      <p id="status"><span id="dot"></span><span id="statusText">运行中</span></p>
+      <div class="row">
+        <button id="btnRun" type="button">⏸ 暂停</button>
+        <button id="btnReset" type="button">⟲ 复位</button>
+        <button id="btnDay" type="button">🌙 夜晚</button>
+      </div>
+      <label class="speed">
+        速度 <span id="speedVal">1.0×</span>
+        <input id="speed" type="range" min="0.25" max="2.5" step="0.25" value="1" />
+      </label>
+    </section>
+
+    <p id="hint">拖拽旋转 · 滚轮缩放 · 右键平移</p>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
