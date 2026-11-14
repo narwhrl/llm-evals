@@ -63,6 +63,18 @@
       "destination": "tasks/ui-ux-design/solutions/deepseek-v4.1-flash",
       "resultReport": "tasks/ui-ux-design/solutions/deepseek-v4.1-flash/RESULTS.md",
       "note": "Scroll-driven three-act studio page (\"After the Crosshair\") with a shared interaction state, an instrument panel, and an accessible plate selector. Built from zero without a starter project, without subagents and without reading other candidates. Verified focus/bevel/plate state transitions, aria attributes, mobile single-column layout, and the production build; browser tab and dev server closed afterwards."
+    },
+    {
+      "candidateId": "muse-spark-1.3",
+      "harness": "OMP CLI",
+      "baselineMain": "9ec1360f064c8cef28862671c58bc40ecfb1bd75",
+      "inputTree": "f82ffc7c0a0689b9c96c80cdf4745d017421c271",
+      "sourceRef": "run:../llm-runs/ui-ux-design/muse-spark-1.3",
+      "sourceCommit": "56123d5931fb191364c3bd7e35a5ae74b51bfde7",
+      "sourceTree": "b1d1d68e606cc9f209b602fb18e8b37f1acbe7e1",
+      "archiveTag": "candidate/ui-ux-design/muse-spark-1.3",
+      "destination": "tasks/ui-ux-design/solutions/muse-spark-1.3",
+      "resultReport": "tasks/ui-ux-design/solutions/muse-spark-1.3/RESULTS.md"
     }
   ]
 }
