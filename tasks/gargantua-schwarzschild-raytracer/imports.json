@@ -27,19 +27,6 @@
       "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/swe-2/RESULTS.md"
     },
     {
-      "candidateId": "minimax-m3.1-flash",
-      "model": "magpie/minimax-code/MiniMax-M3.1-Flash",
-      "baselineMain": "63a46c3a79afa751a12eaa90f5c0f98b4b7212f1",
-      "inputTree": "ee7ace72a10e5741e1227a6965fb7145267d812b",
-      "sourceRef": "worktree:.worktrees/minimax-m3.1-flash/gargantua-schwarzschild-raytracer (detached at 63a46c3a79afa751a12eaa90f5c0f98b4b7212f1)",
-      "sourceCommit": "2cbeaddedf293175496fb23f65daab5e73ca9929",
-      "sourceTree": "cc157528e4dc9d2a07be2cfd84eb60d859e6bff4",
-      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/minimax-m3.1-flash",
-      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/minimax-m3.1-flash",
-      "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/minimax-m3.1-flash/RESULTS.md",
-      "note": "Schwarzschild null-geodesic raytracer with analytic capture test, path-ordered disc crossings, HDR bloom and ACES chain, 24 parameters, 4 presets, 10 diagnostic views."
-    },
-    {
       "candidateId": "deepseek-v4.1-flash",
       "model": "deepseek-v4.1-flash (DeepSeek Harness, devin/deepseek-v4-1-flash-1017)",
       "baselineMain": "091c801b98342f2e778bd356e0c55b7372398541",
