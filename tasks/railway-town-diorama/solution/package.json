@@ -1,0 +1,19 @@
+{
+  "name": "little-railway-town",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A tabletop miniature railway town diorama built with Three.js",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5173",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 4173",
+    "check": "node --check src/layout.js && node --check src/utils.js && node --check src/textures.js && node --check src/world.js && node --check src/train.js && node --check src/main.js"
+  },
+  "dependencies": {
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "vite": "6.4.6"
+  }
+}
