@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Little Railway Town · a tabletop miniature</title>
+    <script type="module" crossorigin src="/llm-evals/railway-town-diorama/hy4-high/assets/index-CWlhvcON.js"></script>
+    <link rel="stylesheet" crossorigin href="/llm-evals/railway-town-diorama/hy4-high/assets/index-BDzNNPM_.css">
+  </head>
+  <body>
+    <div id="scene"></div>
+    <div id="vignette"></div>
+
+    <div id="ui">
+      <div class="heading">
+        <h1>Little Railway Town</h1>
+        <p>A tabletop miniature &middot; evening service</p>
+      </div>
+
+      <div class="row">
+        <button id="btn-play" class="primary" type="button">&#10074;&#10074; Pause</button>
+        <button id="btn-reset" type="button">&#8635; Reset</button>
+      </div>
+      <div class="row">
+        <button id="btn-night" type="button">&#9789; Night</button>
+        <span id="status" class="status">Running</span>
+      </div>
+
+      <label class="slider" for="speed">
+        <span>Speed <b id="speed-val">1.0&times;</b></span>
+        <input id="speed" type="range" min="2" max="22" step="0.5" value="8" />
+      </label>
+
+      <p class="hint">Drag to orbit &middot; Scroll to zoom</p>
+    </div>
+
+    <div id="diag" data-ready="false" hidden></div>
+    <div id="state" hidden></div>
+
+  </body>
+</html>
