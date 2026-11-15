@@ -1,0 +1,198 @@
+{
+  "model": "magpie/opencode-go/hy4:high",
+  "harness": "ZCode",
+  "date": "2026-11-15T04:45:20.754Z",
+  "baseUrl": "http://127.0.0.1:4187",
+  "failures": 0,
+  "results": [
+    {
+      "name": "production build served over HTTP",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "built HTML references local hashed assets only",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "desktop: ready signal + API",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "desktop: default quality / debug / 21 params",
+      "ok": true,
+      "detail": "quality=high debug=0 params=21"
+    },
+    {
+      "name": "desktop: HDR half-float pipeline",
+      "ok": true,
+      "detail": "hdr=half-float buffer=1267x792 dpr=1"
+    },
+    {
+      "name": "desktop: versioned localStorage available",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "desktop: non-black structured frame",
+      "ok": true,
+      "detail": "mean=67.8 std=64.3 dark=0.086 bright=0.096"
+    },
+    {
+      "name": "desktop HUD: 21 sliders, 4 presets, 3 quality, 10 debug, 7 shortcuts",
+      "ok": true,
+      "detail": "{\"sliders\":21,\"presets\":4,\"quality\":3,\"debug\":10,\"shortcuts\":7}"
+    },
+    {
+      "name": "desktop: orbit drag changes camera azimuth and clears preset",
+      "ok": true,
+      "detail": "az 2.19 -> -30.54"
+    },
+    {
+      "name": "desktop: wheel zoom changes camera distance",
+      "ok": true,
+      "detail": "dist 14.05 -> 11.58"
+    },
+    {
+      "name": "desktop: Shift+1..4 applies four distinct presets",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "desktop: Space toggles cinematic loop",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "desktop: H toggles HUD",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "desktop: Q cycles quality tier",
+      "ok": true,
+      "detail": "high -> cinematic"
+    },
+    {
+      "name": "desktop: 0..9 debug views all apply and render distinct diagnostics",
+      "ok": true,
+      "detail": "FINAL COMPOSITE | RAY STEPS / STOP | HORIZON MASK | DISK CROSSINGS | REDSHIFT / DOPPLER | LENSED SKY COORDS | STARS / GALAXY | PRE-POST HDR | DEFLECTION | MIN RADIUS"
+    },
+    {
+      "name": "API rejects invalid inputs without throwing",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "API accepts valid setTime / setDebug",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "three quality tiers change maxSteps / renderScale / bloomLevels / diskSamples",
+      "ok": true,
+      "detail": "standard:120 high:190 cinematic:280"
+    },
+    {
+      "name": "versioned state persists across reload",
+      "ok": true,
+      "detail": "emission=3.25 quality=cinematic debug=6"
+    },
+    {
+      "name": "localStorage payload is versioned",
+      "ok": true,
+      "detail": "version=3"
+    },
+    {
+      "name": "R resets all state to defaults",
+      "ok": true,
+      "detail": "emission=1.75 quality=high debug=0"
+    },
+    {
+      "name": "mobile: ready with Retina DPR handling",
+      "ok": true,
+      "detail": "dpr=1.25 buffer=341x738 quality=standard"
+    },
+    {
+      "name": "mobile: non-black structured frame",
+      "ok": true,
+      "detail": "mean=73.7 std=62.8 dark=0.123 bright=0.100"
+    },
+    {
+      "name": "mobile: HUD drawer collapses and opens",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile: touch OrbitControls changes camera",
+      "ok": true,
+      "detail": "az 1.99 -> 3.11"
+    },
+    {
+      "name": "mobile: resize rebuilds render targets",
+      "ok": true,
+      "detail": "341 -> 437"
+    },
+    {
+      "name": "capture=1 URL matrix: presets 0..3, frozen time, deterministic first frame",
+      "ok": true,
+      "detail": "[{\"preset\":0,\"mean\":66.42912806812346,\"std\":64.06841754517494,\"deterministic\":true},{\"preset\":1,\"mean\":54.35037925333112,\"std\":54.62085154889083,\"deterministic\":true},{\"preset\":2,\"mean\":43.39355885332017,\"std\":43.11406679225665,\"deterministic\":true},{\"preset\":3,\"mean\":91.73347125037697,\"std\":74.38146154157253,\"deterministic\":true}]"
+    },
+    {
+      "name": "capture=1 URL matrix: all debug 0..9 render distinct non-uniform views",
+      "ok": true,
+      "detail": "[{\"debug\":0,\"mean\":71.6,\"std\":65.9},{\"debug\":1,\"mean\":204,\"std\":38.8},{\"debug\":2,\"mean\":19.4,\"std\":56.2},{\"debug\":3,\"mean\":47.7,\"std\":46.3},{\"debug\":4,\"mean\":32.7,\"std\":20.5},{\"debug\":5,\"mean\":126,\"std\":47.4},{\"debug\":6,\"mean\":23.4,\"std\":12.8},{\"debug\":7,\"mean\":18.6,\"std\":21.2},{\"debug\":8,\"mean\":25.7,\"std\":23.8},{\"debug\":9,\"mean\":54.2,\"std\":49.9}]"
+    },
+    {
+      "name": "invalid URL values safely fall back to defaults",
+      "ok": true,
+      "detail": "quality=high preset=0 debug=0 hud=true time=0 invalid=quality,preset,debug,hud,time"
+    },
+    {
+      "name": "invalid-query recovery: non-black structured frame",
+      "ok": true,
+      "detail": "mean=67.4 std=64.6 dark=0.089 bright=0.099"
+    },
+    {
+      "name": "capture=1 without ?time= freezes at 0",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "window.__GARGANTUA__ setters validate and update state; ready is read-only",
+      "ok": true,
+      "detail": "{\"debug\":true,\"quality\":true,\"preset\":true,\"time\":true,\"readonlyReady\":true}"
+    },
+    {
+      "name": "context loss pauses rendering with recoverable overlay",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "context restore rebuilds resources and resumes rendering",
+      "ok": true,
+      "detail": "frames 2 -> 4 std=66.2"
+    },
+    {
+      "name": "persisted state survives context restore",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no browser console errors / page errors / failed requests",
+      "ok": true,
+      "detail": "clean"
+    },
+    {
+      "name": "no remote asset requests at runtime",
+      "ok": true,
+      "detail": "offline"
+    }
+  ],
+  "notes": [],
+  "consoleErrors": [],
+  "pageErrors": [],
+  "remoteRequests": []
+}
