@@ -1,0 +1,10 @@
+{
+  "package": "three",
+  "version": "0.187.0",
+  "license": "MIT",
+  "files": [
+    "three/addons/controls/OrbitControls.js",
+    "three/three.core.js",
+    "three/three.module.js"
+  ]
+}
