@@ -1,0 +1,30 @@
+{
+  "name": "gargantua-schwarzschild-raytracer",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Full-screen Schwarzschild null-geodesic raytracer built with React, Vite and a locally vendored Three.js ESM build.",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 4173",
+    "serve": "node scripts/serve.mjs --dir dist --port 4173",
+    "lint": "eslint .",
+    "check": "node scripts/check.mjs",
+    "verify": "node scripts/verify.mjs",
+    "vendor": "node scripts/vendor.mjs"
+  },
+  "dependencies": {
+    "react": "19.2.9",
+    "react-dom": "19.2.9"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.4",
+    "@vitejs/plugin-react": "5.2.0",
+    "eslint": "9.39.4",
+    "globals": "14.0.0",
+    "playwright-core": "1.65.1",
+    "three": "0.180.0",
+    "vite": "7.3.8"
+  }
+}
