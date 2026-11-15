@@ -100,16 +100,16 @@
       "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/gemini-4-carbon/RESULTS.md"
     },
     {
-      "candidateId": "hy4-high-r2",
+      "candidateId": "hy4",
       "harness": "ZCode",
       "baselineMain": "1d1fcb9e1d745cca9a36285df78555dede277136",
       "inputTree": "4be6a8145d569c0e17555c7567b691d4aab01f44",
-      "sourceRef": "run:../llm-runs/gargantua-schwarzschild-raytracer/hy4-high-r2",
+      "sourceRef": "run:../llm-runs/gargantua-schwarzschild-raytracer/hy4",
       "sourceCommit": "8feae18bc1c4f4a4585e084084cd02689bcbdb9f",
       "sourceTree": "3bfec36e569c376f9bd72abaa6450eaf0e90ae2a",
-      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/hy4-high-r2",
-      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/hy4-high-r2",
-      "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/hy4-high-r2/RESULTS.md"
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/hy4",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/hy4",
+      "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/hy4/RESULTS.md"
     }
   ]
 }
