@@ -97,6 +97,18 @@
       "archiveTag": "candidate/gargantua-schwarzschild-raytracer/hy4",
       "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/hy4",
       "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/hy4/RESULTS.md"
+    },
+    {
+      "candidateId": "minimax-m3.1-flash-max",
+      "harness": "ZCode",
+      "baselineMain": "1d1fcb9e1d745cca9a36285df78555dede277136",
+      "inputTree": "4be6a8145d569c0e17555c7567b691d4aab01f44",
+      "sourceRef": "run:../llm-runs/gargantua-schwarzschild-raytracer/minimax-m3.1-flash-max",
+      "sourceCommit": "d04f0e7d6f0a34f70d3b2e14a7e532e193f77de5",
+      "sourceTree": "abd8ba775c0f3c88e61d1dc6a65be5635c062a65",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/minimax-m3.1-flash-max",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/minimax-m3.1-flash-max",
+      "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/minimax-m3.1-flash-max/RESULTS.md"
     }
   ]
 }
