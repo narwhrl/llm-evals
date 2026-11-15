@@ -102,6 +102,18 @@
       "archiveTag": "candidate/railway-town-diorama/gpt-6.1-terra",
       "destination": "tasks/railway-town-diorama/solutions/gpt-6.1-terra",
       "resultReport": "tasks/railway-town-diorama/solutions/gpt-6.1-terra/RESULTS.md"
+    },
+    {
+      "candidateId": "hy4-high",
+      "harness": "ZCode",
+      "baselineMain": "1d1fcb9e1d745cca9a36285df78555dede277136",
+      "inputTree": "f375976dcefcad1a507c3dec3f5d48092e191120",
+      "sourceRef": "run:../llm-runs/railway-town-diorama/hy4-high",
+      "sourceCommit": "52927d5b6030615f19dfe282c47de9730ac6294a",
+      "sourceTree": "a536b77abc967a42e5fdc316132144dafa22825f",
+      "archiveTag": "candidate/railway-town-diorama/hy4-high",
+      "destination": "tasks/railway-town-diorama/solutions/hy4-high",
+      "resultReport": "tasks/railway-town-diorama/solutions/hy4-high/RESULTS.md"
     }
   ]
 }
