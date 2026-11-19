@@ -109,6 +109,18 @@
       "archiveTag": "candidate/gargantua-schwarzschild-raytracer/minimax-m3.1-flash-max",
       "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/minimax-m3.1-flash-max",
       "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/minimax-m3.1-flash-max/RESULTS.md"
+    },
+    {
+      "candidateId": "gpt-6.2-sol-max",
+      "harness": "Codex desktop",
+      "baselineMain": "1d1fcb9e1d745cca9a36285df78555dede277136",
+      "inputTree": "4be6a8145d569c0e17555c7567b691d4aab01f44",
+      "sourceRef": "run:../llm-runs/gargantua-schwarzschild-raytracer/gpt-6.2-sol-max",
+      "sourceCommit": "8fb0f90962a0d6bc4b9eee901b09761ea8186649",
+      "sourceTree": "a874b7a1d3fce1509b74664ebd02fdfd80e1c193",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/gpt-6.2-sol-max",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/gpt-6.2-sol-max",
+      "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/gpt-6.2-sol-max/RESULTS.md"
     }
   ]
 }
