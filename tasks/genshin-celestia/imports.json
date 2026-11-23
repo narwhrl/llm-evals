@@ -126,6 +126,18 @@
       "archiveTag": "candidate/genshin-celestia/hy4-high",
       "destination": "tasks/genshin-celestia/solutions/hy4-high",
       "resultReport": "tasks/genshin-celestia/solutions/hy4-high/RESULTS.md"
+    },
+    {
+      "candidateId": "glm-5.4",
+      "harness": "ZCode",
+      "baselineMain": "1d1fcb9e1d745cca9a36285df78555dede277136",
+      "inputTree": "389f036e69eec03ef669224fc15bcf8a85992750",
+      "sourceRef": "run:../llm-runs/genshin-celestia/glm-5.4",
+      "sourceCommit": "7cae70489fb71044f755a87c77d0abd2eda7f09f",
+      "sourceTree": "dc8c6741719f03ef51c5c32e0134eead935e0c25",
+      "archiveTag": "candidate/genshin-celestia/glm-5.4",
+      "destination": "tasks/genshin-celestia/solutions/glm-5.4",
+      "resultReport": "tasks/genshin-celestia/solutions/glm-5.4/RESULTS.md"
     }
   ]
 }
