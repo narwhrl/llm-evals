@@ -133,6 +133,18 @@
       "archiveTag": "candidate/gargantua-schwarzschild-raytracer/hungerg",
       "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/hungerg",
       "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/hungerg/RESULTS.md"
+    },
+    {
+      "candidateId": "gemini-4-carbon-high",
+      "harness": "Antigravity CLI",
+      "baselineMain": "77634cacab5cb5e5f725e861d1c53052a16f0b9a",
+      "inputTree": "4be6a8145d569c0e17555c7567b691d4aab01f44",
+      "sourceRef": "run:../llm-runs/gargantua-schwarzschild-raytracer/gemini-4-carbon-high",
+      "sourceCommit": "7602c2f154a06b62f93cb22823e60a1ffcbf8d43",
+      "sourceTree": "95feda77e39a091569ba045983a13db21fb1df4c",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/gemini-4-carbon-high",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/gemini-4-carbon-high",
+      "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/gemini-4-carbon-high/RESULTS.md"
     }
   ]
 }
