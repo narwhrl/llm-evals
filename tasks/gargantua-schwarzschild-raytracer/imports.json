@@ -109,6 +109,18 @@
       "archiveTag": "candidate/gargantua-schwarzschild-raytracer/minimax-m3.1-flash-max",
       "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/minimax-m3.1-flash-max",
       "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/minimax-m3.1-flash-max/RESULTS.md"
+    },
+    {
+      "candidateId": "gemini-4-neon-xhigh",
+      "harness": "Antigravity CLI",
+      "baselineMain": "1d1fcb9e1d745cca9a36285df78555dede277136",
+      "inputTree": "4be6a8145d569c0e17555c7567b691d4aab01f44",
+      "sourceRef": "run:../llm-runs/gargantua-schwarzschild-raytracer/gemini-4-neon-xhigh",
+      "sourceCommit": "fec0ada106b306fd87470d629540ac03b0fdcfd2",
+      "sourceTree": "e6684b7e1623bad04675b7b9318c9b196ca6a0ae",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/gemini-4-neon-xhigh",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/gemini-4-neon-xhigh",
+      "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/gemini-4-neon-xhigh/RESULTS.md"
     }
   ]
 }
