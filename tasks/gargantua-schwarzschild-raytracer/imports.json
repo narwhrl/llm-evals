@@ -121,6 +121,18 @@
       "archiveTag": "candidate/gargantua-schwarzschild-raytracer/gemini-4-neon-xhigh",
       "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/gemini-4-neon-xhigh",
       "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/gemini-4-neon-xhigh/RESULTS.md"
+    },
+    {
+      "candidateId": "hungerg",
+      "harness": "ZCode Desktop",
+      "baselineMain": "1d1fcb9e1d745cca9a36285df78555dede277136",
+      "inputTree": "4be6a8145d569c0e17555c7567b691d4aab01f44",
+      "sourceRef": "run:../llm-runs/gargantua-schwarzschild-raytracer/hungerg",
+      "sourceCommit": "62497dc1badde96144a5e2479577a75115bef383",
+      "sourceTree": "1bef7211461018cb24050dcce3057f83b4ee041b",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/hungerg",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/hungerg",
+      "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/hungerg/RESULTS.md"
     }
   ]
 }
