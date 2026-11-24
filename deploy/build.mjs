@@ -278,6 +278,7 @@ const VENDORS = [
   ["glm", "Z.ai", "GLM", "-"],
   ["gpt", "OpenAI", "GPT", "-"],
   ["grok", "xAI", "Grok"],
+  ["hungerg", "Stealth", "Hungerg"],
   // models.dev canonical model: tencent/hy4, display name: Hy4.
   ["hy4", "Tencent", "Hy4"],
   ["kimi", "Moonshot AI", "Kimi"],
