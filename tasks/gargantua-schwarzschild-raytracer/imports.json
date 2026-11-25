@@ -145,6 +145,18 @@
       "archiveTag": "candidate/gargantua-schwarzschild-raytracer/gemini-4-carbon-high",
       "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/gemini-4-carbon-high",
       "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/gemini-4-carbon-high/RESULTS.md"
+    },
+    {
+      "candidateId": "swe-2-1-xhigh",
+      "harness": "omp",
+      "baselineMain": "77634cacab5cb5e5f725e861d1c53052a16f0b9a",
+      "inputTree": "4be6a8145d569c0e17555c7567b691d4aab01f44",
+      "sourceRef": "run:../llm-runs/gargantua-schwarzschild-raytracer/swe-2-1-xhigh",
+      "sourceCommit": "b5c5806eb52e95334989f64e949e20c4bedde79e",
+      "sourceTree": "247cc91da14ff29f3d54d927443ce21a3b7a7ae5",
+      "archiveTag": "candidate/gargantua-schwarzschild-raytracer/swe-2-1-xhigh",
+      "destination": "tasks/gargantua-schwarzschild-raytracer/solutions/swe-2-1-xhigh",
+      "resultReport": "tasks/gargantua-schwarzschild-raytracer/solutions/swe-2-1-xhigh/RESULTS.md"
     }
   ]
 }
